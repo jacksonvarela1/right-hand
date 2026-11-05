@@ -139,3 +139,8 @@
 @media (max-width:600px) and (hover:hover) and (pointer:fine){#demo-report .stage{--stage-h:1140px}}
 @media (prefers-reduced-motion:reduce){#demo-report *,#demo-report *::before{transition-duration:1ms!important;transition-delay:0s!important}}
 #demo-report:is([data-motion=off] *) *,#demo-report:is([data-motion=off] *) *::before{transition-duration:1ms!important;transition-delay:0s!important}
+
+/* 24px minimum tap area (visual size unchanged) */
+#demo-report .rp-notes li{grid-template-columns:28px minmax(0,1fr)}
+#demo-report .rp-num{width:28px;height:28px;margin:-3px}
+#demo-report .rp-draft{display:inline-block;padding:3px 0;min-height:24px}
