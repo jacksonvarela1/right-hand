@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Right Hand: admin help that shows its work</title>
+<meta name="description" content="A student venture concept. Small business owners hand off routine admin and get it back with the sources, the math and any open questions marked.">
+<meta property="og:title" content="Right Hand: admin help that shows its work">
+<meta property="og:description" content="A student venture concept. Hand off routine admin, get it back with the sources, the math and any open questions marked. Try the live demo.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://jacksonvarela1.github.io/right-hand/">
+<meta property="og:image" content="https://jacksonvarela1.github.io/right-hand/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FBFCFB" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1727" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231B2A41'/%3E%3Cpath d='M9 16.5l4.5 4.5L23 11' fill='none' stroke='%2386A783' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Right Hand. One page, no build.
+   Color roles: navy = the brand voice. Sage = settled state (traced, sorted, answered, approved).
+   Amber = needs the owner, and nothing else. Radius: 4px controls and chips, 6px sheets, 10px dialogs.
+   Type: Schibsted Grotesk for words, IBM Plex Mono for every figure, ID and account ending. */
+:root{
+  color-scheme:light dark;
+  --bg:#FBFCFB;--paper:#FEFEFD;--tint:#EEF2EE;
+  --ink:#1B2A41;--ink-2:#2C3E5A;--soft:#4F5D73;
+  --line:#DCE2DC;--line-strong:#7A8699;
+  --sage:#6F8F6C;--sage-ink:#4A6748;--sage-wash:#E6EFE5;
+  --amber:#B07A1E;--amber-ink:#8A5A12;--amber-wash:#FBF0DA;--amber-line:#E0C189;
+  --danger:#A23B2A;
+  --shadow:0 1px 2px rgba(27,42,65,.06),0 22px 44px -28px rgba(27,42,65,.42);
+  --r1:4px;--r2:6px;--r3:10px;
+  --sans:"Schibsted Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --ease:cubic-bezier(.23,1,.32,1);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0F1727;--paper:#1B2944;--tint:#131D31;
+    --ink:#E6ECF3;--ink-2:#C9D3DF;--soft:#A9B5C8;
+    --line:#2B3B58;--line-strong:#6F7F9B;
+    --sage:#86A783;--sage-ink:#A9C7A5;--sage-wash:#1F3330;
+    --amber:#D9A441;--amber-ink:#E9C27A;--amber-wash:#3A2F18;--amber-line:#7A5C25;
+    --danger:#F08A78;
+    --shadow:0 1px 2px rgba(0,0,0,.35),0 22px 44px -28px rgba(0,0,0,.8);
+  }
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:84px}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1.0625rem/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+::selection{background:var(--sage-wash);color:var(--ink)}
+a{color:inherit;text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--sage-ink);outline-offset:2px;border-radius:2px}
+h1,h2,h3{margin:0;font-weight:700;text-wrap:balance}
+h2{font-size:clamp(1.9rem,3.2vw,2.5rem);line-height:1.12;letter-spacing:-0.025em}
+h3{font-size:1.125rem;line-height:1.3;letter-spacing:-0.01em}
+p{margin:0;text-wrap:pretty}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+@media (max-width:520px){.wrap{padding:0 18px}}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:0}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:12px;top:-80px;z-index:50;background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:var(--r1);font-weight:600}
+.skip:focus{top:12px}
+.ic{width:18px;height:18px;fill:currentColor;flex:none}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:600 .975rem/1.2 var(--sans);padding:12px 20px;border-radius:var(--r1);border:1.5px solid var(--ink);background:var(--ink);color:var(--bg);cursor:pointer;text-decoration:none;white-space:nowrap;transition:background-color .15s ease,transform .12s var(--ease)}
+.btn:hover{background:var(--ink-2);border-color:var(--ink-2)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn.ghost:hover{background:var(--tint);border-color:var(--ink)}
+.btn.sm{padding:9px 14px;font-size:.9rem}
+.linkbtn{font:inherit;font-weight:600;color:var(--ink);background:none;border:0;padding:4px 0;min-height:24px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+@media (pointer:coarse){.btn.sm,.opt{min-height:44px}}
+
+/* tick marks: the workpaper vocabulary */
+.tk{display:inline-grid;place-items:center;min-width:19px;height:19px;padding:0 4px;border:1.5px solid currentColor;border-radius:3px;font:600 .6875rem/1 var(--mono);color:var(--sage-ink);vertical-align:.1em;flex:none}
+.tk.f{color:var(--ink)}
+.tk.q{color:var(--amber-ink);border-color:var(--amber)}
+.tk.p{color:var(--soft)}
+.key{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.8125rem;color:var(--soft)}
+.key span{display:inline-flex;align-items:center;gap:7px}
+
+/* header */
+.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:28px;height:64px}
+.brand{display:flex;align-items:baseline;gap:12px;text-decoration:none;margin-right:auto}
+.brand b{font-size:1.2rem;font-weight:700;letter-spacing:-0.02em}
+.brand span{font:400 .8125rem var(--mono);color:var(--soft);padding-left:12px;border-left:1px solid var(--line)}
+.top nav ul{display:flex;gap:24px;list-style:none;margin:0;padding:0}
+.top nav a{text-decoration:none;color:var(--soft);font-weight:500;font-size:.95rem;padding:8px 0}
+.top nav a:hover{color:var(--ink)}
+@media (max-width:960px){.top nav{display:none}}
+@media (max-width:560px){.brand span{display:none}}
+
+/* hero */
+.hero{padding:56px 0 88px}
+.hero-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:64px;align-items:center}
+.hero h1{font-size:clamp(2.5rem,4.3vw,3.6rem);line-height:1.05;letter-spacing:-0.03em;max-width:15ch}
+.lede{margin-top:22px;font-size:1.2rem;line-height:1.55;color:var(--soft);max-width:26em}
+.ctas{margin-top:32px}
+.hero .rv{animation:rise .6s var(--ease) .05s both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media (max-width:980px){.hero{padding:40px 0 64px}.hero-grid{grid-template-columns:1fr;gap:40px}}
+
+/* review sheet */
+.rv{position:relative;background:var(--paper);border:1px solid var(--line);border-top:3px solid var(--ink);border-radius:var(--r2);box-shadow:var(--shadow)}
+.rv-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:18px 22px 12px}
+.rv-head h3{font-size:1.15rem}
+.rv-sub{margin-top:4px;font-size:.875rem;color:var(--soft);text-wrap:balance}
+@media (max-width:560px){.rv-head{flex-direction:column-reverse;gap:10px}.xs-hide{display:none}}
+.chip{display:inline-flex;align-items:center;font:600 .8125rem/1 var(--sans);padding:6px 9px;border-radius:var(--r1);white-space:nowrap;background:var(--tint);color:var(--soft)}
+.chip.warn{background:var(--amber-wash);color:var(--amber-ink)}
+.chip.ok{background:var(--sage-wash);color:var(--sage-ink)}
+.chip.done{background:var(--sage-ink);color:var(--paper)}
+.tabs{display:flex;gap:4px;padding:0 14px;border-bottom:1px solid var(--line)}
+.tab{display:inline-flex;align-items:center;gap:7px;min-height:44px;font:600 .9375rem/1 var(--sans);color:var(--soft);background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;padding:12px 8px;cursor:pointer;white-space:nowrap}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.count{font:600 .75rem/1 var(--mono);padding:3px 6px;border-radius:3px;background:var(--amber-wash);color:var(--amber-ink)}
+.count.zero{background:var(--sage-wash);color:var(--sage-ink)}
+.panel{position:relative;padding:18px 22px 4px;min-height:330px}
+.panel:focus-visible{outline-offset:-3px}
+@media (max-width:420px){.tabs{padding:0 8px;gap:0}.tab{font-size:.875rem;padding:12px 7px}.rv-head,.panel{padding-left:16px;padding-right:16px}}
+
+.total{display:flex;align-items:center;flex-wrap:wrap;gap:6px 12px}
+.total strong{font:500 2.2rem/1.1 var(--mono);letter-spacing:-0.055em}
+.total .vs{flex-basis:100%;font-size:.875rem;color:var(--soft)}
+.split{position:relative;margin-top:16px}
+.split-bar{display:flex;gap:2px;height:12px;border-radius:2px;overflow:hidden;transform-origin:left center}
+.split-bar.clear{gap:0}
+.split-bar .ok{background:var(--sage);transition:flex-grow .55s var(--ease)}
+.split-bar .eyes{background:var(--amber);transition:flex-grow .55s var(--ease)}
+.split-bar.intro{animation:grow .8s var(--ease) .35s both}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.split-legend{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 12px;margin-top:8px;font-size:.875rem;font-weight:600}
+.split-legend span{white-space:nowrap}
+.rv-foot .key{margin-top:12px}
+.split-legend .a{color:var(--sage-ink)}
+.split-legend .b{color:var(--amber-ink);text-align:right}
+.ledger{list-style:none;margin:16px 0 0;padding:0;font-size:.9375rem}
+.ledger li{display:flex;align-items:baseline;gap:10px;padding:5px 6px;margin:0 -6px;border-radius:3px}
+.ledger .lead{flex:1;min-width:12px;border-bottom:1px dotted var(--line-strong);opacity:.55;transform:translateY(-4px)}
+.ledger .amt{font:400 .9375rem var(--mono);font-variant-numeric:tabular-nums}
+.ledger li.open .name,.ledger li.open .amt{color:var(--amber-ink);font-weight:600}
+.ledger .delta{font:500 .8125rem var(--mono);color:var(--sage-ink)}
+.ledger li.chg{animation:chg 1.4s ease-out}
+@keyframes chg{0%,35%{background:var(--sage-wash)}100%{background:transparent}}
+.panel .key{margin:14px 0 6px}
+
+.ws-h{font-size:.875rem;font-weight:600;color:var(--soft);margin:0 0 8px}
+.ws-h + *{margin-bottom:18px}
+.ws-src{list-style:none;padding:0;margin:0;display:grid;gap:6px;font-size:.9375rem}
+.ws-src li{display:flex;gap:10px;align-items:baseline}
+.tx{width:100%;border-collapse:collapse;font:400 .8125rem/1.45 var(--mono)}
+.tx td{padding:4px 12px 4px 0;vertical-align:baseline}
+.tx td.n{text-align:right;white-space:nowrap}
+.tx td.note{color:var(--amber-ink);padding-right:0}
+.tx tr.done td.note{color:var(--sage-ink)}
+.math{list-style:none;padding:0;margin:0;font:400 .875rem/1.5 var(--mono)}
+.math li{display:flex;justify-content:space-between;gap:12px;padding:3px 0}
+.math li.sum{border-top:1px solid var(--ink);margin-top:4px;padding-top:7px;font-weight:600}
+.math li.sum span:last-child{display:inline-flex;gap:8px;align-items:center}
+.answers{list-style:none;padding:0;margin:0;display:grid;gap:4px;font-size:.9375rem}
+
+.flags{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.flags li{border:1px solid var(--amber-line);border-radius:var(--r2);padding:12px 14px;background:var(--paper)}
+.flags li.ok{border-color:var(--line)}
+.flag-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.flag-q{font-weight:600}
+.st{font:600 .75rem var(--mono);color:var(--amber-ink);white-space:nowrap}
+.flags li.ok .st{color:var(--sage-ink)}
+.flag-meta{font-size:.875rem;color:var(--soft);margin-top:2px}
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.opt{font:600 .875rem/1.1 var(--sans);min-height:36px;padding:7px 12px;border-radius:var(--r1);border:1.5px solid var(--line-strong);background:var(--paper);color:var(--ink);cursor:pointer}
+.opt:hover{border-color:var(--ink)}
+.opt[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.rem{display:flex;align-items:center;gap:9px;margin-top:10px;font-size:.875rem;color:var(--sage-ink);font-weight:500;cursor:pointer}
+.rem input,.check input{width:18px;height:18px;margin:0;accent-color:var(--sage-ink)}
+.allclear{margin-top:12px;font-size:.9375rem;color:var(--sage-ink);font-weight:600}
+
+.rv-foot{margin-top:14px;padding:14px 22px 16px;border-top:1px solid var(--line);background:var(--bg);border-radius:0 0 var(--r2) var(--r2)}
+.foot-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.hint{font-size:.875rem;color:var(--soft);max-width:27em}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.note-field{display:grid;gap:6px}
+.note-field label{font-size:.875rem;font-weight:600}
+.note-field textarea{min-height:76px}
+.note-field + .acts{margin-top:10px;justify-content:flex-end}
+.signoff{display:flex;justify-content:space-between;gap:8px 16px;flex-wrap:wrap;margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);font:400 .8125rem/1.5 var(--mono);color:var(--soft)}
+.signoff .line{display:inline-block;min-width:10ch;border-bottom:1px solid var(--line-strong);color:var(--ink)}
+.signoff .line.signed{border-bottom-color:transparent;color:var(--sage-ink);font-weight:600}
+@media (max-width:420px){.rv-foot{padding-left:16px;padding-right:16px}}
+
+.stamp{position:absolute;right:4px;top:-30px;z-index:2;padding:6px 12px 7px;border:3px double var(--sage-ink);border-radius:3px;color:var(--sage-ink);background:color-mix(in srgb,var(--paper) 84%,transparent);font:600 1rem/1.1 var(--mono);letter-spacing:.06em;text-align:center;transform:rotate(-5deg);pointer-events:none;animation:stamp .32s cubic-bezier(.2,.8,.2,1) both}
+.stamp small{display:block;margin-top:2px;font-size:.6875rem;font-weight:500;letter-spacing:.02em}
+@keyframes stamp{from{opacity:0;transform:rotate(-5deg) scale(1.35)}to{opacity:1;transform:rotate(-5deg) scale(1)}}
+@media (max-width:560px){.stamp{top:-6px}}
+
+/* sections */
+section{position:relative}
+.band{padding:104px 0;border-top:1px solid var(--line)}
+.band.tint{background:var(--tint);border-top:0}
+.lead-p{margin-top:16px;color:var(--soft);font-size:1.0625rem;max-width:38em}
+@media (max-width:900px){.band{padding:72px 0}}
+
+/* what we heard */
+.heard{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.85fr);gap:72px;align-items:start}
+.memo p{margin-top:16px;max-width:37em}
+.memo h2 + p{margin-top:22px}
+.src-box{margin-top:26px;padding:16px 18px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r2);max-width:37em}
+.src-box .lbl{display:flex;align-items:center;gap:8px;font:500 .8125rem var(--mono);color:var(--soft)}
+.src-box blockquote{margin:8px 0 0;font-size:1.2rem;font-weight:600;line-height:1.35;letter-spacing:-0.01em}
+.src-box .fine{margin-top:10px;font:400 .8125rem/1.5 var(--mono);color:var(--soft)}
+.photo{margin:0}
+.photo img{display:block;width:100%;height:auto;aspect-ratio:2/3;object-fit:cover;border-radius:var(--r2);background:var(--tint)}
+.photo figcaption{margin-top:10px;font-size:.8125rem;color:var(--soft)}
+@media (max-width:900px){.heard{grid-template-columns:1fr;gap:40px}.photo img{aspect-ratio:4/3;object-position:center 62%}}
+
+/* demo board */
+#demo{padding:112px 0}
+.demo-bar{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-top:36px;padding-bottom:16px;border-bottom:1px solid var(--line-strong)}
+.biz strong{font-size:1.05rem}
+.biz span{display:block;font-size:.875rem;color:var(--soft)}
+#board-status{margin:14px 0 22px;font-size:.9375rem;font-weight:500;color:var(--sage-ink);min-height:1.6em}
+.board{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px;align-items:start}
+.col{display:flex;flex-direction:column;gap:10px;min-width:0;padding-top:12px;border-top:2px solid var(--line-strong)}
+.col[data-k="input"]{border-top-color:var(--amber)}
+.col[data-k="review"]{border-top-color:var(--ink)}
+.col[data-k="done"]{border-top-color:var(--sage)}
+.col-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.col-h h3{font-size:1rem}
+.col-h .n{font:600 .75rem/1 var(--mono);padding:3px 6px;border-radius:3px;border:1px solid var(--line);background:var(--paper);color:var(--soft)}
+.col[data-k="input"] .col-h .n{background:var(--amber-wash);border-color:var(--amber-line);color:var(--amber-ink)}
+.col-cap{font-size:.875rem;color:var(--soft);margin:-4px 0 4px}
+.card{display:grid;gap:8px;padding:13px 14px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r2);font-size:.9375rem}
+.card:focus-visible{outline:3px solid var(--sage-ink);outline-offset:2px}
+.card .t{font-weight:600;line-height:1.3}
+.card .m{font-size:.875rem;color:var(--soft)}
+.card .ask{font-size:.875rem;color:var(--amber-ink);background:var(--amber-wash);border-radius:var(--r1);padding:8px 10px}
+.card .row{display:flex;gap:6px;flex-wrap:wrap}
+.card.new{animation:arrive 1.2s ease-out}
+@keyframes arrive{0%,30%{border-color:var(--sage);background:var(--sage-wash)}100%{border-color:var(--line);background:var(--paper)}}
+.prog{height:5px;border-radius:3px;background:var(--tint);overflow:hidden}
+.prog i{display:block;height:100%;background:var(--sage)}
+.empty{font-size:.875rem;color:var(--soft);padding:4px 0}
+.prefs{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 22px;margin-top:30px;padding-top:16px;border-top:1px solid var(--line);font-size:.875rem;color:var(--soft)}
+.prefs strong{display:inline-flex;align-items:center;gap:7px;color:var(--ink)}
+.prefs ul{display:flex;flex-wrap:wrap;gap:6px 22px;margin:0;padding:0;list-style:none}
+@media (max-width:980px){.board{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.board{grid-template-columns:1fr}#demo{padding:76px 0}}
+
+/* receipts workpaper */
+.wp{position:relative;margin-top:40px;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);background:var(--paper);border:1px solid var(--line);border-top:3px solid var(--ink);border-radius:var(--r2)}
+.wp .rv-head{grid-column:1/-1;border-bottom:1px solid var(--line)}
+.wp-mail{position:relative;padding:18px 26px 24px;border-right:1px solid var(--line)}
+.mail-meta{display:grid;gap:4px;margin:0 0 16px;font-size:.875rem}
+.mail-meta div{display:grid;grid-template-columns:4.8em 1fr;gap:8px}
+.mail-meta dt{color:var(--soft)}
+.mail-meta dd{margin:0;font-weight:600}
+.mail-body p{margin-top:12px;max-width:52ch;line-height:1.65}
+.mail-body p:first-child{margin-top:0}
+.fig{font-family:var(--mono);font-size:.95em;font-weight:500}
+.mail-body .tk{margin-left:5px}
+.wp-notes{list-style:none;margin:0;padding:18px 22px 24px;display:grid;gap:16px;align-content:start}
+.wp-notes li{display:grid;grid-template-columns:26px 1fr;gap:10px;font-size:.9375rem;line-height:1.5}
+.wp-notes li.q{color:var(--amber-ink)}
+.wp-notes li.q.ok{color:var(--ink)}
+.wp-notes .opts{margin-top:8px}
+.wp .rv-foot{grid-column:1/-1;margin-top:0}
+.wp .stamp{top:12px;right:18px}
+@media (max-width:860px){.wp{grid-template-columns:1fr}.wp-mail{border-right:0;border-bottom:1px solid var(--line)}}
+@media (max-width:420px){.wp-mail,.wp-notes{padding-left:16px;padding-right:16px}}
+
+/* next */
+.hyp{margin-top:22px;font-size:clamp(1.35rem,2.2vw,1.75rem);font-weight:500;line-height:1.35;letter-spacing:-0.012em;max-width:34ch}
+.hyp strong{font-weight:700}
+.hyp-note{margin-top:14px;color:var(--soft)}
+.asks-intro{margin-top:48px;color:var(--soft)}
+.asks{list-style:none;margin:12px 0 0;padding:0;max-width:900px}
+.asks li{padding:20px 0;border-top:1px solid var(--line);font-size:clamp(1.25rem,2.2vw,1.6rem);font-weight:600;line-height:1.3;letter-spacing:-0.015em}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-top:64px}
+.qa{margin:14px 0 0}
+.qa dt{font-weight:700;margin-top:18px}
+.qa dt:first-child{margin-top:0}
+.qa dd{margin:6px 0 0;color:var(--soft);max-width:36em}
+.two-col .flags{margin-top:14px}
+@media (max-width:860px){.two-col{grid-template-columns:1fr;gap:48px}}
+
+/* sign-off */
+.signsec{padding:80px 0 88px;border-top:1px solid var(--line)}
+.sign{margin-top:18px;font-size:clamp(1.25rem,2vw,1.55rem);font-weight:600;line-height:1.35;letter-spacing:-0.01em;max-width:34ch}
+.reviewed{margin-top:22px;font:400 .875rem var(--mono);color:var(--soft)}
+.reviewed .line{display:inline-block;min-width:20ch;border-bottom:1px solid var(--line-strong)}
+footer{padding:28px 0 48px;border-top:1px solid var(--line);font-size:.875rem;color:var(--soft)}
+footer .wrap{display:grid;gap:6px}
+
+/* dialogs and forms */
+dialog{border:0;padding:0;background:transparent;color:var(--ink);width:min(640px,calc(100vw - 20px));max-width:none;max-height:calc(100dvh - 20px);overflow:auto}
+dialog::backdrop{background:rgba(15,23,39,.6)}
+dialog[open]{animation:pop .22s var(--ease)}
+@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.985)}to{opacity:1;transform:none}}
+.dlg-wrap{position:relative}
+.dlg-wrap .rv{box-shadow:none}
+#dlg-review .rv-head{padding-right:64px}
+.dlg-x{position:absolute;right:12px;top:14px;z-index:3;width:40px;height:40px;display:grid;place-items:center;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.form{position:relative;background:var(--paper);border-radius:var(--r3);border-top:3px solid var(--ink);padding:26px}
+.form h3{font-size:1.35rem}
+.form > p{margin:6px 0 20px;color:var(--soft);font-size:.9375rem;max-width:34em}
+.field{display:grid;gap:6px;margin-bottom:16px}
+.field label{font-weight:600;font-size:.9375rem}
+.help{font-size:.875rem;color:var(--soft)}
+.err{font-size:.875rem;color:var(--danger);font-weight:600}
+input,select,textarea{font:inherit;font-size:.975rem;color:var(--ink);background:var(--paper);border:1.5px solid var(--line-strong);border-radius:var(--r1);padding:10px 12px;width:100%}
+input[type="checkbox"]{width:18px}
+input:focus-visible,select:focus-visible,textarea:focus-visible{border-color:var(--ink)}
+[aria-invalid="true"]{border-color:var(--danger)}
+textarea{min-height:100px;resize:vertical}
+input[type="file"]{padding:8px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:520px){.two{grid-template-columns:1fr;gap:0}}
+.check{display:flex;align-items:center;gap:10px;font-size:.9375rem;font-weight:500;cursor:pointer}
+.form .acts{justify-content:flex-end;margin-top:22px}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#main"><b>Right Hand</b><span>student venture concept</span></a>
+    <nav aria-label="Sections">
+      <ul>
+        <li><a href="#heard">What we heard</a></li>
+        <li><a href="#demo">Demo</a></li>
+        <li><a href="#receipts">Receipts</a></li>
+        <li><a href="#next">Next steps</a></li>
+      </ul>
+    </nav>
+    <a class="btn sm" href="#demo">Try the full demo</a>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap hero-grid">
+      <div>
+        <h1 id="hero-title">Admin help that shows its work.</h1>
+        <p class="lede">Right Hand is a student venture concept. Small business owners hand off routine admin and get it back with the sources, the math and any open questions marked.</p>
+        <div class="ctas"><a class="btn" href="#demo">Try the full demo</a></div>
+      </div>
+      <div>
+        <div class="rv" id="hero-rv"></div>
+        <p class="sr-only" aria-live="polite" id="hero-live"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="heard" aria-labelledby="heard-title">
+    <div class="wrap heard">
+      <div class="memo">
+        <h2 id="heard-title">What we heard</h2>
+        <p>Our team started from one problem statement: small business owners are overwhelmed balancing admin tasks with the larger work of running the company. It can lead to lost profit and delayed meetings.</p>
+        <p>Then came the first customer discovery interviews, with a small business owner and a CEO. Both described the same thing. When they hand work off, they still end up double-checking it or answering follow-up questions about it.</p>
+        <div class="src-box">
+          <p class="lbl"><span class="tk" aria-hidden="true">T</span>Team problem statement, Oct 15, 2026</p>
+          <blockquote><p>“Main issue is trust with AI and virtual assistants.”</p></blockquote>
+          <p class="fine">Interviews so far: a small business owner and a CEO. More are on the way.</p>
+        </div>
+        <p>So we built Right Hand around the review instead of the handoff. Every finished task comes back with its work shown, and nothing is final until the owner approves it.</p>
+      </div>
+      <figure class="photo">
+        <img src="assets/shop-counter.jpg" width="960" height="1440" loading="lazy" decoding="async" alt="A shop owner sits at her counter sorting receipts next to a calculator and a computer.">
+        <figcaption>Photo by Alexander Mass on Unsplash.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="band tint" id="demo" aria-labelledby="demo-title">
+    <div class="wrap">
+      <h2 id="demo-title">Try the full demo</h2>
+      <p class="lead-p">The owner’s board for a made-up grooming shop. The expense summary works end to end; the other cards show what the board would hold. Nothing you type leaves your browser.</p>
+      <div class="demo-bar">
+        <div class="biz"><strong>Ozark Paws Grooming</strong><span>Made-up business for this demo</span></div>
+        <div class="acts">
+          <button class="btn sm" id="new-task" type="button"><svg class="ic" viewBox="0 0 256 256" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg>New task</button>
+          <button class="btn ghost sm" id="reset" type="button"><svg class="ic" viewBox="0 0 256 256" aria-hidden="true"><path d="M224,128a96,96,0,0,1-94.71,96H128A95.38,95.38,0,0,1,62.1,197.8a8,8,0,0,1,11-11.63A80,80,0,1,0,71.43,71.39a3.07,3.07,0,0,1-.26.25L44.59,96H72a8,8,0,0,1,0,16H24a8,8,0,0,1-8-8V56a8,8,0,0,1,16,0V85.8L60.25,60A96,96,0,0,1,224,128Z"/></svg>Reset demo</button>
+        </div>
+      </div>
+      <p id="board-status" aria-live="polite">Try it: answer a question under Needs your input, or open the expense summary under Ready to review.</p>
+      <div class="board" id="board"></div>
+      <div class="prefs" id="prefs"></div>
+    </div>
+  </section>
+
+  <section class="band" id="receipts" aria-labelledby="receipts-title">
+    <div class="wrap">
+      <h2 id="receipts-title">Every task comes with its receipts</h2>
+      <p class="lead-p">A second made-up example: reminder emails for four overdue invoices. The marks in the margin show where each figure came from, how it was figured and what still needs the owner.</p>
+      <div class="wp" id="wp"></div>
+      <p class="sr-only" aria-live="polite" id="wp-live"></p>
+    </div>
+  </section>
+
+  <section class="band" id="next" aria-labelledby="next-title">
+    <div class="wrap">
+      <h2 id="next-title">What we’re testing next</h2>
+      <p class="hyp"><strong>Our hypothesis:</strong> owners will hand off routine admin if checking the finished work takes less time than doing it themselves.</p>
+      <p class="hyp-note">So far we have talked with owners about the problem. Next we put this prototype in front of them and ask:</p>
+      <ul class="asks">
+        <li>Would this cut the time you spend checking work?</li>
+        <li>What would you still want to verify yourself?</li>
+        <li>Which task would you trust it with first?</li>
+      </ul>
+      <div class="two-col">
+        <div>
+          <h3>Questions we already get</h3>
+          <dl class="qa">
+            <dt>What if it gets something wrong?</dt>
+            <dd>You see the sources and the math before anything is final, and anything it isn’t sure about comes to you as a question. Nothing goes out until you approve it.</dd>
+            <dt>Is this just ChatGPT?</dt>
+            <dd>Maybe in part. We haven’t decided whether an AI tool, an assistant or both prepare the work. The part we’re testing is the review: showing the work so checking it is fast.</dd>
+          </dl>
+        </div>
+        <div>
+          <h3>What we haven’t decided yet</h3>
+          <ul class="flags">
+            <li><div class="flag-top"><span class="flag-q">Who prepares the work: AI, an assistant, or both</span><span class="st">Open</span></div></li>
+            <li><div class="flag-top"><span class="flag-q">Which recurring task comes after expense summaries</span><span class="st">Open</span></div></li>
+            <li><div class="flag-top"><span class="flag-q">Pricing, once we know what owners would pay for</span><span class="st">Open</span></div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="signsec" id="team" aria-labelledby="team-title">
+    <div class="wrap">
+      <h2 id="team-title" class="sr-only">The team</h2>
+      <span class="chip warn">Rough draft, ready for your review</span>
+      <p class="sign">Prepared Nov 4, 2026 by Jackson Varela, Annie Wagner, Abigail Estes and Bella Gambaro.</p>
+      <p class="reviewed">Reviewed by <span class="line">&nbsp;</span></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Right Hand is a student venture concept, not a bookkeeping, payroll or accounting service. The demo business, names and numbers are made up, and nothing you enter leaves your browser.</p>
+    <p>Photo by <a href="https://unsplash.com/photos/a-woman-working-at-a-counter-with-a-computer-HVsYPecRjdw">Alexander Mass on Unsplash</a>. <a href="https://github.com/jacksonvarela1/right-hand">Source on GitHub</a>.</p>
+  </div>
+</footer>
+
+<dialog id="dlg-review" aria-labelledby="dlg-title">
+  <div class="dlg-wrap">
+    <button class="dlg-x" type="button" data-close aria-label="Close"><svg class="ic" viewBox="0 0 256 256" aria-hidden="true"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></button>
+    <div id="dlg-review-body"></div>
+    <p class="sr-only" aria-live="polite" id="dlg-live"></p>
+  </div>
+</dialog>
+
+<dialog id="dlg-new" aria-labelledby="new-title">
+  <form class="form" id="f-new" novalidate>
+    <button class="dlg-x" type="button" data-close aria-label="Close"><svg class="ic" viewBox="0 0 256 256" aria-hidden="true"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></button>
+    <h3 id="new-title">New task</h3>
+    <p>Give the details once, up front, so nobody has to come back to you with questions.</p>
+    <div class="field">
+      <label for="f-type">What do you need done?</label>
+      <select id="f-type">
+        <option>Expense summary</option>
+        <option>Invoice follow-ups</option>
+        <option>Payroll prep</option>
+        <option>Something else</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="f-ins">Instructions (required)</label>
+      <textarea id="f-ins" required aria-required="true" aria-describedby="f-hint f-err"></textarea>
+      <span class="help" id="f-hint"></span>
+      <span class="err" id="f-err" hidden>Add a sentence or two of instructions.</span>
+    </div>
+    <div class="two">
+      <div class="field"><label for="f-due">Deadline</label><input type="date" id="f-due"></div>
+      <div class="field"><label for="f-files">Files (optional)</label><input type="file" id="f-files" multiple></div>
+    </div>
+    <label class="check"><input type="checkbox" id="f-save"> Save these instructions for next time</label>
+    <div class="acts">
+      <button type="button" class="btn ghost" data-close>Cancel</button>
+      <button type="submit" class="btn">Add task</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+(function(){
+  "use strict";
+  var $ = function(s, r){ return (r || document).querySelector(s); };
+  var esc = function(s){ return String(s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); };
+  var round = function(n){ return Math.round(n * 100) / 100; };
+  var money = function(n){ return round(n).toLocaleString("en-US", {style:"currency", currency:"USD"}); };
+  var signed = function(n){ return (n > 0 ? "+" : "−") + money(Math.abs(n)); };
+  var shortDate = function(d){ return d.toLocaleDateString("en-US", {month:"short", day:"numeric"}); };
+  var TODAY = shortDate(new Date());
+  var SEPT = 7902.10;
+  var BOOKMARK = '<svg class="ic" viewBox="0 0 256 256" aria-hidden="true"><path d="M184,32H72A16,16,0,0,0,56,48V224a8,8,0,0,0,12.24,6.78L128,193.43l59.77,37.35A8,8,0,0,0,200,224V48A16,16,0,0,0,184,32Zm0,177.57-51.77-32.35a8,8,0,0,0-8.48,0L72,209.57V48H184Z"/></svg>';
+  var tk = function(kind, ch, label){ return '<span class="tk ' + kind + '" aria-hidden="true">' + ch + '</span><span class="sr-only">(' + label + ')</span>'; };
+  var KEY = '<p class="key"><span>' + tk("t", "T", "traced") + 'Traced to a transaction or receipt</span><span>' + tk("f", "F", "footed") + 'Added up and checked</span><span>' + tk("q", "?", "open") + 'Needs your answer</span></p>';
+
+  /* ---------- expense review sheet ---------- */
+  var FLAGS = [
+    {k:"amazon", q:"Amazon, Oct 12", amt:214.60, meta:"No receipt found. Was this for the business?", opts:[["biz","Business supplies"],["personal","Personal"]]},
+    {k:"venmo", q:"Venmo to J. Ruiz, Oct 20", amt:150, meta:"No memo on the payment. What was it for?", opts:[["contract","Contract help"],["personal","Personal"]]},
+    {k:"square", q:"Square fee, Oct 28", amt:89, meta:"Same amount as a Square fee on Oct 27. Possible duplicate.", opts:[["keep","Keep both"],["dup","Remove duplicate"]]}
+  ];
+  var ANSWERED = {
+    amazon:{biz:"moved to Grooming supplies", personal:"left out as personal"},
+    venmo:{contract:"moved to Payroll and contract help", personal:"left out as personal"},
+    square:{keep:"kept in Software and fees", dup:"removed as a duplicate"}
+  };
+  var OPTLABEL = {biz:"Business supplies", personal:"Personal", contract:"Contract help", keep:"Keep both", dup:"Remove duplicate"};
+  var TABS = [["sum","Summary"],["work","Work shown"],["q","Questions"]];
+
+  function makeReview(root, live, opts){
+    opts = opts || {};
+    var id = opts.id, st, prev = {}, first = true;
+    function fresh(){ st = {tab:"sum", f:{}, rem:{}, approved:false, sent:false, changing:false, note:"", err:false, changed:{}}; }
+    fresh();
+    function say(m){ live.textContent = ""; setTimeout(function(){ live.textContent = m; }, 30); }
+    function openCount(){ return FLAGS.filter(function(x){ return !st.f[x.k]; }).length; }
+    function cats(f){
+      var c = [
+        {k:"payroll", name:"Payroll", v:3650},
+        {k:"rent", name:"Rent", v:2400},
+        {k:"supplies", name:"Grooming supplies", v:1126.45},
+        {k:"util", name:"Utilities", v:412.18},
+        {k:"soft", name:"Software and fees", v:289.14},
+        {k:"mkt", name:"Marketing", v:175}
+      ];
+      var open = 364.60;
+      if (f.amazon){ open -= 214.60; if (f.amazon === "biz") c[2].v += 214.60; }
+      if (f.venmo){ open -= 150; if (f.venmo === "contract"){ c[0].v += 150; c[0].name = "Payroll and contract help"; } }
+      if (f.square === "dup") c[4].v -= 89;
+      c.forEach(function(x){ x.v = round(x.v); });
+      var sorted = round(c.reduce(function(s, x){ return s + x.v; }, 0));
+      open = round(open);
+      return {c:c, sorted:sorted, open:open, total:round(sorted + open)};
+    }
+    function sumPanel(d, n){
+      var diff = d.total - SEPT;
+      var stamp = st.approved ? '<div class="stamp" aria-hidden="true">Approved<small>' + TODAY + ', by you</small></div>' : "";
+      var rows = d.c.map(function(x){
+        var dl = st.changed[x.k];
+        return '<li class="' + (dl ? "chg" : "") + '"><span class="name">' + x.name + '</span><span class="lead" aria-hidden="true"></span>' + (dl ? '<span class="delta">' + signed(dl) + '</span>' : "") + '<span class="amt">' + money(x.v) + '</span>' + tk("t", "T", "traced") + '</li>';
+      }).join("");
+      if (d.open > 0) rows += '<li class="open"><span class="name">Waiting on your answers</span><span class="lead" aria-hidden="true"></span><span class="amt">' + money(d.open) + '</span>' + tk("q", "?", "open") + '</li>';
+      return '<div class="total"><strong>' + money(d.total) + '</strong>' + tk("f", "F", "footed") + '<span class="vs">' + (diff >= 0 ? "Up " : "Down ") + money(Math.abs(diff)) + ' from September (' + money(SEPT) + ')</span></div>' +
+        '<div class="split"><div class="split-bar' + (d.open > 0 ? "" : " clear") + '" aria-hidden="true"><span class="ok"></span><span class="eyes"></span></div>' +
+        '<p class="split-legend"><span class="a">' + (d.open > 0 ? money(d.sorted) + ' sorted<span class="xs-hide"> and shown</span>' : "All " + money(d.sorted) + " sorted") + '</span>' + (d.open > 0 ? '<span class="b">' + money(d.open) + ' needs you</span>' : "") + '</p>' + stamp + '</div>' +
+        '<ul class="ledger">' + rows + '</ul>' + KEY;
+    }
+    function workPanel(d){
+      var f = st.f;
+      var tx = [
+        ["Oct 12", "Amazon", "214.60", f.amazon ? ANSWERED.amazon[f.amazon] : "no receipt", !!f.amazon],
+        ["Oct 20", "Venmo, J. Ruiz", "150.00", f.venmo ? ANSWERED.venmo[f.venmo] : "no memo", !!f.venmo],
+        ["Oct 27", "Square fee", "89.00", "", false],
+        ["Oct 28", "Square fee", "89.00", f.square ? ANSWERED.square[f.square] : "same as Oct 27", !!f.square]
+      ].map(function(r){ return '<tr class="' + (r[4] ? "done" : "") + '"><td>' + r[0] + '</td><td>' + r[1] + '</td><td class="n">' + r[2] + '</td><td class="note">' + r[3] + '</td></tr>'; }).join("");
+      var math = '<li><span>All 58 transactions</span><span>9,617.37</span></li><li><span>Transfers between your own accounts</span><span>−1,200.00</span></li>';
+      var personal = (f.amazon === "personal" ? 214.60 : 0) + (f.venmo === "personal" ? 150 : 0);
+      if (personal) math += '<li><span>Personal, per your answers</span><span>−' + money(personal).slice(1) + '</span></li>';
+      if (f.square === "dup") math += '<li><span>Duplicate Square fee</span><span>−89.00</span></li>';
+      math += '<li class="sum"><span>October expenses</span><span>' + money(d.total).slice(1) + tk("f", "F", "footed") + '</span></li>';
+      var ans = FLAGS.filter(function(x){ return st.f[x.k]; }).map(function(x){ return '<li>' + x.q.split(",")[0] + ' <span class="mono">' + money(x.amt) + '</span>: ' + ANSWERED[x.k][st.f[x.k]] + '</li>'; }).join("");
+      return '<p class="ws-h">Pulled from</p><ul class="ws-src">' +
+        '<li>' + tk("t", "T", "traced") + '<span>58 transactions from business checking ending <span class="mono">4821</span> and the business card ending <span class="mono">0937</span></span></li>' +
+        '<li>' + tk("t", "T", "traced") + '<span>31 receipts from your Receipts folder, matched by date and amount</span></li>' +
+        '<li>' + tk("p", "P", "preference") + '<span>Payroll from your payroll export, per your saved rule</span></li></ul>' +
+        '<p class="ws-h">Lines that needed a closer look</p><table class="tx"><caption class="sr-only">Flagged transactions</caption><tbody>' + tx + '</tbody></table>' +
+        '<p class="ws-h">The math</p><ul class="math">' + math + '</ul>' +
+        '<p class="ws-h">Your answers</p>' + (ans ? '<ul class="answers">' + ans + '</ul>' : '<p class="hint">None yet. <button type="button" class="linkbtn" data-act="q" data-f="work-q">Answer the questions</button></p>');
+    }
+    function qPanel(n){
+      return '<ul class="flags">' + FLAGS.map(function(x){
+        var v = st.f[x.k];
+        return '<li class="' + (v ? "ok" : "") + '"><div class="flag-top"><span class="flag-q" id="' + id + '-q-' + x.k + '">' + x.q + ': <span class="mono">' + money(x.amt) + '</span></span><span class="st">' + (v ? "Answered" : "Open") + '</span></div>' +
+          '<p class="flag-meta">' + x.meta + '</p><div class="opts" role="group" aria-labelledby="' + id + '-q-' + x.k + '">' +
+          x.opts.map(function(o){ return '<button type="button" class="opt" data-act="flag" data-k="' + x.k + '" data-v="' + o[0] + '" data-f="flag-' + x.k + '-' + o[0] + '" aria-pressed="' + (v === o[0]) + '">' + o[1] + '</button>'; }).join("") + '</div>' +
+          (v ? '<label class="rem"><input type="checkbox" data-rem="' + x.k + '"' + (st.rem[x.k] ? " checked" : "") + '> Remember this for next month</label>' : "") + '</li>';
+      }).join("") + '</ul>' + (n ? "" : '<p class="allclear">All answered. Your answers are already in the summary. <button type="button" class="linkbtn" data-act="tab" data-tab="sum" data-f="see-sum">See the summary</button></p>');
+    }
+    function foot(n){
+      var after = opts.hero ? '<button type="button" class="btn ghost sm" data-act="restart" data-f="restart">Start over</button>' : '<button type="button" class="btn sm" data-act="close" data-f="close">Close</button>';
+      var sign = '<p class="signoff"><span>Prepared by Right Hand, Nov 3</span><span>Approved by <span class="line' + (st.approved ? " signed" : "") + '">' + (st.approved ? "you, " + TODAY : "&nbsp;") + '</span></span></p>';
+      var row;
+      if (st.approved){
+        var saved = Object.keys(st.rem).filter(function(k){ return st.rem[k]; }).length;
+        var msg = opts.hero ? "Approved " + TODAY + ". In the full demo below, this moves to Completed." : "Approved " + TODAY + ". Saved to Completed.";
+        if (saved) msg += " " + saved + (saved > 1 ? " answers" : " answer") + " saved for next month.";
+        row = '<div class="foot-row"><p class="hint">' + msg + '</p><div class="acts">' + after + '</div></div>';
+      } else if (st.sent){
+        row = '<div class="foot-row"><p class="hint">Changes requested: “' + esc(st.note) + '”. The task goes back to In progress.</p><div class="acts">' + after + '</div></div>';
+      } else if (st.changing){
+        row = '<div class="note-field"><label for="' + id + '-note">What should change?</label><textarea id="' + id + '-note" data-f="note"' + (st.err ? ' aria-invalid="true" aria-describedby="' + id + '-note-err"' : "") + '>' + esc(st.note) + '</textarea>' +
+          (st.err ? '<p class="err" id="' + id + '-note-err">Write a short note so they know what to change.</p>' : "") + '</div>' +
+          '<div class="acts"><button type="button" class="btn ghost sm" data-act="cancel" data-f="cancel">Cancel</button><button type="button" class="btn sm" data-act="send" data-f="send">Send note</button></div>';
+      } else if (n){
+        row = '<div class="foot-row"><p class="hint">Approve unlocks once ' + (n > 1 ? "these are" : "this is") + ' answered.</p><div class="acts"><button type="button" class="btn ghost sm" data-act="change" data-f="change">Request changes</button><button type="button" class="btn sm" data-act="q" data-f="answer">Answer ' + n + (n > 1 ? " questions" : " question") + '</button></div></div>';
+      } else {
+        row = '<div class="foot-row"><p class="hint">Everything is answered.</p><div class="acts"><button type="button" class="btn ghost sm" data-act="change" data-f="change">Request changes</button><button type="button" class="btn sm" data-act="approve" data-f="approve">Approve</button></div></div>';
+      }
+      return '<div class="rv-foot">' + row + sign + '</div>';
+    }
+    function render(){
+      var a = document.activeElement;
+      var fk = a && root.contains(a) ? a.getAttribute("data-f") : null;
+      var d = cats(st.f), n = openCount();
+      var chip = st.approved ? '<span class="chip done">Approved</span>' : st.sent ? '<span class="chip">Changes requested</span>' : n ? '<span class="chip warn">' + n + ' need' + (n > 1 ? "" : "s") + ' you</span>' : '<span class="chip ok">Ready to approve</span>';
+      var panel = st.tab === "sum" ? sumPanel(d, n) : st.tab === "work" ? workPanel(d) : qPanel(n);
+      root.innerHTML =
+        '<div class="rv-head"><div><h3' + (opts.titleId ? ' id="' + opts.titleId + '"' : "") + '>October expense summary</h3><p class="rv-sub">Ozark Paws Grooming (made-up demo shop). 58 transactions in October.</p></div>' + chip + '</div>' +
+        '<div class="tabs" role="tablist" aria-label="Review sections">' + TABS.map(function(t){
+          var sel = st.tab === t[0];
+          return '<button type="button" class="tab" role="tab" id="' + id + '-tab-' + t[0] + '" aria-controls="' + id + '-panel" aria-selected="' + sel + '" tabindex="' + (sel ? 0 : -1) + '" data-act="tab" data-tab="' + t[0] + '" data-f="tab-' + t[0] + '">' + t[1] + (t[0] === "q" ? '<span class="count' + (n ? "" : " zero") + '" aria-hidden="true">' + n + '</span><span class="sr-only">, ' + n + ' open</span>' : "") + '</button>';
+        }).join("") + '</div>' +
+        '<div class="panel" role="tabpanel" tabindex="0" id="' + id + '-panel" aria-labelledby="' + id + '-tab-' + st.tab + '">' + panel + '</div>' + foot(n);
+      var bar = root.querySelector(".split-bar");
+      if (bar){
+        var ok = bar.children[0], eyes = bar.children[1];
+        if (first && !opts.noIntro){ bar.classList.add("intro"); ok.style.flexGrow = d.sorted; eyes.style.flexGrow = d.open; }
+        else {
+          ok.style.flexGrow = prev.ok != null ? prev.ok : d.sorted; eyes.style.flexGrow = prev.eyes != null ? prev.eyes : d.open;
+          void bar.offsetWidth;
+          ok.style.flexGrow = d.sorted; eyes.style.flexGrow = d.open;
+        }
+        prev.ok = d.sorted; prev.eyes = d.open;
+        st.changed = {};
+      }
+      first = false;
+      if (fk){ var el = root.querySelector('[data-f="' + fk + '"]'); if (el) el.focus(); }
+    }
+    function focusFirstOpen(){
+      var b = root.querySelector('.flags li:not(.ok) .opt') || root.querySelector(".flags .opt");
+      if (b) b.focus();
+    }
+    root.addEventListener("click", function(e){
+      var b = e.target.closest("button"); if (!b || !root.contains(b)) return;
+      var act = b.getAttribute("data-act");
+      if (act === "tab"){ st.tab = b.getAttribute("data-tab"); render(); var tb = root.querySelector('[data-f="tab-' + st.tab + '"]'); if (tb && b.classList.contains("linkbtn")) tb.focus(); return; }
+      if (act === "q"){ st.tab = "q"; render(); focusFirstOpen(); return; }
+      if (act === "flag"){
+        var k = b.getAttribute("data-k"), v = b.getAttribute("data-v");
+        var before = cats(st.f); st.f[k] = v; var after = cats(st.f);
+        after.c.forEach(function(x, i){ var dv = round(x.v - before.c[i].v); if (dv) st.changed[x.k] = round((st.changed[x.k] || 0) + dv); });
+        render();
+        var left = openCount();
+        say(FLAGS.filter(function(x){ return x.k === k; })[0].q.split(",")[0] + " marked " + OPTLABEL[v] + ". Total is now " + money(after.total) + "." + (left ? " " + left + " left." : " All answered. You can approve."));
+        return;
+      }
+      if (act === "approve"){ if (openCount()) return; st.approved = true; st.tab = "sum"; render(); say("Approved."); var ab = root.querySelector('[data-f="restart"],[data-f="close"]'); if (ab) ab.focus(); if (opts.onApprove) opts.onApprove(); return; }
+      if (act === "change"){ st.changing = true; st.err = false; render(); var ta = root.querySelector("textarea"); if (ta) ta.focus(); return; }
+      if (act === "cancel"){ st.changing = false; st.err = false; render(); var cb = root.querySelector('[data-f="change"]'); if (cb) cb.focus(); return; }
+      if (act === "send"){
+        if (!st.note.trim()){ st.err = true; render(); var t2 = root.querySelector("textarea"); if (t2) t2.focus(); return; }
+        st.note = st.note.trim(); st.sent = true; st.changing = false; st.err = false; render();
+        say("Changes requested."); var nb = root.querySelector('[data-f="restart"],[data-f="close"]'); if (nb) nb.focus();
+        if (opts.onSendBack) opts.onSendBack(st.note); return;
+      }
+      if (act === "restart"){ fresh(); prev = {}; render(); var t0 = root.querySelector('[data-f="tab-sum"]'); if (t0) t0.focus(); say("Started over."); return; }
+      if (act === "close"){ if (opts.onClose) opts.onClose(); }
+    });
+    root.addEventListener("keydown", function(e){
+      if (!e.target.classList || !e.target.classList.contains("tab")) return;
+      var i = TABS.map(function(x){ return x[0]; }).indexOf(st.tab), j;
+      if (e.key === "ArrowRight") j = (i + 1) % TABS.length;
+      else if (e.key === "ArrowLeft") j = (i + TABS.length - 1) % TABS.length;
+      else if (e.key === "Home") j = 0;
+      else if (e.key === "End") j = TABS.length - 1;
+      else return;
+      e.preventDefault(); st.tab = TABS[j][0]; render();
+      var nt = root.querySelector('[data-f="tab-' + st.tab + '"]'); if (nt) nt.focus();
+    });
+    root.addEventListener("input", function(e){ if (e.target.matches("textarea")) st.note = e.target.value; });
+    root.addEventListener("change", function(e){ if (e.target.matches("[data-rem]")) st.rem[e.target.getAttribute("data-rem")] = e.target.checked; });
+    render();
+  }
+
+  makeReview($("#hero-rv"), $("#hero-live"), {hero:true, id:"hero"});
+
+  /* ---------- receipts workpaper ---------- */
+  (function(){
+    var root = $("#wp"), live = $("#wp-live"), fee = null, approved = false;
+    function render(){
+      var a = document.activeElement, fk = a && root.contains(a) ? a.getAttribute("data-f") : null;
+      var bal = fee === "yes" ? 243.60 : 240;
+      var chip = approved ? '<span class="chip done">Approved</span>' : fee ? '<span class="chip ok">Ready to approve</span>' : '<span class="chip warn">1 needs you</span>';
+      var body = '<p>Hi Dana,</p><p>A friendly reminder that invoice <span class="fig">1043</span> from September 12 still has a balance of <span class="fig">' + money(bal) + '</span>' + tk("f", "F", "footed") + ' after your October 2 payment of <span class="fig">$160.00</span>' + tk("t", "T", "traced") + '.' +
+        (fee === "yes" ? ' That includes a 1.5% late fee of <span class="fig">$3.60</span>, per our payment terms.' : "") + '</p><p>You can pay by card using the link on the invoice. Thanks for the referrals!</p><p>Lena, Ozark Paws Grooming</p>';
+      var mathNote = fee === "yes" ? '<span class="fig">$400.00</span> − <span class="fig">$160.00</span> + <span class="fig">$3.60</span> late fee = <span class="fig">$243.60</span>.' : '<span class="fig">$400.00</span> − <span class="fig">$160.00</span> = <span class="fig">$240.00</span>.';
+      var qClass = "q" + (fee ? " ok" : "");
+      var foot;
+      if (approved) foot = '<div class="foot-row"><p class="hint">Approved ' + TODAY + '. In the real product, the 4 reminders would send now.</p><div class="acts"><button type="button" class="btn ghost sm" data-act="restart" data-f="wp-restart">Start over</button></div></div>';
+      else if (!fee) foot = '<div class="foot-row"><p class="hint">Approve unlocks once the late fee question is answered.</p><div class="acts"><button type="button" class="btn sm" data-act="q" data-f="wp-answer">Answer 1 question</button></div></div>';
+      else foot = '<div class="foot-row"><p class="hint">All 4 reminders are ready to send.</p><div class="acts"><button type="button" class="btn sm" data-act="approve" data-f="wp-approve">Approve all 4</button></div></div>';
+      root.innerHTML =
+        '<div class="rv-head"><div><h3>Reminder emails for 4 overdue invoices</h3><p class="rv-sub">Ozark Paws Grooming (made up). Prepared Nov 3. Showing 1 of 4.</p></div>' + chip + '</div>' +
+        '<div class="wp-mail">' + (approved ? '<div class="stamp" aria-hidden="true">Approved<small>' + TODAY + ', by you</small></div>' : "") +
+          '<dl class="mail-meta"><div><dt>To</dt><dd>Dana Whitfield, Hillside Vet billing (made up)</dd></div><div><dt>Subject</dt><dd>Invoice <span class="fig">1043</span>: <span class="fig">' + money(bal) + '</span> balance</dd></div></dl>' +
+          '<div class="mail-body">' + body + '</div></div>' +
+        '<ul class="wp-notes" aria-label="Notes on this draft">' +
+          '<li>' + tk("t", "T", "traced") + '<div>Built from invoice <span class="fig">1043</span> (<span class="fig">$400.00</span>, sent Sep 12) and the <span class="fig">$160.00</span> payment in your bank feed on Oct 2.</div></li>' +
+          '<li>' + tk("f", "F", "footed") + '<div>' + mathNote + ' The invoice was 52 days old on Nov 3.</div></li>' +
+          '<li class="' + qClass + '">' + tk("q", "?", "open") + '<div><span id="wp-q">Your payment terms add a 1.5% late fee after 30 days. That’s <span class="fig">$3.60</span> here. Include it?</span>' +
+            '<div class="opts" role="group" aria-labelledby="wp-q"><button type="button" class="opt" data-act="fee" data-v="yes" data-f="fee-yes" aria-pressed="' + (fee === "yes") + '">Include $3.60</button><button type="button" class="opt" data-act="fee" data-v="no" data-f="fee-no" aria-pressed="' + (fee === "no") + '">Leave it off</button></div></div></li>' +
+          '<li>' + tk("p", "P", "preference") + '<div>Your saved preference: friendly tone for clients who usually pay within 60 days.</div></li>' +
+        '</ul>' +
+        '<div class="rv-foot">' + foot + KEY.replace('</p>', '<span>' + tk("p", "P", "preference") + 'Your saved preference</span></p>') +
+          '<p class="signoff"><span>Prepared by Right Hand, Nov 3</span><span>Approved by <span class="line' + (approved ? " signed" : "") + '">' + (approved ? "you, " + TODAY : "&nbsp;") + '</span></span></p></div>';
+      if (fk){ var el = root.querySelector('[data-f="' + fk + '"]'); if (el) el.focus(); }
+    }
+    function say(m){ live.textContent = ""; setTimeout(function(){ live.textContent = m; }, 30); }
+    root.addEventListener("click", function(e){
+      var b = e.target.closest("button"); if (!b) return;
+      var act = b.getAttribute("data-act");
+      if (act === "fee"){ fee = b.getAttribute("data-v"); render(); say(fee === "yes" ? "Late fee included. Balance is now $243.60." : "Late fee left off. Balance stays $240.00."); }
+      else if (act === "q"){ var o = root.querySelector('[data-f="fee-yes"]'); if (o) o.focus(); }
+      else if (act === "approve"){ approved = true; render(); say("Approved. All 4 reminders."); var r = root.querySelector('[data-f="wp-restart"]'); if (r) r.focus(); }
+      else if (act === "restart"){ fee = null; approved = false; render(); var y = root.querySelector('[data-f="fee-yes"]'); if (y) y.focus(); say("Started over."); }
+    });
+    render();
+  })();
+
+  /* ---------- board ---------- */
+  var COLS = [
+    ["progress", "In progress", "Being prepared by AI or an assistant (we haven’t decided which)."],
+    ["input", "Needs your input", "A question comes to you only when something is missing."],
+    ["review", "Ready to review", "Finished work with its sources and math."],
+    ["done", "Completed", "Approved work and saved files."]
+  ];
+  var EMPTY = {progress:"Nothing in progress. Add a task to start.", input:"No questions waiting on you.", review:"Nothing to review right now.", done:"Approved work shows up here."};
+  var TASKS0 = [
+    {id:1, s:"progress", t:"Reconcile October card statement", due:"Nov 7", p:60},
+    {id:3, s:"input", t:"October payroll prep", due:"Nov 6", ask:"Were Kayla’s 6 overtime hours on Oct 18 approved?", a:["Yes","No"]},
+    {id:4, s:"input", t:"Reminder emails for 4 overdue invoices", due:"Nov 6", ask:"Should the reminder to Hillside Vet include the late fee?", a:["Yes","No"]},
+    {id:5, s:"review", t:"October expense summary", due:"Nov 5", rv:true},
+    {id:6, s:"done", t:"September expense summary", m:"Approved Oct 3"},
+    {id:7, s:"done", t:"August expense summary", m:"Approved Sep 4"}
+  ];
+  var PREFS0 = ["Payroll comes from the payroll export, not the bank line.", "Use the same expense categories as last year’s taxes."];
+  var tasks, prefs, nextId;
+  var board = $("#board"), status = $("#board-status"), prefsEl = $("#prefs");
+  function seed(){ tasks = JSON.parse(JSON.stringify(TASKS0)); prefs = PREFS0.slice(); nextId = 100; }
+  function say(m){ status.textContent = m; }
+  function find(id){ return tasks.filter(function(t){ return t.id === id; })[0]; }
+  function card(t){
+    var meta = [];
+    if (t.due) meta.push("Due " + esc(t.due));
+    if (t.m) meta.push(esc(t.m));
+    var head = '<div class="t">' + esc(t.t) + '</div>' + (meta.length ? '<div class="m">' + meta.join(". ") + '</div>' : "");
+    var open = '<div class="card' + (t.fresh ? " new" : "") + '" data-card="' + t.id + '" tabindex="-1">';
+    if (t.s === "progress") return open + head + '<div class="prog" role="progressbar" aria-label="' + esc(t.t) + ', progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + t.p + '"><i style="width:' + t.p + '%"></i></div></div>';
+    if (t.s === "input") return open + head + '<div class="ask" id="ask-' + t.id + '">' + esc(t.ask) + '</div><div class="row" role="group" aria-labelledby="ask-' + t.id + '">' +
+      t.a.map(function(a){ return '<button type="button" class="opt" data-act="answer" data-id="' + t.id + '" data-a="' + esc(a) + '">' + esc(a) + '</button>'; }).join("") + '</div></div>';
+    if (t.s === "review") return open + head + '<div class="m">Comes with its sources, the math and 3 questions.</div><div class="row"><button type="button" class="btn sm" data-act="review" data-id="' + t.id + '" aria-label="Review ' + esc(t.t) + '">Review</button></div></div>';
+    return open + head + '</div>';
+  }
+  function renderBoard(){
+    board.innerHTML = COLS.map(function(col){
+      var list = tasks.filter(function(t){ return t.s === col[0]; });
+      return '<section class="col" data-k="' + col[0] + '" aria-labelledby="col-' + col[0] + '"><div class="col-h"><h3 id="col-' + col[0] + '">' + col[1] + '</h3><span class="n" aria-label="' + list.length + ' tasks">' + list.length + '</span></div><p class="col-cap">' + col[2] + '</p>' +
+        (list.map(card).join("") || '<p class="empty">' + EMPTY[col[0]] + '</p>') + '</section>';
+    }).join("");
+    prefsEl.innerHTML = '<strong>' + BOOKMARK + 'Saved preferences</strong><ul>' + prefs.map(function(p){ return '<li>' + esc(p) + '</li>'; }).join("") + '</ul>';
+    tasks.forEach(function(t){ delete t.fresh; });
+  }
+  function focusCard(id){ var el = board.querySelector('[data-card="' + id + '"]'); if (el){ el.focus({preventScroll:true}); el.scrollIntoView({block:"nearest", behavior:matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"}); } }
+
+  function openDialog(d){ if (typeof d.showModal === "function") d.showModal(); else d.setAttribute("open", ""); }
+  function closeDialog(d){ if (typeof d.close === "function") d.close(); else d.removeAttribute("open"); }
+  var returnTo = null;
+  document.querySelectorAll("dialog").forEach(function(d){
+    d.addEventListener("click", function(e){ if (e.target === d || e.target.closest("[data-close]")) closeDialog(d); });
+    d.addEventListener("close", function(){
+      var target = typeof returnTo === "number" ? board.querySelector('[data-card="' + returnTo + '"]') : returnTo;
+      if (target && document.body.contains(target)) target.focus();
+      returnTo = null;
+    });
+  });
+  var dlgReview = $("#dlg-review"), dlgNew = $("#dlg-new");
+
+  board.addEventListener("click", function(e){
+    var b = e.target.closest("button"); if (!b) return;
+    var act = b.getAttribute("data-act"), t = find(Number(b.getAttribute("data-id")));
+    if (!t) return;
+    if (act === "answer"){
+      var a = b.getAttribute("data-a");
+      t.s = "progress"; t.p = 25; t.m = "You answered: " + a; t.fresh = true; delete t.ask;
+      renderBoard(); focusCard(t.id);
+      say("Answer saved. “" + t.t + "” is back in progress.");
+    } else if (act === "review"){
+      returnTo = b;
+      var body = $("#dlg-review-body");
+      body.innerHTML = '<div class="rv"></div>';
+      makeReview(body.firstChild, $("#dlg-live"), {
+        id:"dlg", titleId:"dlg-title", noIntro:true,
+        onApprove:function(){ t.s = "done"; t.m = "Approved " + TODAY; t.fresh = true; delete t.due; renderBoard(); returnTo = t.id; say("“" + t.t + "” approved and saved to Completed."); },
+        onSendBack:function(){ t.s = "progress"; t.p = 80; t.m = "Changes requested"; t.fresh = true; renderBoard(); returnTo = t.id; say("“" + t.t + "” is back in progress with your note."); },
+        onClose:function(){ closeDialog(dlgReview); }
+      });
+      openDialog(dlgReview);
+      var ft = body.querySelector(".tab"); if (ft) ft.focus();
+    }
+  });
+
+  /* ---------- new task form ---------- */
+  var HINTS = {
+    "Expense summary":"Which month? Which accounts and cards? Anything personal to leave out?",
+    "Invoice follow-ups":"Which clients or invoices? How firm should the tone be? Include late fees?",
+    "Payroll prep":"Which pay period? Where do the hours come from? Who approves overtime?",
+    "Something else":"What result do you want, and how will you know it was done right?"
+  };
+  var fType = $("#f-type"), fIns = $("#f-ins"), fHint = $("#f-hint"), fErr = $("#f-err"), fDue = $("#f-due"), fSave = $("#f-save"), fFiles = $("#f-files");
+  function iso(d){ var m = d.getMonth() + 1, day = d.getDate(); return d.getFullYear() + "-" + (m < 10 ? "0" : "") + m + "-" + (day < 10 ? "0" : "") + day; }
+  function setHint(){ fHint.textContent = "Good to include: " + HINTS[fType.value]; }
+  fType.addEventListener("change", setHint);
+  fIns.addEventListener("input", function(){ if (fIns.value.trim()){ fErr.hidden = true; fIns.removeAttribute("aria-invalid"); } });
+  $("#new-task").addEventListener("click", function(){
+    returnTo = this;
+    $("#f-new").reset(); fErr.hidden = true; fIns.removeAttribute("aria-invalid");
+    var d = new Date(); d.setDate(d.getDate() + 3); fDue.value = iso(d); fDue.min = iso(new Date());
+    setHint(); openDialog(dlgNew); fType.focus();
+  });
+  $("#f-new").addEventListener("submit", function(e){
+    e.preventDefault();
+    var ins = fIns.value.trim();
+    if (!ins){ fErr.hidden = false; fIns.setAttribute("aria-invalid", "true"); fIns.focus(); return; }
+    var type = fType.value, title = type, words = ins.split(/\s+/);
+    if (type === "Something else") title = words.slice(0, 6).join(" ") + (words.length > 6 ? "…" : "");
+    var due = "";
+    if (fDue.value){ var p = fDue.value.split("-"); due = shortDate(new Date(+p[0], +p[1] - 1, +p[2])); }
+    var files = fFiles.files ? fFiles.files.length : 0;
+    var t = {id:nextId++, s:"progress", t:title, due:due, p:5, m:"Just added" + (files ? ", " + files + " file" + (files > 1 ? "s" : "") + " attached" : ""), fresh:true};
+    tasks.push(t);
+    if (fSave.checked) prefs.push(type + ": " + (ins.length > 60 ? ins.slice(0, 60) + "…" : ins));
+    renderBoard(); returnTo = t.id; closeDialog(dlgNew);
+    say("“" + title + "” added to In progress." + (fSave.checked ? " Instructions saved as a preference." : ""));
+  });
+  $("#reset").addEventListener("click", function(){ seed(); renderBoard(); say("Demo reset. Answer a question under Needs your input, or open the expense summary under Ready to review."); });
+
+  seed(); renderBoard();
+})();
+</script>
+</body>
+</html>
