@@ -5,6 +5,7 @@
   /* ---------- config and helpers ---------- */
   var CONTACT = { email: "jvarela@uark.edu", form: "" };
   var RM = matchMedia("(prefers-reduced-motion: reduce)");
+  if (!RM.matches) document.documentElement.classList.add("js-motion");
   var SRC = (new URLSearchParams(location.search).get("src") || "").toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 16);
   var LAST = { secs: 0, where: "" };
   var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -15,7 +16,7 @@
   var bare = function (n) { return money(n).slice(1); };
   var signed = function (n) { return (n > 0 ? "+" : "−") + money(Math.abs(n)); };
   var shortDate = function (d) { return d.toLocaleDateString("en-US", { month: "short", day: "numeric" }); };
-  var TODAY = shortDate(new Date());
+  var TODAY = "Nov 5"; /* the demo clock is frozen so every date on the sheet agrees */
   var fmtTime = function (s) { return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); };
   var spokenTime = function (s) { var m = Math.floor(s / 60), r = s % 60; return (m ? m + (m > 1 ? " minutes " : " minute ") : "") + r + (r === 1 ? " second" : " seconds"); };
   var SEPT = 7902.10;
@@ -54,7 +55,7 @@
 
   function makeReview(root, live, opts) {
     opts = opts || {};
-    var id = opts.id, st, prev = {}, first = true, lockUntil = 0, t0 = 0;
+    var id = opts.id, st, prev = {}, first = true, lockUntil = 0, t0 = 0, maxH = 0;
     var quiet = opts.quiet || function () { return false; };
     function fresh() { st = { tab: "sum", f: {}, rem: {}, approved: false, sent: false, changing: false, note: "", err: false, changed: {}, fresh: false, just: null }; t0 = 0; }
     fresh();
@@ -79,11 +80,11 @@
     function sumPanel(d, n) {
       var diff = d.total - SEPT;
       var stamp = st.approved ? '<div class="stamp' + (st.fresh ? " fresh" : "") + '" aria-hidden="true">Approved<small>' + TODAY + ', by you</small></div>' : "";
-      var rows = d.c.map(function (x) {
+      var rows = d.c.map(function (x, i) {
         var dl = st.changed[x.k];
-        return '<li class="' + (dl ? "chg" : "") + '"><span class="name">' + x.name + '</span><span class="lead" aria-hidden="true"></span>' + (dl ? '<span class="delta">' + signed(dl) + '</span>' : "") + '<span class="amt">' + money(x.v) + '</span>' + tk("t") + '</li>';
+        return '<li class="' + (dl ? "chg" : "") + '" style="--n:' + i + '"><span class="name">' + x.name + '</span><span class="lead" aria-hidden="true"></span>' + (dl ? '<span class="delta">' + signed(dl) + '</span>' : "") + '<span class="amt">' + money(x.v) + '</span>' + tk("t") + '</li>';
       }).join("");
-      if (d.open > 0) rows += '<li class="open"><span class="name">Waiting on your answers</span><span class="lead" aria-hidden="true"></span><span class="amt">' + money(d.open) + '</span>' + tk("q") + '</li>';
+      if (d.open > 0) rows += '<li class="open" style="--n:6"><span class="name">Waiting on your answers</span><span class="lead" aria-hidden="true"></span><span class="amt">' + money(d.open) + '</span>' + tk("q") + '</li>';
       var legend = d.open > 0
         ? '<span class="a">' + money(d.sorted) + ' in categories</span><button type="button" class="linkbtn legend-q" data-act="q" data-f="legend-q">' + n + (n > 1 ? " questions" : " question") + ' about ' + money(d.open) + '</button>'
         : '<span class="a">All ' + money(d.sorted) + ' in categories</span>';
@@ -122,7 +123,7 @@
           x.opts.map(function (o) { return '<button type="button" class="opt" data-act="flag" data-k="' + x.k + '" data-v="' + o[0] + '" data-f="flag-' + x.k + '-' + o[0] + '" aria-pressed="' + (v === o[0]) + '"' + (lock ? " disabled" : "") + '>' + o[1] + '</button>'; }).join("") + '</div>' +
           (v ? '<label class="rem"><input type="checkbox" data-rem="' + x.k + '"' + (st.rem[x.k] ? " checked" : "") + (lock ? " disabled" : "") + '> Remember this for next month<span class="sr-only"> (' + x.q + ')</span></label>' : "") + '</li>';
       }).join("") + '</ul>' +
-        (lock ? '<p class="hint allclear">Answers are locked once this is ' + (st.approved ? "approved" : "sent back") + '.' + (opts.hero ? " Use Start over to try again." : "") + '</p>'
+        (lock ? '<p class="hint allclear">' + (st.approved ? "Answers are locked once this is approved." : "Answers are locked once you request changes.") + (opts.hero ? " Use Start over to try again." : "") + '</p>'
           : (n ? "" : '<p class="allclear"><button type="button" class="linkbtn" data-act="tab" data-tab="sum" data-f="see-sum">See the updated summary</button></p>'));
     }
     function foot(n) {
@@ -181,20 +182,26 @@
         if (from !== to) tween(650, function (p) { tot.textContent = money(from + (to - from) * p); }, function () { tot.textContent = money(to); });
         prev.total = to;
       }
-      // the tab ink slides to the selected tab
-      var ink = root.querySelector(".tab-ink"), sel = root.querySelector('.tab[aria-selected="true"]');
-      if (ink && sel) {
-        var x = sel.offsetLeft, w = sel.offsetWidth;
-        if (prev.ink && !RM.matches) {
-          ink.style.transform = "translateX(" + prev.ink.x + "px) scaleX(" + prev.ink.w / 100 + ")"; void ink.offsetWidth;
-          ink.style.transition = "transform .24s cubic-bezier(.23,1,.32,1)";
-        }
-        ink.style.transform = "translateX(" + x + "px) scaleX(" + w / 100 + ")";
-        prev.ink = { x: x, w: w };
-      }
+      placeInk(true);
+      if (opts.lockHeight) { var pn = root.querySelector(".panel"); if (pn && pn.offsetHeight > maxH) { maxH = pn.offsetHeight; } if (pn && maxH) pn.style.minHeight = maxH + "px"; }
       first = false; st.fresh = false; st.just = null;
       if (fk && !quiet()) { var el = root.querySelector('[data-f="' + fk + '"]'); if (el && !el.disabled) el.focus({ preventScroll: true }); }
     }
+    // the tab ink slides to the selected tab; measured again whenever the sheet resizes or becomes visible
+    function placeInk(animate) {
+      var ink = root.querySelector(".tab-ink"), sel = root.querySelector('.tab[aria-selected="true"]');
+      if (!ink || !sel) return;
+      var x = sel.offsetLeft, w = sel.offsetWidth;
+      if (!w) return;
+      if (animate && prev.ink && !RM.matches) {
+        ink.style.transition = "none"; ink.style.transform = "translateX(" + prev.ink.x + "px) scaleX(" + prev.ink.w / 100 + ")"; void ink.offsetWidth;
+        ink.style.transition = "transform .24s cubic-bezier(.23,1,.32,1)";
+      } else ink.style.transition = "none";
+      ink.style.transform = "translateX(" + x + "px) scaleX(" + w / 100 + ")";
+      prev.ink = { x: x, w: w };
+      ink.parentNode.classList.add("inked");
+    }
+    if (window.ResizeObserver) new ResizeObserver(function () { placeInk(false); }).observe(root);
     function focusSel(s) { if (quiet()) return; var el = root.querySelector(s); if (el) el.focus({ preventScroll: true }); }
     root.addEventListener("click", function (e) {
       var b = e.target.closest("button"); if (!b || !root.contains(b) || b.disabled) return;
@@ -253,6 +260,7 @@
       root: root,
       clean: function () { return !st.approved && !st.sent && !st.changing && !Object.keys(st.f).length && st.tab === "sum"; },
       restart: function () { fresh(); render(); },
+      prep: function () { prev.total = 0; prev.ok = 0; prev.eyes = 0; root.classList.add("prep"); render(); setTimeout(function () { root.classList.remove("prep"); }, 1300); },
       openQuestions: function () { if (!t0 && !quiet()) t0 = performance.now(); st.tab = "q"; render(); focusSel(".flags li:not(.ok) .opt"); }
     };
   }
@@ -261,13 +269,13 @@
   var reviewedBy = $("#reviewed-by"), signHint = $("#sign-hint"), heroAsk = $("#hero-ask");
   var HA = { playing: false };
   var hero = makeReview($("#hero-rv"), $("#hero-live"), {
-    hero: true, id: "hero",
+    hero: true, id: "hero", lockHeight: true,
     quiet: function () { return HA.playing; },
     onApprove: function (secs) {
       if (HA.playing) return;
       LAST.secs = secs >= 5 && secs <= 600 ? secs : 0;
       reviewedBy.textContent = "you, " + TODAY; reviewedBy.classList.add("signed"); if (signHint) signHint.hidden = true;
-      heroAsk.innerHTML = (LAST.secs ? '<p class="na-time" aria-hidden="true">You approved this made-up month in ' + fmtTime(LAST.secs) + '.</p><p class="sr-only">You approved this made-up month in ' + spokenTime(LAST.secs) + '.</p>' : "") +
+      heroAsk.innerHTML = (LAST.secs ? '<p class="na-time">You approved this made-up month in ' + spokenTime(LAST.secs) + '.</p>' : "") +
         '<h3>Would checking your real month go that fast?</h3><p>That is what we are testing. Real books are messier. Give us 15 minutes and tell us what you would still check.</p>' +
         '<a class="btn" href="#ask" data-ask="approved">Get a 15-minute walkthrough</a><p class="fine" style="color:var(--n-mute)">Your time goes into the email draft. Edit anything before you send.</p>';
       heroAsk.hidden = false; updateComposer();
@@ -281,10 +289,11 @@
 
   (function autoplay() {
     var frame = $("#hero-frame"), rv = $("#hero-rv"), cur = $("#hero-cursor"), stateEl = $("#hero-state"), btn = $("#hero-demo-btn");
-    var S = [[1600, "to", "tab-q"], [850, "tap", "tab-q"], [800, "to", "flag-amazon-biz"], [700, "tap", "flag-amazon-biz"],
+    var S = [[900, "prep"], [1700, "to", "tab-q"], [850, "tap", "tab-q"], [800, "to", "flag-amazon-biz"], [700, "tap", "flag-amazon-biz"],
       [800, "to", "flag-venmo-contract"], [700, "tap", "flag-venmo-contract"], [800, "to", "flag-square-dup"], [700, "tap", "flag-square-dup"],
       [800, "to", "see-sum"], [700, "tap", "see-sum"], [1300, "to", "approve"], [700, "tap", "approve"], [600, "hide"], [2600, "swap"]];
-    var i = 0, loops = 0, timer = 0, due = 0, left = 0, running = false, vis = false, auto = !RM.matches, started = false;
+    var i = 0, loops = 0, timer = 0, due = 0, left = 0, running = false, vis = false, auto = !RM.matches, started = false, swapT = 0, endT = 0;
+    function claim() { auto = false; started = true; }
     function q(f) { return rv.querySelector('[data-f="' + f + '"]'); }
     function setState(kind) {
       stateEl.className = "state " + kind;
@@ -299,14 +308,17 @@
     function step() {
       if (!HA.playing) return;
       var s = S[i++], el = s[2] && q(s[2]);
-      if (s[1] === "to" && el) moveTo(el);
+      if (s[1] === "prep") { stateEl.lastChild.textContent = "Preparing"; hero.prep(); }
+      else if (stateEl.lastChild.textContent === "Preparing") stateEl.lastChild.textContent = "Demo playing";
+      if (s[1] === "prep") { /* done above */ }
+      else if (s[1] === "to" && el) moveTo(el);
       else if (s[1] === "tap" && el) { cur.classList.add("down"); setTimeout(function () { cur.classList.remove("down"); }, 120); el.click(); }
       else if (s[1] === "hide") cur.style.opacity = 0;
       else if (s[1] === "swap") {
         rv.classList.add("swap");
-        setTimeout(function () { hero.restart(); rv.classList.remove("swap"); }, 220);
+        swapT = setTimeout(function () { rv.classList.remove("swap"); if (HA.playing) hero.restart(); }, 220);
         i = 0; loops++;
-        if (loops >= 3) { setTimeout(function () { end(false); }, 260); return; }
+        if (loops >= 3) { endT = setTimeout(function () { if (HA.playing) end(false); }, 260); return; }
       }
       sched(S[i][0]);
     }
@@ -314,32 +326,43 @@
     function pause() { if (running) { clearTimeout(timer); left = Math.max(0, due - Date.now()); running = false; } }
     function resume() { if (HA.playing && !running && vis && !document.hidden) { running = true; sched(left || S[i][0]); left = 0; } }
     function start() {
+      clearTimeout(swapT); clearTimeout(endT);
       if (!hero.clean()) hero.restart();
       heroAsk.hidden = true; i = 0; loops = 0; left = 0; HA.playing = true; started = true; setState("playing"); resume();
     }
     function end(reset) {
-      if (!HA.playing && started) { setState("turn"); return; }
+      clearTimeout(swapT); clearTimeout(endT); rv.classList.remove("swap");
+      if (!HA.playing) { setState("turn"); return; }
       pause(); HA.playing = false; cur.style.opacity = 0; setState("turn");
       if (reset && !hero.clean()) { hero.restart(); }
+      if (LAST.secs) heroAsk.hidden = false;
     }
-    btn.addEventListener("click", function () { if (HA.playing) end(true); else start(); });
+    btn.addEventListener("click", function () {
+      if (HA.playing) { claim(); end(true); return; }
+      var r = frame.getBoundingClientRect();
+      if (r.top < 64 || r.top > innerHeight * .5) frame.scrollIntoView({ block: "start", behavior: RM.matches ? "auto" : "smooth" });
+      vis = true; start();
+    });
     // a real click or keyboard focus inside the sheet hands it over
     frame.addEventListener("click", function (e) {
-      if (!HA.playing || !e.isTrusted || e.target.closest(".rv-bar")) return;
+      if (!e.isTrusted || e.target.closest(".rv-bar")) return;
+      if (!HA.playing) { claim(); return; }
+      claim();
       var dirty = !hero.clean();
       end(true);
       if (dirty) { e.preventDefault(); e.stopPropagation(); }
     }, true);
-    frame.addEventListener("focusin", function (e) { if (HA.playing && !e.target.closest(".rv-bar")) end(true); });
-    frame.addEventListener("keydown", function (e) { if (HA.playing && !e.target.closest(".rv-bar")) end(true); }, true);
+    frame.addEventListener("focusin", function (e) { if (e.target.closest(".rv-bar")) return; claim(); if (HA.playing) end(true); });
+    frame.addEventListener("keydown", function (e) { if (e.target.closest(".rv-bar")) return; claim(); if (HA.playing) end(true); }, true);
     new IntersectionObserver(function (es) {
-      vis = es[0].intersectionRatio >= .5;
+      var en = es[0], rb = en.rootBounds;
+      vis = en.isIntersecting && (en.intersectionRatio >= .5 || (rb && en.intersectionRect.height >= rb.height * .55));
       if (vis && auto && !started) { start(); return; }
       if (vis) resume(); else pause();
-    }, { threshold: [0, .5] }).observe(rv);
+    }, { threshold: [0, .1, .2, .3, .4, .5, .6] }).observe(rv);
     document.addEventListener("visibilitychange", function () { if (document.hidden) pause(); else resume(); });
     if (!auto) setState("turn");
-    HA.takeOver = function () { end(true); };
+    HA.takeOver = function () { claim(); end(true); };
   })();
 
   $("#try-first").addEventListener("click", function () {
@@ -353,7 +376,6 @@
   function flowSVG(L) {
     var o = [];
     o.push('<svg class="' + L.cls + '" viewBox="' + L.vb + '" aria-hidden="true" focusable="false">');
-    L.labels.forEach(function (l) { o.push('<text class="col" x="' + l[0] + '" y="' + l[1] + '">' + l[2] + '</text>'); });
     L.wires.src.forEach(function (d) { o.push('<path class="wire" d="' + d + '"/>'); });
     ["cs", "so"].forEach(function (k) { o.push('<path class="wire" d="' + L.wires[k] + '"/>'); });
     var SN = [["Business checking", "ending 4821"], ["Business card", "ending 0937"], ["Receipts folder", "31 files"], ["Payroll export", "October"]];
@@ -374,7 +396,7 @@
       '<g class="row r1"><text x="18" y="90">Payroll</text><text class="m" x="212" y="90" text-anchor="end">3,650.00</text></g>' +
       '<g class="row r2"><text x="18" y="118">Rent</text><text class="m" x="212" y="118" text-anchor="end">2,400.00</text></g>' +
       '<g class="row r3"><text x="18" y="146">Supplies</text><text class="m" x="212" y="146" text-anchor="end">1,126.45</text></g>' +
-      '<g class="row rq"><rect class="qb" x="18" y="160" width="16" height="16" rx="3"/><text class="m" x="26" y="172.5" text-anchor="middle">?</text><text x="42" y="173">Waiting on you</text><text class="m" x="212" y="173" text-anchor="end">453.60</text></g>' +
+      '<g class="row rq"><rect class="qb" x="18" y="160" width="16" height="16" rx="3"/><text class="m rq-open" x="26" y="172.5" text-anchor="middle">?</text><text class="rq-open" x="42" y="173">Waiting on you</text><text class="rq-done" x="42" y="173">Answered by you</text><text class="m" x="212" y="173" text-anchor="end">453.60</text></g>' +
       '<rect class="bar-ok" x="18" y="194" width="176" height="8" rx="1"/><rect class="bar-q" x="196" y="194" width="16" height="8" rx="1"/>' +
       '<g class="fstamp"><rect x="96" y="220" width="116" height="32" rx="2"/><text x="154" y="241" text-anchor="middle">APPROVED</text></g></g>');
     var w = L.owner;
@@ -391,7 +413,6 @@
   var srcH = [0, 1, 2, 3].map(function (i) { return [0, 40 + i * 90, 232, 64]; });
   var LH = {
     cls: "flow-h", vb: "0 0 1200 440",
-    labels: [[0, 20, "01  YOUR RECORDS"], [400, 20, "02  RIGHT HAND PREPARES"], [800, 20, "03  REVIEW SHEET"], [1080, 20, "04  YOU"]],
     src: srcH, core: [400, 96], sheet: [800, 86], owner: [1080, 166],
     wires: {
       src: srcH.map(function (s, i) { var ay = s[1] + 32, by = 160 + i * 40; return "M232 " + ay + " C316 " + ay + " 316 " + by + " 400 " + by; }),
@@ -401,50 +422,49 @@
   var srcV = [0, 1, 2, 3].map(function (i) { return [0, 30 + i * 60, 220, 50]; });
   var LV = {
     cls: "flow-v", vb: "0 0 360 1036",
-    labels: [[0, 16, "01  YOUR RECORDS"], [50, 312, "02  RIGHT HAND PREPARES"], [65, 610, "03  REVIEW SHEET"], [120, 906, "04  YOU"]],
     src: srcV, core: [50, 322], sheet: [65, 620], owner: [120, 918],
     wires: {
-      src: srcV.map(function (s) { var ay = s[1] + 25; return "M220 " + ay + " C312 " + ay + " 300 290 180 322"; }),
+      src: srcV.map(function (s) { var ay = s[1] + 25; return "M220 " + ay + " C312 " + ay + " 310 300 285 322"; }),
       cs: "M180 570V620", so: "M180 888V918", os: "M190 918V888"
     }
   };
   $("#flow-h").innerHTML = flowSVG(LH);
   $("#flow-v").innerHTML = flowSVG(LV);
   (function () {
-    var fl = $("#flow");
-    if (RM.matches) return;
+    var fl = $("#flow"), tg = $("#flow-toggle"), inView = false, paused = false;
+    if (RM.matches) { tg.hidden = true; return; }
     fl.classList.add("on");
-    var io = new IntersectionObserver(function (es) { fl.classList.toggle("off", !es[0].isIntersecting); }, { threshold: .15 });
-    io.observe(fl);
-    document.addEventListener("visibilitychange", function () { fl.classList.toggle("off", document.hidden); });
+    function sync() { fl.classList.toggle("off", paused || !inView || document.hidden); tg.textContent = paused ? "Play animation" : "Pause animation"; tg.setAttribute("aria-pressed", String(paused)); }
+    new IntersectionObserver(function (es) { inView = es[0].isIntersecting; sync(); }, { threshold: .15 }).observe(fl);
+    document.addEventListener("visibilitychange", sync);
+    tg.addEventListener("click", function () { paused = !paused; sync(); });
   })();
 
   /* ---------- the problem: what we know ---------- */
   var EV = [
-    ["Owners are overwhelmed balancing admin with running the company.", "Team problem statement, Oct 15", "t"],
-    ["That strain can lead to lost profit and delayed meetings.", "Team problem statement, Oct 15", "t"],
+    ["Our starting assumption: owners are overwhelmed balancing admin with running the company, and it can cost them profit and push back meetings.", "Team problem statement, Oct 15. An assumption we are testing.", "q"],
     ["Owners we interviewed described having to double-check work or answer follow-up questions.", "2 of 2 interviews: a small business owner and a CEO", "t"],
     ["Showing the work makes checking faster than doing it yourself.", "Not tested yet. This is what we need owners for.", "q"]
   ];
-  $("#ev-ledger").innerHTML = EV.map(function (r) {
-    return '<li class="' + (r[2] === "q" ? "open" : "") + '"><span class="claim">' + r[0] + '<span class="src">' + r[1] + (r[2] === "q" ? ' <a href="#ask" data-ask="heard">Help us test it</a>' : "") + '</span></span>' + tk(r[2]) + '</li>';
+  $("#ev-ledger").innerHTML = EV.map(function (r, i) {
+    return '<li class="' + (r[2] === "q" ? "open" : "") + '"><span class="claim">' + r[0] + '<span class="src">' + r[1] + (i === EV.length - 1 ? ' <a href="#ask" data-ask="heard">Help us test it</a>' : "") + '</span></span>' + tk(r[2]) + '</li>';
   }).join("");
   $("#ev-key").innerHTML = '<span>' + tk("t") + 'Traced to a source</span><span>' + tk("q") + 'Not tested yet</span>';
 
   /* ---------- services ---------- */
   var FEAT = [
-    ["Money and books", "Expense summary", "bank and card exports, your receipts folder", [["f", "Totals by category, checked against last month"], ["t", "Each line traced to its transaction and receipt"]], "Amazon, Oct 12, $214.60, no receipt. Business or personal?", "Your CPA decides tax treatment.", ["#hero-title", "Try it at the top of this page"]],
+    ["Money and books", "Expense summary", "bank and card exports and your receipts folder", [["f", "Totals by category, checked against last month"], ["t", "Each line traced to its transaction and receipt"]], "Amazon, Oct 12, $214.60, no receipt. Business or personal?", "Your CPA decides tax treatment.", ["#hero-title", "Try it at the top of this page"]],
     ["Getting paid", "Overdue invoice reminders", "your invoice list and payment history", [["p", "One draft per client, in your tone"], ["t", "Amount and days late traced to the invoice"]], "Should the reminder to Hillside Vet include the late fee?", "No demand letters. Collections stay with an attorney or an agency.", ["#receipts", "See the example below"]],
-    ["Money and books", "Bank and card reconciliation", "statements, plus read-only access to your books", [["t", "Every charge matched to your books"], ["f", "Ending balance tied out to the statement"]], "Check 1043 for $600 cleared but isn’t in your books. Who was it to?", "No edits to closed months. Your CPA signs off at year end.", null],
+    ["Money and books", "Bank and card reconciliation", "statements, plus read-only access to your books", [["t", "Every charge matched to your books"], ["f", "Ending balance tied out to the statement"]], "Check 2117 for $600 cleared but isn’t in your books. Who was it to?", "No edits to closed months. Your CPA signs off at year end.", null],
     ["Payroll and people", "Payroll prep", "timesheets and the schedule", [["t", "Hours per person, traced to timesheets"], ["f", "Overtime and changes since the last run, marked"]], "Were Kayla’s 6 overtime hours on Oct 18 approved?", "Your payroll provider runs payroll and files payroll taxes.", null],
-    ["Customers and inbox", "Inbox triage and draft replies", "your business inbox", [["t", "Mail sorted into needs you, draft ready and FYI"], ["p", "Each draft cites the thread and your policy"]], "A customer wants a refund on a $90 groom. Your policy says store credit. Which?", "Replies go out only after you approve them.", null],
+    ["Customers and inbox", "Inbox triage and draft replies", "your business inbox", [["t", "Mail sorted into Needs you, Draft ready and FYI"], ["p", "Each draft cites the thread and your policy"]], "A customer wants a refund on a $90 groom. Your policy says store credit. Which?", "Replies go out only after you approve them.", null],
     ["Scheduling and operations", "Bills due and cash needed", "your bills inbox", [["t", "Bills by due date, checked against the last price paid"], ["f", "Cash needed this week, added up"]], "The shampoo supplier’s bill is 12% higher than the last order. Accept?", "You release every payment from your own bank.", null]
   ];
   $("#svc-grid").innerHTML = FEAT.map(function (s, i) {
     return '<li class="svc" data-reveal style="--i:' + i + '"><span class="cat">' + s[0] + '</span><h3>' + s[1] + '</h3><p class="give">You hand off ' + s[2] + '.</p>' +
       '<ul>' + s[3].map(function (r) { return '<li>' + tk(r[0]) + '<span>' + r[1] + '</span></li>'; }).join("") + '</ul>' +
       '<p class="flagq">' + tk("q") + '<span>“' + s[4] + '”</span></p><p class="bound">' + s[5] + '</p>' +
-      (s[6] ? '<a class="here" href="' + s[6][0] + '">' + s[6][1] + '</a>' : "") + '</li>';
+      (s[6] ? '<a class="here" href="' + s[6][0] + '">' + s[6][1] + '</a>' : '<span class="here" aria-hidden="true">&nbsp;</span>') + '</li>';
   }).join("");
   var CAT = [
     ["Money and books", ["*Expense summary", "*Bank and card reconciliation", "Receipt chase", "Subscription audit", "Month-end packet", "Tax-time organizer for your CPA"]],
@@ -456,7 +476,7 @@
     ["Documents and compliance", ["License and permit tracker", "Contract and lease summary", "Form prep", "Sales tax worksheet", "Document filing"]]
   ];
   $("#catalog").innerHTML = CAT.map(function (c) {
-    return '<div><h3>' + c[0] + '</h3><ul>' + c[1].map(function (n) { var star = n.charAt(0) === "*"; return '<li' + (star ? ' class="star"' : "") + '>' + (star ? n.slice(1) : n) + '</li>'; }).join("") + '</ul></div>';
+    return '<div><h3>' + c[0] + '</h3><ul>' + c[1].filter(function (n) { return n.charAt(0) !== "*"; }).map(function (n) { return '<li>' + n + '</li>'; }).join("") + '</ul></div>';
   }).join("");
 
   /* ---------- second example: the letter ---------- */
@@ -491,6 +511,8 @@
     ["mouseover", "focusin"].forEach(function (ev) { root.addEventListener(ev, function (e) { var t = e.target.closest("[data-ref]"); if (t) hl(t.getAttribute("data-ref"), true); }); });
     ["mouseout", "focusout"].forEach(function (ev) { root.addEventListener(ev, function (e) { var t = e.target.closest("[data-ref]"); if (t) hl(t.getAttribute("data-ref"), false); }); });
     root.addEventListener("click", function (e) {
+      var rf = e.target.closest("[data-ref]");
+      if (rf && !e.target.closest("button")) { var ref = rf.getAttribute("data-ref"); $$(".hl", root).forEach(function (n) { n.classList.remove("hl"); }); hl(ref, true); }
       var b = e.target.closest("button"); if (!b || b.disabled) return;
       var act = b.getAttribute("data-act");
       if (act === "fee") { if (approved) return; fee = b.getAttribute("data-v"); render(); say(live, fee === "yes" ? "Late fee included. Balance is now $243.60." : "Late fee left off. Balance stays $240.00."); }
@@ -503,14 +525,14 @@
 
   /* ---------- the board ---------- */
   var COLS = [
-    ["progress", "In progress", "Being prepared, by AI or a person (not decided yet). You see the work either way."],
+    ["progress", "In progress", "Being prepared. You see the sources and math either way."],
     ["input", "Needs your input", "A question comes to you only when something is missing."],
     ["review", "Ready to review", "Finished work with its sources and math."],
     ["done", "Completed", "Approved work and saved files."]
   ];
   var EMPTY = { progress: "Nothing in progress. Add a task to start.", input: "No questions waiting on you.", review: "Nothing waiting. Finished work lands here.", done: "Approved work shows up here." };
   var TASKS0 = [
-    { id: 1, s: "progress", t: "Match October card charges to receipts", due: "Nov 7", p: 60, note: "Matched 38 of 63 card charges so far" },
+    { id: 1, s: "progress", t: "Match November card charges to receipts", due: "Dec 3", p: 41, note: "Matched 9 of 22 card charges so far" },
     { id: 3, s: "input", t: "October payroll prep", due: "Nov 6", ask: "Were Kayla’s 6 overtime hours on Oct 18 approved?", a: ["Yes", "No"] },
     { id: 4, s: "input", t: "Reminder emails for 4 overdue invoices", due: "Nov 6", ask: "Should the reminder to Hillside Vet include the late fee?", a: ["Yes", "No"] },
     { id: 5, s: "review", t: "October expense summary", due: "Nov 5" },
@@ -590,7 +612,7 @@
   });
   var HINTS = {
     "Expense summary": "Which month? Which accounts and cards? Anything personal to leave out?",
-    "Invoice follow-ups": "Which clients or invoices? How firm should the tone be? Include late fees?",
+    "Overdue invoice reminders": "Which clients or invoices? How firm should the tone be? Include late fees?",
     "Payroll prep": "Which pay period? Where do the hours come from? Who approves overtime?",
     "Something else": "What result do you want, and how will you know it was done right?"
   };
@@ -627,15 +649,18 @@
 
   /* ---------- the ask: an email draft the visitor approves ---------- */
   var aBiz = $("#a-biz"), aWhen = $("#a-when"), aTask = $("#a-task"), aPrev = $("#a-preview"), aSend = $("#a-send"), aCopy = $("#a-copy"), cStat = $("#copy-status");
+  var WHERE = { header: "top bar", hero: "top of the page", approved: "after trying the sample", heard: "problem section", final: "bottom of the page" };
   function draft() {
     var before = ($('input[name="a-before"]:checked') || {}).value || "";
+    var how = ($('input[name="a-how"]:checked') || {}).value || "";
     var lines = ["Hi Right Hand team,", "", "I’d like a 15-minute walkthrough.", "",
       "My business: " + (aBiz.value.trim() || ""),
-      "Days and times that work for me: " + (aWhen.value.trim() || ""),
-      "The admin task I’d hand off first: " + (aTask.value || "")];
+      "Days and times that work for me: " + (aWhen.value.trim() || "")];
+    if (how) lines.push("Best way to meet: " + how);
+    if (aTask.value) lines.push("The admin task I’d hand off first: " + aTask.value);
     if (before) lines.push("Handed admin work off before: " + before);
-    if (LAST.secs) lines.push("", "I tried the sample on your page and approved it in " + fmtTime(LAST.secs) + ".");
-    lines.push("", "(Sent from the Right Hand page" + (SRC ? ", via " + SRC : "") + (LAST.where ? ", " + LAST.where + " button" : "") + ")");
+    if (LAST.secs) lines.push("", "I tried the sample on your page and approved it in " + spokenTime(LAST.secs) + ".");
+    lines.push("", "(Sent from the Right Hand page" + (SRC ? ", via " + SRC : "") + (WHERE[LAST.where] ? ", from the " + WHERE[LAST.where] : "") + ")");
     var subject = "Right Hand walkthrough" + (aBiz.value.trim() ? ": " + aBiz.value.trim().slice(0, 60) : "");
     return { subject: subject, body: lines.join("\n") };
   }
@@ -646,7 +671,8 @@
       : "mailto:" + CONTACT.email + "?subject=" + encodeURIComponent(d.subject) + "&body=" + encodeURIComponent(d.body.replace(/\n/g, "\r\n"));
   }
   ["input", "change"].forEach(function (ev) { $("#ask-form").addEventListener(ev, updateComposer); });
-  $("#ask-form").addEventListener("submit", function (e) { e.preventDefault(); });
+  $("#ask-form").addEventListener("submit", function (e) { e.preventDefault(); aSend.click(); });
+  aSend.addEventListener("click", function () { setTimeout(function () { if (document.visibilityState === "visible") cStat.textContent = "If no email opened, tap Copy the email and paste it into an email to " + CONTACT.email + "."; }, 1500); });
   aCopy.addEventListener("click", function () {
     var d = draft(), text = "To: " + CONTACT.email + "\nSubject: " + d.subject + "\n\n" + d.body;
     function ok() { cStat.textContent = "Copied. Paste it into any email to " + CONTACT.email + "."; }
@@ -663,27 +689,20 @@
 
   /* ---------- header turns dark over dark bands ---------- */
   (function () {
-    var top = $("#top"), on = new Set();
-    var io = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting) on.add(e.target); else on.delete(e.target); });
-      top.classList.toggle("on-dark", on.size > 0);
-    }, { rootMargin: "-63px 0px -92% 0px" });
-    $$('[data-theme="dark"]').forEach(function (s) { io.observe(s); });
+    var top = $("#top"), on = new Set(), io = null, bands = $$('[data-theme="dark"]');
+    function cb(es) { es.forEach(function (e) { if (e.isIntersecting) on.add(e.target); else on.delete(e.target); }); top.classList.toggle("on-dark", on.size > 0); }
+    function build() { if (io) io.disconnect(); on.clear(); io = new IntersectionObserver(cb, { rootMargin: "-63px 0px " + (66 - innerHeight) + "px 0px" }); bands.forEach(function (s) { io.observe(s); }); }
+    build(); var rt = 0; addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(build, 150); });
   })();
 
   /* ---------- reveals, counters and the board rules ---------- */
   (function () {
     var targets = $$("[data-reveal]");
-    function count(el) {
-      var to = +el.getAttribute("data-count"); tween(900, function (p) { el.textContent = Math.round(to * p); });
-    }
     if (!document.documentElement.classList.contains("js-motion")) { board.classList.add("drawn"); return; }
-    $$("[data-count]").forEach(function (el) { el.textContent = "0"; });
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (e) {
         if (!e.isIntersecting) return;
         e.target.classList.add("in"); io.unobserve(e.target);
-        $$("[data-count]", e.target).forEach(count);
       });
     }, { threshold: .15 });
     targets.forEach(function (t) { io.observe(t); });
@@ -709,17 +728,17 @@
       var list = $$(".stop", stage); idx = Math.max(0, Math.min(list.length - 1, n));
       list.forEach(function (s, i) { s.classList.toggle("on", i === idx); });
       $("#stage-count", stage).textContent = (idx + 1) + " / " + list.length;
-      if (idx === 4) $("#pres-time", stage).textContent = presSecs ? "We just checked a made-up month in " + fmtTime(presSecs) + "." : "";
+      if (idx === 4) $("#pres-time", stage).textContent = presSecs ? "We just checked a made-up month in " + spokenTime(presSecs) + "." : "";
     }
     function open() {
       if (stage) return;
-      lastFocus = document.activeElement; if (HA.takeOver && HA.playing) HA.takeOver();
+      lastFocus = document.activeElement; if (HA.takeOver) HA.takeOver();
       document.documentElement.classList.add("presenting");
       stage = document.createElement("div"); stage.id = "stage"; stage.className = "dark"; stage.setAttribute("role", "region"); stage.setAttribute("aria-label", "Right Hand, one-minute walkthrough"); stage.tabIndex = -1;
       stage.innerHTML = stops().map(function (h) { return '<div class="stop">' + h + '</div>'; }).join("") +
         '<div class="stage-nav"><button type="button" class="bar-btn" data-s="prev">Back</button><button type="button" class="bar-btn" data-s="next">Next</button><span id="stage-count"></span><span class="grow"></span><button type="button" class="bar-btn" data-s="exit">Exit (Esc)</button></div>';
       document.body.appendChild(stage);
-      $("#main").inert = true; $("#top").inert = true;
+      Array.prototype.forEach.call(document.body.children, function (n) { if (n !== stage && n.tagName !== "SCRIPT") { n.setAttribute("data-was-inert", n.inert ? "1" : "0"); n.inert = true; } });
       makeReview($("#pres-rv", stage), $("#pres-live", stage), { id: "pres", hero: true, noIntro: true, onApprove: function (s) { presSecs = s >= 3 && s <= 600 ? s : 0; } });
       stage.addEventListener("click", function (e) { var b = e.target.closest("[data-s]"); if (!b) return; var s = b.getAttribute("data-s"); if (s === "prev") show(idx - 1); else if (s === "next") show(idx + 1); else close(); });
       show(0); stage.focus();
@@ -727,16 +746,16 @@
     function close() {
       if (!stage) return;
       stage.remove(); stage = null; document.documentElement.classList.remove("presenting");
-      $("#main").inert = false; $("#top").inert = false;
+      Array.prototype.forEach.call(document.body.children, function (n) { if (n.hasAttribute("data-was-inert")) { n.inert = n.getAttribute("data-was-inert") === "1"; n.removeAttribute("data-was-inert"); } });
       if (location.hash === "#present") history.replaceState(null, "", location.pathname + location.search);
       if (lastFocus && document.body.contains(lastFocus)) lastFocus.focus();
     }
     document.addEventListener("keydown", function (e) {
       if (!stage) return;
-      var inSheet = e.target.closest && e.target.closest("#pres-rv");
+      var t = e.target, guard = t.getAttribute && (t.getAttribute("role") === "tab" || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName));
       if (e.key === "Escape") { e.preventDefault(); close(); }
-      else if (!inSheet && (e.key === "ArrowRight" || e.key === "PageDown" || (e.key === " " && e.target === stage))) { e.preventDefault(); show(idx + 1); }
-      else if (!inSheet && (e.key === "ArrowLeft" || e.key === "PageUp")) { e.preventDefault(); show(idx - 1); }
+      else if (e.key === "PageDown" || (!guard && (e.key === "ArrowRight" || (e.key === " " && t === stage)))) { e.preventDefault(); show(idx + 1); }
+      else if (e.key === "PageUp" || (!guard && e.key === "ArrowLeft")) { e.preventDefault(); show(idx - 1); }
     });
     function check() { if (location.hash === "#present" || /(^|[?&])present\b/.test(location.search)) open(); }
     addEventListener("hashchange", check);
