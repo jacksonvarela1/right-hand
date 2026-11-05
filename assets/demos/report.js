@@ -127,7 +127,8 @@
     lis.forEach(function (li) { li.classList.remove("on"); });
     rp.classList.add("z1", "z2");
   }
-  function show(html) { out.innerHTML = html; out.classList.add("on"); }
+  // qb = the question chip that asked, so only that chip reads as pressed
+  function show(html, qb) { out.innerHTML = html; out.classList.add("on"); qa("[data-q]").forEach(function (x) { x.setAttribute("aria-pressed", String(x === qb)); }); }
   function clearOut() {
     out.innerHTML = "<p>Pick a day in the chart to see sample rows, or ask a question.</p>"; out.classList.remove("on");
     qa("[data-q]").forEach(function (x) { x.setAttribute("aria-pressed", "false"); });
@@ -208,13 +209,17 @@
     tick(kv(f), kv(w), 600);
   }
 
+  // One column: the ask panel shows once the visitor takes over (or under reduced motion), never on its own when
+  // autoplay parks, so the stage does not grow under a reader. finalState runs right before a parking hand-off.
+  var parking = false;
+  function asked(e) { if (!e || e.isTrusted) root.classList.add("rp-asked"); }
   player = RH.demo({
     root: root,
     title: "Monday owner report",
     loops: 1,
-    reset: function () { S.w = "a"; S.nw = ""; unlight(); paint(W.a); zero(); clearOut(); qa("details").forEach(function (d) { d.open = false; }); },
-    finalState: function () { S.w = "a"; unlight(); paint(W.a); clearOut(); unhov(); },
-    onHandoff: function () { paint(W[S.w]); unhov(); },
+    reset: function () { parking = false; if (!RH.motionOff()) root.classList.remove("rp-asked"); S.w = "a"; S.nw = ""; unlight(); paint(W.a); zero(); clearOut(); qa("details").forEach(function (d) { d.open = false; }); },
+    finalState: function () { parking = true; S.w = "a"; unlight(); paint(W.a); clearOut(); unhov(); },
+    onHandoff: function () { if (!parking || RH.motionOff()) asked(); parking = false; paint(W[S.w]); unhov(); },
     steps: [
       { d: 500, run: function () { tick([0, 0, 0, 0], kv(W[S.w]), 900); } },
       { d: 300, run: growBars },
@@ -226,11 +231,13 @@
       { d: 1100, run: function (c) { reveal(3, c); } },
       { d: 3000, run: function (c) { unlight(); unhov(); c.hideCursors(); c.cursor("you", q('[data-w="b"]')); } },
       { d: 800, run: function (c) { c.press("you"); setWeek("b", c); } },
-      { d: 2600, run: function (c) { c.cursor("you", q('[data-w="a"]')); } },
-      { d: 800, run: function (c) { c.press("you"); setWeek("a", c); } },
-      { d: 1400, run: function (c) { c.hideCursors(); } }
+      // Week B's regenerated text cites its chart too; no cursor-only steps, so reduced-motion Next step always shows a change
+      { d: 2000, run: function (c) { lightNote(0, c); c.cursor("you", q('[data-w="a"]')); } },
+      { d: 1400, run: function (c) { c.press("you"); setWeek("a", c); } }
     ]
   });
+  stage.addEventListener("click", asked, true);
+  stage.addEventListener("focusin", asked);
   function link(t, force) {
     var c = player.ctx, li, el, n, k;
     if (!c.handedOff() || !t.closest) return;
@@ -259,8 +266,7 @@
     } else if (b.hasAttribute("data-q")) {
       i = +b.getAttribute("data-q"); r = answer(w, i);
       unlight(); mark(r.c, "A");
-      show('<p class="rp-oh">' + esc(QS[i]) + "</p><p>" + esc(r.t) + "</p>");
-      qa("[data-q]").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      show('<p class="rp-oh">' + esc(QS[i]) + "</p><p>" + esc(r.t) + "</p>", b);
       c.say(r.t);
     } else if ((i = dbtn.indexOf(b)) >= 0) {
       r = sample(w, i); link(b, 1);

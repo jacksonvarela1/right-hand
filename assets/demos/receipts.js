@@ -67,7 +67,7 @@
         '<div class="rc-extract" role="group" aria-label="Read from the receipt"><p class="rc-h">Read from the receipt</p><dl>' +
           '<div><dt>Merchant</dt><dd data-x="m"></dd></div><div><dt>Date</dt><dd data-x="d"></dd></div><div><dt>Items</dt><dd data-x="i"></dd></div><div><dt>Total</dt><dd data-x="t"></dd></div><div><dt>Card</dt><dd data-x="c"></dd></div>' +
           '<div class="rc-math"><dt>Math</dt><dd data-x="math"></dd></div></dl></div>' +
-        '<div class="rc-bank"><p class="rc-h">Card charges (sample)</p><ul>' + BANK.map(function (b, i) { return '<li data-b="' + i + '"><span class="mono">' + b[0] + '</span><span>' + b[1] + '</span><span class="mono">' + bare(b[2]) + '</span><em></em></li>'; }).join("") + '</ul></div>' +
+        '<div class="rc-bank"><p class="rc-h">Card charges (sample)</p><ul>' + BANK.map(function (b, i) { return '<li data-b="' + i + '"><span class="mono">' + b[0] + '</span><span>' + b[1] + '</span><span class="mono">' + bare(b[2]) + '</span><em>' + note(i) + '</em></li>'; }).join("") + '</ul></div>' +
         '<div class="rc-guess"><p data-guess></p><div class="rc-opts" role="group" aria-label="Business or personal"></div></div>' +
         '<div class="rc-try"><p class="rc-h">Try another receipt</p><div><button type="button" class="chip" data-rec="supply">Supplies</button><button type="button" class="chip" data-rec="fuel">Fuel</button><button type="button" class="chip" data-rec="mixed">Mixed groceries</button></div></div>' +
       '</div>' +
@@ -83,13 +83,17 @@
       '</section>';
     stage.appendChild(w);
     paintGuess(); paintSheet(true);
+    if (player && player.ctx.handedOff()) show(".rc-try");   // reduced-motion stepping rebuilds after hand-off
   }
+  // match notes are in the DOM from the start (hidden until match()), so the card list never changes height
+  function note(i) { var r = RECEIPTS[st.rec]; return i === r.match ? "Match: same date, amount and card" : st.rec === "supply" && i === 2 ? "Not a match: different amount" : ""; }
   function q(s) { return stage.querySelector(s); }
   function qa(s) { return Array.prototype.slice.call(stage.querySelectorAll(s)); }
   function paintGuess() {
     var r = RECEIPTS[st.rec];
     q("[data-guess]").textContent = r.guess;
-    q(".rc-opts").innerHTML = r.opts.map(function (o) { return '<button type="button" class="chip" data-g="' + o[0] + '" aria-pressed="false">' + o[1] + '</button>'; }).join("");
+    var pv = st.rec === "supply" ? st.ans.online : null;
+    q(".rc-opts").innerHTML = r.opts.map(function (o) { return '<button type="button" class="chip" data-g="' + o[0] + '" aria-pressed="' + (o[0] === pv) + '">' + o[1] + '</button>'; }).join("");
     qa(".rc-try .chip").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-rec") === st.rec)); });
   }
   function fill(animate, ctx) {
@@ -106,11 +110,7 @@
   function match() {
     var r = RECEIPTS[st.rec];
     q(".rc-bank").classList.add("on");
-    qa(".rc-bank li").forEach(function (li, i) {
-      var em = li.querySelector("em"); li.classList.remove("hit", "miss"); em.textContent = "";
-      if (i === r.match) { li.classList.add("hit"); em.textContent = "Match: same date, amount and card"; }
-      else if (st.rec === "supply" && i === 2) { li.classList.add("miss"); em.textContent = "Not a match: different amount"; }
-    });
+    qa(".rc-bank li").forEach(function (li, i) { li.classList.toggle("hit", i === r.match); li.classList.toggle("miss", st.rec === "supply" && i === 2); });
     var t = q('[data-x="t"]');
     if (r.match < 0) t.textContent = money(r.total) + ". No card charge matches $" + bare(r.total) + " yet. We will check again when the statement posts.";
   }
@@ -122,7 +122,7 @@
     var diff = d.total - SEPT;
     q("[data-vs]").textContent = (diff >= 0 ? "Up " : "Down ") + money(Math.abs(diff)) + " from September (" + money(SEPT) + ")";
     q("[data-cats]").innerHTML = d.c.map(function (x) { return '<li><span>' + x[0] + '</span><span class="mono">' + money(x[1]) + '</span></li>'; }).join("") +
-      (d.open > 0 ? '<li class="open"><span>Waiting on your answers</span><span class="mono">' + money(d.open) + '</span></li>' : "");
+      '<li class="open' + (d.open > 0 ? "" : " done") + '"><span>Waiting on your answers</span><span class="mono">' + money(d.open) + '</span></li>';
     q("[data-open]").textContent = n;
     q(".rs-open").classList.toggle("zero", !n);
     qa(".rs-qs li").forEach(function (li) {
@@ -130,7 +130,11 @@
       li.classList.toggle("ok", !!v);
       li.querySelectorAll(".chip").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-v") === v)); b.disabled = st.approved; });
     });
-    var ap = q(".rs-approve"); ap.disabled = !!n || st.approved;
+    // approved stays focusable (aria-disabled), so a keyboard Approve does not drop focus to the page
+    var ap = q(".rs-approve"); ap.disabled = !!n && !st.approved;
+    if (st.approved) ap.setAttribute("aria-disabled", "true"); else ap.removeAttribute("aria-disabled");
+    // once October is approved the supply guess can no longer change it
+    qa(".rc-opts .chip").forEach(function (b) { b.disabled = st.rec === "supply" && st.approved; });
     ap.textContent = st.approved ? "Approved" : n ? "Answer " + n + (n > 1 ? " questions" : " question") + " to approve" : "Approve";
     q(".rc-sheet").classList.toggle("approved", st.approved);
   }
@@ -152,7 +156,8 @@
       qa(".rc-opts .chip").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-g") === "biz")); });
       paintSheet(true);
     },
-    onHandoff: function () { show(".rc-receipt"); show(".rc-try"); stage.classList.add("live-mode"); },
+    // a mid-play hand-off finishes Right Hand's read (act 1); the owner's answers and approval stay as they are
+    onHandoff: function () { show(".rc-receipt"); boxes(true); fill(false); match(); show(".rc-guess"); show(".rc-try"); stage.classList.add("live-mode"); },
     steps: [
       { d: 300, run: function (c) { var p = q(".rc-receipt"); p.classList.add("on"); c.anim(p.querySelector(".rc-paper"), [{ clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0 0)" }], { duration: 1200, easing: "steps(14, end)" }); } },
       { d: 1350, run: function (c) { var b = q(".rc-beam"), h = q(".rc-paper").offsetHeight - 4; c.anim(b, [{ transform: "translateY(0)", opacity: 1 }, { transform: "translateY(" + h + "px)", opacity: 1, offset: .95 }, { transform: "translateY(" + h + "px)", opacity: 0 }], { duration: 1000, easing: "linear", fill: "none" }); } },
@@ -180,7 +185,7 @@
       var g = b.getAttribute("data-g");
       qa(".rc-opts .chip").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
       if (st.rec === "supply") { answer("online", g); ctx.say(g === "biz" ? "Moved to Grooming supplies." : "Left out as personal."); }
-      else if (st.rec === "fuel") ctx.say(g === "vehicle" ? "Filed under Vehicle. It joins next month's review." : "Left out as personal.");
+      else if (st.rec === "fuel") ctx.say(g === "vehicle" ? "Filed under Vehicle." : "Left out as personal.");
       else ctx.say(g === "split" ? "Split: 23.47 to Shop supplies, the rest left out as personal." : "Left out as personal.");
       return;
     }
@@ -192,6 +197,6 @@
       var nb = q('[data-rec="' + st.rec + '"]'); if (nb) nb.focus();
       return;
     }
-    if (b.classList.contains("rs-approve")) { st.approved = true; paintSheet(true); ctx.say("Approved. October expenses are " + money(cats().total) + "."); var a = q(".rs-approve"); if (a) a.focus(); }
+    if (b.classList.contains("rs-approve")) { if (st.approved) return; st.approved = true; paintSheet(true); ctx.say("Approved. October expenses are " + money(cats().total) + "."); var a = q(".rs-approve"); if (a) a.focus(); }
   });
 })();

@@ -1,5 +1,5 @@
 /* Demo 05: Automation builder (Flint Row Auto Care, sample). Every rule is scoped to #demo-automation. */
-#demo-automation .stage{--stage-h:656px;--fw-h:350px;--low-h:270px;--focus:var(--blue-400);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:var(--fw-h) var(--low-h);gap:12px;padding:12px;background:var(--navy-950);color:var(--navy-50)}
+#demo-automation .stage{--stage-h:698px;--fw-h:350px;--low-h:312px;--focus:var(--blue-400);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:var(--fw-h) var(--low-h);gap:12px;padding:12px;background:var(--navy-950);color:var(--navy-50)}
 
 /* canvas: 24px dot grid, flow left to right */
 #demo-automation .fw{grid-column:1/-1;min-width:0;overflow:auto;border:1px solid var(--navy-800);border-radius:10px;background:radial-gradient(circle,var(--navy-700) 1px,transparent 1.5px) 0 0/24px 24px}

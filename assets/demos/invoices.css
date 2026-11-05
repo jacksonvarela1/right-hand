@@ -21,6 +21,8 @@
 
 /* plot: gutters hold the y labels and let edge nodes sit centered; overflow clips the moving playhead box */
 #demo-invoices .iv-plot{position:relative;flex:1 0 auto;display:flex;flex-direction:column;justify-content:center;padding:6px var(--gr) 2px var(--gl);overflow:hidden;overflow:clip}
+/* the sr-only balance table: pin it inside the plot and let it wrap, so its box never pokes past a 360px screen */
+#demo-invoices table.sr-only{left:0;top:0;white-space:normal}
 #demo-invoices .iv-x{position:relative;height:calc(var(--rows) + var(--ch) + 76px)}
 
 /* event nodes: the ol is the semantic source, two staggered rows so neighbors never collide */

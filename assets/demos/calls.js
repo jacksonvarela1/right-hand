@@ -92,13 +92,17 @@
   }
   function hit(i) { E.tr[i].className = "hit"; }
   function chips(c, keys) {
-    var g = E.chips, s = keys.join();
+    var g = E.chips, s = keys.join(), a = document.activeElement, fk = g.contains(a) ? a.getAttribute("data-k") : null;
     if (g.getAttribute("data-s") === s) return;
     g.setAttribute("data-s", s);
     g.innerHTML = keys.map(function (k) { return '<button type="button" class="chip" data-k="' + k + '">' + L[k] + "</button>"; }).join("");
     [].forEach.call(g.children, function (b, i) { A(c, b, [{ opacity: 0, transform: "translateY(6px)" }, { opacity: 1, transform: "none" }], { duration: 240, delay: i * 60, fill: "both" }); });
     E.tray.hidden = !keys.length;
     E.cl.textContent = conv.s === "held" ? "Next: press Confirm visit on the owner card" : "Reply as the customer";
+    // the tray changes the thread's height: keep the newest text in view
+    E.thread.scrollTop = E.thread.scrollHeight;
+    // a re-render (hand-off, next menu) must not drop keyboard focus to the page
+    if (fk) { var nb = g.querySelector('[data-k="' + fk + '"]') || g.firstChild; if (nb) nb.focus({ preventScroll: true }); }
   }
   function sync(c) { if (c.handedOff()) chips(c, MENU[conv.s] || []); }
 

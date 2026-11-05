@@ -17,7 +17,7 @@
     draft: ["AI", "Draft the reply", "For you to read", "Writes a reply for you to read. It never sends on its own."],
     gate: ["Gate", "You approve", "Nothing goes out without you", "Nothing a customer reads goes out until you approve it."],
     send: ["Action", "Send email to customer", "After your OK", "Sends the reply you approved from the shop address."],
-    follow: ["Timer", "Follow up in 2 days", "Then add to customer list", "If there is no answer in 2 days, it nudges once, then adds them to your customer list."],
+    follow: ["Timer", "Follow up in 2 days", "Then add to customer list", "If there is no answer in 2 days, it drafts one nudge for your OK, then adds them to your customer list."],
     text: ["Action", "Text the customer", "After your OK", "Texts the customer the reply you approved."],
     cal: ["Action", "Add to calendar", "Shop calendar (sample)", "Puts the visit on the shop calendar."],
     inv: ["Action", "Create invoice draft", "Draft only", "Starts an invoice draft. You check it and send it."],
@@ -168,7 +168,7 @@
     if (k === "draft") return ["Draft ready for you", [["To", s.email], ["Draft", s.draft, 1]]];
     if (k === "gate") return g ? ["Approved by you", [["Status", "Approved by you"], ["Next", "OK to send"]], "ok"] : ["Waiting for you", [["Status", "Waiting for you"], ["Holds", "Anything a customer will read"]], "wait"];
     if (CF[k]) return g ? ["Sent (sample)", [["To", k === "send" ? s.email : s.ph], ["Status", "Sent (sample)"]], "ok"] : ["Stopped: needs your OK", [["Status", "Stopped before sending"], ["Why", "No approval before this step"]], "wait"];
-    if (k === "follow") return ["Sat Nov 7, 9:00 AM", [["Follow-up", "Sat Nov 7, 9:00 AM, if no answer"], ["Then", "Add " + s.who + " to the customer list"]], "ok"];
+    if (k === "follow") return ["Sat Nov 7, 9:00 AM", [["Follow-up", "Sat Nov 7, 9:00 AM, if no answer"], ["Sends", "Only after your OK"], ["Then", "Add " + s.who + " to the customer list"]], "ok"];
     if (k === "cal") return b ? ["Hold: Sat 9:00 AM, bay 2", [["Calendar", "Hold for Sat Nov 7, 9:00 AM (sample)"]]] : ["Nothing to book", [["Calendar", "No visit asked for"]]];
     if (k === "inv") return b ? ["Draft saved. Not sent.", [["Invoice", "Brake inspection, draft"], ["Status", "Draft only. You check it and send it."]]] : ["Nothing to bill", [["Invoice", "No work asked for"]]];
     if (k === "file") return ["Saved to Customers / " + s.who, [["File", "quote-request.pdf"], ["Folder", "Customers / " + s.who]]];
@@ -325,16 +325,13 @@
   var steps = [{ d: 100, run: assemble }, { d: 1600, run: function () { arr(0); pkStart(); } }];
   for (var n = 1; n < 8; n++) (function (i) {
     steps.push({ d: i === 1 ? 300 : i === 5 ? 600 : 400, run: function (c) { if (i === 6) c.hideCursors(); ride(wires[i - 1]); } });
-    steps.push({ d: 600, run: function () {
+    steps.push({ d: 600, run: function (c) {
       arr(i, i > 5);
       if (i === 2) dimPath(2, B);
-      if (i === 5) { ap.hidden = false; wait = { i: 5, s: B, tok: runTok }; }
+      if (i === 5) { ap.hidden = false; wait = { i: 5, s: B, tok: runTok }; c.cursor("you", ap); }
     } });
-    if (i === 5) steps.push(
-      { d: 500, run: function (c) { c.cursor("you", ap); } },
-      { d: 800, run: function (c) { c.press("you"); } },
-      { d: 100, run: function () { wait = null; ap.hidden = true; arr(5, 1); } }
-    );
+    // the You cursor presses Approve; one step, so reduced-motion Next step never lands on a cursor-only beat
+    if (i === 5) steps.push({ d: 1300, run: function (c) { c.press("you"); wait = null; ap.hidden = true; arr(5, 1); } });
   })(n);
   steps.push({ d: 800, run: pkOff });
 

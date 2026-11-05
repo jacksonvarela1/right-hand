@@ -106,7 +106,7 @@
       '<h4 tabindex="-1">' + mk(e.s) + "</h4><dl><dt>Why</dt><dd>" + esc(e.w) + "</dd><dt>Phrases</dt><dd>" + esc(ph) + "</dd></dl>";
     if (e.k === "bill") h += '<div class="act"><button type="button" class="btn sm bill' + (e.b ? ' on" aria-disabled="true">' + CK + "Added to bills due" : '">Add to bills due') + '</button></div><p class="nt">You pay it. Right Hand never moves money.</p>';
     if (e.k === "opts") h += '<p class="nt">Pick a reply to start from. None is sent.</p><div class="opts">' +
-      OPTS.map(function (o, k) { return '<button type="button" class="chip" data-o="' + k + '" aria-pressed="' + (e.o === k) + '">' + o[0] + "</button>"; }).join("") + "</div>";
+      OPTS.map(function (o, k) { return '<button type="button" class="chip" data-o="' + k + '" aria-pressed="' + (e.o === k) + '"' + (e.sent ? ' aria-disabled="true"' : "") + ">" + o[0] + "</button>"; }).join("") + "</div>";
     if (e.t != null) h += '<label for="ib-t">Draft reply</label><textarea id="ib-t" rows="3" placeholder="Pick a reply above"' + (e.sent ? " readonly" : "") + ">" + esc(e.t) + "</textarea>" +
       '<div class="act"><button type="button" class="btn sm go"' + (e.sent || !e.t ? ' aria-disabled="true"' : "") + ">" + (e.sent ? "Approved" : "Approve and send") + "</button>" +
       '<button type="button" class="btn sm ghost send' + (e.sent ? ' on" disabled>' + CK + "Sent" : '" disabled>Waiting for your OK') + "</button></div>";
@@ -138,6 +138,7 @@
     g.setAttribute("aria-disabled", "true"); g.textContent = "Approved";
     draw(dr.querySelector(".send"), CK + "Sent");
     dr.querySelector("textarea").readOnly = true;
+    each(dr.querySelectorAll("[data-o]"), function (x) { x.setAttribute("aria-disabled", "true"); });
     tag(i, "Sent", 1);
     X.say("You approved it. Reply to " + e.f + " sent. Demo only, nothing leaves this page.");
   }
@@ -198,9 +199,12 @@
   }
   function onHandoff(ctx) {
     X = ctx;
+    var a = document.activeElement;
     C.forEach(function (e, i) { var p = L[i].parentNode; if (!p || p === stream) place(i); });
     cnt();
     tryBox.hidden = false;
+    // moving a focused card into its lane blurs it (focusin on a card in the stream hands off): put focus back
+    if (a && a !== document.activeElement && wrap.contains(a)) a.focus();
   }
 
   var steps = [], last = 0;
@@ -237,6 +241,16 @@
     else if (d.o) pick(cur, +d.o, b);
     else if (d.t) tryOne(+d.t, b);
   });
-  stage.addEventListener("input", function (ev) { if (ev.target.id === "ib-t" && cur >= 0) C[cur].t = ev.target.value; });
+  stage.addEventListener("input", function (ev) {
+    if (ev.target.id !== "ib-t" || cur < 0) return;
+    var e = C[cur], g = dr.querySelector(".go");
+    e.t = ev.target.value;
+    if (g && !e.sent) { if (e.t.trim()) g.removeAttribute("aria-disabled"); else g.setAttribute("aria-disabled", "true"); }
+  });
+  // focus leaving the drawer for a card or chip it may cover closes it, so focus is never hidden under it
+  stage.addEventListener("focusin", function (ev) {
+    if (cur < 0 || !X.handedOff() || dr.contains(ev.target) || !wrap.contains(ev.target) || ev.target === L[cur].firstChild) return;
+    close();
+  });
   stage.addEventListener("keydown", function (ev) { if (ev.key === "Escape" && cur >= 0 && X.handedOff()) close(true); });
 })();

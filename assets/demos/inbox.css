@@ -91,6 +91,7 @@
   #demo-inbox .lane .fr{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;white-space:normal;overflow-wrap:anywhere;font-size:.75rem;line-height:1.25}
   #demo-inbox .lane .sj{position:absolute;width:1px;height:1px;clip-path:inset(50%);white-space:nowrap}
   #demo-inbox .dr{padding:12px 14px}
+  #demo-inbox .dr textarea{font-size:1rem}
   #demo-inbox .dr dl{grid-template-columns:minmax(0,1fr);gap:2px}
   #demo-inbox .dr dd + dt{margin-top:6px}
 }
