@@ -9,7 +9,11 @@ Contact: righthandnwa@gmail.com · Instagram: @righthandnwa
 
 ## About the site
 
-Static files only, no build step and no libraries:
+Static files only, no libraries. One optional build step: after editing `assets/services-data.js`, the FAQ, the check-up list or the promises, run `node tools/build-services.mjs`. It writes the services catalog into `index.html` as static HTML (so search and AI crawlers that skip JavaScript see every service), refreshes the JSON-LD in the head, and regenerates `llms.txt` and `llms-full.txt`. `site.js` enhances the static catalog in place, and still renders from the data file if the markers are empty.
+
+Also at the root: `robots.txt` (all crawlers allowed, AI crawlers named), `sitemap.xml`, `404.html`.
+
+Files:
 
 - `index.html`, `assets/site.css`, `assets/site.js`: the page, brand system and page behavior.
 - `assets/nwa-map.js`: the hero map of Northwest Arkansas (schematic, not to scale) feeding a sample task queue.

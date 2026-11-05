@@ -328,7 +328,12 @@ html[data-motion=off] .cursor{display:none}
 .svc .kind.ai{background:var(--wash);color:var(--accent-ink)}
 .svc .more{display:grid;grid-template-rows:0fr;transition:grid-template-rows var(--dur-reveal) var(--ease-out)}
 .svc[data-open] .more{grid-template-rows:1fr}
-.svc .more > div{overflow:hidden}
+.svc .more > div{overflow:hidden;transition:visibility var(--dur-reveal)}
+/* the catalog ships as static HTML: closed panels stay out of the tab order and the reading order until opened */
+.js .svc:not([data-open]) .more > div{visibility:hidden}
+/* without JavaScript the panels cannot open, so show them open and hide the controls that need a script */
+html:not(.js) .svc .more{grid-template-rows:1fr}
+html:not(.js) .svc .plus,html:not(.js) .svc .pick .chip,html:not(.js) .who{display:none}
 .svc dl{margin:0 16px 14px;padding-top:12px;border-top:1px dashed var(--line);display:grid;gap:8px;font-size:.9rem}
 .svc dt{font:600 .75rem var(--font-mono);letter-spacing:.05em;text-transform:uppercase;color:var(--soft)}
 .svc dd{margin:2px 0 0;color:var(--ink-2)}

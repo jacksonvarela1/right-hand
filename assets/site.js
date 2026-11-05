@@ -100,32 +100,54 @@
   });
 
   /* ---------- services, filters and the picker ---------- */
-  var picks = [];
-  (function services() {
-    var S = window.RH_SERVICES, host = $("#svc-lines");
-    if (!S || !host) return;
+  /* services-render:start
+     tools/build-services.mjs runs this exact block in Node to write the static catalog into index.html,
+     so the static markup and the runtime markup cannot drift. Keep it free of DOM calls. */
+  var RENDER = (function () {
+    function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
     var ICON = { receipt: "i-receipt", chat: "i-chat", calendar: "i-cal", folder: "i-folder", chip: "i-chip", pin: "i-pin" };
     var KIND = { ai: ["ai", "AI drafts, we check, you approve"], we: ["", "We do it"], pro: ["", "Stays with a licensed pro"] };
     var ROWS = [["handoff", "You hand off"], ["back", "You get back"], ["ai", "Where AI helps"], ["person", "Where a person checks"], ["never", "What we never do"], ["example", "Example"]];
-    host.innerHTML = S.lines.map(function (l) {
-      return '<div class="svc-line" data-reveal><h3><span class="tile" aria-hidden="true"><svg class="i"><use href="#' + (ICON[l.icon] || "i-folder") + '"/></svg></span>' + esc(l.name) + (l.note ? '<span class="line-note">' + esc(l.note) + '</span>' : "") + '</h3><ul class="svc-grid">' +
-        l.items.map(function (s) {
-          var k = KIND[s.tag] || KIND.we, id = "svc-" + s.id;
-          return '<li class="svc' + (s.tag === "ai" ? " is-ai" : "") + '" data-who="' + esc((s.who || []).join(" ")) + '" data-id="' + esc(s.id) + '"><button type="button" aria-expanded="false" aria-controls="' + id + '-more"><span class="nm">' + esc(s.name) + '</span><svg class="plus" aria-hidden="true"><use href="#i-plus"/></svg><span class="sum">' + esc(s.sum) + '</span><span class="kind ' + k[0] + '">' + k[1] + '</span></button>' +
-            '<div class="more" id="' + id + '-more"><div><dl>' + ROWS.map(function (r) { return s.rows && s.rows[r[0]] ? '<div><dt>' + r[1] + '</dt><dd>' + esc(s.rows[r[0]].replace(/^Example:\s*/, "")) + '</dd></div>' : ""; }).join("") + '</dl>' +
-            '<div class="pick"><button type="button" class="chip" aria-pressed="false" data-pick="' + esc(s.id) + '" data-name="' + esc(s.name) + '">Add to my Right Hand</button>' + (s.demo ? ' <a class="linkbtn" href="' + esc(s.demo) + '">See it in the demo</a>' : "") + '</div></div></div></li>';
-        }).join("") + '</ul></div>';
-    }).join("");
-    var stays = $("#stays");
-    if (stays && S.stays) stays.innerHTML = '<div class="svc pro stays-card" data-reveal><h3><span class="tile" aria-hidden="true"><svg class="i"><use href="#i-hand"/></svg></span>' + esc(S.stays.name) + '</h3><ul>' + S.stays.items.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + '</ul><p class="fine">We will point you to a licensed pro when something needs one.</p></div>';
-    var buy = $("#buy");
-    if (buy && S.buy) buy.innerHTML = '<h3 class="buy-h">How you can buy it</h3>' + S.buy.map(function (b) { return '<div><h4>' + esc(b.name) + '</h4><p>' + esc(b.text) + '</p>' + (b.tiers ? '<ul>' + b.tiers.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") + '</ul>' : "") + '</div>'; }).join("") + (S.priceLine ? '<p class="price-line">' + esc(S.priceLine) + '</p>' : "");
-    // newly added nodes get the reveal treatment
-    if ("IntersectionObserver" in window && rio) $$("#services [data-reveal]:not(.in)").forEach(function (el) { rio.observe(el); }); else $$("#services [data-reveal]").forEach(function (el) { el.classList.add("in"); });
+    function card(s) {
+      var k = KIND[s.tag] || KIND.we, id = "svc-" + s.id;
+      return '<li class="svc' + (s.tag === "ai" ? " is-ai" : "") + '" data-who="' + esc((s.who || []).join(" ")) + '" data-id="' + esc(s.id) + '"><button type="button" aria-expanded="false" aria-controls="' + id + '-more"><span class="nm">' + esc(s.name) + '</span><svg class="plus" aria-hidden="true"><use href="#i-plus"/></svg><span class="sum">' + esc(s.sum) + '</span><span class="kind ' + k[0] + '">' + k[1] + '</span></button>' +
+        '<div class="more" id="' + id + '-more"><div><dl>' + ROWS.map(function (r) { return s.rows && s.rows[r[0]] ? '<div><dt>' + r[1] + '</dt><dd>' + esc(s.rows[r[0]].replace(/^Example:\s*/, "")) + '</dd></div>' : ""; }).join("") + '</dl>' +
+        '<div class="pick"><button type="button" class="chip" aria-pressed="false" data-pick="' + esc(s.id) + '" data-name="' + esc(s.name) + '">Add to my Right Hand</button>' + (s.demo ? ' <a class="linkbtn" href="' + esc(s.demo) + '">See it in the demo</a>' : "") + '</div></div></div></li>';
+    }
+    // nl is "" in the browser and "\n" in the build; it only sits between cards and lines, where the grids ignore whitespace
+    function lines(S, nl) {
+      nl = nl || "";
+      return S.lines.map(function (l) {
+        return '<div class="svc-line" data-reveal><h3><span class="tile" aria-hidden="true"><svg class="i"><use href="#' + (ICON[l.icon] || "i-folder") + '"/></svg></span>' + esc(l.name) + (l.note ? '<span class="line-note">' + esc(l.note) + '</span>' : "") + '</h3><ul class="svc-grid">' + nl +
+          l.items.map(card).join(nl) + nl + '</ul></div>';
+      }).join(nl);
+    }
+    function stays(S) { return '<div class="svc pro stays-card" data-reveal><h3><span class="tile" aria-hidden="true"><svg class="i"><use href="#i-hand"/></svg></span>' + esc(S.stays.name) + '</h3><ul>' + S.stays.items.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + '</ul><p class="fine">We will point you to a licensed pro when something needs one.</p></div>'; }
+    function buy(S) { return '<h3 class="buy-h">How you can buy it</h3>' + S.buy.map(function (b) { return '<div><h4>' + esc(b.name) + '</h4><p>' + esc(b.text) + '</p>' + (b.tiers ? '<ul>' + b.tiers.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") + '</ul>' : "") + '</div>'; }).join("") + (S.priceLine ? '<p class="price-line">' + esc(S.priceLine) + '</p>' : ""); }
+    return { lines: lines, stays: stays, buy: buy, KIND: KIND, ROWS: ROWS };
+  })();
+  /* services-render:end */
+  var picks = [];
+  (function services() {
+    var S = window.RH_SERVICES, host = $("#svc-lines");
+    if (!host) return;
+    // index.html ships the catalog as static HTML (for crawlers and AI fetchers that skip JavaScript), so enhance it in place.
+    // A page whose markers are empty still renders from assets/services-data.js.
+    var stat = !!$(".svc[data-id]", host);
+    if (!stat && !S) return;
+    if (!stat) {
+      host.innerHTML = RENDER.lines(S);
+      var stays = $("#stays");
+      if (stays && S.stays && !$(".stays-card", stays)) stays.innerHTML = RENDER.stays(S);
+      var buy = $("#buy");
+      if (buy && S.buy && !$(".buy-h", buy)) buy.innerHTML = RENDER.buy(S);
+      // newly added nodes get the reveal treatment
+      if ("IntersectionObserver" in window && rio) $$("#services [data-reveal]:not(.in)").forEach(function (el) { rio.observe(el); }); else $$("#services [data-reveal]").forEach(function (el) { el.classList.add("in"); });
+    }
 
     // filters
     var who = $("#who"), live = $("#who-live"), cur = "";
-    if (who) {
+    if (who && S && S.who) {
       who.innerHTML = '<button type="button" class="chip" aria-pressed="true" data-who="">All</button>' + S.who.map(function (w) { return '<button type="button" class="chip" aria-pressed="false" data-who="' + esc(w.id) + '">' + esc(w.label) + '</button>'; }).join("");
       who.addEventListener("click", function (e) {
         var b = e.target.closest("button"); if (!b) return;

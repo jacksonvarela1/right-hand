@@ -1,0 +1,692 @@
+# Right Hand NWA: full services catalog and answers
+
+> Right Hand NWA is a Northwest Arkansas team that takes receipts, invoices, follow-ups, scheduling and paperwork off small business owners' plates, and sets up AI that drafts the busywork. AI drafts, a person on the team checks every piece, and the owner approves: nothing goes out in an owner's name until they have approved it. It is run by four University of Arkansas students. The one offer is a free 30-minute admin and AI check-up, and Your Admin Map follows within 3 business days.
+
+Source: https://righthandnwa.com/. Short version: https://righthandnwa.com/llms.txt
+
+## About
+
+- Who: four University of Arkansas students who work in Northwest Arkansas: Jackson Varela, Annie Wagner, Abigail Estes and Bella Gambaro. One named person owns each client task.
+- New business: there are no reviews or client results on the site yet, because the team will not make them up.
+- Method: AI drafts, we check, you approve. A person on the team checks every piece. Automatic messages, like a missed-call text, only ever use wording the owner approved.
+- Area: anywhere in Benton and Washington counties, Arkansas, including Bentonville, Rogers, Springdale, Fayetteville, Bella Vista, Siloam Springs, Lowell, Cave Springs, Centerton, Farmington, Prairie Grove and Pea Ridge. In person at the business or a coffee shop, or by video or phone.
+- Contact: righthandnwa@gmail.com (reply within one business day). Instagram: @righthandnwa (https://www.instagram.com/righthandnwa/).
+- Pricing: the check-up is free. After that, a flat monthly price is quoted in writing before any work starts, based on the tasks the owner picks. No prices are published.
+- What we are not: we are not a CPA firm, law firm or payroll provider. If something needs one, we say so.
+
+## How it works
+
+1. Check-up: 30 minutes at your shop or on video. We list your recurring admin with you.
+2. Admin Map: Within 3 business days: your top 3 handoffs, what AI drafts, what stays yours, and a flat quote if you want one.
+3. One-month pilot: We take one or two tasks. You approve every piece. AI drafts / We check / You approve
+4. Monthly help: Month to month. Add or drop tasks any time. Stop with one email.
+
+## Services
+
+Every service lists what you hand off, what you get back, where AI helps, where a person checks, what we never do, and an example. Prices: Quoted after your check-up, based on volume.
+
+### Money admin
+
+Prep only. You and your CPA decide.
+
+#### Receipt capture and categorizing
+
+Receipts and bills gathered in one place, sorted, with questions flagged weekly.
+
+- How it works: AI drafts, we check, you approve
+- Suits: Home services, Shops and restaurants, Auto shops, Salons and studios
+- You hand off: Receipt photos and emailed bills, sent whatever way is easiest for you.
+- You get back: Everything in one place, like QuickBooks receipt forwarding or the app you already use, with the queue cleared weekly and a short question list.
+- Where AI helps: AI reads each receipt and suggests the vendor, date, amount and category.
+- Where a person checks: A person checks every category. You or your bookkeeper approve.
+- What we never do: We never file taxes and never hold your bank logins.
+- Example: a Springdale food truck snaps receipts at the commissary all week, and by Friday they are sorted with three questions waiting.
+- Live demo: https://righthandnwa.com/#demo-receipts
+
+#### Monthly expense review
+
+Totals by category each month, checked against last month and traced to receipts.
+
+- How it works: AI drafts, we check, you approve
+- Suits: Shops and restaurants, Professional offices, Supplier and vendor offices, Home services
+- You hand off: An export from your books, or view-only access you set up in QuickBooks or your accounting app.
+- You get back: Totals by category, checked against last month, with every line traced to its transaction and receipt and open questions flagged for you.
+- Where AI helps: AI drafts the month's summary and points out lines that look different from last month.
+- Where a person checks: A person traces every line to its transaction and receipt before you see it.
+- What we never do: We never change your books without your OK, file anything or move money.
+- Example: a Cave Springs insurance agency sees software costs jump in March, and the review flags a duplicate charge to ask about.
+- Live demo: https://righthandnwa.com/#demo-receipts
+
+#### Invoices and overdue follow-ups
+
+Reminders on, past-due follow-ups drafted, and a weekly who-owes-what list.
+
+- How it works: AI drafts, we check, you approve
+- Suits: Home services, Auto shops, Professional offices, Supplier and vendor offices
+- You hand off: Your invoicing tool, like QuickBooks or Square, and the customers you want followed up.
+- You get back: Automatic reminders turned on in your invoicing tool, personal follow-ups drafted for anything past due, and a weekly who-owes-what list.
+- Where AI helps: AI drafts polite follow-ups in your voice from the invoice details.
+- Where a person checks: A person checks each draft against the invoice. You approve the wording before anything sends.
+- What we never do: We never collect or move money, change terms, add fees or threaten anyone.
+- Example: a Rogers HVAC company after a cold snap has forty open invoices, and Monday's list shows who to nudge first.
+- Live demo: https://righthandnwa.com/#demo-invoices
+
+#### Quotes and estimates
+
+Quotes drafted from your own price sheet and a job-site voice note.
+
+- How it works: AI drafts, we check, you approve
+- Suits: Home services, Auto shops, Supplier and vendor offices
+- You hand off: Your price sheet and a quick voice note or photos from the job site.
+- You get back: A clean quote ready for your review, plus a follow-up if the customer goes quiet.
+- Where AI helps: AI turns your voice note into line items, using only your own price sheet.
+- Where a person checks: A person checks every line against your price sheet. You set every price.
+- What we never do: We never set, change or discount a price, and never send a quote you have not approved.
+- Example: a Fayetteville landscaping crew records a two-minute walkthrough, and the quote is waiting for review before the truck leaves.
+
+#### Bills-due and renewals calendar
+
+Reminders before licenses, insurance, permits and registrations come due.
+
+- How it works: We do it
+- Suits: Home services, Auto shops, Professional offices, Salons and studios
+- You hand off: Your license, insurance, permit and registration paperwork, or just a list of what you renew each year.
+- You get back: Reminders 60, 30 and 7 days out for licenses, insurance, vendor certificates, domains, permits, vehicle registrations and the state annual report.
+- Where AI helps: Not needed for this one. It is a calendar built from your paperwork.
+- Where a person checks: A person checks every date against the paperwork and updates the calendar after each renewal.
+- What we never do: We never file or pay anything. You or your licensed pro file and pay.
+- Example: a Lowell trucking outfit gets a 60-day heads-up on three truck registrations and its insurance renewal.
+
+#### CPA and bookkeeper prep
+
+Statements, receipts and reports gathered and labeled for the pros who file.
+
+- How it works: We do it
+- Suits: Professional offices, Shops and restaurants, Salons and studios, Home services
+- You hand off: Statements you download, your receipts, and the request list from your CPA or bookkeeper.
+- You get back: One labeled folder that matches your CPA's list, with gaps flagged early instead of in April.
+- Where AI helps: Not needed for this one. It is gathering, labeling and checking a list.
+- Where a person checks: A person matches every item to your CPA's request list before anything is shared.
+- What we never do: We never prepare or file returns, give tax advice or hold your bank logins.
+- Example: a Farmington salon owner hands over a shoebox of paper in January, and the CPA gets a labeled folder by February.
+
+#### Software subscription cleanup
+
+Every software subscription listed with seats, renewal dates and overlaps flagged.
+
+- How it works: We do it
+- Suits: Professional offices, Supplier and vendor offices, Shops and restaurants
+- You hand off: Statements you download, or a list of the apps your team logs into.
+- You get back: One list of every subscription with seats, renewal date and any overlaps flagged.
+- Where AI helps: Not needed for this one. A person reads the statements and builds the list.
+- Where a person checks: A person confirms each seat count with you before anything is marked unused.
+- What we never do: We never cancel anything for you or promise savings. You decide every cancel.
+- Example: a Centerton marketing office finds two video tools doing the same job, and the owner decides which one stays.
+
+### Customers and front desk
+
+Nothing goes out in wording you have not approved.
+
+#### Inbox triage and reply drafts
+
+Your inbox sorted daily, with replies drafted in your voice for you to send.
+
+- How it works: AI drafts, we check, you approve
+- Suits: Supplier and vendor offices, Professional offices, Home services
+- You hand off: Access to your Gmail or Outlook inbox, plus a few notes on who matters most.
+- You get back: Labels and filters, a daily list of what needs you, and replies drafted in your voice waiting in Drafts.
+- Where AI helps: AI sorts mail into labels and drafts replies from your past emails and approved facts.
+- Where a person checks: A person checks the daily list and every draft. You send.
+- What we never do: We never agree to prices or dates you have not set, and never delete mail permanently.
+- Example: a Bentonville supplier office has its inbox sorted before 8 AM, with five reply drafts ready to review.
+- Live demo: https://righthandnwa.com/#demo-inbox
+
+#### Missed-call text-back and booking
+
+Missed callers get an instant text offering your real open slots.
+
+- How it works: We do it
+- Suits: Auto shops, Home services, Salons and studios
+- You hand off: Your business phone number, open hours, and the wording you want missed callers to see.
+- You get back: An instant text to every missed caller, in wording you approved, that offers your real open slots and holds one until you confirm.
+- Where AI helps: Not needed for this one. The text is your approved wording, sent by your phone system.
+- Where a person checks: A person sets up carrier registration (A2P 10DLC) with you before anything sends, then checks the message log weekly.
+- What we never do: We never send marketing blasts, text before registration is approved, or ignore a STOP reply.
+- Example: a Springdale auto shop misses a call during an oil change, and the caller picks Thursday at 10, held until the owner confirms.
+- Live demo: https://righthandnwa.com/#demo-calls
+
+#### AI phone answering, inbound only
+
+An assistant answers inbound calls from approved facts and routes urgent ones to you.
+
+- How it works: AI drafts, we check, you approve
+- Suits: Home services, Auto shops, Professional offices
+- You hand off: Your hours, services, service area and the facts you approve, plus which words mean urgent.
+- You get back: Calls answered with the caller's name and reason taken, and urgent words like leak or no heat routed to your phone.
+- Where AI helps: AI answers inbound calls from your approved facts and says it is an assistant. After hours, a person replies the next business day.
+- Where a person checks: We run test calls with you before launch and review transcripts weekly for the first month.
+- What we never do: We never make outbound AI calls, and the assistant never quotes prices you have not approved.
+- Example: a Prairie Grove plumber gets a no-water call at 9 PM routed to his cell, while routine calls wait for morning.
+
+#### Website chat assistant
+
+A chat assistant that answers from your approved FAQ and hands off the rest.
+
+- How it works: AI drafts, we check, you approve
+- Suits: Shops and restaurants, Salons and studios, Professional offices
+- You hand off: Your FAQ, hours and policies, or the questions customers ask you most.
+- You get back: A chat on your site that answers only from your approved FAQ and collects contact details for everything else.
+- Where AI helps: AI answers from your approved FAQ only and introduces itself as an assistant.
+- Where a person checks: Anything outside the FAQ goes to a person, and we read the chat logs with you to update the FAQ.
+- What we never do: We never let it guess, quote prices you have not approved, or pretend to be a person.
+- Example: a Bentonville bike shop gets asked about Sunday hours at midnight, and the chat answers straight from the FAQ.
+
+#### Lead intake form that routes itself
+
+One short form that logs each request and alerts the right person.
+
+- How it works: We do it
+- Suits: Home services, Professional offices, Auto shops
+- You hand off: The questions you need answered before you call someone back, and who handles what.
+- You get back: A form on your site and Google profile that logs each request in a sheet or CRM, alerts the right person and sends a we-got-it reply.
+- Where AI helps: Not needed for this one. Simple rules route each request.
+- Where a person checks: A person test-submits the form with you and checks that every alert lands.
+- What we never do: The form never asks for card numbers, SSNs or health details.
+- Example: a Fayetteville roofer in a hail week gets sixty requests, each one logged and routed to the right crew lead.
+
+#### CRM setup and cleanup
+
+Contacts cleaned up in one simple pipeline with follow-up tasks.
+
+- How it works: We do it
+- Suits: Professional offices, Supplier and vendor offices, Home services
+- You hand off: Your contact lists, spreadsheets and old email, and how you track jobs today.
+- You get back: Contacts imported and de-duplicated, a simple pipeline (New, Quoted, Won, Lost) and follow-up tasks.
+- Where AI helps: Not needed for this one. It is careful importing, matching and setup.
+- Where a person checks: A person checks merged duplicates by hand. You approve the stages.
+- What we never do: We never buy lists or send cold bulk email.
+- Example: a Rogers event venue tracking inquiries in three spreadsheets moves to one pipeline with every open date in view.
+
+#### Quote follow-ups
+
+Polite nudges on open quotes, drafted for your OK.
+
+- How it works: AI drafts, we check, you approve
+- Suits: Home services, Auto shops, Supplier and vendor offices
+- You hand off: Your list of open quotes, or access to the tool where they live.
+- You get back: A weekly list of quotes gone quiet, each with a short, polite nudge drafted for your OK.
+- Where AI helps: AI drafts each nudge from the quote details and your past wording.
+- Where a person checks: A person checks every draft against the quote. You approve before anything sends.
+- What we never do: We never discount, change the scope or pressure a customer.
+- Example: a Gentry fence company has twelve quotes over two weeks old, and Friday's nudges are ready to approve in one batch.
+
+### Scheduling and follow-ups
+
+Your hours and your rules. We never book outside them.
+
+#### Booking page
+
+Online booking in the tool you already use, with real hours and reminders.
+
+- How it works: We do it
+- Suits: Salons and studios, Auto shops, Professional offices
+- You hand off: Your hours, your services, how long each one takes and the buffer you need between them.
+- You get back: A booking page in the tool you already use, with your real hours, buffer times and reminders turned on.
+- Where AI helps: Not needed for this one. Your booking tool does the work once it is set up right.
+- Where a person checks: A person books test appointments with you before the page goes live.
+- What we never do: We never open hours you did not set or change your cancellation policy.
+- Example: a Fayetteville hair studio adds longer buffers on Razorback home-game weekends, when traffic makes clients run late.
+
+#### Appointment reminders and no-show follow-ups
+
+Reminders before every appointment and a kind follow-up after a no-show.
+
+- How it works: We do it
+- Suits: Salons and studios, Auto shops, Professional offices, Home services
+- You hand off: Your booking tool and the reminder wording you want, approved once.
+- You get back: Reminders before each appointment and a follow-up after a no-show, in wording you approved once.
+- Where AI helps: Not needed for this one. Your booking tool sends the approved wording.
+- Where a person checks: A person checks the send log weekly and fixes anything that bounced.
+- What we never do: We never add no-show fees, and texts wait until carrier registration (A2P 10DLC) is approved.
+- Example: a Johnson nail studio sends a reminder the day before and a rebook link after a missed visit.
+
+#### Calendar management
+
+A weekly check of your calendar with conflicts flagged early.
+
+- How it works: We do it
+- Suits: Professional offices, Supplier and vendor offices, Salons and studios
+- You hand off: Access to your Google or Outlook calendar and the hours you keep.
+- You get back: A weekly check with double-bookings, travel gaps and conflicts flagged, plus invites answered by the rules you set.
+- Where AI helps: Not needed for this one. A person reads the week ahead with you.
+- Where a person checks: A person does the weekly check and asks you before moving anything.
+- What we never do: We never book outside the hours you set.
+- Example: a Pea Ridge architect learns on Monday that a site visit overlaps a school pickup on Thursday.
+
+#### Staff schedule drafts
+
+Weekly staff schedule drafts built from availability, for your approval.
+
+- How it works: We do it
+- Suits: Shops and restaurants, Salons and studios, Auto shops
+- You hand off: Staff availability, time-off requests and how many people each shift needs.
+- You get back: A draft schedule each week with gaps and long weeks flagged, ready for your approval.
+- Where AI helps: Not needed for this one. A person builds the draft in your scheduling tool or a shared sheet.
+- Where a person checks: A person checks every request against the draft. You approve before staff see it.
+- What we never do: We never handle payroll or post a schedule you have not approved.
+- Example: a Tontitown restaurant gets Grape Festival week drafted early, with every time-off request already counted.
+
+#### Vendor and delivery coordination
+
+Vendor confirmations and follow-ups kept on one shared list.
+
+- How it works: We do it
+- Suits: Shops and restaurants, Supplier and vendor offices, Auto shops
+- You hand off: Your vendor contacts, open orders and expected delivery dates.
+- You get back: Delivery confirmations, follow-ups on anything late, and one shared list everyone can check.
+- Where AI helps: Not needed for this one. It is steady follow-up and one clean list.
+- Where a person checks: A person checks the list against your orders each week and flags anything late.
+- What we never do: We never place, change or pay for orders. You approve every order.
+- Example: an Elkins cafe tracks three produce vendors and a coffee roaster on one list, with a late Tuesday delivery flagged by noon.
+
+#### Meeting and call notes with AI
+
+A summary and action items after each meeting, skimmed by you first.
+
+- How it works: AI drafts, we check, you approve
+- Suits: Supplier and vendor offices, Professional offices
+- You hand off: Your meeting or call recordings, with every recording announced to everyone on the call.
+- You get back: A short summary and action items after each meeting, filed where your team can find them.
+- Where AI helps: AI transcribes the recording and drafts the summary and action items.
+- Where a person checks: A person checks the summary against the recording, and you skim it before anything goes to clients.
+- What we never do: We never record a call without announcing it to everyone on it.
+- Example: a Springdale logistics broker's weekly carrier calls become one page of who promised what, and by when.
+
+### Documents and how-tos
+
+Your files stay in the accounts you already own.
+
+#### One folder system with naming rules
+
+One folder system with naming rules, and your paper scanned and filed.
+
+- How it works: We do it
+- Suits: Professional offices, Home services, Supplier and vendor offices
+- You hand off: Your shared drives, desktop folders and boxes of paper.
+- You get back: One folder system with naming rules in Google Drive or OneDrive, whichever you already pay for, with paper scanned and named.
+- Where AI helps: Not needed for this one. A person sorts, scans and names each file.
+- Where a person checks: A person spot-checks names and locations, and you approve the folder map before anything moves.
+- What we never do: IDs and tax forms go in a secure vault, never in shared folders. We never delete your files.
+- Example: a Bella Vista property manager finds any lease in two clicks instead of three drawers.
+
+#### Templates for quotes, forms and checklists
+
+Ready-to-use templates for quotes, intake forms, onboarding and invoice notes.
+
+- How it works: We do it
+- Suits: Home services, Professional offices, Auto shops
+- You hand off: The quotes, forms and checklists you use today, even the messy ones.
+- You get back: Clean templates for quotes, intake forms, onboarding checklists and invoice notes in the tools you already use.
+- Where AI helps: Not needed for this one. We build them from the wording you already use.
+- Where a person checks: A person checks every field with you before the templates go live.
+- What we never do: We never add legal terms or contract language. Your attorney handles those.
+- Example: a Greenland electrician sends every new customer the same clean intake form and onboarding checklist.
+
+#### Written how-tos (SOPs)
+
+Step-by-step how-tos drafted from a recorded walkthrough, signed off by you.
+
+- How it works: AI drafts, we check, you approve
+- Suits: Shops and restaurants, Salons and studios, Auto shops, Home services
+- You hand off: A recorded walkthrough of how you or your best person does the task.
+- You get back: A plain written how-to, with steps and screenshots your staff can follow.
+- Where AI helps: AI drafts the how-to from the recorded walkthrough.
+- Where a person checks: A person edits each draft for accuracy, and you sign off before staff use it.
+- What we never do: We never hand your team a how-to you have not signed off on.
+- Example: a Gravette tire shop records its closing routine once, and new hires follow the same steps every night.
+
+#### Hiring admin
+
+Job post, applicant inbox, interview scheduling and tracking. You make every decision.
+
+- How it works: AI drafts, we check, you approve
+- Suits: Shops and restaurants, Home services, Auto shops, Salons and studios
+- You hand off: Your notes on the role and the times you can interview.
+- You get back: A job post drafted from your notes, a separate applicant inbox, interview scheduling and a tracking sheet.
+- Where AI helps: AI drafts only the job post. Applications are never screened, scored or ranked by AI.
+- Where a person checks: You read every application and make every decision. A person checks the job post with you before it goes up.
+- What we never do: No background checks, I-9s or payroll. We never reject or rank an applicant.
+- Example: a Rogers taqueria hiring two cooks gets applicants in their own inbox, with interviews booked into open afternoons.
+
+#### Supplier and vendor office support
+
+Notes, follow-ups, filing and report prep for teams that sell to big retailers.
+
+- How it works: AI drafts, we check, you approve
+- Suits: Supplier and vendor offices
+- You hand off: Your meeting notes, retailer emails, sales exports and the files your team keeps hunting for.
+- You get back: Meeting notes, follow-ups, document filing and report prep, so your team spends its time on the account.
+- Where AI helps: AI summarizes long emails and drafts notes and report text from your exports.
+- Where a person checks: A person checks every number against the source export before you see it.
+- What we never do: We never claim any relationship with a retailer, and we never log into retailer portals as you.
+- Example: a Bentonville supplier team turns Monday's sales exports into a clean one-page recap before the weekly call.
+
+### AI in your business
+
+Nothing new is installed without your yes.
+
+#### Workflow automations
+
+Your apps pass work to each other, documented and checked every month.
+
+- How it works: We do it
+- Suits: Home services, Professional offices, Supplier and vendor offices, Shops and restaurants
+- You hand off: The apps you already use and the copy-paste chores you repeat every week.
+- You get back: Automations like attachments saved to the right folder, form leads added to the CRM, or a review request queued when a job is marked done.
+- Where AI helps: Usually not needed. Plain rules move the data, and AI is added only where it clearly helps and you agree.
+- Where a person checks: Each automation is documented in one line, test-run with you and log-checked monthly.
+- What we never do: We never automate payments, payroll or anything that sends money.
+- Example: a Cave Springs cleaning company marks a job done, and the photos file themselves and the review request is queued.
+- Live demo: https://righthandnwa.com/#demo-automation
+
+#### AI email drafting in your inbox
+
+AI drafting turned on in the Google Workspace or Microsoft 365 plan you have.
+
+- How it works: AI drafts, we check, you approve
+- Suits: Professional offices, Supplier and vendor offices, Home services
+- You hand off: An admin invite to your Google Workspace or Microsoft 365 account, for setup only.
+- You get back: The assistant your plan already includes, set up in your inbox, with a short guide and saved prompts for your common replies.
+- Where AI helps: AI drafts replies inside your inbox, using the assistant your plan already includes.
+- Where a person checks: We walk through it with you and review the first week of drafts together.
+- What we never do: Nothing sends on its own, and we never add a new AI tool or plan without your yes.
+- Example: a Fayetteville engineering firm turns on drafting in Outlook, and routine client replies start as drafts to edit.
+
+#### Weekly owner report
+
+One page every Monday from your own numbers, reviewed by a person first.
+
+- How it works: AI drafts, we check, you approve
+- Suits: Home services, Shops and restaurants, Salons and studios, Auto shops
+- You hand off: Exports from your booking, invoicing, phone and review tools, or access to pull them.
+- You get back: One page every Monday: jobs, calls, money owed and reviews, compared with last week.
+- Where AI helps: AI drafts the summary lines from your exports.
+- Where a person checks: A person checks every number against the source before it reaches you.
+- What we never do: We never present a forecast as fact or fill a gap with a guess.
+- Example: a Rogers auto shop owner reads Monday's page over coffee and sees that missed calls doubled on Saturday.
+- Live demo: https://righthandnwa.com/#demo-report
+
+#### AI starter workshop
+
+A half day for you and your staff, plus a follow-up a month later.
+
+- How it works: AI drafts, we check, you approve
+- Suits: Supplier and vendor offices, Professional offices, Shops and restaurants
+- You hand off: A few real tasks your team does every week, with private details removed.
+- You get back: A half-day session on drafting, summarizing and checking AI output against the source, plus a follow-up a month later.
+- Where AI helps: The whole session is about using AI tools well on your own everyday tasks.
+- Where a person checks: Your team practices checking every AI draft against the source before it gets used.
+- What we never do: A red list of what never gets pasted in: card numbers, SSNs, health details and other people's private info.
+- Example: a Bentonville supplier team learns to summarize long retailer emails and check each summary against the original.
+
+#### One-page AI use policy
+
+A plain-language page on how your team may and may not use AI.
+
+- How it works: AI drafts, we check, you approve
+- Suits: Professional offices, Supplier and vendor offices
+- You hand off: How your team uses AI today, and anything your clients or contracts ask of you.
+- You get back: One page in plain language: which tools are allowed, what never gets pasted in, and who checks AI work.
+- Where AI helps: AI helps with a first draft, which a person rewrites in your words.
+- Where a person checks: A person edits it with you. Your attorney reviews anything formal.
+- What we never do: We never give legal advice or present the page as a formal HR policy.
+- Example: a Rogers bookkeeping office hands every new hire the same one-page AI rules on day one.
+
+#### Company prompt kit and SOP assistant
+
+Saved prompts and an assistant built only from your own approved documents.
+
+- How it works: AI drafts, we check, you approve
+- Suits: Professional offices, Supplier and vendor offices, Shops and restaurants
+- You hand off: Your how-tos, FAQs and templates, with customer personal data and financial records left out.
+- You get back: A kit of tested prompts and an assistant that answers staff questions from your approved documents.
+- Where AI helps: AI answers staff questions using only the documents you approved.
+- Where a person checks: You approve every document that goes in, and we re-test the answers every quarter.
+- What we never do: We never load customer personal data or financial records into it.
+- Example: a Lowell coffee shop's new counter staff ask the assistant how to log a catering order.
+
+#### Monthly AI office hours
+
+A monthly session to answer questions, screen one new tool and tune automations.
+
+- How it works: AI drafts, we check, you approve
+- Suits: Professional offices, Supplier and vendor offices, Home services
+- You hand off: Your questions, plus any AI tool someone on your team wants to try.
+- You get back: Answers, one new tool screened against your stack, and your existing automations tuned.
+- Where AI helps: We look at AI tools with you and test them on your real tasks.
+- Where a person checks: A person checks each new tool against your stack and your data rules before you decide.
+- What we never do: Nothing new is installed without your yes.
+- Example: a Bella Vista HVAC office asks whether a new scheduling add-on is worth trying and gets a plain yes, no or not yet.
+
+### Local presence and reputation
+
+Honest listings and real reviews only. We never write reviews.
+
+#### Google Business Profile and listings upkeep
+
+Hours, posts and photos kept current on Google, Apple, Bing, Yelp and Facebook.
+
+- How it works: We do it
+- Suits: Shops and restaurants, Salons and studios, Auto shops, Home services
+- You hand off: Manager access to your listings, plus your own photos.
+- You get back: Hours, holiday and event hours, posts and photos kept current, with the same name, address and phone everywhere.
+- Where AI helps: Not needed for this one. A person updates each listing by hand.
+- Where a person checks: A person checks every listing monthly. You approve each post.
+- What we never do: We never keyword-stuff your business name or post photos that are not yours.
+- Example: a downtown Rogers boutique adds its holiday hours once, and they match on every map.
+
+#### Honest review requests
+
+A review request to every customer after every job, never with an incentive.
+
+- How it works: We do it
+- Suits: Home services, Auto shops, Salons and studios, Shops and restaurants
+- You hand off: Your customer list, or the tool where jobs are marked done.
+- You get back: A short review request sent to every customer after a job, with a direct link to your Google profile.
+- Where AI helps: Not needed for this one. The request is your approved wording.
+- Where a person checks: A person checks the send log so every customer gets the same request, not only the happy ones.
+- What we never do: We never offer incentives, skip unhappy customers or write reviews.
+- Example: a Farmington pressure-washing crew sends the same request after every driveway, good day or bad.
+
+#### Review reply drafts
+
+A reply drafted in your voice for every review, good or bad.
+
+- How it works: AI drafts, we check, you approve
+- Suits: Shops and restaurants, Salons and studios, Auto shops
+- You hand off: Manager access to your review profiles and a few past replies you liked.
+- You get back: A drafted reply for every review, good or bad, in your voice and waiting for your OK.
+- Where AI helps: AI drafts each reply from the review and your past wording.
+- Where a person checks: A person checks every draft for tone and facts. You approve before it posts.
+- What we never do: We never argue with reviewers, share customer details or post a reply you have not approved.
+- Example: a Siloam Springs diner gets a calm, specific reply drafted for a one-star review about a long wait.
+
+#### Social posts and content calendar
+
+A month of captions drafted in your voice, approved in one batch.
+
+- How it works: AI drafts, we check, you approve
+- Suits: Shops and restaurants, Salons and studios, Home services
+- You hand off: Your own photos and a few notes on what is coming up this month.
+- You get back: A month of captions in your voice on a simple calendar, using your photos, approved in one batch.
+- Where AI helps: AI drafts captions from your notes and photos.
+- Where a person checks: A person edits every caption and checks every claim. You approve the batch.
+- What we never do: We never buy followers, invent claims or use photos that are not yours.
+- Example: a Eureka Springs gift shop approves October's posts in one sitting, every photo taken in its own store.
+
+#### Email newsletter
+
+A newsletter to people who opted in, drafted from your notes.
+
+- How it works: AI drafts, we check, you approve
+- Suits: Shops and restaurants, Salons and studios, Professional offices
+- You hand off: Your opted-in email list and notes on the news, events or offers you want to share.
+- You get back: A newsletter drafted from your notes, ready in your email tool for your OK, with the unsubscribe link always on.
+- Where AI helps: AI drafts the newsletter from your notes.
+- Where a person checks: A person proofreads it and checks every date and detail. You approve before it sends.
+- What we never do: We never use purchased lists or email anyone who did not opt in.
+- Example: a Fayetteville yoga studio sends its monthly class schedule to members who signed up at the front desk.
+
+#### Digital front door check
+
+How a customer finds and reaches you on a phone, scored with you.
+
+- How it works: We do it
+- Suits: Shops and restaurants, Salons and studios, Home services, Auto shops
+- You hand off: A short call where we search for you and contact you the way a customer would.
+- You get back: A simple scorecard of your listings, site, hours, calls and messages, with the fixes ranked.
+- Where AI helps: Not needed for this one. A person searches and calls the way a customer would.
+- Where a person checks: A person runs every step on a real phone and scores it with you.
+- What we never do: Nothing is changed during the check.
+- Example: a Springdale bakery learns its holiday hours are wrong on two maps.
+
+### Always stays with you or a licensed pro
+
+- Tax prep and filing
+- Payroll processing and filing
+- Legal advice, contracts and formal HR policy
+- Moving money, paying bills or collecting debts
+- Signing anything
+- Outbound AI voice calls to your customers
+- Patient or health records
+
+We will point you to a licensed pro when something needs one.
+
+## How you can buy it
+
+### Free NWA Admin and AI Check-up
+
+30 minutes with us, then Your Admin Map in 3 business days: what to hand off first and what stays with you.
+
+### One-month pilot
+
+One or two tasks for one month, every piece approved by you.
+
+### Right Hand Desk, monthly
+
+Ongoing admin from the same team every month, sized to your volume.
+
+- Desk Basics: books prep and receipts, invoice follow-ups, Monday brief.
+- Desk Standard: Basics plus inbox triage, scheduling and reminders, and review reply drafts.
+- Desk Plus: Standard plus listings upkeep, social and newsletter admin, and monthly AI office hours.
+
+### AI Builds
+
+Fixed scope: text-back, phone answering, chat assistant, lead intake, CRM, automations, meeting notes and the review system. Each includes setup, a test run you watch, a one-page how-it-works sheet and a 30-day watch of logs before sign-off. Builds can roll into the Desk plan.
+
+### AI Starter Workshop
+
+A half day for owner and staff, plus a follow-up a month later. Sold alone or with any build.
+
+Quoted after your check-up, based on volume.
+
+## The free check-up
+
+**Free NWA Admin and AI Check-up**
+
+- A 30-minute conversation at your business anywhere in Benton or Washington County, or by video or phone.
+- We walk through your week together and list every recurring admin task and roughly how long it takes you.
+- Within 3 business days, Your Admin Map arrives by email: your top 3 tasks to hand off, and for each one what we would do, what AI would draft, what stays with you, and what stays with your CPA or attorney.
+- One quick win you can do yourself this week with tools you already pay for.
+- If you want help, a flat written quote, good for 30 days. No pressure.
+
+Free. Nothing to buy, now or later. No books, bank statements or passwords needed. You keep the Admin Map whether you hire us or not. About 35 minutes of your time: 30 to talk, 5 to read your map.
+
+## Promises
+
+- You approve before anything is sent, filed or final. Automatic messages, like a missed-call text, only ever use wording you approved.
+- We reply to your email within one business day.
+- Your Admin Map arrives within 3 business days of your check-up.
+- One named person owns each of your tasks.
+- We ask for the least access a task needs, and never for your passwords.
+- Stop any time. Within 2 business days we remove our access, hand back every file and how-to we made, and confirm it in writing.
+- If we make a mistake in work you approved, we fix it at no charge.
+
+## How we handle your logins and data
+
+- We never ask for passwords by email, text or on this site.
+- You invite us as a user, so you can remove us in one click.
+- View-only access unless a task needs more.
+- Multi-factor sign-in on every account we use for your work.
+- A password manager and long, unique passwords on our side.
+- Your files stay in your accounts wherever possible, not on our laptops.
+- We tell you in writing which tools, including AI tools, touch your data, and we use settings that keep it out of AI model training.
+- When you stop, we remove our access within 2 business days.
+
+What we are not: we are not a CPA firm, law firm or payroll provider. If something needs one, we say so.
+
+## What we never do
+
+- Nothing is sent, filed or final until the owner approves it.
+- We never ask for passwords by email, text or on the website, and the check-up needs no logins at all.
+- We never touch your bank or move money.
+- We never write reviews. Honest listings and real reviews only.
+- We never sell or share your data, and we use settings that keep it out of AI model training.
+- We are not a CPA firm, law firm or payroll provider. If something needs one, we say so.
+- Always stays with you or a licensed pro: Tax prep and filing; Payroll processing and filing; Legal advice, contracts and formal HR policy; Moving money, paying bills or collecting debts; Signing anything; Outbound AI voice calls to your customers; Patient or health records.
+
+## Questions and answers
+
+### What does it cost?
+
+The check-up is free, with nothing to buy. If you want help after that, we quote a flat monthly price in writing before any work starts, based on the tasks you pick. Tool costs, like a texting plan, are paid by you directly to the vendor, and we show them before you decide.
+
+### Do I have to give you my passwords or bank login?
+
+No, and please don't send them. The check-up needs no logins at all. If you hire us, you invite us as a user in the tools you already use, so you can see what we can reach and remove us in one click. We never touch your bank or move money.
+
+### Is AI going to talk to my customers?
+
+Only if you want it to, and only from answers you approved. A phone or chat assistant says it is an assistant and hands anything else to you. Everything else AI does is a draft that one of us checks and you approve. If you'd rather we skip AI on a task, we do it by hand.
+
+### You're students. Why should I trust you with my business?
+
+Fair question. We are four University of Arkansas students who work in Northwest Arkansas. For you, that means a short client list, a named person on every task, and work you can check line by line. It does not mean we are CPAs, attorneys or a payroll company, and we will tell you when something needs one. Try the demos on this page and judge the work yourself.
+
+### What happens over school breaks or when you graduate?
+
+We tell you our schedule up front, breaks included. Every task we take on gets a written how-to, so nothing lives in one person's head, and it is yours to keep.
+
+### What happens to my data?
+
+Wherever possible it stays in your own accounts. We tell you in writing which tools touch it, AI tools included, and we use settings that keep your data out of AI model training. We never sell or share it, and we delete working copies when a task is done.
+
+### Which tools do you use?
+
+The ones you already pay for, where possible: Google Workspace or Microsoft 365, your accounting and booking tools, your phone system. If something new would help, we tell you what it costs and you decide.
+
+### What if I want to stop?
+
+Email us. It is month to month with no cancellation fee. Within 2 business days we remove our access, hand back every file and how-to, and confirm it in writing.
+
+### What if you get something wrong?
+
+You see the sources and the math before anything is final, and anything we can't match to a record comes to you as a question. If a mistake slips through in work you approved, we fix it at no charge.
+
+### Will this replace my bookkeeper or CPA?
+
+No. We get the paperwork ready so they get clean records. Tax, payroll, legal decisions and moving money stay with them and with you.
+
+### Do you really come in person?
+
+Yes, anywhere in Benton and Washington counties, at your shop or a coffee shop. Video and phone work too.
+
+## Links
+
+- [Home page](https://righthandnwa.com/): the method, six live demos on made-up businesses, every service, promises, team and FAQ
+- [Services](https://righthandnwa.com/services/): the full services catalog
+- [About](https://righthandnwa.com/about/): the four people behind Right Hand NWA
+- [Free check-up](https://righthandnwa.com/#checkup): writes a check-up request email in your own email app
+- [Full catalog and answers as text](https://righthandnwa.com/llms-full.txt): every service with all six details, promises and FAQ answers
+- [Instagram @righthandnwa](https://www.instagram.com/righthandnwa/)
+- [Email righthandnwa@gmail.com](mailto:righthandnwa@gmail.com)
