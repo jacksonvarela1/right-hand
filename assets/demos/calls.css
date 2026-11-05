@@ -1,0 +1,110 @@
+/* Demo 01: Missed call to booked visit (Cold Hollow Heating & Air, made-up shop). Every rule is scoped to #demo-calls.
+   Left: the shop's business line on a phone. Right: the owner's job card and the How it decided trace.
+   --stage-h is fixed per breakpoint and the phone has a fixed height, so the stage never changes height mid-play. */
+#demo-calls .stage{--stage-h:688px;background:var(--navy-950);box-shadow:inset 0 0 0 1px rgba(167,181,202,.12)}
+#demo-calls .cc{display:grid;grid-template-columns:320px minmax(0,460px);justify-content:center;align-items:center;gap:clamp(24px,4vw,56px);min-height:var(--stage-h);padding:24px}
+
+/* phone */
+#demo-calls .phone{width:320px;height:640px;padding:9px;border-radius:36px;background:var(--navy-800);box-shadow:inset 0 0 0 1px rgba(167,181,202,.22),0 28px 56px -28px rgba(0,0,0,.9)}
+#demo-calls .screen{position:relative;display:flex;flex-direction:column;height:100%;overflow:hidden;border-radius:28px}
+#demo-calls .sb{display:flex;justify-content:space-between;gap:8px;padding:10px 18px 4px;font:600 .6875rem/1 var(--font-mono);color:var(--ink-2)}
+#demo-calls .ring{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:24px;text-align:center;background:var(--navy-900);color:#FFF}
+#demo-calls .rl{font:600 .75rem/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--blue-300)}
+#demo-calls .rn{font:700 1.5rem/1.2 var(--font-sans);letter-spacing:-.01em}
+#demo-calls .rc{font-size:.8125rem;color:var(--navy-300)}
+#demo-calls .wave{display:flex;align-items:center;gap:5px;height:48px;margin:22px 0}
+#demo-calls .wave i{width:4px;height:100%;border-radius:2px;background:var(--blue-400);transform:scaleY(.3)}
+#demo-calls .call.on .ring{opacity:0;visibility:hidden;transition:visibility 0s .2s}
+#demo-calls .miss{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:1px 9px;align-items:center;margin:4px 8px 0;padding:8px 11px;border-radius:12px;background:var(--surface-2);font-size:.75rem;line-height:1.3;color:var(--soft);opacity:0;visibility:hidden;transform:translateY(-120%)}
+#demo-calls .call.on .miss{opacity:1;visibility:visible;transform:none}
+#demo-calls .miss svg{grid-area:1/1/3/2;width:18px;height:18px;fill:none;stroke:var(--red-500);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+#demo-calls .miss b{font-size:.8125rem;color:var(--ink)}
+#demo-calls .miss span{grid-area:2/2}
+#demo-calls .miss time{grid-area:1/3;font:500 .6875rem/1 var(--font-mono)}
+
+/* text thread */
+#demo-calls .thread{flex:1;min-height:0;display:flex;flex-direction:column;gap:6px;padding:10px 10px 12px;overflow-y:auto;overscroll-behavior:contain;list-style:none;scrollbar-width:thin}
+#demo-calls .thread:focus-visible{outline-offset:-3px}
+#demo-calls .msg{max-width:84%;padding:8px 11px;border-radius:16px;font-size:.8125rem;line-height:1.4}
+#demo-calls .msg.out{align-self:flex-end;background:var(--blue-600);color:#FFF;border-bottom-right-radius:5px;transform-origin:100% 100%}
+#demo-calls .msg.in{align-self:flex-start;background:var(--surface-2);color:var(--ink);border-bottom-left-radius:5px;transform-origin:0 100%}
+#demo-calls .msg small{display:block;margin-top:4px;font:500 .6875rem/1.3 var(--font-mono);color:var(--blue-100)}
+#demo-calls .msg.typing{display:flex;gap:4px;padding:12px 13px;background:var(--wash)}
+#demo-calls .typing i{width:6px;height:6px;border-radius:50%;background:var(--accent-ink);animation:dc-dot 1s ease-in-out infinite}
+#demo-calls .typing i:nth-of-type(2){animation-delay:.15s}
+#demo-calls .typing i:nth-of-type(3){animation-delay:.3s}
+@keyframes dc-dot{50%{opacity:.25}}
+
+/* reply tray (the visitor plays the customer after hand-off) */
+#demo-calls .tray{padding:9px 12px 16px;border-top:1px solid var(--line);background:var(--surface)}
+#demo-calls .cl{margin-bottom:7px;font:600 .625rem/1.2 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
+#demo-calls .chips{display:flex;flex-wrap:wrap;gap:6px;margin:0}
+#demo-calls .chip{min-height:32px;padding:5px 10px;font-size:.8125rem}
+
+/* owner's job card */
+#demo-calls .side{display:grid;gap:14px;min-width:0}
+#demo-calls .ocard{container-type:inline-size;padding:16px 18px 14px;border-top:4px solid var(--line);border-radius:var(--r-md);box-shadow:var(--sh-3)}
+#demo-calls .ocard.rh{border-top-color:var(--accent)}
+#demo-calls .ocard.warn{border-top-color:var(--amber-400)}
+#demo-calls .ocard.ok{border-top-color:var(--green-500)}
+#demo-calls .ocard header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 10px;margin-bottom:12px}
+#demo-calls .ocard h4{font-size:1rem;font-weight:700}
+#demo-calls .of{display:grid;gap:7px;margin:0}
+#demo-calls .of div{display:grid;grid-template-columns:76px minmax(0,1fr);gap:10px;align-items:baseline}
+#demo-calls .of dt{font:600 .6875rem/1.3 var(--font-mono);letter-spacing:.05em;text-transform:uppercase;color:var(--soft)}
+#demo-calls .of dd{margin:0;min-height:1.35em;font-size:.875rem;font-weight:500;line-height:1.35;color:var(--ink)}
+#demo-calls .of dd:empty::before{content:"\a0";display:inline-block;width:55%;line-height:.55;border-radius:3px;background:var(--surface-3)}
+#demo-calls .sv{display:inline-block;padding:1px 7px;border-radius:5px;background:var(--surface-2);font-weight:600}
+#demo-calls .rh .sv{background:var(--wash);color:var(--accent-ink)}
+#demo-calls .warn .sv{background:var(--warn-wash);color:var(--warn)}
+#demo-calls .ok .sv{background:var(--ok-wash);color:var(--ok)}
+#demo-calls .act{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+#demo-calls .cfm{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 16px;font:600 .875rem/1 var(--font-sans);color:#FFF;background:var(--navy-900);border:0;border-radius:var(--r-btn);cursor:pointer}
+#demo-calls .cfm:disabled{cursor:default;color:var(--soft);background:var(--surface-2)}
+#demo-calls .warn .cfm:enabled{box-shadow:0 0 0 3px var(--amber-300)}
+#demo-calls .cfm.done{color:var(--ok);background:var(--ok-wash)}
+#demo-calls .cfm .ck{display:none;width:18px;height:18px}
+#demo-calls .cfm.done .ck{display:block}
+#demo-calls .olog{display:grid;align-content:start;gap:4px;min-height:calc(5.8em + 12px);margin-top:12px;list-style:none;font-size:.75rem;line-height:1.45;color:var(--ink-2)}
+#demo-calls .olog li{display:flex;gap:10px}
+#demo-calls .olog time{flex:none;min-width:5.2em;font-family:var(--font-mono);color:var(--soft)}
+@container (max-width:420px){#demo-calls .of .l2{min-height:2.7em}}
+@container (max-width:330px){#demo-calls .of div{grid-template-columns:62px minmax(0,1fr);gap:8px}#demo-calls .of dd{font-size:.8125rem}}
+
+/* How it decided */
+#demo-calls .trace{padding:12px 14px;border:1px solid rgba(167,181,202,.16);border-radius:var(--r-md)}
+#demo-calls .trace h4{margin-bottom:8px;font:600 .6875rem/1.2 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--blue-300)}
+#demo-calls .trace ul{display:grid;gap:4px;list-style:none;font-size:.8125rem;line-height:1.45;color:var(--navy-200)}
+#demo-calls .trace li{display:flex;align-items:center;gap:9px}
+#demo-calls .trace i{position:relative;flex:none;width:9px;height:9px;border:1.5px solid var(--navy-400);border-radius:2px}
+#demo-calls .trace i::after{content:"";position:absolute;inset:-1.5px;border-radius:2px;background:var(--blue-400);opacity:0;transition:opacity .2s ease}
+#demo-calls .trace .hit{color:#FFF}
+#demo-calls .trace .hit i::after{opacity:1}
+
+@media (pointer:coarse){#demo-calls .chip,#demo-calls .cfm{min-height:44px}}
+@media (max-width:900px){
+  #demo-calls .stage{--stage-h:640px}
+  #demo-calls .cc{grid-template-columns:280px minmax(0,460px);gap:20px;padding:30px 16px}
+  #demo-calls .phone{width:280px;height:580px;padding:8px;border-radius:32px}
+  #demo-calls .screen{border-radius:25px}
+  #demo-calls .olog{min-height:1.45em}
+  #demo-calls .olog li:not(:last-child){display:none}
+}
+@media (max-width:720px){
+  #demo-calls .stage{--stage-h:1000px}
+  #demo-calls .cc{grid-template-columns:minmax(0,1fr);justify-items:center;align-content:center;gap:14px;padding:12px}
+  #demo-calls .phone{width:min(100%,300px);height:480px}
+  #demo-calls .side{width:100%;max-width:480px}
+}
+@media (max-width:600px){
+  #demo-calls .stage{--stage-h:1060px}
+  #demo-calls .cc{padding:10px}
+}
+
+/* reduced motion: no looping dots, no fades */
+@media (prefers-reduced-motion:reduce){
+  #demo-calls .typing i{animation:none}
+  #demo-calls .trace i::after,#demo-calls .call.on .ring{transition:none}
+}
+#demo-calls:is([data-motion=off] *) .typing i{animation:none}
+#demo-calls:is([data-motion=off] *) .trace i::after,#demo-calls:is([data-motion=off] *) .call.on .ring{transition:none}

@@ -1,0 +1,208 @@
+/* Demo 04: invoice follow-ups. Pinyon Hollow Landscapes (made-up crew, Bella Vista).
+   A paper timeline (event nodes, day track, balance step chart, playhead) beside a paper detail pane.
+   The playhead, its aging chip and the chart reveal all ride one translateX on .iv-ph.
+   Every rule is scoped to #demo-invoices. Stage height is fixed per breakpoint so nothing jumps. */
+
+#demo-invoices .stage{--stage-h:520px}
+#demo-invoices .iv{--gl:52px;--gr:22px;--nh:40px;--rows:calc(var(--nh)*2 + 18px);--ch:76px;display:grid;grid-template-columns:minmax(0,1fr) clamp(300px,34%,360px);grid-template-rows:1fr;gap:12px;min-height:var(--stage-h)}
+@media (pointer:coarse){#demo-invoices .iv{--nh:44px}}
+
+/* ---------- timeline panel ---------- */
+#demo-invoices .iv-tl{position:relative;display:flex;flex-direction:column;gap:12px;min-width:0;padding:16px 16px 12px;border-radius:var(--r-md)}
+#demo-invoices .iv-top{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:8px 20px}
+#demo-invoices .iv-id h4{display:flex;align-items:center;gap:8px;font:700 1.0625rem/1.3 var(--font-sans);color:var(--ink)}
+#demo-invoices .iv-tag{font:500 .6875rem/1 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--soft);padding:4px 6px;border:1px solid var(--line);border-radius:var(--r-xs)}
+#demo-invoices .iv-id p{margin-top:3px;font-size:.8125rem;line-height:1.45;color:var(--soft)}
+#demo-invoices .iv-read{display:flex;gap:18px;margin:0}
+#demo-invoices .iv-read dt{font:600 .6875rem/1.2 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+#demo-invoices .iv-read dd{margin:3px 0 0;font:600 1.0625rem/1.25 var(--font-mono);font-variant-numeric:tabular-nums;color:var(--ink);white-space:nowrap}
+#demo-invoices .iv-day{min-width:18ch}
+#demo-invoices .iv-bal{min-width:9ch}
+
+/* plot: gutters hold the y labels and let edge nodes sit centered; overflow clips the moving playhead box */
+#demo-invoices .iv-plot{position:relative;flex:1 0 auto;display:flex;flex-direction:column;justify-content:center;padding:6px var(--gr) 2px var(--gl);overflow:hidden;overflow:clip}
+#demo-invoices .iv-x{position:relative;height:calc(var(--rows) + var(--ch) + 76px)}
+
+/* event nodes: the ol is the semantic source, two staggered rows so neighbors never collide */
+#demo-invoices .events{position:absolute;left:0;right:0;top:0;height:calc(var(--rows) + 10px);margin:0;padding:0;list-style:none;z-index:3}
+#demo-invoices .ev{position:absolute;top:0;bottom:0;width:0}
+#demo-invoices .ev::before{content:"";position:absolute;left:-.5px;width:1px;top:var(--nh);bottom:0;background:var(--gray-300)}
+#demo-invoices .ev.r1::before{top:calc(var(--nh)*2 + 6px)}
+#demo-invoices .ev.on::before{background:var(--blue-200)}
+#demo-invoices .ev-b{position:absolute;z-index:1;top:0;left:0;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:32px;height:var(--nh);padding:3px 5px;border:1px solid var(--gray-200);border-radius:var(--r-sm);background:var(--surface);color:var(--gray-500);font:600 .6875rem/1 var(--font-mono);font-variant-numeric:tabular-nums;cursor:pointer}
+#demo-invoices .ev.r1 .ev-b{top:calc(var(--nh) + 6px)}
+#demo-invoices .ev-b svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#demo-invoices .ev.on .ev-b{color:var(--navy-800);border-color:var(--blue-200)}
+#demo-invoices .ev.on .ev-b svg{stroke:var(--blue-600)}
+#demo-invoices .ev.wait .ev-b{border-color:var(--amber-400);background:var(--amber-50)}
+#demo-invoices .ev.wait .ev-b svg{stroke:var(--amber-700)}
+#demo-invoices .ev.ok .ev-b svg{stroke:var(--navy-900)}
+#demo-invoices .events .ev-b:hover{border-color:var(--navy-500)}
+#demo-invoices .ev .ev-b[aria-current]{box-shadow:0 0 0 2px var(--blue-500)}
+#demo-invoices .ev.on .ev-b[aria-current]{background:var(--blue-100)}
+#demo-invoices .ev.wait .ev-b[aria-current]{background:var(--amber-50)}
+#demo-invoices .dot{position:absolute;left:-5px;bottom:-5px;width:10px;height:10px;border-radius:50%;background:var(--surface);border:2px solid var(--gray-300)}
+#demo-invoices .ev.on .dot{background:var(--blue-500);border-color:var(--blue-500)}
+#demo-invoices .ev.wait .dot{background:var(--amber-400);border-color:var(--amber-400)}
+#demo-invoices .ev.ok .dot{opacity:0}
+/* navy gate post: the owner said yes here */
+#demo-invoices .post{position:absolute;left:-3px;bottom:-9px;width:6px;height:22px;border-radius:2px;background:var(--navy-900);box-shadow:0 0 0 2px var(--surface);transform-origin:50% 100%;opacity:0}
+#demo-invoices .ev.ok .post{opacity:1}
+
+/* day track */
+#demo-invoices .iv-trk{position:absolute;left:0;top:var(--rows);width:100%;height:20px;overflow:visible;z-index:1}
+#demo-invoices .iv-trk path{fill:none;vector-effect:non-scaling-stroke}
+#demo-invoices .iv-trk .b{stroke:var(--navy-300);stroke-width:2}
+#demo-invoices .iv-trk .t{stroke:var(--gray-300);stroke-width:1}
+#demo-invoices .iv-dates{position:absolute;left:0;right:0;top:calc(var(--rows) + 21px);height:16px;margin:0;padding:0;list-style:none}
+#demo-invoices .iv-dates li{position:absolute;top:0;transform:translateX(-50%);font:500 .6875rem/1 var(--font-mono);color:var(--soft);white-space:nowrap}
+#demo-invoices .iv-dates li:first-child{transform:none}
+#demo-invoices .iv-dates li:last-child{transform:translateX(-100%)}
+
+/* balance step chart, revealed by the cover that rides the playhead */
+#demo-invoices .iv-chart{position:absolute;left:0;right:0;top:calc(var(--rows) + 44px);height:var(--ch);border-bottom:1px solid var(--gray-300)}
+#demo-invoices .iv-chart svg{display:block;width:100%;height:100%;overflow:visible}
+#demo-invoices .iv-chart path{vector-effect:non-scaling-stroke}
+#demo-invoices .iv-chart .a{fill:var(--blue-100);stroke:none}
+#demo-invoices .iv-chart .l{fill:none;stroke:var(--navy-900);stroke-width:2}
+#demo-invoices .iv-tl.nr .iv-chart .r,#demo-invoices .iv-tl:not(.nr) .iv-chart .n{display:none}
+#demo-invoices .iv-ylab{position:absolute;right:calc(100% + 6px);top:calc(var(--rows) + 44px);height:var(--ch);width:calc(var(--gl) - 6px)}
+#demo-invoices .iv-ylab span{position:absolute;right:0;transform:translateY(-50%);font:500 .6875rem/1 var(--font-mono);color:var(--soft);white-space:nowrap}
+#demo-invoices .iv-ylab .y0{top:6%}
+#demo-invoices .iv-ylab .y1{top:56.8%}
+#demo-invoices .iv-ylab .y2{top:100%}
+#demo-invoices .iv-tl.nr .iv-ylab .y1{display:none}
+
+/* playhead: one box, one translateX (percent of the day scale) */
+#demo-invoices .iv-ph{position:absolute;left:0;top:calc(var(--rows) + 2px);width:100%;height:calc(var(--ch) + 74px);z-index:2;pointer-events:none;will-change:transform}
+#demo-invoices .iv-cov{position:absolute;left:2px;top:42px;width:100%;height:calc(var(--ch) - 1px);background:var(--surface)}
+#demo-invoices .iv-ln{position:absolute;left:-1px;top:0;bottom:18px;width:2px;background:var(--blue-500)}
+#demo-invoices .iv-hd{position:absolute;left:-6px;top:2px;width:12px;height:12px;border-radius:3px;background:var(--blue-500);box-shadow:0 0 0 2px var(--surface)}
+#demo-invoices .iv-age{position:absolute;left:0;bottom:0;display:inline-flex;align-items:center;height:22px;padding:0 7px;border-radius:var(--r-xs);font:600 .6875rem/1 var(--font-mono);white-space:nowrap;background:var(--gray-100);color:var(--navy-700);transform:translateX(6px);transition:transform var(--dur-chip) var(--ease-out)}
+#demo-invoices .iv-age.flip{transform:translateX(calc(-100% - 6px))}
+#demo-invoices .iv-age.w{background:var(--amber-50);color:var(--amber-700)}
+#demo-invoices .iv-age.x{background:var(--amber-400);color:var(--navy-900)}
+#demo-invoices .iv-age.g{background:var(--green-50);color:var(--green-700)}
+
+/* controls: shown after hand-off; space is always reserved */
+#demo-invoices .iv-ctl{display:grid;gap:6px;transition:opacity var(--dur-chip) ease}
+#demo-invoices:not(.handed) .iv-ctl{opacity:0;visibility:hidden}
+#demo-invoices .iv-rng{position:relative;padding:0 var(--gr) 0 var(--gl)}
+#demo-invoices .iv-rng label{position:absolute;left:0;top:50%;transform:translateY(-50%);font:600 .6875rem/1 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--soft)}
+#demo-invoices .iv-rng input{display:block;width:calc(100% + 22px);height:40px;margin:0 -11px;padding:0;background:none;-webkit-appearance:none;appearance:none;cursor:pointer}
+#demo-invoices .iv-rng input::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:var(--gray-200)}
+#demo-invoices .iv-rng input::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;box-sizing:border-box;width:22px;height:22px;margin-top:-8px;border-radius:7px;border:3px solid var(--surface);background:var(--blue-600);box-shadow:0 0 0 1px var(--blue-600)}
+#demo-invoices .iv-rng input::-moz-range-track{height:6px;border-radius:3px;background:var(--gray-200)}
+#demo-invoices .iv-rng input::-moz-range-thumb{box-sizing:border-box;width:22px;height:22px;border-radius:7px;border:3px solid var(--surface);background:var(--blue-600);box-shadow:0 0 0 1px var(--blue-600)}
+#demo-invoices .iv-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 16px}
+#demo-invoices .iv-sw{display:inline-flex;align-items:center;gap:10px;min-height:40px;padding:6px 10px 6px 4px;border:0;border-radius:var(--r-sm);background:none;font:600 .875rem/1.2 var(--font-sans);color:var(--ink);cursor:pointer}
+#demo-invoices .iv-sw:hover{background:var(--gray-50)}
+#demo-invoices .iv-sw-t{position:relative;flex:none;width:34px;height:20px;border-radius:10px;background:var(--gray-500)}
+#demo-invoices .iv-sw-t i{position:absolute;left:3px;top:3px;width:14px;height:14px;border-radius:50%;background:var(--surface);transition:transform var(--dur-hover) var(--ease-out)}
+#demo-invoices .iv-sw[aria-checked=true] .iv-sw-t{background:var(--blue-600)}
+#demo-invoices .iv-sw[aria-checked=true] .iv-sw-t i{transform:translateX(14px)}
+#demo-invoices .iv-hint{font:500 .75rem/1.4 var(--font-mono);color:var(--soft)}
+
+/* ---------- detail pane ---------- */
+#demo-invoices .iv-pane{position:relative;display:flex;flex-direction:column;min-width:0;min-height:0;border-radius:var(--r-md);overflow:hidden}
+#demo-invoices .iv-card{flex:1 1 0;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:18px 18px 14px}
+#demo-invoices .iv-gate{flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;height:68px;padding:10px 14px 10px 18px;border-top:1px solid var(--line);background:var(--gray-50)}
+#demo-invoices .iv-gs{display:flex;align-items:flex-start;gap:9px;min-width:0;font:600 .875rem/1.4 var(--font-sans);color:var(--ink-2)}
+#demo-invoices .iv-gs i{flex:none;width:9px;height:9px;margin-top:6px;border-radius:2px;background:var(--gray-400)}
+#demo-invoices .iv-gate.w .iv-gs{color:var(--amber-700)}
+#demo-invoices .iv-gate.w .iv-gs i{background:var(--amber-400)}
+#demo-invoices .iv-gate.y .iv-gs{color:var(--navy-900)}
+#demo-invoices .iv-gate.y .iv-gs i{background:var(--navy-900)}
+#demo-invoices .iv-gate.b .iv-gs{color:var(--blue-700)}
+#demo-invoices .iv-gate.b .iv-gs i{background:var(--blue-500)}
+#demo-invoices .iv-gate.g .iv-gs{color:var(--green-700)}
+#demo-invoices .iv-gate.g .iv-gs i{background:var(--green-500)}
+#demo-invoices .iv-ok{flex:none}
+#demo-invoices .iv-ok.off{visibility:hidden}
+
+/* cards */
+#demo-invoices .iv-when{font:600 .75rem/1.3 var(--font-mono);letter-spacing:.04em;color:var(--accent-ink)}
+#demo-invoices .iv-t{margin:4px 0 10px;font:700 1.125rem/1.3 var(--font-sans);color:var(--ink)}
+#demo-invoices .iv-card p{margin-bottom:8px;font-size:.9375rem;line-height:1.5;color:var(--ink-2)}
+#demo-invoices .iv-card .iv-when{margin:0;font-size:.75rem;line-height:1.3;color:var(--accent-ink)}
+#demo-invoices .iv-card .iv-lbl{margin:12px 0 6px;font:600 .6875rem/1.2 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
+#demo-invoices .m{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+#demo-invoices .iv-q{margin:0;padding:10px 12px;border-left:3px solid var(--blue-500);border-radius:0 var(--r-sm) var(--r-sm) 0;background:var(--gray-50)}
+#demo-invoices .iv-card .iv-q p{margin-bottom:6px;font-size:.875rem;color:var(--ink)}
+#demo-invoices .iv-card .iv-q .iv-sig,#demo-invoices .iv-card .iv-sig{margin:0;font-size:.875rem;font-weight:600;color:var(--ink)}
+#demo-invoices .iv-tone{display:flex;align-items:center;gap:10px;margin:0 0 10px}
+#demo-invoices .iv-tone-l{font:600 .6875rem/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
+#demo-invoices .iv-tone ol{flex:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px;max-width:240px;list-style:none}
+#demo-invoices .iv-tone li{padding-top:6px;border-top:4px solid var(--gray-200);font:600 .6875rem/1 var(--font-sans);color:var(--mute)}
+#demo-invoices .iv-tone li.f{border-top-color:var(--blue-500)}
+#demo-invoices .iv-tone li.on{color:var(--ink)}
+#demo-invoices .iv-card .iv-att{display:inline-flex;align-items:center;gap:6px;margin:8px 0 0;padding:5px 8px;border:1px solid var(--line);border-radius:var(--r-xs);font:500 .75rem/1 var(--font-mono);color:var(--ink-2)}
+#demo-invoices .iv-att svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#demo-invoices .iv-card .iv-math{margin:8px 0;font:500 .8125rem/1.5 var(--font-mono);font-variant-numeric:tabular-nums;color:var(--ink-2)}
+#demo-invoices .iv-math b{font-weight:600;color:var(--ink)}
+#demo-invoices .iv-open,#demo-invoices .iv-back{margin-top:12px}
+#demo-invoices:not(.handed) .iv-open{visibility:hidden}
+#demo-invoices .iv-dl{display:grid;gap:6px;margin:0}
+#demo-invoices .iv-dl div{display:grid;grid-template-columns:72px minmax(0,1fr);gap:10px}
+#demo-invoices .iv-dl dt{font:600 .75rem/1.6 var(--font-mono);color:var(--soft)}
+#demo-invoices .iv-dl dd{margin:0;font-size:.9375rem;line-height:1.45;color:var(--ink)}
+#demo-invoices .iv-script{display:grid;gap:6px;list-style:none;counter-reset:ivs}
+#demo-invoices .iv-script li{position:relative;padding-left:26px;font-size:.875rem;line-height:1.45;color:var(--ink)}
+#demo-invoices .iv-script li::before{counter-increment:ivs;content:counter(ivs);position:absolute;left:0;top:1px;width:18px;height:18px;border-radius:5px;background:var(--blue-100);color:var(--blue-700);font:600 .6875rem/18px var(--font-mono);text-align:center}
+#demo-invoices .iv-stm{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:0 0 8px}
+#demo-invoices .iv-stm div{min-width:0;padding:7px 9px;border:1px solid var(--line);border-radius:var(--r-sm)}
+#demo-invoices .iv-stm dt{font:600 .6875rem/1.2 var(--font-mono);color:var(--soft)}
+#demo-invoices .iv-stm dd{margin:3px 0 0;font:600 .8125rem/1.2 var(--font-mono);font-variant-numeric:tabular-nums;color:var(--ink);white-space:nowrap}
+#demo-invoices .iv-reply{margin:0 0 10px}
+#demo-invoices .iv-reply blockquote{margin:0;padding:12px 14px;border:1px solid var(--gray-200);border-radius:var(--r-md) var(--r-md) var(--r-md) 4px;background:var(--navy-50)}
+#demo-invoices .iv-card .iv-reply p{margin:0;font-size:1rem;font-weight:600;color:var(--ink)}
+#demo-invoices .iv-reply figcaption{margin-top:6px;font:500 .75rem/1.3 var(--font-mono);color:var(--soft)}
+#demo-invoices .iv-card .iv-fee{margin-top:10px;font-size:.875rem}
+#demo-invoices .iv-fee b{color:var(--ink)}
+#demo-invoices .iv-picks{display:flex;flex-wrap:wrap;gap:6px}
+#demo-invoices .iv-card .iv-pr{margin:10px 0 0;padding:8px 10px;border-radius:var(--r-sm);background:var(--blue-50);font-size:.875rem;color:var(--ink)}
+
+/* letter view (the reminder letter with linked notes, re-skinned) */
+#demo-invoices .iv-lt{font:700 .9375rem/1.3 var(--font-sans);color:var(--ink)}
+#demo-invoices .iv-lt span{display:block;margin-top:2px;font:500 .75rem/1.4 var(--font-mono);color:var(--soft)}
+#demo-invoices .iv-meta{display:grid;gap:3px;margin:10px 0 12px;padding:8px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+#demo-invoices .iv-meta div{display:grid;grid-template-columns:60px minmax(0,1fr);gap:8px}
+#demo-invoices .iv-meta dt{font:600 .75rem/1.55 var(--font-mono);color:var(--soft)}
+#demo-invoices .iv-meta dd{margin:0;font-size:.8125rem;line-height:1.5;color:var(--ink);overflow-wrap:anywhere}
+#demo-invoices .iv-card .iv-body p{font-size:.875rem;color:var(--ink)}
+#demo-invoices .iv-fig{font-family:var(--font-mono);font-size:.95em;font-variant-numeric:tabular-nums;text-decoration:underline;text-decoration-color:var(--gray-300);text-decoration-thickness:1.5px;text-underline-offset:3px;border-radius:2px;cursor:help}
+#demo-invoices .iv-fig.hl,#demo-invoices .iv-fig:focus-visible{text-decoration-color:var(--blue-500);background:var(--blue-50)}
+#demo-invoices .iv-notes{display:grid;gap:4px;list-style:none}
+#demo-invoices .iv-notes li{position:relative;padding:6px 10px 6px 22px;border-left:1px solid transparent;border-radius:0 var(--r-sm) var(--r-sm) 0;font-size:.8125rem;line-height:1.45;color:var(--ink-2)}
+#demo-invoices .iv-notes li::before{content:"";position:absolute;left:9px;top:12px;width:6px;height:6px;border-radius:1.5px;background:var(--blue-500)}
+#demo-invoices .iv-notes li.hl{border-left-color:var(--blue-600);background:var(--blue-100);color:var(--ink)}
+
+/* ---------- tablet and phone: stack the pane under the timeline ---------- */
+@media (max-width:900px){
+  #demo-invoices .stage{--stage-h:880px}
+  #demo-invoices .iv{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(300px,1fr)}
+  #demo-invoices .iv-hint{display:none}
+}
+@media (max-width:600px){
+  #demo-invoices .stage{--stage-h:900px}
+  #demo-invoices .iv{--gl:40px;--gr:20px;--ch:58px;gap:10px}
+  #demo-invoices .iv-tl{gap:10px;padding:12px 10px 8px}
+  #demo-invoices .iv-read{gap:14px}
+  #demo-invoices .iv-read dd{font-size:.9375rem}
+  #demo-invoices .ev-b{min-width:28px;padding:3px}
+  #demo-invoices .iv-ylab{right:calc(100% + 3px);width:calc(var(--gl) - 3px)}
+  #demo-invoices .iv-ylab span{font-size:.625rem}
+  #demo-invoices .iv-age{height:20px;padding:0 6px;font-size:.625rem}
+  #demo-invoices .iv-card{padding:14px 14px 12px}
+  #demo-invoices .iv-gate{padding:10px 12px}
+  #demo-invoices .iv-t{font-size:1.0625rem}
+  #demo-invoices .iv-stm div{padding:6px}
+  #demo-invoices .iv-stm dd{font-size:.75rem}
+}
+@media (pointer:coarse){#demo-invoices .iv-rng input,#demo-invoices .iv-sw{min-height:44px;height:44px}}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion:reduce){
+  #demo-invoices .iv-age,#demo-invoices .iv-sw-t i,#demo-invoices .iv-ctl{transition:none}
+}
+#demo-invoices:is(html[data-motion=off] *) .iv-age,#demo-invoices:is(html[data-motion=off] *) .iv-sw-t i,#demo-invoices:is(html[data-motion=off] *) .iv-ctl{transition:none}
