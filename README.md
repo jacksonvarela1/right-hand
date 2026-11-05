@@ -5,11 +5,14 @@ A student venture concept: admin help for small business owners that shows its w
 Owners hand off routine admin, like a monthly expense summary, and get it back with the sources, the math and any open questions marked. Nothing is final until the owner approves it.
 
 Live page: https://jacksonvarela1.github.io/right-hand/
+Present mode for class: https://jacksonvarela1.github.io/right-hand/#present
 
 Team: Jackson Varela, Annie Wagner, Abigail Estes and Bella Gambaro.
 
-## About the demo
+## About the page
 
-The page is one static `index.html` with a working prototype in plain JavaScript. The demo business (Ozark Paws Grooming), every name and every dollar amount are made up. Nothing typed into the demo leaves the browser.
+Static files only: `index.html`, `assets/site.css` and `assets/app.js`, with no build step and no libraries. The hero review sheet runs a short demo on its own and hands control to the visitor on the first click. The demo business (Ozark Paws Grooming), every name and every dollar amount are made up. Nothing typed into the page leaves the browser. Walkthrough requests open an email draft to jvarela@uark.edu.
 
-Photo by [Alexander Mass on Unsplash](https://unsplash.com/photos/a-woman-working-at-a-counter-with-a-computer-HVsYPecRjdw), used under the Unsplash License. Icons from [Phosphor Icons](https://phosphoricons.com) (MIT). Fonts: Schibsted Grotesk and IBM Plex Mono (SIL Open Font License), served by Google Fonts.
+Survey figures are quoted from their sources, which are linked on the page: the Federal Reserve Banks' Small Business Credit Survey (2025 report), Intuit QuickBooks (January 2025) and Bluevine (April 2026).
+
+Fonts: Schibsted Grotesk and Geist Mono, self-hosted under the SIL Open Font License (license files in `assets/fonts`). Icons: Phosphor Icons (MIT).
