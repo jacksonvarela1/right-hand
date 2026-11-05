@@ -514,3 +514,7 @@ footer .linkbtn{color:var(--navy-200);font-weight:500;padding:0}
 .int-card .btn{--btn-bg:var(--blue-600);--btn-bg-hover:var(--blue-700);--btn-ink:#FFF}
 .int-card .btn.ghost{color:var(--navy-900);border-color:var(--gray-500);background:#FFF}
 .amap .st{font-style:normal;transition:background-color .3s ease,color .3s ease}
+
+/* source links: 24px tap height on phones */
+.src a{display:inline-block;padding:4px 0;line-height:1.35}
+.team-mail a,.close-alt a,footer a{display:inline-block;padding:3px 0}

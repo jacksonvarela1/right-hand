@@ -1,18 +1,23 @@
-# Right Hand
+# Right Hand NWA
 
-A student venture concept: admin help for small business owners that shows its work.
+Admin and AI help for Northwest Arkansas small businesses, from four University of Arkansas students: Jackson Varela, Annie Wagner, Abigail Estes and Bella Gambaro.
 
-Owners hand off routine admin, like a monthly expense summary, and get it back with the sources, the math and any open questions marked. Nothing is final until the owner approves it.
+AI drafts, a person on our team checks, and the owner approves. Nothing goes out in an owner's name until they say yes. Tax, payroll, legal work and moving money stay with the owner and their licensed pros.
 
-Live page: https://jacksonvarela1.github.io/right-hand/
-Present mode for class: https://jacksonvarela1.github.io/right-hand/#present
+Live site: https://righthandnwa.com
+Contact: righthandnwa@gmail.com · Instagram: @righthandnwa
 
-Team: Jackson Varela, Annie Wagner, Abigail Estes and Bella Gambaro.
+## About the site
 
-## About the page
+Static files only, no build step and no libraries:
 
-Static files only: `index.html`, `assets/site.css` and `assets/app.js`, with no build step and no libraries. The hero review sheet runs a short demo on its own and hands control to the visitor on the first click. The demo business (Ozark Paws Grooming), every name and every dollar amount are made up. Nothing typed into the page leaves the browser. Walkthrough requests open an email draft to jvarela@uark.edu.
+- `index.html`, `assets/site.css`, `assets/site.js`: the page, brand system and page behavior.
+- `assets/nwa-map.js`: the hero map of Northwest Arkansas (schematic, not to scale) feeding a sample task queue.
+- `assets/demo-player.js`: the shared player for the six live demos (autoplay, pause offscreen, one demo at a time, hand-off to the visitor, reduced-motion stepping).
+- `assets/demos/*.js|css`: the six demos (missed call, inbox, receipts, invoices, automation, weekly report).
+- `assets/services-data.js`: the services catalog.
+- `assets/interest.js`: the email updates pop-up (FormSubmit to righthandnwa@gmail.com, with an email fallback).
 
-Survey figures are quoted from their sources, which are linked on the page: the Federal Reserve Banks' Small Business Credit Survey (2025 report), Intuit QuickBooks (January 2025) and Bluevine (April 2026).
+Every demo business, name and number is made up and labeled as sample. Nothing typed into a demo leaves the browser. The check-up form only writes an email draft in the visitor's own email app. Every statistic on the page links to its source.
 
-Fonts: Schibsted Grotesk and Geist Mono, self-hosted under the SIL Open Font License (license files in `assets/fonts`). Icons: Phosphor Icons (MIT).
+Fonts: Plus Jakarta Sans and Geist Mono, self-hosted under the SIL Open Font License (license files in `assets/fonts`). Icons drawn for Right Hand.

@@ -93,9 +93,10 @@
   }
   d.addEventListener("click", function (e) {
     var a = e.target.closest("[data-go=checkup]"); if (!a) return;
-    e.preventDefault();
-    if (history.replaceState) history.replaceState(null, "", "#checkup");
-    goCheckup(a.getAttribute("data-ask"));
+    // let the browser do the jump itself (works even when the hash is already #checkup), then focus the first field
+    var ask = a.getAttribute("data-ask"); if (ask) composer.ask(ask);
+    if (location.hash === "#checkup") { e.preventDefault(); goCheckup(); }
+    else later(function () { var f = $("#c-name"); if (f) f.focus({ preventScroll: true }); }, off() ? 0 : 700);
   });
 
   /* ---------- services, filters and the picker ---------- */
