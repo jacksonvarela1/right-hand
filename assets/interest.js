@@ -1,7 +1,9 @@
 /* Right Hand NWA: interest pop-up. One small dialog, shown once per visitor, never during interaction. */
 (function () {
   "use strict";
-  var ENDPOINT = "https://formsubmit.co/ajax/righthandnwa@gmail.com";
+  // Sign-ups go to a Google Form owned by righthandnwa@gmail.com (responses tab plus email alerts).
+  var ENDPOINT = "https://docs.google.com/forms/d/e/1FAIpQLScthXfEx8WRH-UOFJgcvtD2Zo4NrtUutI3HHeGuptyLz_Jd5w/formResponse";
+  var FIELDS = { email: "entry.848100374", business: "entry.1907144585", city: "entry.736194494", interests: "entry.537803960", source: "entry.2127818100" };
   var INSTAGRAM = "https://www.instagram.com/righthandnwa/";
   var KEY = "rhnwa-interest";
   var DAYS = 30;
@@ -54,22 +56,22 @@
       business: form.elements.business.value,
       city: form.elements.city.value,
       interests: interests.join(", ") || "(none picked)",
-      source: location.href,
-      _subject: "New interest from righthandnwa.com",
-      _template: "table"
+      source: location.href + (document.referrer ? " | ref " + document.referrer : "")
     };
+    var body = new URLSearchParams();
+    Object.keys(FIELDS).forEach(function (k) { body.append(FIELDS[k], data[k] || ""); });
     var btn = form.querySelector("button[type=submit]");
     btn.disabled = true; status.textContent = "Sending…";
-    fetch(ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" }, body: JSON.stringify(data) })
-      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || j.success === "false" || j.success === false) throw new Error("send"); }); })
+    // Google Forms does not send CORS headers, so the reply is opaque: a resolved fetch means it was delivered.
+    fetch(ENDPOINT, { method: "POST", mode: "no-cors", body: body })
       .then(function () {
         store("joined"); form.hidden = true; done.hidden = false; status.textContent = "";
         var h = done.querySelector("h2"); if (h) { h.setAttribute("tabindex", "-1"); h.focus(); }
       })
       .catch(function () {
         btn.disabled = false;
-        var body = "Hi Right Hand NWA,%0D%0A%0D%0AI'm interested. Email: " + encodeURIComponent(data.email) + "%0D%0ABusiness: " + encodeURIComponent(data.business) + "%0D%0ACity: " + encodeURIComponent(data.city) + "%0D%0AInterested in: " + encodeURIComponent(data.interests);
-        status.innerHTML = 'That didn’t go through. <a href="mailto:righthandnwa@gmail.com?subject=Interested%20in%20Right%20Hand%20NWA&body=' + body + '">Email us instead</a>.';
+        var mbody = "Hi Right Hand NWA,%0D%0A%0D%0AI'm interested. Email: " + encodeURIComponent(data.email) + "%0D%0ABusiness: " + encodeURIComponent(data.business) + "%0D%0ACity: " + encodeURIComponent(data.city) + "%0D%0AInterested in: " + encodeURIComponent(data.interests);
+        status.innerHTML = 'That didn’t go through. <a href="mailto:righthandnwa@gmail.com?subject=Interested%20in%20Right%20Hand%20NWA&body=' + mbody + '">Email us instead</a>.';
       });
   });
   window.RHInterest = { open: function () { open(true); }, instagram: INSTAGRAM };
