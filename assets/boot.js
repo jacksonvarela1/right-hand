@@ -9,6 +9,6 @@
   try { first = !sessionStorage.getItem("rh-intro"); sessionStorage.setItem("rh-intro", "1"); } catch (e) {}
   var intro = motion && first && h.hasAttribute("data-intro") && !location.hash;
   h.className += " js" + (motion ? " js-motion" : "") + (intro ? " rh-intro" : "");
-  // if motion.js has not taken over by 1.4 s after navigation (slow network, blocked file), drop the cover so the hero shows
-  if (intro) setTimeout(function () { if (!/\bfx-intro-live\b/.test(h.className)) h.className = h.className.replace(/\s*\brh-intro\b/, ""); }, Math.max(0, 1400 - (window.performance && performance.now ? performance.now() : 0)));
+  // if motion.js has not taken over by 4.2 s after navigation (slow network, blocked file), drop the cover so the hero shows
+  if (intro) setTimeout(function () { if (!/\bfx-intro-live\b/.test(h.className)) h.className = h.className.replace(/\s*\brh-intro\b/, ""); }, Math.max(0, 4200 - (window.performance && performance.now ? performance.now() : 0)));
 })(document);

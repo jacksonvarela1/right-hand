@@ -20,7 +20,7 @@
 /* ---------- 1. first-visit intro (home page, once per session) ---------- */
 /* boot.js marks html.rh-intro before first paint; this navy cover holds until motion.js puts the intro on top.
    If motion.js never runs (or runs late), the cover clears itself by 1.5 s so the hero is never held back. */
-html.rh-intro:not(.fx-intro-live) body::after{content:"";position:fixed;inset:0;z-index:399;background:#051326;animation:fx-cover-off .2s 1.3s forwards}
+html.rh-intro:not(.fx-intro-live) body::after{content:"";position:fixed;inset:0;z-index:399;background:#051326;animation:fx-cover-off .2s 4s forwards}
 @keyframes fx-cover-off{to{opacity:0;visibility:hidden}}
 html.fx-intro-live .top .mark *{animation-play-state:paused}
 html.fx-intro-live .hero [data-reveal]{opacity:0!important;transform:translateY(16px)!important}

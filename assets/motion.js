@@ -28,7 +28,7 @@
     if (!html.classList.contains("rh-intro")) return;
     var mark = $(".top .mark");
     // late page, no motion or no animation support: just show the page
-    if (off() || performance.now() > 1000 || !mark || !Element.prototype.animate || !d.body) { endIntro(); return; }
+    if (off() || performance.now() > 4000 || !mark || !Element.prototype.animate || !d.body) { endIntro(); return; }
     introOn = true;
     var k = 1;
     function T(ms) { return Math.round(ms * k); }
@@ -48,10 +48,11 @@
     function start() {
       if (done) return;
       var now = performance.now();
-      if (now > 1000) { finish(false); return; }
+      if (now > 4000) { finish(false); return; }
       // pin every step to this frame's time: a long task right after this frame must not push the whole intro later
       t0 = d.timeline && d.timeline.currentTime != null ? d.timeline.currentTime : null;
-      k = Math.min(1, (1550 - now) / 1380);   // the hero is uncovered about 60% into the lift, near 1.45 s
+      // fast page: squeeze so the hero is readable near 1.45 s; slow page (in-app browsers on cell data): a short 0.9 s cut, never skipped
+      k = now < 900 ? Math.min(1, (1550 - now) / 1380) : 0.65;
       a($(".fx-ig-h", o), [{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], 520, 0);
       a($(".fx-ig-v", o), [{ transform: "scaleY(0)" }, { transform: "scaleY(1)" }], 560, 60);
       a($(".mk-bx", m), [{ transform: "scale(.4)", opacity: 0 }, { transform: "scale(1)", opacity: 1 }], 380, 80, LAND);
