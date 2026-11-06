@@ -1,3 +1,6 @@
 {
-  "allowPublic": ["llms-full.txt"]
+  "allowPublic": [
+    "llms-full.txt",
+    "7a4bd4bbaf17bd221184514bf06990f4.txt"
+  ]
 }
