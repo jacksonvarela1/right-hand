@@ -1,5 +1,5 @@
 /* Right Hand NWA: styles for /services/ and /about/. Loads after site.css and only uses its tokens.
-   Both pages are written by tools/build-pages.mjs. No scripts: everything reads without JavaScript. */
+   Both pages are written by tools/build-pages.mjs. Their only scripts add motion (boot.js, motion.js): everything reads without JavaScript. */
 
 .pg .band{--section-y:clamp(3.5rem,2.4rem + 4.4vw,6.5rem)}
 .top nav a[aria-current=page]{color:#FFF;box-shadow:inset 0 -2px 0 var(--blue-500)}

@@ -1,0 +1,217 @@
+/* Right Hand NWA: motion system. Loads after site.css; assets/motion.js drives it.
+   Rules of the road:
+   - Every moving effect is scoped under .js-motion (boot.js sets it when the visitor allows motion; the Pause motion
+     button removes it), so reduced motion, paused motion and no-JS visitors get the finished, static page.
+   - Hidden "before" states also need .fx, which motion.js adds only after it has settled everything already on
+     screen, so nothing blinks out on load.
+   - Only transform and opacity animate (plus the brand's stroke draw on checks and the ghost-button trace).
+   - Static decoration (icons, hairlines, the ticker strip) is plain CSS, present from first paint: no layout shift. */
+
+:root{
+  --fx-arr:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 12'%3E%3Cpath d='M1.5 6h14M11 1.5L15.5 6 11 10.5' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --fx-play:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 1.6v8.8a.6.6 0 0 0 .9.5l7-4.4a.6.6 0 0 0 0-1L3.9 1.1a.6.6 0 0 0-.9.5z'/%3E%3C/svg%3E");
+  --fx-stop:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Crect x='2' y='2' width='8' height='8' rx='1.6'/%3E%3C/svg%3E");
+  --fx-step:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M1.5 1.8v8.4a.6.6 0 0 0 .9.5l6-4.2a.6.6 0 0 0 0-1l-6-4.2a.6.6 0 0 0-.9.5z'/%3E%3Crect x='9' y='1.5' width='1.8' height='9' rx='.7'/%3E%3C/svg%3E");
+  --fx-pause:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Crect x='2.2' y='1.5' width='2.8' height='9' rx='.9'/%3E%3Crect x='7' y='1.5' width='2.8' height='9' rx='.9'/%3E%3C/svg%3E");
+  --fx-ck:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6.4l2.6 2.6L10 3.4' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --fx-down:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M6 1.5v8.5M2.2 6.4L6 10.2l3.8-3.8' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+/* ---------- 1. first-visit intro (home page, once per session) ---------- */
+/* boot.js marks html.rh-intro before first paint; this navy cover holds until motion.js puts the intro on top.
+   If motion.js never runs (or runs late), the cover clears itself by 1.5 s so the hero is never held back. */
+html.rh-intro:not(.fx-intro-live) body::after{content:"";position:fixed;inset:0;z-index:399;background:#051326;animation:fx-cover-off .2s 1.3s forwards}
+@keyframes fx-cover-off{to{opacity:0;visibility:hidden}}
+html.fx-intro-live .top .mark *{animation-play-state:paused}
+html.fx-intro-live .hero [data-reveal]{opacity:0!important;transform:translateY(16px)!important}
+.fx-intro{position:fixed;inset:0;z-index:400;display:grid;place-items:center;overflow:hidden;background:#051326;color:#FFF;cursor:pointer}
+.fx-ig{position:absolute;inset:0;-webkit-mask-image:radial-gradient(closest-side,#000 30%,transparent);mask-image:radial-gradient(closest-side,#000 30%,transparent)}
+.fx-ig-h{background:linear-gradient(180deg,rgba(149,192,254,.14) 1px,transparent 1px) center/100% 48px}
+.fx-ig-v{background:linear-gradient(90deg,rgba(149,192,254,.14) 1px,transparent 1px) center/48px 100%}
+.fx-ic{position:relative;display:grid;justify-items:center;gap:22px;padding:0 20px;text-align:center}
+.fx-mk{display:block;width:84px;height:84px;overflow:visible}
+.fx-mk .mk-br{fill:var(--blue-500);transform-box:fill-box}
+.fx-mk .mk-bx,.fx-mk .mk-ck{stroke:#FFF}
+.fx-mk .mk-bx{transform-box:fill-box;transform-origin:center}
+.fx-iw{position:relative;width:min(88vw,15ch);height:1.3em;font-size:clamp(1.9rem,1.2rem + 3vw,3rem);line-height:1.3}
+.fx-iw > span{position:absolute;left:50%;top:0;white-space:nowrap;transform:translateX(-50%)}
+.fx-iw-m{font:500 1em/1.3 var(--font-mono);letter-spacing:-.01em;color:var(--blue-300)}
+.fx-iw-m i{font-style:normal}
+.fx-iw-s{font:800 1em/1.3 var(--font-sans);letter-spacing:-.03em;opacity:0}
+.fx-iw-s b{font-weight:800;color:var(--blue-400)}
+.fx-it{font:500 .75rem/1.4 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--navy-300)}
+.fx-iscan{position:absolute;left:0;right:0;top:0;height:150px;background:linear-gradient(180deg,#95C0FE 0,#95C0FE 2px,rgba(47,128,237,.3) 2px,rgba(47,128,237,0) 100%);transform:translateY(110vh)}
+
+/* ---------- 2. section heads: hairline draws, mono eyebrow scrambles in, heading rises word by word ---------- */
+main{counter-reset:fxs}
+main > section{counter-increment:fxs}
+[data-fx=head]::before{content:"";display:block;height:1px;margin-bottom:20px;background:linear-gradient(90deg,var(--accent) 0 48px,var(--line) 48px);transform-origin:left center}
+.line-head[data-fx=head]::before{content:none}
+[data-fx=head] > .eyebrow{font-family:var(--font-mono);font-weight:500;letter-spacing:.14em}
+[data-fx=head]:not(.line-head) > .eyebrow::before{content:counter(fxs,decimal-leading-zero) " / ";content:counter(fxs,decimal-leading-zero) " / " / "";color:var(--mute)}
+.fx-w{display:inline-block}
+.fx.js-motion [data-fx=head]:not(.fx-in)::before{transform:scaleX(0)}
+.fx.js-motion [data-fx=head]:not(.fx-in) > .eyebrow,.fx.js-motion [data-fx=head]:not(.fx-in) > .lead{opacity:0}
+.fx.js-motion [data-fx=head]:not(.fx-in) .fx-w{opacity:0;transform:translateY(.5em)}
+.js-motion [data-fx=head]:not(.fx-in) .sw::after{transform:scaleX(0)}
+.js-motion [data-fx=head].fx-in:not(.fx-done)::before{animation:fx-draw .9s var(--ease-out) backwards}
+.js-motion [data-fx=head].fx-in:not(.fx-done) .fx-w{animation:fx-rise .62s var(--ease-out) calc(var(--w,0)*42ms + 120ms) backwards}
+.js-motion [data-fx=head].fx-in:not(.fx-done) > .lead{animation:fx-up .6s var(--ease-out) .38s backwards}
+.js-motion [data-fx=head].fx-in .sw.in::after{transition-delay:calc(var(--n,4)*42ms + .42s)}
+.fx.js-motion [data-fx=scramble]:not(.fx-in){opacity:0}
+
+/* ---------- 3. cascades (with an optional blue edge flash) ---------- */
+[data-edge] > *{position:relative}
+.fx.js-motion [data-fx=cascade]:not(.fx-in) > *{opacity:0}
+.js-motion [data-fx=cascade].fx-in:not(.fx-done) > *{animation:fx-up .56s var(--ease-out) calc(var(--k,0)*65ms) backwards}
+.js-motion [data-edge].fx-in:not(.fx-done) > *::before{content:"";position:absolute;inset:-1px;border:1.5px solid var(--blue-400);border-radius:inherit;pointer-events:none;animation:fx-edge 1s ease calc(var(--k,0)*65ms + 260ms) both}
+/* How it works: a dashed pipeline draws behind the four step cards */
+@media (min-width:961px){
+  .steps[data-fx]{position:relative;isolation:isolate}
+  .steps[data-fx]::before{content:"";position:absolute;left:14px;right:14px;top:34px;height:1px;z-index:-1;background:repeating-linear-gradient(90deg,var(--accent) 0 6px,transparent 6px 12px);opacity:.75;transform-origin:left center}
+  .fx.js-motion .steps[data-fx]:not(.fx-in)::before{transform:scaleX(0)}
+  .js-motion .steps[data-fx].fx-in:not(.fx-done)::before{animation:fx-draw 1.2s var(--ease-io) .1s backwards}
+}
+
+/* ---------- 4. scan-line wipe ---------- */
+[data-fx=scan]{position:relative}
+.fx.js-motion [data-fx=scan]:not(.fx-in){opacity:0}
+.fx-scan{position:absolute;inset:-12px;z-index:30;overflow:hidden;border-radius:var(--r-lg);pointer-events:none}
+.fx-scan > b{position:absolute;inset:0;background:var(--bg);transform-origin:50% 100%}
+.fx-scan > i{position:absolute;left:0;right:0;top:-88px;height:90px;background:linear-gradient(0deg,#5F9FFA 0,#5F9FFA 2px,rgba(47,128,237,.28) 2px,rgba(47,128,237,0) 100%)}
+
+@keyframes fx-draw{from{transform:scaleX(0)}}
+@keyframes fx-rise{from{opacity:0;transform:translateY(.5em)}}
+@keyframes fx-up{from{opacity:0;transform:translateY(18px)}}
+@keyframes fx-edge{0%{opacity:0}30%{opacity:1}100%{opacity:0}}
+@keyframes fx-pop{from{transform:scale(.55)}}
+
+/* ---------- 5. section HUD (fixed, mono, updates as you scroll; hidden on phones) ---------- */
+.fx-hud{position:fixed;left:14px;top:50%;z-index:40;display:none;align-items:center;gap:12px;writing-mode:vertical-rl;transform:translateY(-50%) rotate(180deg);font:500 .6875rem/1 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--navy-300);pointer-events:none;transition:opacity .3s ease}
+@media (min-width:768px){.fx-hud{display:flex}}
+.fx-hud.is-top{opacity:0}
+.fx-hud.on-light{color:var(--navy-500)}
+.fx-hud .hud-n{font-weight:600;color:var(--blue-400)}
+.fx-hud.on-light .hud-n{color:var(--blue-700)}
+.fx-hud .hud-ticks{display:flex;gap:4px}
+.fx-hud .hud-ticks i{display:block;width:8px;height:2px;border-radius:1px;background:currentColor;opacity:.3;transition:opacity .3s ease}
+.fx-hud .hud-ticks i.on{opacity:1;background:var(--blue-400)}
+.fx-hud.on-light .hud-ticks i.on{background:var(--blue-600)}
+.fx-hud .hud-l{inline-size:24ch;max-block-size:42vh;overflow:hidden;white-space:nowrap}   /* fixed length: a new label never moves anything */
+/* nav links light up for the section you are in */
+.top nav a.fx-cur{color:#FFF}
+
+/* ---------- 6. towns ticker ---------- */
+.ticker{position:relative;background:var(--navy-900);border-top:1px solid rgba(167,181,202,.14);border-bottom:1px solid rgba(167,181,202,.14)}
+.ticker-in{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
+.ticker-track{display:flex;width:max-content}
+.ticker ul{display:flex;list-style:none;margin:0;padding:0}
+.ticker li{display:inline-flex;align-items:center;gap:20px;padding:14px 0 14px 20px;font:500 .75rem/1 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--navy-300);white-space:nowrap}
+.ticker li::after{content:"";width:6px;height:6px;border-radius:1.5px;background:var(--blue-500)}
+.ticker li.hl{color:#FFF}
+.js-motion .ticker.fx-run .ticker-track{animation:fx-marquee 70s linear infinite}
+.js-motion .ticker:hover .ticker-track{animation-play-state:paused}
+@keyframes fx-marquee{to{transform:translateX(-50%)}}
+
+/* ---------- 7. parallax on the grid and topo lines (scroll-driven; static elsewhere) ---------- */
+.band.grid-48{isolation:isolate}
+.close .topo{left:auto;right:-6%;bottom:auto;top:-8%;scale:-1 -1}
+.band.grid-48{overflow:hidden;overflow:clip}
+@supports (animation-timeline:scroll()){
+  @media (prefers-reduced-motion:no-preference){
+    .js-motion .hero.grid-48::after,.js-motion .page-hero.grid-48::after{top:-96px;bottom:-96px;animation:fx-par-grid linear both;animation-timeline:scroll(root);animation-range:0 100vh}
+    .js-motion .hero .topo{animation:fx-par-topo linear both;animation-timeline:scroll(root);animation-range:0 100vh}
+    .js-motion .band.grid-48::after{top:-96px;bottom:-96px;animation:fx-par-band linear both;animation-timeline:view();animation-range:cover}
+    .js-motion .band .topo{animation:fx-par-topo2 linear both;animation-timeline:view();animation-range:cover}
+  }
+}
+@keyframes fx-par-grid{to{transform:translateY(64px)}}
+@keyframes fx-par-topo{to{transform:translateY(110px)}}
+@keyframes fx-par-band{from{transform:translateY(-48px)}to{transform:translateY(48px)}}
+@keyframes fx-par-topo2{from{transform:translateY(70px)}to{transform:translateY(-70px)}}
+/* the scroll progress line is motion too: it stays off while motion is paused */
+html[data-motion=off] .progress-rail{display:none}
+
+/* ---------- 8. cursor spotlight on dark cards, magnetic primary CTAs (fine pointers; motion.js adds the classes) ---------- */
+.fx-spotted{position:relative;isolation:isolate}
+.fx-spot-clip{position:absolute;inset:0;z-index:-1;overflow:hidden;border-radius:inherit;pointer-events:none}
+.fx-spot{position:absolute;left:0;top:0;width:460px;height:460px;margin:-230px 0 0 -230px;border-radius:50%;background:radial-gradient(closest-side,rgba(95,159,250,.2),rgba(95,159,250,.07) 55%,rgba(95,159,250,0));opacity:0;transition:opacity .35s ease}
+.js-motion .fx-lit > .fx-spot-clip > .fx-spot{opacity:1}
+.fx-mag{transition:background-color var(--dur-hover) ease,border-color var(--dur-hover) ease,transform var(--dur-press) var(--ease-out),translate .32s var(--ease-out)}
+html[data-motion=off] .fx-mag{translate:none!important}
+
+/* ---------- 9. buttons ---------- */
+/* primary: an arrow that slides on hover and a press ripple (demo stages keep their own buttons untouched) */
+.btn:not(.ghost):not(.stage *){position:relative;overflow:hidden;isolation:isolate}
+/* the arrow sits partly in the right padding so the buttons barely grow */
+.btn:not(.ghost):not(.stage *):not(.sm){padding-right:19px}
+.btn.sm:not(.ghost):not(.stage *):not(.top *){padding-right:12px}
+.btn:not(.ghost):not(.stage *)::before{content:"";position:absolute;left:var(--rx,50%);top:var(--ry,50%);width:var(--rs,0px);height:var(--rs,0px);margin:calc(var(--rs,0px)/-2) 0 0 calc(var(--rs,0px)/-2);border-radius:50%;z-index:-1;background:radial-gradient(closest-side,rgba(255,255,255,.62),rgba(255,255,255,0));opacity:0;pointer-events:none}
+.btn:not(.ghost):not(.stage *)::after{content:"";flex:none;width:15px;height:11px;margin:0 -3px 0 -2px;background:currentColor;-webkit-mask:var(--fx-arr) center/contain no-repeat;mask:var(--fx-arr) center/contain no-repeat;transition:transform .28s var(--ease-out)}
+.btn:not(.ghost):not(.stage *):hover::after,.btn:not(.ghost):not(.stage *):focus-visible::after{transform:translateX(4px)}
+.btn:not(.ghost):not(.stage *):active::after{transform:translateX(7px)}
+/* the header check-up button gets a shine sweep every few seconds instead of the arrow */
+.top .btn:not(.ghost)::after,.top .btn:not(.ghost):hover::after,.top .btn:not(.ghost):focus-visible::after,.top .btn:not(.ghost):active::after{position:absolute;top:0;bottom:0;left:0;width:42%;height:auto;margin:0;background:linear-gradient(100deg,rgba(255,255,255,0) 20%,rgba(255,255,255,.62) 50%,rgba(255,255,255,0) 80%);-webkit-mask:none;mask:none;transform:translateX(-130%) skewX(-18deg);transition:none;pointer-events:none}
+.js-motion .top .btn:not(.ghost)::after{animation:fx-shine 6.5s var(--ease-io) 2.6s infinite}
+@keyframes fx-shine{0%{transform:translateX(-130%) skewX(-18deg)}16%,100%{transform:translateX(330%) skewX(-18deg)}}
+/* hero queue approve: a check instead of the arrow */
+/* (these selectors outrank the generic arrow rules above, which carry two :not()s) */
+.q-ask .q-approve.btn:not(.stage *)::after,.q-ask .q-approve.btn:not(.stage *):hover::after,.q-ask .q-approve.btn:not(.stage *):focus-visible::after,.q-ask .q-approve.btn:not(.stage *):active::after{width:13px;height:13px;margin:0;-webkit-mask-image:var(--fx-ck);mask-image:var(--fx-ck);transform:none}
+.q-ask .q-approve.btn:not(.stage *):hover::after{transform:scale(1.2)}
+/* ghost: a blue line traces the border on hover (motion.js adds the svg) */
+.btn.ghost:not(.stage *){position:relative}
+.fx-trace{position:absolute;left:-1.5px;top:-1.5px;width:calc(100% + 3px);height:calc(100% + 3px);overflow:hidden;border-radius:var(--r-btn);pointer-events:none}
+.fx-trace rect{fill:none;stroke:var(--blue-400);stroke-width:3;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .55s var(--ease-io)}
+.light .fx-trace rect,.composer .fx-trace rect,.int-card .fx-trace rect{stroke:var(--blue-600)}
+.btn.ghost:hover .fx-trace rect,.btn.ghost:focus-visible .fx-trace rect{stroke-dashoffset:0}
+/* chips: a box that becomes a tick that draws when pressed (motion.js adds the svg) */
+.fx-tick{width:14px;height:14px;flex:none;margin-left:-3px;overflow:visible}
+.fx-tick .bx{fill:none;stroke:currentColor;stroke-width:1.8;opacity:.45;transition:opacity .2s ease}
+.fx-tick .c{fill:none;stroke:currentColor;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .3s var(--ease-out) .04s}
+.chip[aria-pressed=true] .fx-tick .c,.chip.on .fx-tick .c,label.chip:has(input:checked) .fx-tick .c{stroke-dashoffset:0}
+.chip[aria-pressed=true] .fx-tick .bx,.chip.on .fx-tick .bx,label.chip:has(input:checked) .fx-tick .bx{opacity:0}
+.js-motion .chip[aria-pressed=true] .fx-tick,.js-motion label.chip:has(input:checked) .fx-tick{animation:fx-pop .32s var(--ease-land)}
+/* demo bar: play, stop or step glyph that follows the button's state */
+.bar-btn{display:inline-flex;align-items:center;gap:8px}
+.bar-btn::before{content:"";flex:none;width:10px;height:10px;background:currentColor;-webkit-mask:var(--fx-play) center/contain no-repeat;mask:var(--fx-play) center/contain no-repeat;transition:transform .2s var(--ease-out)}
+.bar-btn[aria-pressed=true]::before{-webkit-mask-image:var(--fx-stop);mask-image:var(--fx-stop)}
+html[data-motion=off] .bar-btn::before{-webkit-mask-image:var(--fx-step);mask-image:var(--fx-step)}
+@media (prefers-reduced-motion:reduce){.bar-btn::before{-webkit-mask-image:var(--fx-step);mask-image:var(--fx-step)}}
+.bar-btn:hover::before{transform:scale(1.2)}
+.js-motion .bar-btn[aria-pressed=true]::before{animation:fx-pop .3s var(--ease-land)}
+.js-motion .bar-btn[aria-pressed=false]::before{animation:fx-pop2 .3s var(--ease-land)}
+@keyframes fx-pop2{from{transform:scale(.55)}}
+/* header motion toggle: pause or play glyph */
+.motion-btn{display:inline-flex;align-items:center;gap:7px}
+@media (max-width:560px){.motion-btn{display:none}}
+.motion-btn::before{content:"";flex:none;width:10px;height:10px;background:currentColor;-webkit-mask:var(--fx-pause) center/contain no-repeat;mask:var(--fx-pause) center/contain no-repeat}
+.motion-btn[aria-pressed=true]::before{-webkit-mask-image:var(--fx-play);mask-image:var(--fx-play)}
+/* demo jump links: a down arrow that nudges */
+.demo-index a::after{content:"";flex:none;width:10px;height:10px;background:var(--blue-400);-webkit-mask:var(--fx-down) center/contain no-repeat;mask:var(--fx-down) center/contain no-repeat;transition:transform .25s var(--ease-out)}
+.demo-index a:hover::after,.demo-index a:focus-visible::after{transform:translateY(3px)}
+/* plus icons turn on hover, close buttons spin */
+.svc:not([data-open]) > button:hover .plus{transform:rotate(90deg)}
+.faq details:not([open]) summary:hover svg{transform:rotate(90deg)}
+.int-x svg{transition:transform .3s var(--ease-out)}
+.int-x:hover svg{transform:rotate(90deg)}
+/* the logo bracket nudges toward the corner on hover */
+.lockup .mark .mk-br{transition:transform .35s var(--ease-out)}
+.lockup:hover .mark .mk-br{transform:translate(1.5px,-1.5px)}
+
+/* ---------- 10. links: underlines that slide ---------- */
+.top nav a{position:relative;display:inline-block}
+.top nav a::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:2px;border-radius:1px;background:var(--blue-400);transform:scaleX(0);transform-origin:right center;transition:transform .32s var(--ease-out)}
+.top nav a:hover::after,.top nav a:focus-visible::after,.top nav a.fx-cur::after,.top nav a[aria-current=page]::after{transform:scaleX(1);transform-origin:left center}
+.top nav a[aria-current=page]{box-shadow:none}
+footer a,footer .linkbtn,.team-mail a,.contact-line a,.close-alt a,.close-alt .linkbtn,.svc .pick .linkbtn{position:relative;display:inline-block;text-decoration:none}
+footer a::before,footer .linkbtn::before,.team-mail a::before,.contact-line a::before,.close-alt a::before,.close-alt .linkbtn::before,.svc .pick .linkbtn::before{content:"";position:absolute;left:0;right:0;bottom:1px;height:1px;background:currentColor;opacity:.4}
+footer a::after,footer .linkbtn::after,.team-mail a::after,.contact-line a::after,.close-alt a::after,.close-alt .linkbtn::after,.svc .pick .linkbtn::after{content:"";position:absolute;left:0;right:0;bottom:.5px;height:2px;border-radius:1px;background:var(--blue-400);transform:scaleX(0);transform-origin:right center;transition:transform .32s var(--ease-out)}
+.svc .pick .linkbtn::after{background:var(--accent-ink)}
+footer a:hover::after,footer .linkbtn:hover::after,.team-mail a:hover::after,.contact-line a:hover::after,.close-alt a:hover::after,.close-alt .linkbtn:hover::after,.svc .pick .linkbtn:hover::after,
+footer a:focus-visible::after,footer .linkbtn:focus-visible::after,.team-mail a:focus-visible::after,.contact-line a:focus-visible::after,.close-alt a:focus-visible::after,.close-alt .linkbtn:focus-visible::after,.svc .pick .linkbtn:focus-visible::after{transform:scaleX(1);transform-origin:left center}
+
+/* source links under the statistics: the link takes the accent color and its underline thickens */
+.src a{transition:color var(--dur-hover) ease}
+.src a:hover,.src a:focus-visible{color:var(--accent-ink);text-decoration-thickness:2px}
+
+@media print{.fx-hud,.fx-intro,.ticker,.fx-scan,.fx-spot-clip{display:none!important}[data-fx],[data-fx] *{opacity:1!important;transform:none!important}}

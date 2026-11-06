@@ -103,7 +103,6 @@ ul,ol{margin:0;padding:0}
 .btn.sm{min-height:40px;padding:9px 15px;font-size:.9375rem}
 .btn[disabled]{opacity:.5;cursor:not-allowed}
 .linkbtn{font:inherit;font-weight:600;color:var(--accent-ink);background:none;border:0;padding:4px 0;cursor:pointer;text-decoration:underline;text-underline-offset:4px}
-@media (pointer:coarse){.btn.sm,.chip,.bar-btn{min-height:44px}}
 
 /* logo */
 .mark{width:28px;height:28px;flex:none;overflow:visible}
@@ -408,7 +407,7 @@ html:not(.js) .svc .plus,html:not(.js) .svc .pick .chip,html:not(.js) .who{displ
 /* close + composer */
 .close-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(2rem,1rem + 3vw,4rem);align-items:start}
 .close-grid h2{color:#FFF}
-.close-grid .lead{color:var(--navy-200)}
+.close-grid .lead{margin-top:18px;color:var(--navy-200)}
 .promise-strip{margin-top:22px;display:flex;flex-wrap:wrap;gap:8px;list-style:none}
 .promise-strip li{padding:7px 11px;border-radius:var(--r-xs);border:1px solid rgba(167,181,202,.22);font-weight:600;font-size:.9rem;color:var(--navy-100)}
 .composer{position:relative;background:#FFF;color:var(--navy-900);border-radius:var(--r-md);box-shadow:var(--sh-3);padding:24px}
@@ -432,12 +431,14 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px soli
 .composer .btn.ghost{color:var(--navy-900);border-color:var(--gray-500)}
 .c-status{margin-top:12px;font-size:.9375rem;font-weight:600;color:var(--green-700)}
 .confirm{margin-top:16px;padding:16px;border-radius:var(--r-sm);background:var(--green-50);color:var(--navy-900)}
+.confirm a{color:var(--blue-700)}
 @media (max-width:900px){.close-grid{grid-template-columns:minmax(0,1fr)}}
 
 /* footer */
 footer{background:var(--navy-950);color:var(--navy-300);padding:48px 0 calc(48px + env(safe-area-inset-bottom));font-size:.9375rem}
 footer .wrap{display:grid;gap:14px}
 footer a{color:var(--navy-200)}
+footer .fine{color:var(--navy-400)}
 footer .row{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center}
 @media (max-width:760px){footer{padding-bottom:96px}}
 
@@ -523,3 +524,5 @@ footer .linkbtn{color:var(--navy-200);font-weight:500;padding:0}
 /* source links: 24px tap height on phones */
 .src a{display:inline-block;padding:4px 0;line-height:1.35}
 .team-mail a,.close-alt a,footer a{display:inline-block;padding:3px 0}
+/* touch: small buttons and chips at least 44px tall. It sits after the base .chip and .bar-btn rules so it wins (demo stages keep their own sizes) */
+@media (pointer:coarse){.btn.sm,.chip:not(.stage *),.bar-btn,.q-ask .q-approve{min-height:44px}}

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-intro>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -30,6 +30,7 @@
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/plus-jakarta-sans-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/geist-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/site.css">
 <link rel="stylesheet" href="assets/demos/calls.css">
 <link rel="stylesheet" href="assets/demos/inbox.css">
@@ -37,7 +38,10 @@
 <link rel="stylesheet" href="assets/demos/invoices.css">
 <link rel="stylesheet" href="assets/demos/automation.css">
 <link rel="stylesheet" href="assets/demos/report.css">
+<link rel="stylesheet" href="assets/motion.css">
+<link rel="stylesheet" href="assets/close.css">
 <script src="assets/boot.js"></script>
+<script src="assets/motion.js" defer></script>
 <script src="assets/demo-player.js" defer></script>
 <script src="assets/services-data.js" defer></script>
 <script src="assets/nwa-map.js" defer></script>
@@ -49,6 +53,7 @@
 <script src="assets/demos/automation.js" defer></script>
 <script src="assets/demos/report.js" defer></script>
 <script src="assets/interest.js" defer></script>
+<script src="assets/close.js" defer></script>
 <!-- jsonld:start -->
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["Organization","ProfessionalService"],"@id":"https://righthandnwa.com/#organization","name":"Right Hand NWA","alternateName":"Right Hand Northwest Arkansas","url":"https://righthandnwa.com/","description":"A Northwest Arkansas team that takes receipts, invoices, follow-ups, scheduling and paperwork off small business owners' plates, and sets up AI that drafts the busywork. AI drafts, a person on the team checks, and the owner approves. Tax, payroll, legal work and moving money stay with the owner and their licensed pros.","slogan":"Hand off the admin. Keep the final say.","logo":{"@type":"ImageObject","@id":"https://righthandnwa.com/#logo","url":"https://righthandnwa.com/assets/logo.png","contentUrl":"https://righthandnwa.com/assets/logo.png","width":512,"height":512,"caption":"Right Hand NWA"},"image":{"@type":"ImageObject","@id":"https://righthandnwa.com/#image","url":"https://righthandnwa.com/assets/og.png","contentUrl":"https://righthandnwa.com/assets/og.png","width":1200,"height":630},"email":"righthandnwa@gmail.com","contactPoint":{"@type":"ContactPoint","contactType":"customer service","email":"righthandnwa@gmail.com","areaServed":"US-AR","availableLanguage":"English"},"sameAs":["https://www.instagram.com/righthandnwa/"],"founder":[{"@type":"Person","name":"Jackson Varela","description":"University of Arkansas student","memberOf":{"@id":"https://righthandnwa.com/#uark"}},{"@type":"Person","name":"Annie Wagner","description":"University of Arkansas student","memberOf":{"@id":"https://righthandnwa.com/#uark"}},{"@type":"Person","name":"Abigail Estes","description":"University of Arkansas student","memberOf":{"@id":"https://righthandnwa.com/#uark"}},{"@type":"Person","name":"Bella Gambaro","description":"University of Arkansas student","memberOf":{"@id":"https://righthandnwa.com/#uark"}}],"areaServed":[{"@type":"Place","name":"Northwest Arkansas","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"AdministrativeArea","name":"Benton County, Arkansas","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"AdministrativeArea","name":"Washington County, Arkansas","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Bentonville","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Rogers","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Springdale","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Fayetteville","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Bella Vista","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Siloam Springs","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Lowell","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Cave Springs","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Centerton","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Farmington","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Prairie Grove","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Pea Ridge","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}}],"knowsAbout":["Small business admin","Receipt capture and expense review","Invoice follow-ups","CPA and bookkeeper prep","Inbox triage and reply drafts","Missed-call text-back","Appointment scheduling and reminders","Written how-tos (SOPs)","Workflow automations","Practical AI for small business","AI use policies for small business","Google Business Profile and local listings","Honest review requests"],"hasOfferCatalog":{"@type":"OfferCatalog","name":"Right Hand NWA services","url":"https://righthandnwa.com/#services","itemListElement":[{"@type":"OfferCatalog","name":"Money admin","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Receipt capture and categorizing"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Monthly expense review"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Invoices and overdue follow-ups"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Quotes and estimates"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Bills-due and renewals calendar"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"CPA and bookkeeper prep"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Software subscription cleanup"}}]},{"@type":"OfferCatalog","name":"Customers and front desk","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Inbox triage and reply drafts"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Missed-call text-back and booking"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"AI phone answering, inbound only"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Website chat assistant"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Lead intake form that routes itself"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"CRM setup and cleanup"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Quote follow-ups"}}]},{"@type":"OfferCatalog","name":"Scheduling and follow-ups","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Booking page"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Appointment reminders and no-show follow-ups"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Calendar management"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Staff schedule drafts"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Vendor and delivery coordination"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Meeting and call notes with AI"}}]},{"@type":"OfferCatalog","name":"Documents and how-tos","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"One folder system with naming rules"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Templates for quotes, forms and checklists"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Written how-tos (SOPs)"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Hiring admin"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Supplier and vendor office support"}}]},{"@type":"OfferCatalog","name":"AI in your business","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Workflow automations"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"AI email drafting in your inbox"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Weekly owner report"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"AI starter workshop"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"One-page AI use policy"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Company prompt kit and SOP assistant"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Monthly AI office hours"}}]},{"@type":"OfferCatalog","name":"Local presence and reputation","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Google Business Profile and listings upkeep"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Honest review requests"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Review reply drafts"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Social posts and content calendar"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Email newsletter"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Digital front door check"}}]}]},"makesOffer":{"@type":"Offer","@id":"https://righthandnwa.com/#checkup-offer","name":"Free NWA Admin and AI Check-up","price":"0","priceCurrency":"USD","url":"https://righthandnwa.com/#checkup","description":"A free 30-minute admin and AI check-up at your business anywhere in Benton or Washington County, or by video or phone. Within 3 business days, Your Admin Map arrives by email: your top 3 tasks to hand off, and for each one what we would do, what AI would draft, what stays with you, and what stays with your CPA or attorney. Nothing to buy, now or later.","itemOffered":{"@type":"Service","name":"NWA Admin and AI Check-up","provider":{"@id":"https://righthandnwa.com/#organization"},"areaServed":{"@id":"https://righthandnwa.com/#arkansas"}}}},{"@type":"CollegeOrUniversity","@id":"https://righthandnwa.com/#uark","name":"University of Arkansas","url":"https://www.uark.edu/"},{"@type":"State","@id":"https://righthandnwa.com/#arkansas","name":"Arkansas","containedInPlace":{"@type":"Country","name":"United States"}},{"@type":"WebSite","@id":"https://righthandnwa.com/#website","url":"https://righthandnwa.com/","name":"Right Hand NWA","alternateName":"Right Hand Northwest Arkansas","publisher":{"@id":"https://righthandnwa.com/#organization"},"inLanguage":"en-US"},{"@type":"WebPage","@id":"https://righthandnwa.com/#webpage","url":"https://righthandnwa.com/","name":"Right Hand NWA | Admin and AI help for Northwest Arkansas small businesses","description":"Admin and AI help for Northwest Arkansas small businesses in Bentonville, Rogers, Springdale and Fayetteville. AI drafts, we check, you approve. Free 30-minute check-up.","isPartOf":{"@id":"https://righthandnwa.com/#website"},"about":{"@id":"https://righthandnwa.com/#organization"},"primaryImageOfPage":{"@id":"https://righthandnwa.com/#image"},"inLanguage":"en-US"},{"@type":"FAQPage","@id":"https://righthandnwa.com/#faq","url":"https://righthandnwa.com/#questions","isPartOf":{"@id":"https://righthandnwa.com/#webpage"},"mainEntity":[{"@type":"Question","name":"What does it cost?","acceptedAnswer":{"@type":"Answer","text":"The check-up is free, with nothing to buy. If you want help after that, we quote a flat monthly price in writing before any work starts, based on the tasks you pick. Tool costs, like a texting plan, are paid by you directly to the vendor, and we show them before you decide."}},{"@type":"Question","name":"Do I have to give you my passwords or bank login?","acceptedAnswer":{"@type":"Answer","text":"No, and please don't send them. The check-up needs no logins at all. If you hire us, you invite us as a user in the tools you already use, so you can see what we can reach and remove us in one click. We never touch your bank or move money."}},{"@type":"Question","name":"Is AI going to talk to my customers?","acceptedAnswer":{"@type":"Answer","text":"Only if you want it to, and only from answers you approved. A phone or chat assistant says it is an assistant and hands anything else to you. Everything else AI does is a draft that one of us checks and you approve. If you'd rather we skip AI on a task, we do it by hand."}},{"@type":"Question","name":"You're students. Why should I trust you with my business?","acceptedAnswer":{"@type":"Answer","text":"Fair question. We are four University of Arkansas students who work in Northwest Arkansas. For you, that means a short client list, a named person on every task, and work you can check line by line. It does not mean we are CPAs, attorneys or a payroll company, and we will tell you when something needs one. Try the demos on this page and judge the work yourself."}},{"@type":"Question","name":"What happens over school breaks or when you graduate?","acceptedAnswer":{"@type":"Answer","text":"We tell you our schedule up front, breaks included. Every task we take on gets a written how-to, so nothing lives in one person's head, and it is yours to keep."}},{"@type":"Question","name":"What happens to my data?","acceptedAnswer":{"@type":"Answer","text":"Wherever possible it stays in your own accounts. We tell you in writing which tools touch it, AI tools included, and we use settings that keep your data out of AI model training. We never sell or share it, and we delete working copies when a task is done."}},{"@type":"Question","name":"Which tools do you use?","acceptedAnswer":{"@type":"Answer","text":"The ones you already pay for, where possible: Google Workspace or Microsoft 365, your accounting and booking tools, your phone system. If something new would help, we tell you what it costs and you decide."}},{"@type":"Question","name":"What if I want to stop?","acceptedAnswer":{"@type":"Answer","text":"Email us. It is month to month with no cancellation fee. Within 2 business days we remove our access, hand back every file and how-to, and confirm it in writing."}},{"@type":"Question","name":"What if you get something wrong?","acceptedAnswer":{"@type":"Answer","text":"You see the sources and the math before anything is final, and anything we can't match to a record comes to you as a question. If a mistake slips through in work you approved, we fix it at no charge."}},{"@type":"Question","name":"Will this replace my bookkeeper or CPA?","acceptedAnswer":{"@type":"Answer","text":"No. We get the paperwork ready so they get clean records. Tax, payroll, legal decisions and moving money stay with them and with you."}},{"@type":"Question","name":"Do you really come in person?","acceptedAnswer":{"@type":"Answer","text":"Yes, anywhere in Benton and Washington counties, at your shop or a coffee shop. Video and phone work too."}}]}]}</script>
 <!-- jsonld:end -->
@@ -94,7 +99,7 @@
 
 <main id="main">
 
-<section class="hero dark grid-48" aria-labelledby="hero-h">
+<section class="hero dark grid-48" data-hud="Home" aria-labelledby="hero-h">
   <svg class="topo" viewBox="0 0 600 400" aria-hidden="true" preserveAspectRatio="none">
     <path d="M-20 380 C 80 330, 160 350, 240 300 S 400 250, 470 290"/>
     <path d="M-20 350 C 70 300, 150 320, 230 268 S 380 220, 450 255"/>
@@ -125,39 +130,43 @@
       <div class="hero-glow" aria-hidden="true"></div>
       <div class="win bracket">
         <div class="win-bar"><span class="path">right-hand / queue</span><span class="tag">Sample data</span></div>
-        <div id="nwa-map" class="nwa"></div>
+        <div id="nwa-map" class="nwa"><!-- nwa:start --><div class="nwa-layout"><svg class="nwa-svg" viewBox="0 0 560 520" role="img" aria-labelledby="nwa-t"><title id="nwa-t">Schematic map of Northwest Arkansas: Interstate 49 runs from Bella Vista through Bentonville, Rogers, Springdale and Fayetteville, with Siloam Springs to the west.</title><defs><pattern id="nwa-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="currentColor" opacity=".18"/></pattern></defs><rect width="560" height="520" fill="url(#nwa-dots)"/><path class="nwa-area" transform="translate(-32 0)" d="M60 300 C 70 210, 230 150, 300 60 C 340 10, 520 20, 540 110 C 560 220, 530 420, 470 495 C 420 540, 330 520, 320 470 C 300 400, 200 400, 120 390 C 70 385, 55 345, 60 300 Z"/><path class="nwa-hwy-bg" d="M410 336 Q314 343 252.5 333.5 Q191 324 134 329.5 L77 335"/><path class="nwa-hwy-bg" d="M279 44 Q331 104 355.5 133.5 Q380 163 391 184 Q402 205 407 239.5 Q412 274 413 304 Q414 334 408 361.5 Q402 389 397.5 414 Q393 439 389.5 464.5 L386 490"/><path class="nwa-hwy" pathLength="100" d="M279 44 Q331 104 355.5 133.5 Q380 163 391 184 Q402 205 407 239.5 Q412 274 413 304 Q414 334 408 361.5 Q402 389 397.5 414 Q393 439 389.5 464.5 L386 490"/><path class="nwa-hwy west" pathLength="100" d="M410 336 Q314 343 252.5 333.5 Q191 324 134 329.5 L77 335"/><g class="nwa-shield" transform="translate(369 231)"><rect width="34" height="26" rx="6"/><text x="17" y="18.5" text-anchor="middle">49</text></g><circle class="nwa-small" cx="441" cy="91" r="3.4"/><circle class="nwa-small" cx="292" cy="177" r="3.4"/><circle class="nwa-small" cx="427" cy="274" r="3.4"/><circle class="nwa-small" cx="325" cy="470" r="3.4"/><circle class="nwa-small" cx="397" cy="386" r="3.4"/><circle class="nwa-small" cx="340" cy="232" r="3.4"/><g class="nwa-city" style="--i:0" data-city="Bella Vista"><circle class="nwa-pulse" cx="302" cy="66" r="7"/><circle class="nwa-dot" cx="302" cy="66" r="8"/><text x="286" y="73" text-anchor="end">Bella Vista</text></g><g class="nwa-city" style="--i:1" data-city="Bentonville"><circle class="nwa-pulse" cx="359" cy="166" r="7"/><circle class="nwa-dot" cx="359" cy="166" r="8"/><text x="343" y="173" text-anchor="end">Bentonville</text></g><g class="nwa-city" style="--i:2" data-city="Rogers"><circle class="nwa-pulse" cx="438" cy="203" r="7"/><circle class="nwa-dot" cx="438" cy="203" r="8"/><text x="454" y="210" text-anchor="start">Rogers</text></g><g class="nwa-city" style="--i:3" data-city="Springdale"><circle class="nwa-pulse" cx="429" cy="336" r="7"/><circle class="nwa-dot" cx="429" cy="336" r="8"/><text x="445" y="343" text-anchor="start">Springdale</text></g><g class="nwa-city" style="--i:4" data-city="Fayetteville"><circle class="nwa-pulse" cx="404" cy="450" r="7"/><circle class="nwa-dot" cx="404" cy="450" r="8"/><text x="420" y="457" text-anchor="start">Fayetteville</text></g><g class="nwa-city" style="--i:5" data-city="Siloam Springs"><circle class="nwa-pulse" cx="68" cy="335" r="7"/><circle class="nwa-dot" cx="68" cy="335" r="8"/><text x="58" y="369" text-anchor="start">Siloam Springs</text></g></svg><div class="queue"><p class="q-head"><span>Right Hand queue</span><span class="mono">Tue Nov 3 · sample</span></p><ol class="q-list"><li class="q-row" style="--i:0" data-city="Rogers"><span class="q-city">Rogers</span><b class="q-task">Missed call</b><span class="q-note">Text-back ready in your wording</span><span class="q-st"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>Prepared</span><span class="q-scan" aria-hidden="true"></span></li><li class="q-row" style="--i:1" data-city="Springdale"><span class="q-city">Springdale</span><b class="q-task">Receipt photo</b><span class="q-note">Matched to the card charge</span><span class="q-st"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>Prepared</span><span class="q-scan" aria-hidden="true"></span></li><li class="q-row" style="--i:2" data-city="Bella Vista"><span class="q-city">Bella Vista</span><b class="q-task">Invoice past due</b><span class="q-note">Friendly reminder drafted</span><span class="q-st"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>Prepared</span><span class="q-scan" aria-hidden="true"></span></li><li class="q-row" style="--i:3" data-city="Bentonville"><span class="q-city">Bentonville</span><b class="q-task">Booking request</b><span class="q-note">Slot held until you confirm</span><span class="q-st"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>Prepared</span><span class="q-scan" aria-hidden="true"></span></li><li class="q-row" style="--i:4" data-city="Fayetteville"><span class="q-city">Fayetteville</span><b class="q-task">Weekly numbers</b><span class="q-note">Monday report ready</span><span class="q-st"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>Prepared</span><span class="q-scan" aria-hidden="true"></span></li><li class="q-row q-ask" style="--i:5" data-city="Siloam Springs"><span class="q-city">Siloam Springs</span><b class="q-task">Quote request</b><span class="q-note">Reply drafted. Needs your OK.</span><button type="button" class="btn sm q-approve">Approve</button><span class="q-scan" aria-hidden="true"></span></li></ol><p class="sr-only" aria-live="polite" data-hero-live></p></div></div><p class="map-cap">Northwest Arkansas. Schematic, not to scale. Sample tasks.</p><!-- nwa:end --></div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="band light" id="nwa" aria-labelledby="nwa-h">
+<div class="ticker" aria-hidden="true" data-ticker>
+  <div class="ticker-in"><div class="ticker-track"><ul><li class="hl">Serving Northwest Arkansas</li><li>Bentonville</li><li>Rogers</li><li>Springdale</li><li>Fayetteville</li><li>Bella Vista</li><li>Siloam Springs</li><li>Lowell</li><li>Cave Springs</li><li>Centerton</li><li>Farmington</li><li>Prairie Grove</li><li>Pea Ridge</li><li>And the towns in between</li><li class="hl">AI drafts / We check / You approve</li></ul></div></div>
+</div>
+
+<section class="band light" id="nwa" data-hud="Why now" aria-labelledby="nwa-h">
   <div class="wrap">
-    <div class="sec-h" data-reveal>
+    <div class="sec-h" data-fx="head">
       <p class="eyebrow">Why now, why here</p>
       <h2 id="nwa-h">Northwest Arkansas keeps <span class="sw">growing</span>. So does the paperwork.</h2>
     </div>
-    <ul class="stats">
-      <li class="stat" data-reveal style="--i:0"><b data-count="622177">622,177</b><p>people in the Northwest Arkansas metro.</p><p class="src">Source: <a href="https://talkbusiness.net/2026/04/northwest-arkansas-ranks-9th-fastest-growing-u-s-metro-first-time-in-top-10-since-at-least-2020/" target="_blank" rel="noopener noreferrer">U.S. Census Bureau estimate, July 2025, via Talk Business &amp; Politics</a></p></li>
-      <li class="stat" data-reveal style="--i:1"><b>9th</b><p>fastest-growing metro in the U.S.</p><p class="src">Source: <a href="https://talkbusiness.net/2026/04/northwest-arkansas-ranks-9th-fastest-growing-u-s-metro-first-time-in-top-10-since-at-least-2020/" target="_blank" rel="noopener noreferrer">Census Bureau, via Talk Business &amp; Politics</a></p></li>
-      <li class="stat" data-reveal style="--i:2"><b data-count="38">38</b><p>new residents a day.</p><p class="src">Source: <a href="https://talkbusiness.net/2025/04/northwest-arkansas-council-focused-on-health-and-housing-marks-35-years/" target="_blank" rel="noopener noreferrer">Talk Business &amp; Politics, April 2025</a></p></li>
-      <li class="stat" data-reveal style="--i:3"><b>2.7%</b><p>regional unemployment.</p><p class="src">Source: <a href="https://nwacouncil.org/2025/10/27/planning-for-growth-insights-from-the-2025-state-of-the-region/" target="_blank" rel="noopener noreferrer">2025 State of the Northwest Arkansas Region, Northwest Arkansas Council</a></p></li>
-      <li class="stat" data-reveal style="--i:4"><b><span data-count="1300">1,300</span>+</b><p>Walmart suppliers based in Northwest Arkansas.</p><p class="src">Source: <a href="https://fortune.com/2024/06/07/walmart-bentonville-arkansas-headquarters-new-campus-company-town/" target="_blank" rel="noopener noreferrer">Fortune, June 2024</a></p></li>
-      <li class="stat" data-reveal style="--i:5"><b>17 to 20%</b><p>of U.S. businesses use AI at all (national data).</p><p class="src">Source: <a href="https://census.gov/library/stories/2026/05/ai-use-businesses.html" target="_blank" rel="noopener noreferrer">U.S. Census Bureau, May 2026</a></p></li>
+    <ul class="stats" data-fx="cascade" data-edge>
+      <li class="stat" style="--i:0"><b data-count="622177">622,177</b><p>people in the Northwest Arkansas metro.</p><p class="src">Source: <a href="https://talkbusiness.net/2026/04/northwest-arkansas-ranks-9th-fastest-growing-u-s-metro-first-time-in-top-10-since-at-least-2020/" target="_blank" rel="noopener noreferrer">U.S. Census Bureau estimate, July 2025, via Talk Business &amp; Politics</a></p></li>
+      <li class="stat" style="--i:1"><b><span data-count="9">9</span>th</b><p>fastest-growing metro in the U.S.</p><p class="src">Source: <a href="https://talkbusiness.net/2026/04/northwest-arkansas-ranks-9th-fastest-growing-u-s-metro-first-time-in-top-10-since-at-least-2020/" target="_blank" rel="noopener noreferrer">Census Bureau, via Talk Business &amp; Politics</a></p></li>
+      <li class="stat" style="--i:2"><b data-count="38">38</b><p>new residents a day.</p><p class="src">Source: <a href="https://talkbusiness.net/2025/04/northwest-arkansas-council-focused-on-health-and-housing-marks-35-years/" target="_blank" rel="noopener noreferrer">Talk Business &amp; Politics, April 2025</a></p></li>
+      <li class="stat" style="--i:3"><b>2.7%</b><p>regional unemployment.</p><p class="src">Source: <a href="https://nwacouncil.org/2025/10/27/planning-for-growth-insights-from-the-2025-state-of-the-region/" target="_blank" rel="noopener noreferrer">2025 State of the Northwest Arkansas Region, Northwest Arkansas Council</a></p></li>
+      <li class="stat" style="--i:4"><b><span data-count="1300">1,300</span>+</b><p>Walmart suppliers based in Northwest Arkansas.</p><p class="src">Source: <a href="https://fortune.com/2024/06/07/walmart-bentonville-arkansas-headquarters-new-campus-company-town/" target="_blank" rel="noopener noreferrer">Fortune, June 2024</a></p></li>
+      <li class="stat" style="--i:5"><b>17 to 20%</b><p>of U.S. businesses use AI at all (national data).</p><p class="src">Source: <a href="https://census.gov/library/stories/2026/05/ai-use-businesses.html" target="_blank" rel="noopener noreferrer">U.S. Census Bureau, May 2026</a></p></li>
     </ul>
-    <p class="aside-read" data-reveal><b>Our read, not a statistic:</b> with unemployment this low, hiring a full-time admin is hard. Flexible local help fills the gap. Only about 1 in 5 businesses use AI. Small shops are not catching up on their own, so we set it up with you, in person.</p>
+    <p class="aside-read" data-fx="scan"><b>Our read, not a statistic:</b> with unemployment this low, hiring a full-time admin is hard. Flexible local help fills the gap. Only about 1 in 5 businesses use AI. Small shops are not catching up on their own, so we set it up with you, in person.</p>
   </div>
 </section>
 
-<section class="band dark" id="problem" aria-labelledby="problem-h">
+<section class="band dark" id="problem" data-hud="The problem" aria-labelledby="problem-h">
   <div class="wrap">
-    <div class="sec-h" data-reveal>
+    <div class="sec-h" data-fx="head">
       <p class="eyebrow">The problem</p>
       <h2 id="problem-h">Owners want the busywork gone. Not their <span class="sw">control</span> over it.</h2>
     </div>
     <div class="pstats">
-      <div class="pstat bracket" data-reveal style="--i:0"><b><span data-count="78">78</span>%</b><p>of small business owners surveyed don't fully trust AI to handle low-level tasks without oversight.</p><p class="src">Source: <a href="https://stacker.com/stories/small-business/34-small-businesses-dont-trust-ai-basic-tasks" target="_blank" rel="noopener noreferrer">Bluevine survey of 942 owners, April 2026, via Stacker</a></p></div>
-      <div class="pstat bracket" data-reveal style="--i:1"><b><span data-count="56">56</span>%</b><p>of small businesses surveyed were owed money from unpaid invoices.</p><p class="src">Source: <a href="https://quickbooks.intuit.com/r/small-business-data/small-business-late-payments-report-2025/" target="_blank" rel="noopener noreferrer">Intuit QuickBooks survey of 2,487 businesses, January 2025</a></p></div>
+      <div class="pstat bracket" data-fx="scan"><b><span data-count="78">78</span>%</b><p>of small business owners surveyed don't fully trust AI to handle low-level tasks without oversight.</p><p class="src">Source: <a href="https://stacker.com/stories/small-business/34-small-businesses-dont-trust-ai-basic-tasks" target="_blank" rel="noopener noreferrer">Bluevine survey of 942 owners, April 2026, via Stacker</a></p></div>
+      <div class="pstat bracket" data-fx="scan" data-fx-delay="140"><b><span data-count="56">56</span>%</b><p>of small businesses surveyed were owed money from unpaid invoices.</p><p class="src">Source: <a href="https://quickbooks.intuit.com/r/small-business-data/small-business-late-payments-report-2025/" target="_blank" rel="noopener noreferrer">Intuit QuickBooks survey of 2,487 businesses, January 2025</a></p></div>
     </div>
     <ol class="loop3" id="loop3" aria-label="Our method">
       <li>AI drafts</li><li aria-hidden="true" class="arrw"><svg class="arr"><use href="#i-arr"/></svg></li>
@@ -168,13 +177,13 @@
   </div>
 </section>
 
-<section class="band light" id="how" aria-labelledby="how-h">
+<section class="band light" id="how" data-hud="How it works" aria-labelledby="how-h">
   <div class="wrap">
-    <div class="sec-h" data-reveal>
+    <div class="sec-h" data-fx="head">
       <p class="eyebrow">How it works</p>
       <h2 id="how-h">From first coffee to work off your <span class="sw">plate</span>.</h2>
     </div>
-    <ol class="steps" id="steps">
+    <ol class="steps" data-fx="cascade" id="steps">
       <li class="step"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ck"/></svg><h3>Check-up</h3><p>30 minutes at your shop or on video. We list your recurring admin with you.</p></li>
       <li class="step"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ck"/></svg><h3>Admin Map</h3><p>Within 3 business days: your top 3 handoffs, what AI drafts, what stays yours, and a flat quote if you want one.</p></li>
       <li class="step"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ck"/></svg><h3>One-month pilot</h3><p>We take one or two tasks. You approve every piece.</p><p class="inner-loop">AI drafts / We check / You approve</p></li>
@@ -183,14 +192,14 @@
   </div>
 </section>
 
-<section class="band demos-band dark" id="demos" aria-labelledby="demos-h">
+<section class="band demos-band dark" id="demos" data-hud="Live demos" aria-labelledby="demos-h">
   <div class="wrap">
-    <div class="sec-h" data-reveal>
+    <div class="sec-h" data-fx="head">
       <p class="eyebrow">Live demos</p>
       <h2 id="demos-h">Don't take our word for it. Try the <span class="sw">work</span>.</h2>
       <p class="lead">Every demo runs in your browser on a made-up Northwest Arkansas business. Nothing you type in a demo leaves this page.</p>
     </div>
-    <ul class="demo-index" aria-label="Jump to a demo">
+    <ul class="demo-index" data-fx="cascade" aria-label="Jump to a demo">
       <li><a href="#demo-calls"><span>01</span>Missed call to booked visit · Rogers</a></li>
       <li><a href="#demo-inbox"><span>02</span>Inbox sorted by 8 AM · Bentonville</a></li>
       <li><a href="#demo-receipts"><span>03</span>Receipt to expense review · Springdale</a></li>
@@ -199,48 +208,48 @@
       <li><a href="#demo-report"><span>06</span>Monday owner report · Fayetteville</a></li>
     </ul>
 
-    <section class="demo" id="demo-calls" aria-labelledby="demo-calls-h">
-      <div class="demo-head"><span class="num">01 · Rogers · Customers and front desk</span><h3 id="demo-calls-h">A missed call becomes a booked visit</h3><p>Tuesday, 6:52 PM. The owner of Cold Hollow Heating &amp; Air is under a house. The caller gets a text in wording the owner approved, picks a real open slot, and the owner confirms it.</p></div>
+    <section class="demo" data-fx="scan" id="demo-calls" aria-labelledby="demo-calls-h">
+      <div class="demo-head"><span class="num" data-fx="scramble">01 · Rogers · Customers and front desk</span><h3 id="demo-calls-h">A missed call becomes a booked visit</h3><p>Tuesday, 6:52 PM. The owner of Cold Hollow Heating &amp; Air is under a house. The caller gets a text in wording the owner approved, picks a real open slot, and the owner confirms it.</p></div>
       <div class="proto-bar"><h4 class="proto-title">Missed-call text-back · Cold Hollow Heating &amp; Air</h4><span class="pill"><i></i><span>Ready</span></span><button type="button" class="bar-btn" aria-pressed="false">Stop demo</button></div>
       <div class="stage" data-demo="calls"></div>
       <p class="stage-foot"><span>Sample data. Made-up business.</span><span>Scripted demo. Not a live AI.</span></p>
       <div class="demo-cta"><span>Want this at your shop?</span><a class="btn sm" href="#checkup" data-go="checkup" data-ask="calls">Get my free admin check-up</a></div>
     </section>
 
-    <section class="demo" id="demo-inbox" aria-labelledby="demo-inbox-h">
-      <div class="demo-head"><span class="num">02 · Bentonville · Customers and front desk</span><h3 id="demo-inbox-h">The inbox, sorted before you open the shop</h3><p>Eight emails came in overnight at Linden &amp; Loom. Each one lands in Needs you, Draft ready or FYI, with replies waiting in Drafts. You send.</p></div>
+    <section class="demo" data-fx="scan" id="demo-inbox" aria-labelledby="demo-inbox-h">
+      <div class="demo-head"><span class="num" data-fx="scramble">02 · Bentonville · Customers and front desk</span><h3 id="demo-inbox-h">The inbox, sorted before you open the shop</h3><p>Eight emails came in overnight at Linden &amp; Loom. Each one lands in Needs you, Draft ready or FYI, with replies waiting in Drafts. You send.</p></div>
       <div class="proto-bar"><h4 class="proto-title">Inbox triage · Linden &amp; Loom</h4><span class="pill"><i></i><span>Ready</span></span><button type="button" class="bar-btn" aria-pressed="false">Stop demo</button></div>
       <div class="stage" data-demo="inbox"></div>
       <p class="stage-foot"><span>Sample data. Made-up business.</span><span>Scripted demo. Not a live AI.</span></p>
       <div class="demo-cta"><span>Want this at your shop?</span><a class="btn sm" href="#checkup" data-go="checkup" data-ask="email">Get my free admin check-up</a></div>
     </section>
 
-    <section class="demo" id="demo-receipts" aria-labelledby="demo-receipts-h">
-      <div class="demo-head"><span class="num">03 · Springdale · Money admin</span><h3 id="demo-receipts-h">A receipt photo becomes a checked expense review</h3><p>Right Hand reads the receipt, matches it to the card charge and asks Ozark Paws Grooming one question. The October review shows its sources and math before the owner approves.</p></div>
+    <section class="demo" data-fx="scan" id="demo-receipts" aria-labelledby="demo-receipts-h">
+      <div class="demo-head"><span class="num" data-fx="scramble">03 · Springdale · Money admin</span><h3 id="demo-receipts-h">A receipt photo becomes a checked expense review</h3><p>Right Hand reads the receipt, matches it to the card charge and asks Ozark Paws Grooming one question. The October review shows its sources and math before the owner approves.</p></div>
       <div class="proto-bar"><h4 class="proto-title">Receipt capture and monthly review · Ozark Paws Grooming</h4><span class="pill"><i></i><span>Ready</span></span><button type="button" class="bar-btn" aria-pressed="false">Stop demo</button></div>
       <div class="stage" data-demo="receipts"></div>
       <p class="stage-foot"><span>Sample data. Made-up business.</span><span>Scripted demo. Not a live AI.</span></p>
       <div class="demo-cta"><span>Want this at your shop?</span><a class="btn sm" href="#checkup" data-go="checkup" data-ask="receipts">Get my free admin check-up</a></div>
     </section>
 
-    <section class="demo" id="demo-invoices" aria-labelledby="demo-invoices-h">
-      <div class="demo-head"><span class="num">04 · Bella Vista · Money admin</span><h3 id="demo-invoices-h">Invoice follow-ups you can scrub through</h3><p>One overdue invoice for Pinyon Hollow Landscapes, from the day it is sent to the day it is paid. Every reminder is drafted for the owner's OK. Late fees and terms stay the owner's call.</p></div>
+    <section class="demo" data-fx="scan" id="demo-invoices" aria-labelledby="demo-invoices-h">
+      <div class="demo-head"><span class="num" data-fx="scramble">04 · Bella Vista · Money admin</span><h3 id="demo-invoices-h">Invoice follow-ups you can scrub through</h3><p>One overdue invoice for Pinyon Hollow Landscapes, from the day it is sent to the day it is paid. Every reminder is drafted for the owner's OK. Late fees and terms stay the owner's call.</p></div>
       <div class="proto-bar"><h4 class="proto-title">Invoice follow-ups · Pinyon Hollow Landscapes</h4><span class="pill"><i></i><span>Ready</span></span><button type="button" class="bar-btn" aria-pressed="false">Stop demo</button></div>
       <div class="stage" data-demo="invoices"></div>
       <p class="stage-foot"><span>Sample data. Made-up business.</span><span>Scripted demo. Not a live AI.</span></p>
       <div class="demo-cta"><span>Want this at your shop?</span><a class="btn sm" href="#checkup" data-go="checkup" data-ask="invoices">Get my free admin check-up</a></div>
     </section>
 
-    <section class="demo" id="demo-automation" aria-labelledby="demo-automation-h">
-      <div class="demo-head"><span class="num">05 · Siloam Springs · AI in your business</span><h3 id="demo-automation-h">An automation between apps you already use</h3><p>A quote request comes in on the Flint Row Auto Care website. AI sorts it, checks open bays and drafts the reply. Nothing sends until the owner approves the gate.</p></div>
+    <section class="demo" data-fx="scan" id="demo-automation" aria-labelledby="demo-automation-h">
+      <div class="demo-head"><span class="num" data-fx="scramble">05 · Siloam Springs · AI in your business</span><h3 id="demo-automation-h">An automation between apps you already use</h3><p>A quote request comes in on the Flint Row Auto Care website. AI sorts it, checks open bays and drafts the reply. Nothing sends until the owner approves the gate.</p></div>
       <div class="proto-bar"><h4 class="proto-title">Automation builder · Flint Row Auto Care</h4><span class="pill"><i></i><span>Ready</span></span><button type="button" class="bar-btn" aria-pressed="false">Stop demo</button></div>
       <div class="stage" data-demo="automation"></div>
       <p class="stage-foot"><span>Sample data. Made-up business.</span><span>Scripted demo. Not a live AI.</span></p>
       <div class="demo-cta"><span>Want this at your shop?</span><a class="btn sm" href="#checkup" data-go="checkup" data-ask="ai">Get my free admin check-up</a></div>
     </section>
 
-    <section class="demo" id="demo-report" aria-labelledby="demo-report-h">
-      <div class="demo-head"><span class="num">06 · Fayetteville · AI in your business</span><h3 id="demo-report-h">A Monday report that shows its work</h3><p>Every sentence in the Cobalt &amp; Comb Salon summary points at the chart it came from. Pick a line and its source lights up.</p></div>
+    <section class="demo" data-fx="scan" id="demo-report" aria-labelledby="demo-report-h">
+      <div class="demo-head"><span class="num" data-fx="scramble">06 · Fayetteville · AI in your business</span><h3 id="demo-report-h">A Monday report that shows its work</h3><p>Every sentence in the Cobalt &amp; Comb Salon summary points at the chart it came from. Pick a line and its source lights up.</p></div>
       <div class="proto-bar"><h4 class="proto-title">Weekly owner report · Cobalt &amp; Comb Salon</h4><span class="pill"><i></i><span>Ready</span></span><button type="button" class="bar-btn" aria-pressed="false">Stop demo</button></div>
       <div class="stage" data-demo="report"></div>
       <p class="stage-foot"><span>Sample data. Made-up business.</span><span>Scripted demo. Not a live AI.</span></p>
@@ -249,14 +258,97 @@
   </div>
 </section>
 
-<section class="band light" id="services" aria-labelledby="services-h">
+<section class="band light qz-band" id="first-handoff" data-hud="First handoff" aria-labelledby="qz-h">
+  <div class="wrap qz-grid">
+    <div class="qz-left">
+      <div class="sec-h" data-fx="head">
+        <p class="eyebrow">Your first handoff</p>
+        <h2 id="qz-h">Find your first handoff in 30 <span class="sw">seconds</span>.</h2>
+        <p class="lead">Three taps. We match your answers to our services and build a sample Admin Map, the same shape as the real one you get after a check-up. Nothing you tap leaves this page.</p>
+      </div>
+      <p class="qz-nojs">Tell us your kind of business and what eats your time in the <a href="#checkup">check-up form</a>, and we will send you a real Admin Map.</p>
+      <div class="qz-ask qz-ui" id="qz" data-fx="scan">
+        <div class="qz-top" aria-hidden="true"><span>Step <b data-qz-n>01</b> / 03 · <span data-qz-l>Business</span></span><span class="qz-bar"><i data-qz-bar></i></span></div>
+        <div class="qz-steps">
+          <fieldset class="qz-step is-on" data-step="1"><legend>What kind of business do you run?</legend><div class="qz-opts">
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="home">Home services</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="shops">Shops and restaurants</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="salons">Salons and studios</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="auto">Auto shops</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="supplier">Supplier and vendor offices</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="pro">Professional offices</button>
+          </div></fieldset>
+          <fieldset class="qz-step" data-step="2"><legend>What eats the most time?</legend><div class="qz-opts">
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="Missed calls and texts">Missed calls and texts</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="Email">Email</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="Receipts and expenses">Receipts and expenses</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="Invoices and follow-ups">Invoices and follow-ups</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="Scheduling">Scheduling</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="Paperwork and files">Paperwork and files</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="Setting up AI and automations">Setting up AI and automations</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="Weekly numbers">Weekly numbers</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="Reviews and Google profile">Reviews and Google profile</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="Not sure">Not sure</button>
+          </div><button type="button" class="linkbtn qz-back" data-back>Back</button></fieldset>
+          <fieldset class="qz-step" data-step="3"><legend>How do you like to meet?</legend><div class="qz-opts">
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="At my business">At my business</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="Video">Video</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="Phone">Phone</button>
+          </div><button type="button" class="linkbtn qz-back" data-back>Back</button></fieldset>
+          <div class="qz-step qz-done" data-step="4">
+            <p class="qz-done-h"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>Your sample is ready.</p>
+            <dl class="qz-sum"><div><dt>Business</dt><dd data-sum="who"></dd></div><div><dt>Eats the most time</dt><dd data-sum="eats"></dd></div><div><dt>Meet</dt><dd data-sum="mode"></dd></div></dl>
+            <div class="field qz-town"><label for="qz-town">Your town, for the check-up email <span class="opt">(optional)</span></label><select id="qz-town"><option value="">Pick your town</option><option>Bentonville</option><option>Rogers</option><option>Springdale</option><option>Fayetteville</option><option>Bella Vista</option><option>Siloam Springs</option><option>Lowell</option><option>Cave Springs</option><option>Centerton</option><option>Farmington</option><option>Prairie Grove</option><option>Other NWA town</option></select></div>
+            <button type="button" class="btn ghost sm" data-restart>Start over</button>
+          </div>
+        </div>
+        <p class="sr-only" id="qz-live" aria-live="polite"></p>
+      </div>
+    </div>
+    <div class="qz-outwrap qz-ui" data-fx="scan" data-fx-delay="140">
+      <div class="qz-out win dark bracket" id="qz-out">
+        <div class="win-bar"><span class="path">right-hand / first-handoff</span><span class="tag">Sample</span></div>
+        <ol class="qz-log" aria-hidden="true">
+          <li data-log="who"><span class="k">business</span><span class="v">waiting</span><svg class="tk" viewBox="0 0 24 24"><path pathLength="1" d="M6 12.5l4 4 8-9"/></svg></li>
+          <li data-log="eats"><span class="k">eats time</span><span class="v">waiting</span><svg class="tk" viewBox="0 0 24 24"><path pathLength="1" d="M6 12.5l4 4 8-9"/></svg></li>
+          <li data-log="mode"><span class="k">meet</span><span class="v">waiting</span><svg class="tk" viewBox="0 0 24 24"><path pathLength="1" d="M6 12.5l4 4 8-9"/></svg></li>
+          <li data-log="match"><span class="k">match</span><span class="v">waiting for three taps</span><svg class="tk" viewBox="0 0 24 24"><path pathLength="1" d="M6 12.5l4 4 8-9"/></svg></li>
+        </ol>
+        <figure class="amap qz-paper" aria-labelledby="qz-map-t">
+          <p class="t" id="qz-map-t" tabindex="-1">Your sample Admin Map</p>
+          <p class="s" data-qz-for>Built from your three taps · sample</p>
+          <ol class="qz-rows">
+            <li class="qz-ph"><b>Your first handoff</b><span>Waiting for your answers</span><em class="st">Waiting</em></li>
+            <li class="qz-ph"><b>Your second handoff</b><span>Waiting for your answers</span><em class="st">Waiting</em></li>
+            <li class="qz-ph"><b>Your third handoff</b><span>Waiting for your answers</span><em class="st">Waiting</em></li>
+          </ol>
+          <p class="qz-note"><b>Your real Admin Map</b> arrives within 3 business days of your free check-up.</p>
+          <i class="qz-beam" aria-hidden="true"></i>
+        </figure>
+        <div class="qz-foot">
+          <p class="qz-idle">Answer the three taps and your sample builds here.</p>
+          <div class="qz-go">
+            <div class="ctas"><a class="btn" href="#checkup" data-go="checkup" data-qz-go>Send me my real Admin Map</a></div>
+            <ul class="proof" aria-label="The fine print">
+              <li style="--k:0"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>Free. Nothing to buy.</li>
+              <li style="--k:1"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>You keep the plan.</li>
+              <li style="--k:2"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>We reply within one business day.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band light" id="services" data-hud="Services" aria-labelledby="services-h">
   <div class="wrap">
-    <div class="sec-h" data-reveal>
+    <div class="sec-h" data-fx="head">
       <p class="eyebrow">Services</p>
       <h2 id="services-h">Everything we can take off your <span class="sw">plate</span>.</h2>
       <p class="lead">Each one shows what you hand off, what comes back and what stays yours. Tap a card for the details, and tick the ones you want to build your own Right Hand.</p>
     </div>
-    <div class="who" id="who" role="group" aria-label="Show services for your kind of business"></div>
+    <div class="who" id="who" data-fx="cascade" role="group" aria-label="Show services for your kind of business"></div>
     <p class="sr-only" id="who-live" aria-live="polite"></p>
     <div class="svc-lines" id="svc-lines"><!-- services:start -->
 <div class="svc-line" data-reveal><h3><span class="tile" aria-hidden="true"><svg class="i"><use href="#i-receipt"/></svg></span>Money admin<span class="line-note">Prep only. You and your CPA decide.</span></h3><ul class="svc-grid">
@@ -311,24 +403,25 @@
 </ul></div>
 <!-- services:end --></div>
     <div class="svc-line stays" id="stays"><!-- services-stays:start --><div class="svc pro stays-card" data-reveal><h3><span class="tile" aria-hidden="true"><svg class="i"><use href="#i-hand"/></svg></span>Always stays with you or a licensed pro</h3><ul><li>Tax prep and filing</li><li>Payroll processing and filing</li><li>Legal advice, contracts and formal HR policy</li><li>Moving money, paying bills or collecting debts</li><li>Signing anything</li><li>Outbound AI voice calls to your customers</li><li>Patient or health records</li></ul><p class="fine">We will point you to a licensed pro when something needs one.</p></div><!-- services-stays:end --></div>
-    <p class="trust-line">Taxes, payroll, legal work and moving money stay with you and your licensed pros. We prep, draft and remind. You approve.</p>
+    <p class="trust-line" data-fx="scan">Taxes, payroll, legal work and moving money stay with you and your licensed pros. We prep, draft and remind. You approve.</p>
     <div class="picker" id="picker" hidden>
       <p class="list" aria-live="polite"><b>Your Right Hand:</b> <span data-pick-list>nothing picked yet</span></p>
       <a class="btn sm" href="#checkup" data-go="checkup" data-pick-go>Add these to my check-up</a>
     </div>
     <div class="svc-cta"><span>Not sure which of these you need? That is what the check-up is for.</span><a class="btn" href="#checkup" data-go="checkup">Get my free admin check-up</a></div>
-    <div class="buy" id="buy"><!-- services-buy:start --><h3 class="buy-h">How you can buy it</h3><div><h4>Free NWA Admin and AI Check-up</h4><p>30 minutes with us, then Your Admin Map in 3 business days: what to hand off first and what stays with you.</p></div><div><h4>One-month pilot</h4><p>One or two tasks for one month, every piece approved by you.</p></div><div><h4>Right Hand Desk, monthly</h4><p>Ongoing admin from the same team every month, sized to your volume.</p><ul><li>Desk Basics: books prep and receipts, invoice follow-ups, Monday brief.</li><li>Desk Standard: Basics plus inbox triage, scheduling and reminders, and review reply drafts.</li><li>Desk Plus: Standard plus listings upkeep, social and newsletter admin, and monthly AI office hours.</li></ul></div><div><h4>AI Builds</h4><p>Fixed scope: text-back, phone answering, chat assistant, lead intake, CRM, automations, meeting notes and the review system. Each includes setup, a test run you watch, a one-page how-it-works sheet and a 30-day watch of logs before sign-off. Builds can roll into the Desk plan.</p></div><div><h4>AI Starter Workshop</h4><p>A half day for owner and staff, plus a follow-up a month later. Sold alone or with any build.</p></div><p class="price-line">Quoted after your check-up, based on volume.</p><!-- services-buy:end --></div>
+    <ul class="proof" data-fx="cascade" aria-label="The fine print"><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>Free. Nothing to buy.</li><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>30 minutes, at your shop or on video.</li><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>You keep the plan.</li></ul>
+    <div class="buy" data-fx="cascade" id="buy"><!-- services-buy:start --><h3 class="buy-h">How you can buy it</h3><div><h4>Free NWA Admin and AI Check-up</h4><p>30 minutes with us, then Your Admin Map in 3 business days: what to hand off first and what stays with you.</p></div><div><h4>One-month pilot</h4><p>One or two tasks for one month, every piece approved by you.</p></div><div><h4>Right Hand Desk, monthly</h4><p>Ongoing admin from the same team every month, sized to your volume.</p><ul><li>Desk Basics: books prep and receipts, invoice follow-ups, Monday brief.</li><li>Desk Standard: Basics plus inbox triage, scheduling and reminders, and review reply drafts.</li><li>Desk Plus: Standard plus listings upkeep, social and newsletter admin, and monthly AI office hours.</li></ul></div><div><h4>AI Builds</h4><p>Fixed scope: text-back, phone answering, chat assistant, lead intake, CRM, automations, meeting notes and the review system. Each includes setup, a test run you watch, a one-page how-it-works sheet and a 30-day watch of logs before sign-off. Builds can roll into the Desk plan.</p></div><div><h4>AI Starter Workshop</h4><p>A half day for owner and staff, plus a follow-up a month later. Sold alone or with any build.</p></div><p class="price-line">Quoted after your check-up, based on volume.</p><!-- services-buy:end --></div>
   </div>
 </section>
 
-<section class="band dark" id="offer" aria-labelledby="offer-h">
+<section class="band dark" id="offer" data-hud="The offer" aria-labelledby="offer-h">
   <div class="wrap offer-grid">
     <div>
-      <div class="sec-h" data-reveal>
+      <div class="sec-h" data-fx="head">
         <p class="eyebrow">The one offer</p>
         <h2 id="offer-h">The free NWA Admin and AI <span class="sw">Check-up</span>.</h2>
       </div>
-      <ul class="inc" id="inc">
+      <ul class="inc" data-fx="cascade" id="inc">
         <li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ck"/></svg><span>A 30-minute conversation at your business anywhere in Benton or Washington County, or by video or phone.</span></li>
         <li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ck"/></svg><span>We walk through your week together and list every recurring admin task and roughly how long it takes you.</span></li>
         <li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ck"/></svg><span>Within 3 business days, Your Admin Map arrives by email: your top 3 tasks to hand off, and for each one what we would do, what AI would draft, what stays with you, and what stays with your CPA or attorney.</span></li>
@@ -337,8 +430,9 @@
       </ul>
       <p class="terms"><b>Free.</b> Nothing to buy, now or later. No books, bank statements or passwords needed. You keep the Admin Map whether you hire us or not. About 35 minutes of your time: 30 to talk, 5 to read your map.</p>
       <div class="ctas"><a class="btn" href="#checkup" data-go="checkup">Get my free admin check-up</a></div>
+      <ul class="proof" data-fx="cascade" aria-label="The fine print"><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>We reply within one business day.</li><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>Your Admin Map within 3 business days.</li><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>Yours to keep, hire us or not.</li></ul>
     </div>
-    <figure class="amap bracket" id="amap" aria-labelledby="amap-t">
+    <figure class="amap bracket" data-fx="scan" id="amap" aria-labelledby="amap-t">
       <p class="t" id="amap-t">Admin Map</p>
       <p class="s">Ozark Paws Grooming, Springdale (made-up shop) · sample</p>
       <ol>
@@ -355,14 +449,14 @@
   </div>
 </section>
 
-<section class="band light" id="promises" aria-labelledby="promises-h">
+<section class="band light" id="promises" data-hud="Promises" aria-labelledby="promises-h">
   <div class="wrap prom-grid">
     <div>
-      <div class="sec-h" data-reveal>
+      <div class="sec-h" data-fx="head">
         <p class="eyebrow">Promises</p>
         <h2 id="promises-h">What we promise, in <span class="sw">writing</span>.</h2>
       </div>
-      <ol class="prom" id="prom">
+      <ol class="prom" data-fx="cascade" data-edge id="prom">
         <li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ck"/></svg><span>You approve before anything is sent, filed or final. Automatic messages, like a missed-call text, only ever use wording you approved.</span></li>
         <li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ck"/></svg><span>We reply to your email within one business day.</span></li>
         <li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ck"/></svg><span>Your Admin Map arrives within 3 business days of your check-up.</span></li>
@@ -372,7 +466,7 @@
         <li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ck"/></svg><span>If we make a mistake in work you approved, we fix it at no charge.</span></li>
       </ol>
     </div>
-    <div class="dataCard" data-reveal>
+    <div class="dataCard" data-fx="scan">
       <h3><svg class="i" aria-hidden="true"><use href="#i-key"/></svg>How we handle your logins and data</h3>
       <ul>
         <li>We never ask for passwords by email, text or on this site.</li>
@@ -389,30 +483,30 @@
   </div>
 </section>
 
-<section class="band dark" id="team" aria-labelledby="team-h">
+<section class="band dark" id="team" data-hud="The team" aria-labelledby="team-h">
   <div class="wrap">
-    <div class="sec-h" data-reveal>
+    <div class="sec-h" data-fx="head">
       <p class="eyebrow">Who you would work with</p>
       <h2 id="team-h">Four people you can <span class="sw">meet</span>.</h2>
       <p class="lead">We're new. You won't find reviews here yet, because we won't make them up. What you will find is the actual work, live on this page, and four people you can meet.</p>
     </div>
-    <ul class="team">
-      <li data-reveal style="--i:0"><span class="ini" aria-hidden="true">JV</span><b>Jackson Varela</b><span>University of Arkansas student</span></li>
-      <li data-reveal style="--i:1"><span class="ini" aria-hidden="true">AW</span><b>Annie Wagner</b><span>University of Arkansas student</span></li>
-      <li data-reveal style="--i:2"><span class="ini" aria-hidden="true">AE</span><b>Abigail Estes</b><span>University of Arkansas student</span></li>
-      <li data-reveal style="--i:3"><span class="ini" aria-hidden="true">BG</span><b>Bella Gambaro</b><span>University of Arkansas student</span></li>
+    <ul class="team" data-fx="cascade" data-edge>
+      <li style="--i:0"><span class="ini" aria-hidden="true">JV</span><b>Jackson Varela</b><span>University of Arkansas student</span></li>
+      <li style="--i:1"><span class="ini" aria-hidden="true">AW</span><b>Annie Wagner</b><span>University of Arkansas student</span></li>
+      <li style="--i:2"><span class="ini" aria-hidden="true">AE</span><b>Abigail Estes</b><span>University of Arkansas student</span></li>
+      <li style="--i:3"><span class="ini" aria-hidden="true">BG</span><b>Bella Gambaro</b><span>University of Arkansas student</span></li>
     </ul>
     <p class="team-mail"><svg class="i" aria-hidden="true"><use href="#i-mail"/></svg>Reach all four of us at <a href="mailto:righthandnwa@gmail.com">righthandnwa@gmail.com</a> · <a href="https://www.instagram.com/righthandnwa/" target="_blank" rel="noopener noreferrer">@righthandnwa on Instagram</a></p>
   </div>
 </section>
 
-<section class="band light" id="questions" aria-labelledby="questions-h">
+<section class="band light" id="questions" data-hud="Questions" aria-labelledby="questions-h">
   <div class="wrap">
-    <div class="sec-h" data-reveal>
+    <div class="sec-h" data-fx="head">
       <p class="eyebrow">Questions</p>
       <h2 id="questions-h">Fair questions, plain <span class="sw">answers</span>.</h2>
     </div>
-    <div class="faq">
+    <div class="faq" data-fx="cascade" data-edge>
       <details><summary>What does it cost?<svg aria-hidden="true"><use href="#i-plus"/></svg></summary><p>The check-up is free, with nothing to buy. If you want help after that, we quote a flat monthly price in writing before any work starts, based on the tasks you pick. Tool costs, like a texting plan, are paid by you directly to the vendor, and we show them before you decide.</p></details>
       <details><summary>Do I have to give you my passwords or bank login?<svg aria-hidden="true"><use href="#i-plus"/></svg></summary><p>No, and please don't send them. The check-up needs no logins at all. If you hire us, you invite us as a user in the tools you already use, so you can see what we can reach and remove us in one click. We never touch your bank or move money.</p></details>
       <details><summary>Is AI going to talk to my customers?<svg aria-hidden="true"><use href="#i-plus"/></svg></summary><p>Only if you want it to, and only from answers you approved. A phone or chat assistant says it is an assistant and hands anything else to you. Everything else AI does is a draft that one of us checks and you approve. If you'd rather we skip AI on a task, we do it by hand.</p></details>
@@ -426,19 +520,29 @@
       <details><summary>Do you really come in person?<svg aria-hidden="true"><use href="#i-plus"/></svg></summary><p>Yes, anywhere in Benton and Washington counties, at your shop or a coffee shop. Video and phone work too.</p></details>
     </div>
     <div class="svc-cta"><a class="btn" href="#checkup" data-go="checkup">Get my free admin check-up</a></div>
+    <ul class="proof" data-fx="cascade" aria-label="The fine print"><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>Free. Nothing to buy.</li><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>No passwords needed.</li><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>We reply within one business day.</li></ul>
   </div>
 </section>
 
-<section class="band dark close" id="checkup" aria-labelledby="close-h">
+<section class="band dark close grid-48" id="checkup" data-hud="Free check-up" aria-labelledby="close-h">
+  <svg class="topo" viewBox="0 0 600 400" aria-hidden="true" preserveAspectRatio="none">
+    <path d="M-20 380 C 80 330, 160 350, 240 300 S 400 250, 470 290"/>
+    <path d="M-20 350 C 70 300, 150 320, 230 268 S 380 220, 450 255"/>
+    <path d="M-20 318 C 60 270, 140 290, 220 238 S 360 192, 425 222"/>
+    <path d="M-20 286 C 50 240, 130 258, 205 210 S 335 168, 395 190"/>
+    <path d="M10 255 C 70 214, 135 228, 196 186 S 305 150, 360 162"/>
+    <path d="M50 226 C 100 194, 150 202, 196 172 S 280 140, 318 146"/>
+    <path d="M100 200 C 135 182, 165 184, 196 166 S 250 146, 270 148"/>
+  </svg>
   <div class="wrap close-grid">
-    <div>
+    <div data-fx="head">
       <p class="eyebrow">Start here</p>
       <h2 id="close-h">Keep your business organized and moving <span class="sw">forward</span>.</h2>
       <p class="lead">Start with 30 minutes. Free, local, and you keep the plan.</p>
-      <ul class="promise-strip"><li>You approve everything</li><li>Stop any time</li><li>No passwords needed</li></ul>
+      <ul class="promise-strip" data-fx="cascade"><li>You approve everything</li><li>Stop any time</li><li>No passwords needed</li></ul>
       <p class="fine close-alt">Rather just ask a question? Email <a href="mailto:righthandnwa@gmail.com">righthandnwa@gmail.com</a> or <button type="button" class="linkbtn" data-open-interest>leave your email for updates</button>.</p>
     </div>
-    <form class="composer bracket" id="composer" novalidate aria-labelledby="comp-h">
+    <form class="composer bracket" data-fx="scan" id="composer" novalidate aria-labelledby="comp-h">
       <h3 id="comp-h">Get your free admin check-up</h3>
       <p class="sub">Fill in three things. Your email app opens with the message written. You hit send.</p>
       <div class="field"><label for="c-name">Your name</label><input id="c-name" name="name" autocomplete="name" required aria-describedby="c-name-err"><p class="err" id="c-name-err" hidden>Add your name so we know who to reply to.</p></div>
@@ -452,6 +556,7 @@
       <p class="ws-h fine">Your message</p>
       <pre class="preview" id="c-preview" aria-live="off"></pre>
       <div class="c-acts"><button type="submit" class="btn">Open my email draft</button><button type="button" class="btn ghost" id="c-copy">Copy the message instead</button></div>
+      <ul class="proof" data-fx="cascade" aria-label="The fine print"><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>Free. Nothing to buy.</li><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>You keep the plan.</li><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>We reply within one business day.</li></ul>
       <p class="c-status" id="c-status" role="status"></p>
       <div class="confirm" id="c-confirm" hidden tabindex="-1"><p><b>Your email app should be open with the message ready. Hit send there.</b> One of us replies within one business day from righthandnwa@gmail.com. Nothing opened? Copy the message and email <a href="mailto:righthandnwa@gmail.com">righthandnwa@gmail.com</a>.</p></div>
     </form>
@@ -470,6 +575,7 @@
   </div>
 </footer>
 
+<a class="cta-pill" id="cta-pill" href="#checkup" data-go="checkup"><span class="cp-i" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path class="cp-ck" pathLength="1" d="M8.5 14.5l2 2 4-4"/></svg><i class="cp-ping"></i></span>Free check-up · 30 min</a>
 <div class="mobile-bar" id="mobile-bar"><span>Free admin check-up · 30 min</span><a class="btn sm" href="#checkup" data-go="checkup">Get it</a></div>
 
 <dialog id="interest" aria-labelledby="int-h">

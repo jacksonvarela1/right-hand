@@ -4,7 +4,8 @@
 //   1. the static services catalog into index.html (between the services, services-stays and services-buy markers),
 //      using the exact render block from assets/site.js, so crawlers and AI fetchers that skip JavaScript see all of it;
 //   2. the JSON-LD @graph (business, website, page, offer catalog, free check-up offer, FAQ) between the jsonld markers;
-//   3. llms.txt and llms-full.txt at the site root.
+//   3. llms.txt and llms-full.txt at the site root;
+//   4. the hero map markup from assets/nwa-map.js into index.html (between the nwa markers), so the hero never grows on load.
 // No dependencies. Node 18 or newer.
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -37,6 +38,17 @@ function put(name, body) {
 put("services", "\n" + RENDER.lines(S, "\n") + "\n");
 put("services-stays", RENDER.stays(S));
 put("services-buy", RENDER.buy(S));
+// the hero map, so the hero window has its full size at first paint (assets/nwa-map.js keeps markup it finds)
+put("nwa", heroMap());
+function heroMap() {
+  let out = "";
+  const el = () => ({ classList: { add() {}, remove() {}, contains: () => false }, addEventListener() {}, querySelector: () => null, querySelectorAll: () => [], getAttribute: () => null });
+  const host = el();
+  Object.defineProperty(host, "innerHTML", { set(v) { out = v; throw new Error("captured"); }, get: () => out });
+  try { vm.runInNewContext(readFileSync(p("assets/nwa-map.js"), "utf8"), { document: { getElementById: () => host, documentElement: el(), addEventListener() {} }, matchMedia: () => ({ matches: true }) }); }
+  catch (e) { if (e.message !== "captured") throw e; }
+  return must(out, "hero map markup in assets/nwa-map.js");
+}
 
 /* ---------- 3. text pulled from the page itself, so every copy matches ---------- */
 const ENT = { amp: "&", lt: "<", gt: ">", quot: '"', "#39": "'", nbsp: " " };
@@ -51,7 +63,7 @@ const promises = lis(grab(/id="prom">([\s\S]*?)<\/ol>/, "#prom list"));
 const dataRules = lis(grab(/class="dataCard"[\s\S]*?<ul>([\s\S]*?)<\/ul>/, "data card list"));
 const notWe = text(grab(/<p class="notwe">([\s\S]*?)<\/p>/, "what we are not"));
 const steps = [...grab(/id="steps">([\s\S]*?)<\/ol>/, "#steps").matchAll(/<h3>([\s\S]*?)<\/h3>([\s\S]*?)<\/li>/g)].map((m) => text(m[1]) + ": " + [...m[2].matchAll(/<p[^>]*>([\s\S]*?)<\/p>/g)].map((x) => text(x[1])).join(" "));
-const team = must([...grab(/<ul class="team">([\s\S]*?)<\/ul>/, "team list").matchAll(/<b>([\s\S]*?)<\/b>/g)].map((m) => text(m[1])), "team names");
+const team = must([...grab(/<ul class="team"[^>]*>([\s\S]*?)<\/ul>/, "team list").matchAll(/<b>([\s\S]*?)<\/b>/g)].map((m) => text(m[1])), "team names");
 const title = text(grab(/<title>([\s\S]*?)<\/title>/, "title"));
 const description = grab(/<meta name="description" content="([^"]*)"/, "meta description");
 

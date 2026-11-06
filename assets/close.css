@@ -1,0 +1,162 @@
+/* Right Hand NWA: closing devices. Loads after motion.css; assets/close.js drives it.
+   Same rules as motion.css: everything that moves sits under .js-motion (so reduced motion, the Pause motion button
+   and no-JS get the finished, static page), only transform and opacity animate (plus the brand's check draw),
+   and every state change keeps its box size, so nothing shifts the layout. */
+
+/* ---------- 1. find your first handoff ---------- */
+.band.qz-band{--bg:var(--blue-100);background:linear-gradient(rgba(47,128,237,.08) 1px,transparent 1px) -1px -1px/48px 48px,linear-gradient(90deg,rgba(47,128,237,.08) 1px,transparent 1px) -1px -1px/48px 48px,var(--bg);border-bottom:1px solid var(--blue-200)}
+.qz-grid{display:grid;grid-template-columns:minmax(0,.84fr) minmax(0,1.16fr);gap:clamp(1.75rem,1rem + 3vw,4rem);align-items:start}
+.qz-left .sec-h{margin-bottom:28px}
+.qz-nojs{font-weight:600;color:var(--ink-2)}
+.js .qz-nojs{display:none}
+html:not(.js) .qz-ui{display:none}
+html:not(.js) .qz-grid{grid-template-columns:minmax(0,1fr)}
+@media (max-width:900px){.qz-grid{grid-template-columns:minmax(0,1fr)}}
+
+/* the ask card: three steps share one grid cell, so a new step never changes the card's height */
+.qz-ask{position:relative;padding:20px 22px 22px;background:#FFF;border:1px solid var(--blue-200);border-radius:var(--r-lg);box-shadow:var(--sh-2)}
+.qz-top{display:flex;align-items:center;gap:14px;font:500 .75rem/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--navy-600)}
+.qz-top b{font-weight:600;color:var(--blue-700)}
+.qz-bar{flex:1;height:3px;border-radius:2px;background:var(--gray-200);overflow:hidden}
+.qz-bar i{display:block;height:100%;background:var(--blue-500);transform:scaleX(.3334);transform-origin:left center;transition:transform .45s var(--ease-out)}
+.qz-steps{display:grid}
+.qz-step{grid-area:1/1;min-width:0;margin:0;padding:0;border:0;visibility:hidden;opacity:0}
+.qz-step.is-on{visibility:visible;opacity:1}
+.js-motion .qz-step.is-on{animation:qz-step .42s var(--ease-out) both}
+@keyframes qz-step{from{opacity:0;transform:translateX(14px)}}
+.qz-step legend{float:left;width:100%;margin:18px 0 14px;padding:0;font-size:1.25rem;font-weight:700;line-height:1.25;letter-spacing:-.01em;color:var(--navy-900)}
+.qz-opts{clear:both;display:flex;flex-wrap:wrap;gap:8px}
+.qz-opt{position:relative;display:inline-flex;align-items:center;gap:9px;min-height:44px;padding:9px 14px 9px 12px;font:600 .9375rem/1.2 var(--font-sans);color:var(--navy-900);background:#FFF;border:1.5px solid var(--gray-500);border-radius:var(--r-sm);cursor:pointer;text-align:left;transition:background-color var(--dur-hover) ease,border-color var(--dur-hover) ease,color var(--dur-hover) ease,transform var(--dur-press) var(--ease-out)}
+.qz-opt::before{content:"";flex:none;width:14px;height:14px;border:1.8px solid currentColor;border-radius:4px;opacity:.45;transition:opacity .2s ease}
+.qz-opt::after{content:"";position:absolute;left:13.5px;top:50%;width:14px;height:14px;margin-top:-7px;background:currentColor;-webkit-mask:var(--fx-ck) center/contain no-repeat;mask:var(--fx-ck) center/contain no-repeat;opacity:0;transform:scale(.55)}
+.qz-opt:hover{border-color:var(--navy-900);background:var(--blue-50)}
+.qz-opt[aria-pressed=true]{color:#FFF;background:var(--navy-900);border-color:var(--navy-900)}
+.qz-opt[aria-pressed=true]::before{opacity:0}
+.qz-opt[aria-pressed=true]::after{opacity:1;transform:none}
+.qz-opt:active{transform:scale(.97)}
+.js-motion .qz-opt::after{transition:opacity .15s ease,transform .34s var(--ease-land)}
+.qz-back{margin-top:14px;font-size:.9375rem}
+@media (max-width:560px){.qz-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.qz-opt{padding:8px 10px;font-size:.875rem}.qz-opt::after{left:11.5px}}
+@media (forced-colors:active){.qz-opt[aria-pressed=true]{forced-color-adjust:none;background:Highlight;color:HighlightText}}
+
+/* done: what you picked, an optional town for the email, start over */
+.qz-done{padding-top:18px}
+.qz-done-h{display:flex;align-items:center;gap:10px;font-size:1.25rem;font-weight:700;line-height:1.25;color:var(--navy-900)}
+.qz-done-h .ck{width:28px;height:28px;flex:none;padding:5px;border-radius:50%;background:var(--green-50);color:var(--green-700);stroke-width:3}
+.qz-done .ck path{stroke-dashoffset:1}
+.qz-done.is-on .ck path{stroke-dashoffset:0}
+.js-motion .qz-done.is-on .ck path{transition:stroke-dashoffset .5s var(--ease-out) .2s}
+.qz-sum{margin:14px 0 0;display:grid;gap:6px}
+.qz-sum div{display:grid;grid-template-columns:10.5em minmax(0,1fr);gap:10px;align-items:baseline}
+.qz-sum dt{font:500 .75rem/1.4 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--navy-600)}
+.qz-sum dd{margin:0;font-weight:600;font-size:.9375rem;color:var(--navy-900)}
+.qz-town{margin-top:16px}
+.qz-done .btn{margin-top:16px}
+@media (max-width:420px){.qz-sum div{grid-template-columns:minmax(0,1fr);gap:0}}
+
+/* the queue window: a log that types each answer, then the sample Admin Map prints under a scan beam */
+.qz-out{padding-bottom:18px}
+.qz-log{list-style:none;margin:0;padding:12px 20px 2px;display:grid;gap:0;font:500 .8125rem/1.5 var(--font-mono)}
+.qz-log li{display:grid;grid-template-columns:12ch minmax(0,1fr) 14px;gap:8px;align-items:center;min-height:24px;color:var(--navy-400)}
+.qz-log .k{color:var(--blue-300);white-space:nowrap}
+.qz-log .k::before{content:"> ";content:"> " / "";color:var(--navy-500)}
+.qz-log .v{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.qz-log .v i{font-style:normal}
+.qz-log li.set .v{color:var(--navy-100)}
+.qz-log li.ok .v{color:#FFF}
+.qz-log .tk{width:14px;height:14px;fill:none;stroke:var(--green-300);stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
+.qz-log .tk path{stroke-dasharray:1;stroke-dashoffset:1}
+.qz-log li.ok .tk path{stroke-dashoffset:0}
+.js-motion .qz-log li.ok .tk path{transition:stroke-dashoffset .35s var(--ease-out) .12s}
+.js-motion .qz-log li.set .v i{animation:qz-ch 1ms linear calc(var(--c,0)*14ms) backwards}
+@keyframes qz-ch{from{opacity:0}}
+.qz-paper{margin:12px 20px 0;padding:18px 20px 16px;overflow:hidden}
+.amap.qz-paper ol{margin-top:14px;gap:8px}
+.qz-note{margin-top:12px;font-size:.875rem;line-height:1.45;color:var(--navy-700)}
+.qz-note b{color:var(--navy-900)}
+.qz-paper .t{outline-offset:4px}
+.qz-rows li{position:relative}
+.qz-rows span i{display:block;margin-bottom:2px;font:500 .6875rem/1.4 var(--font-mono);font-style:normal;letter-spacing:.1em;text-transform:uppercase;color:var(--blue-700)}
+.qz-ph b{color:var(--navy-600)}
+.amap .qz-ph span{color:var(--gray-500)}
+.amap .qz-ph .st{background:var(--gray-100);color:var(--gray-600)}
+.amap .qz-st{display:grid;padding:0;background:none}
+.qz-st i{grid-area:1/1;padding:5px 8px;border-radius:5px;font-style:normal;text-align:center}
+.qz-st .s1{background:var(--blue-50);color:var(--blue-700);opacity:0}
+.qz-st .s2{background:var(--blue-100);color:var(--blue-800);opacity:0}
+.qz-st .s3{background:var(--amber-50);color:var(--amber-700)}
+.js-motion .qz-row{animation:qz-row .5s var(--ease-out) calc(var(--k,0)*180ms + 260ms) backwards}
+.js-motion .qz-row .s1{animation:qz-s1 1s linear calc(var(--k,0)*180ms + 260ms) both}
+.js-motion .qz-row .s2{animation:qz-s2 1s linear calc(var(--k,0)*180ms + 260ms) both}
+.js-motion .qz-row .s3{animation:qz-s3 1s linear calc(var(--k,0)*180ms + 260ms) both}
+@keyframes qz-row{from{opacity:0;transform:translateY(12px)}}
+@keyframes qz-s1{0%,38%{opacity:1}46%,100%{opacity:0}}
+@keyframes qz-s2{0%,38%{opacity:0}46%,74%{opacity:1}82%,100%{opacity:0}}
+@keyframes qz-s3{0%,74%{opacity:0;transform:scale(.9)}86%{opacity:1;transform:scale(1.06)}100%{opacity:1;transform:none}}
+.qz-beam{position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(0deg,#5F9FFA 0,#5F9FFA 2px,rgba(47,128,237,.18) 2px,rgba(47,128,237,0) 90px);opacity:0;transform:translateY(-100%)}
+@media (max-width:560px){
+  .qz-log{padding:12px 16px 4px}
+  .qz-log li{grid-template-columns:11.5ch minmax(0,1fr) 14px;font-size:.75rem}
+  .qz-paper{margin:12px 12px 0;padding:16px 14px 14px}
+  .amap .qz-rows li{grid-template-columns:minmax(0,1fr)}
+  .amap .qz-rows .st{grid-column:1;grid-row:auto;justify-self:start;margin-top:4px}
+}
+.qz-foot{display:grid;margin:16px 20px 0}
+.qz-foot > *{grid-area:1/1;min-width:0}
+.qz-idle{align-self:center;font:500 .8125rem/1.5 var(--font-mono);color:var(--navy-300)}
+.qz-out.is-done .qz-idle{visibility:hidden;opacity:0}
+.qz-go{visibility:hidden;opacity:0}
+@media (max-width:560px){.qz-foot{margin:16px 12px 0}}
+.qz-go.on{visibility:visible;opacity:1}
+.qz-go .ctas{margin-top:0}
+.js-motion .qz-go.on{animation:fx-up .5s var(--ease-out) both}
+.js-motion .qz-go.on .proof li{animation:fx-up .5s var(--ease-out) calc(var(--k,0)*80ms + 180ms) backwards}
+.js-motion .qz-go.on .proof .ck path{animation:cl-draw .45s var(--ease-out) calc(var(--k,0)*80ms + 300ms) backwards}
+
+/* ---------- 2. micro-proof under the primary CTAs (motion.js cascades it in) ---------- */
+.proof{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:14px;list-style:none;font-size:.875rem;font-weight:600;line-height:1.4;color:var(--soft)}
+.proof li{display:inline-flex;align-items:center;gap:7px}
+.proof .ck{width:16px;height:16px;flex:none;color:var(--ok);stroke-width:2.8}
+.proof .ck path{stroke-dashoffset:0}
+.fx.js-motion .proof[data-fx]:not(.fx-in) .ck path{stroke-dashoffset:1}
+.js-motion .proof[data-fx].fx-in:not(.fx-done) .ck path{animation:cl-draw .45s var(--ease-out) calc(var(--k,0)*65ms + 300ms) backwards}
+@keyframes cl-draw{from{stroke-dashoffset:1}}
+.composer .proof{margin-top:12px;color:var(--navy-700)}
+.composer .proof .ck{color:var(--green-700)}
+
+/* counters with a "+", "th" or "%" after them hold their finished width while they count (site.js sets the width) */
+b > span[data-count]{display:inline-block;font-variant-numeric:tabular-nums}
+
+/* ---------- 3. floating check-up pill (desktop; phones have the mobile bar) ---------- */
+.cta-pill{position:fixed;right:max(20px,env(safe-area-inset-right));bottom:20px;z-index:44;display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 20px 0 9px;border-radius:999px;background:var(--blue-600);color:#FFF;font:600 .9375rem/1 var(--font-sans);text-decoration:none;white-space:nowrap;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14),0 14px 30px -12px rgba(5,19,38,.6);visibility:hidden;opacity:0;transform:translateY(16px) scale(.96);transition:opacity .25s ease,transform .4s var(--ease-out),visibility 0s linear .4s,background-color var(--dur-hover) ease}
+.cta-pill.on{visibility:visible;opacity:1;transform:none;transition:opacity .25s ease,transform .4s var(--ease-out),visibility 0s,background-color var(--dur-hover) ease}
+.cta-pill:hover{background:var(--blue-700)}
+.cta-pill.on:active{transform:scale(.97)}
+.cta-pill:focus-visible{outline:3px solid var(--navy-900);outline-offset:3px;border-radius:999px}
+.cp-i{position:relative;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.16)}
+.cp-i svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;transition:transform .3s var(--ease-out)}
+.cp-ck{stroke-dasharray:1;stroke-dashoffset:0;stroke-width:2.2}
+.cp-ping{position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(255,255,255,.75);opacity:0;pointer-events:none}
+.cta-pill:hover .cp-i svg{transform:rotate(-8deg) scale(1.08)}
+.js-motion .cta-pill.on .cp-ck{animation:cl-draw .5s var(--ease-out) .25s backwards}
+.js-motion .cta-pill.on .cp-ping{animation:cp-ping 1.5s var(--ease-out) .5s 2}
+@keyframes cp-ping{from{opacity:.85;transform:scale(.9)}to{opacity:0;transform:scale(1.9)}}
+@media (max-width:899px){.cta-pill{display:none}}
+html:not(.js) .cta-pill{display:none}
+
+/* ---------- 4. the check-up form's success moment ---------- */
+.cs-ok{position:absolute;inset:-1.5px;z-index:2;display:flex;align-items:center;justify-content:center;gap:8px;border-radius:inherit;background:var(--green-300);color:var(--navy-950);font-weight:700;pointer-events:none;opacity:0;transform:translateY(105%)}
+.cs-ok svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
+.cs-ok path{stroke-dasharray:1;stroke-dashoffset:1}
+.is-sent > .cs-ok{opacity:1;transform:none}
+.is-sent > .cs-ok path{stroke-dashoffset:0}
+.js-motion .cs-ok{transition:transform .42s var(--ease-out),opacity .2s ease}
+.js-motion .cs-ok path{transition:stroke-dashoffset .45s var(--ease-out) .22s}
+.confirm{position:relative;display:flex;gap:12px;align-items:flex-start;overflow:hidden}
+.cf-badge{flex:none;width:30px;height:30px}
+.cf-badge svg{display:block;width:100%;height:100%;overflow:visible}
+.cf-badge circle{fill:var(--green-700)}
+.cf-badge path{fill:none;stroke:#FFF;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:0}
+.cf-beam{position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(21,173,110,.85) 0,rgba(21,173,110,.85) 2px,rgba(99,217,155,.22) 2px,rgba(99,217,155,0) 60px);opacity:0;transform:translateY(-100%)}
+
+@media print{.cta-pill,.qz-band{display:none!important}}

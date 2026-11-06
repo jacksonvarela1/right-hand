@@ -21,6 +21,8 @@ Files:
 - `assets/demos/*.js|css`: the six demos (missed call, inbox, receipts, invoices, automation, weekly report).
 - `assets/services-data.js`: the services catalog.
 - `assets/interest.js`: the email updates pop-up (FormSubmit to righthandnwa@gmail.com, with an email fallback).
+- `assets/motion.js`, `assets/motion.css`: the motion system on all three pages (first-visit intro on the home page, `data-fx` section entrances, section HUD, towns ticker, parallax, cursor spotlight, magnetic CTAs, button and link icons). Reduced motion and the Pause motion button get the finished, static page.
+- `assets/close.js`, `assets/close.css`: the closing devices on the home page (the three-tap "Find your first handoff" quiz that builds a sample Admin Map and pre-fills the check-up form, the desktop check-up pill, the proof lines under the main buttons and the form's success moment). They use `RH.composer.prefill` and the `rh:draft` event from `site.js`.
 
 Every demo business, name and number is made up and labeled as sample. Nothing typed into a demo leaves the browser. The check-up form only writes an email draft in the visitor's own email app. Every statistic on the page links to its source.
 

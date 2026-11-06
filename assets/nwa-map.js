@@ -1,13 +1,15 @@
 /* Right Hand NWA hero: "the corridor check-in".
    A schematic of Northwest Arkansas (not to scale, cities placed from real latitude and longitude) feeding a sample
-   Right Hand queue. Plays once per session in about 2.6 seconds, then the last row waits for the visitor to approve. */
+   Right Hand queue. Plays once per session in about 2.6 seconds, then the last row waits for the visitor to approve.
+   After editing the markup below, run node tools/build-services.mjs so the static copy in index.html matches. */
 (function () {
   "use strict";
   var host = document.getElementById("nwa-map");
   if (!host) return;
   var html = document.documentElement;
   function off() { return matchMedia("(prefers-reduced-motion: reduce)").matches || html.getAttribute("data-motion") === "off"; }
-  function P(lat, lon) { return [Math.round(30 + (lon + 94.62) / 0.57 * 500), Math.round(30 + (36.52 - lat) / 0.50 * 460)]; }
+  // x starts at -2 (not 30) so the Springdale and Fayetteville labels on the right fit inside the 560-wide view; the area outline moves with it
+  function P(lat, lon) { return [Math.round(-2 + (lon + 94.62) / 0.57 * 500), Math.round(30 + (36.52 - lat) / 0.50 * 460)]; }
   // name, lat, lon, label side
   var CITY = [
     ["Bella Vista", 36.481, -94.273, "l"], ["Bentonville", 36.372, -94.209, "l"], ["Rogers", 36.332, -94.118, "r"],
@@ -31,7 +33,7 @@
   ];
   var s = ['<div class="nwa-layout"><svg class="nwa-svg" viewBox="0 0 560 520" role="img" aria-labelledby="nwa-t"><title id="nwa-t">Schematic map of Northwest Arkansas: Interstate 49 runs from Bella Vista through Bentonville, Rogers, Springdale and Fayetteville, with Siloam Springs to the west.</title>'];
   s.push('<defs><pattern id="nwa-dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="currentColor" opacity=".18"/></pattern></defs><rect width="560" height="520" fill="url(#nwa-dots)"/>');
-  s.push('<path class="nwa-area" d="M60 300 C 70 210, 230 150, 300 60 C 340 10, 520 20, 540 110 C 560 220, 530 420, 470 495 C 420 540, 330 520, 320 470 C 300 400, 200 400, 120 390 C 70 385, 55 345, 60 300 Z"/>');
+  s.push('<path class="nwa-area" transform="translate(-32 0)" d="M60 300 C 70 210, 230 150, 300 60 C 340 10, 520 20, 540 110 C 560 220, 530 420, 470 495 C 420 540, 330 520, 320 470 C 300 400, 200 400, 120 390 C 70 385, 55 345, 60 300 Z"/>');
   s.push('<path class="nwa-hwy-bg" d="' + curve(WEST) + '"/><path class="nwa-hwy-bg" d="' + curve(I49) + '"/>');
   s.push('<path class="nwa-hwy" pathLength="100" d="' + curve(I49) + '"/><path class="nwa-hwy west" pathLength="100" d="' + curve(WEST) + '"/>');
   var sh = P(36.29, -94.152);
@@ -51,7 +53,8 @@
   });
   s.push('</ol><p class="sr-only" aria-live="polite" data-hero-live></p></div></div>');
   s.push('<p class="map-cap">Northwest Arkansas. Schematic, not to scale. Sample tasks.</p>');
-  host.innerHTML = s.join("");
+  // index.html ships this exact markup (tools/build-services.mjs writes it), so the hero window has its full size at first paint
+  if (!host.querySelector(".nwa-layout")) host.innerHTML = s.join("");
 
   var rows = host.querySelectorAll(".q-row"), cities = {}, ask = host.querySelector(".q-ask"), btn = host.querySelector(".q-approve"), live = host.querySelector("[data-hero-live]");
   host.querySelectorAll(".nwa-city").forEach(function (g) { cities[g.getAttribute("data-city")] = g; });
@@ -64,6 +67,7 @@
     Object.keys(cities).forEach(function (k) { cities[k].classList.remove("live"); });
   }
   function play() {
+    if (host.classList.contains("done")) return;
     host.classList.add("drawn");
     rows.forEach(function (r, i) {
       var c = cities[r.getAttribute("data-city")];
@@ -81,7 +85,12 @@
     var io = new IntersectionObserver(function (es) {
       if (!es[0].isIntersecting) return;
       io.disconnect(); try { sessionStorage.setItem("rh-hero", "1"); } catch (e) {}
-      play();
+      // the first-visit intro (assets/motion.js) covers the hero: play the map as the intro lifts away
+      if (html.classList.contains("fx-intro-live")) {
+        var go = function () { clearTimeout(t); document.removeEventListener("rh:intro-done", go); play(); };
+        var t = setTimeout(go, 3000);
+        document.addEventListener("rh:intro-done", go);
+      } else play();
     }, { threshold: .35 });
     io.observe(host);
   }

@@ -47,20 +47,20 @@ const OG_ALT = grab(/<meta property="og:image:alt" content="([^"]*)"/, "og:image
 const MARK = grab(/<a class="lockup"[^>]*>\s*(<svg class="mark"[\s\S]*?<\/svg>)/, "logo mark");
 const SYMBOLS = Object.fromEntries([...html.matchAll(/<symbol id="([^"]+)"[\s\S]*?<\/symbol>/g)].map((m) => [m[1], m[0]]));
 const LOOP3 = local(grab(/(<ol class="loop3"[\s\S]*?<\/ol>)/, "#loop3"));
-const STEPS = local(grab(/<ol class="steps" id="steps">([\s\S]*?)<\/ol>/, "#steps")).replace(/<svg class="ck"[\s\S]*?<\/svg>/g, "").replace(/<(\/?)h3>/g, "<$1h4>");
-const INC = local(grab(/<ul class="inc" id="inc">([\s\S]*?)<\/ul>/, "#inc"));
+const STEPS = local(grab(/<ol class="steps"[^>]*>([\s\S]*?)<\/ol>/, "#steps")).replace(/<svg class="ck"[\s\S]*?<\/svg>/g, "").replace(/<(\/?)h3>/g, "<$1h4>");
+const INC = local(grab(/<ul class="inc"[^>]*>([\s\S]*?)<\/ul>/, "#inc"));
 const TERMS = local(grab(/(<p class="terms">[\s\S]*?<\/p>)/, "check-up terms"));
 const OFFER_H = grab(/<h2 id="offer-h">([\s\S]*?)<\/h2>/, "offer heading");
-const PROM = local(grab(/<ol class="prom" id="prom">([\s\S]*?)<\/ol>/, "#prom"));
+const PROM = local(grab(/<ol class="prom"[^>]*>([\s\S]*?)<\/ol>/, "#prom"));
 const PROM_H = grab(/<h2 id="promises-h">([\s\S]*?)<\/h2>/, "promises heading");
 const DATA_CARD = local(grab(/(<div class="dataCard"[^>]*>[\s\S]*?<\/ul>\s*<p class="notwe">[\s\S]*?<\/p>\s*<\/div>)/, "data card"));
 const NOT_WE = grab(/<p class="notwe">([\s\S]*?)<\/p>/, "what we are not").replace(/^What we are not:\s*we/i, "We");
-const FAQ = local(grab(/<div class="faq">([\s\S]*?)<\/div>\s*<div class="svc-cta">/, "FAQ"));
+const FAQ = local(grab(/<div class="faq"[^>]*>([\s\S]*?)<\/div>\s*<div class="svc-cta">/, "FAQ"));
 const FAQ_H = grab(/<h2 id="questions-h">([\s\S]*?)<\/h2>/, "questions heading");
-const TRUST = grab(/<p class="trust-line">([\s\S]*?)<\/p>/, "trust line");
+const TRUST = grab(/<p class="trust-line"[^>]*>([\s\S]*?)<\/p>/, "trust line");
 const MICRO = grab(/<p class="micro">([\s\S]*?)<\/p>/, "hero micro line");
 const NOT_SURE = grab(/<div class="svc-cta"><span>([\s\S]*?)<\/span>/, "services check-up line");
-const TEAM = must([...grab(/<ul class="team">([\s\S]*?)<\/ul>/, "team list").matchAll(/<span class="ini"[^>]*>([\s\S]*?)<\/span><b>([\s\S]*?)<\/b><span>([\s\S]*?)<\/span>/g)].map((m) => ({ ini: m[1], name: m[2], role: m[3] })), "team members");
+const TEAM = must([...grab(/<ul class="team"[^>]*>([\s\S]*?)<\/ul>/, "team list").matchAll(/<span class="ini"[^>]*>([\s\S]*?)<\/span><b>([\s\S]*?)<\/b><span>([\s\S]*?)<\/span>/g)].map((m) => ({ ini: m[1], name: m[2], role: m[3] })), "team members");
 const FAQ_ITEMS = [...FAQ.matchAll(/<summary>([\s\S]*?)<svg/g)].length;
 const TOWNS = ["Bentonville", "Rogers", "Springdale", "Fayetteville", "Bella Vista", "Siloam Springs", "Lowell", "Cave Springs", "Centerton", "Farmington", "Prairie Grove", "Pea Ridge"];
 const names = TEAM.map((t) => t.name);
@@ -105,8 +105,12 @@ ${REFERRER}
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
 <link rel="preload" href="../assets/fonts/plus-jakarta-sans-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/geist-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../assets/site.css">
 <link rel="stylesheet" href="../assets/pages.css">
+<link rel="stylesheet" href="../assets/motion.css">
+<script src="../assets/boot.js"></script>
+<script src="../assets/motion.js" defer></script>
 ${ldjson(o.jsonld)}
 </head>`;
 const cur = (page, me) => (page === me ? ' aria-current="page"' : "");
@@ -125,6 +129,7 @@ const header = (page) => `<a class="skip" href="#main">Skip to content</a>
       <li><a href="/about/"${cur(page, "about")}>About</a></li>
       <li><a href="/#questions">Questions</a></li>
     </ul></nav>
+    <button type="button" class="motion-btn" id="motion-btn" aria-pressed="false">Pause motion</button>
     <a class="btn sm" href="/#checkup">Free check-up</a>
     <span class="progress-rail" aria-hidden="true"></span>
   </div>
@@ -145,7 +150,7 @@ const footer = (fine) => `<footer>
     <p class="fine">Fonts: Plus Jakarta Sans and Geist Mono (SIL OFL). Icons drawn for Right Hand.</p>
   </div>
 </footer>`;
-const hero = (o) => `<section class="page-hero dark grid-48" aria-labelledby="hero-h">
+const hero = (o) => `<section class="page-hero dark grid-48" data-hud="${esc(o.crumb)}" aria-labelledby="hero-h">
   <div class="wrap">
     <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><span aria-current="page">${esc(o.crumb)}</span></li></ol></nav>
     <p class="eyebrow">${o.eyebrow}</p>
@@ -163,8 +168,8 @@ const hero = (o) => `<section class="page-hero dark grid-48" aria-labelledby="he
     <p class="micro">${MICRO}</p>
   </div>
 </section>`;
-const cta = (h, lead) => `<section class="band dark page-cta" aria-labelledby="cta-h">
-  <div class="wrap">
+const cta = (h, lead) => `<section class="band dark page-cta" data-hud="Free check-up" aria-labelledby="cta-h">
+  <div class="wrap" data-fx="head">
     <p class="eyebrow">Start here</p>
     <h2 id="cta-h">${h}</h2>
     <p class="lead">${lead}</p>
@@ -196,14 +201,14 @@ const svcDoc = (s) => `<article class="svc-doc${s.tag === "ai" ? " is-ai" : ""}"
 ${ROWS.filter((r) => s.rows && s.rows[r[0]]).map((r) => `    <div><dt>${esc(r[1])}</dt><dd${r[0] === "never" ? ' class="never"' : r[0] === "example" ? ' class="ex"' : ""}>${esc(s.rows[r[0]].replace(/^Example:\s*/, ""))}</dd></div>`).join("\n")}
   </dl>${s.demo ? `\n  <p class="demo-link"><a href="/${esc(s.demo)}">See it in the demo</a></p>` : ""}
 </article>`;
-const lineSec = (l, i) => `<section class="line-sec" id="${lineId(l)}" aria-labelledby="${lineId(l)}-h">
-  <div class="line-head">
+const lineSec = (l, i) => `<section class="line-sec" data-hud="${esc(l.name)}" id="${lineId(l)}" aria-labelledby="${lineId(l)}-h">
+  <div class="line-head" data-fx="head">
     <span class="tile" aria-hidden="true"><svg class="i"><use href="#${ICON[l.icon] || "i-folder"}"/></svg></span>
     <p class="eyebrow">Service line ${i + 1} of ${S.lines.length} · ${l.items.length} services</p>
     <h2 id="${lineId(l)}-h">${esc(l.name)}</h2>
     ${l.note ? `<p class="line-note">${esc(l.note)}</p>` : ""}
   </div>
-  <div class="svc-docs">
+  <div class="svc-docs" data-fx="cascade" data-edge>
 ${l.items.map(svcDoc).join("\n")}
   </div>
 </section>`;
@@ -215,7 +220,7 @@ ${S.lines.map((l) => `    <li><a href="#${lineId(l)}">${esc(l.name)}<span class=
     <li><a href="#how-you-can-buy">How you can buy it</a></li>
   </ol>
 </nav>`;
-const buyHtml = `<ul class="buy-grid">
+const buyHtml = `<ul class="buy-grid" data-fx="cascade" data-edge>
 ${S.buy.map((b) => `  <li><h3>${esc(b.name)}</h3><p>${esc(b.text)}</p>${b.tiers ? "<ul>" + b.tiers.map((t) => "<li>" + esc(t) + "</li>").join("") + "</ul>" : ""}</li>`).join("\n")}
 </ul>${S.priceLine ? `\n<p class="price-note">${esc(S.priceLine)}</p>` : ""}`;
 
@@ -226,7 +231,7 @@ const servicesMain = hero({
   second: '<a class="btn ghost" href="#contents">See all services</a>'
 }) + `
 
-<section class="band light" aria-label="All services">
+<section class="band light" data-hud="All services" aria-label="All services">
   <div class="wrap svc-layout">
     ${toc}
     <div class="svc-main">
@@ -237,21 +242,21 @@ const servicesMain = hero({
           <li><span class="kind ai">${esc(KIND.ai[1])}</span><span>AI makes a first draft, a person on our team checks it, and you approve it. ${nAi} services.</span></li>
           <li><span class="kind">${esc(KIND.we[1])}</span><span>A person on our team does the work. Most of these need no AI at all. ${nWe} services.</span></li>
         </ul>
-        <p class="note-made-up">Every example below describes a made-up Northwest Arkansas business, written to show how the service works. They are not clients, and they are not results.</p>
+        <p class="note-made-up" data-fx="scan">Every example below describes a made-up Northwest Arkansas business, written to show how the service works. They are not clients, and they are not results.</p>
       </div>
 ${S.lines.map(lineSec).join("\n")}
       <section class="line-sec stays-sec" id="stays-with-you" aria-labelledby="stays-with-you-h">
-        <div class="line-head">
+        <div class="line-head" data-fx="head">
           <span class="tile plain" aria-hidden="true"><svg class="i"><use href="#i-hand"/></svg></span>
           <p class="eyebrow">Never handed to us</p>
           <h2 id="stays-with-you-h">${esc(S.stays.name)}</h2>
           <p class="line-note">We will point you to a licensed pro when something needs one.</p>
         </div>
-        <ul class="chips-list">${S.stays.items.map((x) => "<li>" + esc(x) + "</li>").join("")}</ul>
+        <ul data-fx="cascade" class="chips-list">${S.stays.items.map((x) => "<li>" + esc(x) + "</li>").join("")}</ul>
         <p class="trust-line">${TRUST}</p>
       </section>
       <section class="line-sec buy-sec" id="how-you-can-buy" aria-labelledby="how-you-can-buy-h">
-        <div class="line-head">
+        <div class="line-head" data-fx="head">
           <span class="tile" aria-hidden="true"><svg class="i"><use href="#i-cal"/></svg></span>
           <p class="eyebrow">Ways to work with us</p>
           <h2 id="how-you-can-buy-h">How you can buy it</h2>
@@ -311,9 +316,9 @@ const aboutMain = hero({
   second: '<a class="btn ghost" href="/services/">See all ' + N + " services</a>"
 }) + `
 
-<section class="band light" id="who-we-are" aria-labelledby="who-h">
+<section class="band light" id="who-we-are" data-hud="Who we are" aria-labelledby="who-h">
   <div class="wrap">
-    <div class="sec-h">
+    <div class="sec-h" data-fx="head">
       <p class="eyebrow">Who we are</p>
       <h2 id="who-h">Four students you can <span class="sw">meet</span>.</h2>
     </div>
@@ -321,23 +326,23 @@ const aboutMain = hero({
       <p>We are four University of Arkansas students who work in Northwest Arkansas: ${esc(nameList)}. One named person on our team owns each of your tasks.</p>
       <p>We're new. You won't find reviews or client results here yet, because we won't make them up. You can try the work yourself in the <a href="/#demos">live demos on our home page</a>, and you can meet all four of us.</p>
     </div>
-    <ul class="people" aria-label="The Right Hand NWA team">
+    <ul class="people" data-fx="cascade" data-edge aria-label="The Right Hand NWA team">
 ${TEAM.map((t) => `      <li><span class="ini" aria-hidden="true">${t.ini}</span><b>${t.name}</b><span class="role">${t.role}</span></li>`).join("\n")}
     </ul>
     <p class="contact-line"><svg class="i" aria-hidden="true"><use href="#i-mail"/></svg>Reach all four of us at <a href="mailto:righthandnwa@gmail.com">righthandnwa@gmail.com</a> · <a href="https://www.instagram.com/righthandnwa/" target="_blank" rel="noopener noreferrer">@righthandnwa on Instagram</a></p>
   </div>
 </section>
 
-<section class="band dark" id="what-we-do" aria-labelledby="what-h">
+<section class="band dark" id="what-we-do" data-hud="What we do" aria-labelledby="what-h">
   <div class="wrap">
-    <div class="sec-h">
+    <div class="sec-h" data-fx="head">
       <p class="eyebrow">What we do and how</p>
       <h2 id="what-h">The admin comes off your plate. The final say <span class="sw">stays</span>.</h2>
     </div>
     <div class="prose">
       <p>We take receipts, invoices, follow-ups, scheduling and paperwork off your plate, and we set up AI that drafts the busywork. Tax, payroll, legal work and moving money stay with you and your licensed pros.</p>
     </div>
-    <ul class="line-links" aria-label="Our ${numWord(S.lines.length)} service lines">
+    <ul class="line-links" data-fx="cascade" aria-label="Our ${numWord(S.lines.length)} service lines">
 ${S.lines.map((l) => `      <li><a href="/services/#${lineId(l)}"><span class="tile" aria-hidden="true"><svg class="i"><use href="#${ICON[l.icon] || "i-folder"}"/></svg></span><b>${esc(l.name)}</b><span class="note">${l.items.length} services. ${esc(l.note || "")}</span></a></li>`).join("\n")}
     </ul>
     <h3 class="sub-h">The method</h3>
@@ -345,56 +350,56 @@ ${S.lines.map((l) => `      <li><a href="/services/#${lineId(l)}"><span class="t
     ${LOOP3}
     <h3 class="sub-h">How working with us goes</h3>
     <p>Four steps, and you can stop after any of them.</p>
-    <ol class="steps">${STEPS}</ol>
+    <ol class="steps" data-fx="cascade">${STEPS}</ol>
   </div>
 </section>
 
-<section class="band light" id="where-we-work" aria-labelledby="where-h">
+<section class="band light" id="where-we-work" data-hud="Where we work" aria-labelledby="where-h">
   <div class="wrap">
-    <div class="sec-h">
+    <div class="sec-h" data-fx="head">
       <p class="eyebrow">Where we work</p>
       <h2 id="where-h">Anywhere in Benton and Washington <span class="sw">counties</span>.</h2>
     </div>
     <div class="prose">
       <p>We work with small businesses across Northwest Arkansas, in Benton and Washington counties. We come to your shop or meet at a coffee shop, and video and phone work too.</p>
     </div>
-    <ul class="meet">
+    <ul class="meet" data-fx="cascade" data-edge>
       <li><b>In person</b><span>At your business or a coffee shop, anywhere in Benton and Washington counties.</span></li>
       <li><b>Video or phone</b><span>Same check-up, same Admin Map, if that is easier for your week.</span></li>
     </ul>
     <p class="towns-h">Towns we work in</p>
-    <ul class="chips-list towns-list">${TOWNS.map((t) => "<li>" + t + "</li>").join("")}<li>And the towns in between</li></ul>
+    <ul data-fx="cascade" class="chips-list towns-list">${TOWNS.map((t) => "<li>" + t + "</li>").join("")}<li>And the towns in between</li></ul>
   </div>
 </section>
 
-<section class="band dark" id="check-up" aria-labelledby="offer-h">
+<section class="band dark" id="check-up" data-hud="Free check-up" aria-labelledby="offer-h">
   <div class="wrap offer-one">
-    <div class="sec-h">
+    <div class="sec-h" data-fx="head">
       <p class="eyebrow">The free check-up and Your Admin Map</p>
       <h2 id="offer-h">${OFFER_H}</h2>
     </div>
-    <ul class="inc">${INC}</ul>
+    <ul class="inc" data-fx="cascade">${INC}</ul>
     ${TERMS}
     <div class="ctas"><a class="btn" href="/#checkup">Get my free admin check-up</a></div>
   </div>
 </section>
 
-<section class="band light" id="promises" aria-labelledby="promises-h">
+<section class="band light" id="promises" data-hud="Promises" aria-labelledby="promises-h">
   <div class="wrap prom-grid">
     <div>
-      <div class="sec-h">
+      <div class="sec-h" data-fx="head">
         <p class="eyebrow">Our promises</p>
         <h2 id="promises-h">${PROM_H}</h2>
       </div>
-      <ol class="prom">${PROM}</ol>
+      <ol class="prom" data-fx="cascade" data-edge>${PROM}</ol>
     </div>
     ${DATA_CARD}
   </div>
 </section>
 
-<section class="band dark not-sec" id="what-we-are-not" aria-labelledby="not-h">
+<section class="band dark not-sec" id="what-we-are-not" data-hud="What we are not" aria-labelledby="not-h">
   <div class="wrap">
-    <div class="sec-h">
+    <div class="sec-h" data-fx="head">
       <p class="eyebrow">What we are not</p>
       <h2 id="not-h">Not a CPA firm, law firm or payroll <span class="sw">provider</span>.</h2>
     </div>
@@ -402,31 +407,31 @@ ${S.lines.map((l) => `      <li><a href="/services/#${lineId(l)}"><span class="t
       <p>${NOT_WE}</p>
       <p>${esc(S.stays.name)}:</p>
     </div>
-    <ul class="chips-list not-list">${S.stays.items.map((x) => "<li>" + esc(x) + "</li>").join("")}</ul>
+    <ul data-fx="cascade" class="chips-list not-list">${S.stays.items.map((x) => "<li>" + esc(x) + "</li>").join("")}</ul>
     <p class="fine">Nothing on this site is tax, legal or accounting advice.</p>
   </div>
 </section>
 
-<section class="band light" id="facts" aria-labelledby="facts-h">
+<section class="band light" id="facts" data-hud="Facts" aria-labelledby="facts-h">
   <div class="wrap">
-    <div class="sec-h">
+    <div class="sec-h" data-fx="head">
       <p class="eyebrow">Facts</p>
       <h2 id="facts-h">Right Hand NWA at a <span class="sw">glance</span>.</h2>
     </div>
-    <dl class="facts">
+    <dl class="facts" data-fx="cascade">
 ${facts.map(([k, v]) => `      <div><dt>${esc(k)}</dt><dd>${linkify(v)}</dd></div>`).join("\n")}
     </dl>
     <p class="fine facts-note">Short and plain on purpose, so anyone summarizing us, a person or an AI assistant, gets it right.</p>
   </div>
 </section>
 
-<section class="band white" id="questions" aria-labelledby="questions-h">
+<section class="band white" id="questions" data-hud="Questions" aria-labelledby="questions-h">
   <div class="wrap">
-    <div class="sec-h">
+    <div class="sec-h" data-fx="head">
       <p class="eyebrow">Questions</p>
       <h2 id="questions-h">${FAQ_H}</h2>
     </div>
-    <div class="faq">${FAQ}</div>
+    <div class="faq" data-fx="cascade" data-edge>${FAQ}</div>
   </div>
 </section>
 

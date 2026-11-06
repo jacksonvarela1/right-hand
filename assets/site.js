@@ -15,6 +15,10 @@
   }
   var timers = [];
   function later(fn, ms) { var t = setTimeout(fn, ms); timers.push(t); return t; }
+  // assets/motion.js only takes over the motion button and the swooshes on pages without this script
+  (window.RH = window.RH || {}).site = true;
+  // change a button's words without dropping the icon motion.js put in front of them
+  function relabel(el, t) { var n = el.lastChild; if (n && n.nodeType === 3) n.nodeValue = t; else el.textContent = t; }
 
   /* ---------- motion toggle ---------- */
   var mb = $("#motion-btn");
@@ -42,8 +46,10 @@
     var to = +el.getAttribute("data-count");
     once(el, .6, function () {
       if (off()) return;
+      // a number with a "+", "th" or "%" after it keeps its finished width while it counts (close.css makes it inline-block)
+      if (el.tagName === "SPAN") el.style.minWidth = el.getBoundingClientRect().width + "px";
       var t0 = performance.now(), ms = 1100;
-      requestAnimationFrame(function f(t) { var k = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - k, 3); el.textContent = Math.round(to * e).toLocaleString("en-US"); if (k < 1) requestAnimationFrame(f); });
+      requestAnimationFrame(function f(t) { var k = Math.max(0, Math.min(1, (t - t0) / ms)), e = 1 - Math.pow(1 - k, 3); /* the first frame can be stamped before t0: never show "-0" */ el.textContent = Math.round(to * e).toLocaleString("en-US"); if (k < 1) requestAnimationFrame(f); });
     });
   });
 
@@ -164,18 +170,21 @@
     // expand and pick
     host.addEventListener("click", function (e) {
       var pk = e.target.closest("[data-pick]");
-      if (pk) {
-        var on = pk.getAttribute("aria-pressed") !== "true", id = pk.getAttribute("data-pick"), nm = pk.getAttribute("data-name");
-        pk.setAttribute("aria-pressed", String(on)); pk.textContent = on ? "Added to my Right Hand" : "Add to my Right Hand";
-        pk.closest(".svc").classList.toggle("picked", on);
-        picks = picks.filter(function (p) { return p.id !== id; }); if (on) picks.push({ id: id, name: nm });
-        paintPicker(); composer.update(); return;
-      }
+      if (pk) { setPick(pk.getAttribute("data-pick"), pk.getAttribute("aria-pressed") !== "true"); return; }
       var b = e.target.closest(".svc > button"); if (!b) return;
       var card = b.parentNode, open = b.getAttribute("aria-expanded") !== "true";
       b.setAttribute("aria-expanded", String(open)); if (open) card.setAttribute("data-open", ""); else card.removeAttribute("data-open");
     });
   })();
+  // tick or untick one service card; the card, the picker bar and the composer all follow
+  function setPick(id, on) {
+    var pk = $$("#svc-lines [data-pick]").filter(function (x) { return x.getAttribute("data-pick") === id; })[0];
+    if (!pk) return;
+    pk.setAttribute("aria-pressed", String(on)); relabel(pk, on ? "Added to my Right Hand" : "Add to my Right Hand");
+    pk.closest(".svc").classList.toggle("picked", on);
+    picks = picks.filter(function (p) { return p.id !== id; }); if (on) picks.push({ id: id, name: pk.getAttribute("data-name") });
+    paintPicker(); composer.update();
+  }
   function paintPicker() {
     var p = $("#picker"); if (!p) return;
     p.hidden = !picks.length;
@@ -226,6 +235,7 @@
       var m = msg();
       location.href = "mailto:" + EMAIL + "?subject=" + encodeURIComponent(m.subject) + "&body=" + encodeURIComponent(m.body);
       conf.hidden = false; setTimeout(function () { conf.focus(); }, 50);
+      d.dispatchEvent(new CustomEvent("rh:draft"));   // assets/close.js plays the success moment
     });
     $("#c-copy").addEventListener("click", function () {
       var m = msg(), text = "To: " + EMAIL + "\nSubject: " + m.subject + "\n\n" + m.body;
@@ -234,10 +244,24 @@
       function fallback() { var r = d.createRange(); r.selectNodeContents(pre); var s = getSelection(); s.removeAllRanges(); s.addRange(r); status.textContent = "Selected. Press Ctrl+C or Cmd+C to copy."; }
     });
     api.ask = function (k) { var v = ASK[k]; if (!v) return; var b = $('[data-v="' + v + '"]', eats); if (b) { b.setAttribute("aria-pressed", "true"); update(); } };
+    // pre-fill from elsewhere on the page (assets/close.js): town, chips by their words, service picks by id.
+    // o.clear lists what the caller set last time, so a second run replaces its own picks instead of piling up.
+    api.prefill = function (o) {
+      o = o || {}; var c = o.clear || {};
+      function set(host, vals, on) { (vals || []).forEach(function (v) { $$("button", host).forEach(function (b) { if (b.getAttribute("data-v") === v) b.setAttribute("aria-pressed", String(on)); }); }); }
+      set(eats, c.eats, false); set(mode, c.modes, false);
+      set(eats, o.eats, true); set(mode, o.modes, true);
+      (c.picks || []).forEach(function (id) { setPick(id, false); });
+      (o.picks || []).forEach(function (id) { setPick(id, true); });
+      var t = form.elements.town;
+      if (o.town && [].some.call(t.options, function (x) { return x.value === o.town; })) { t.value = o.town; clearErr(t); }
+      update();
+    };
     api.update = update;
     update();
     return api;
   })();
+  RH.composer = composer;
 
   /* ---------- mobile bottom bar ---------- */
   var bar = $("#mobile-bar"), hero = $(".hero"), checkup = $("#checkup");

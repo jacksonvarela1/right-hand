@@ -28,6 +28,7 @@
   "use strict";
   var RH = window.RH = window.RH || {};
   var RM = matchMedia("(prefers-reduced-motion: reduce)");
+  var STEPS = []; for (var i = 0; i <= 20; i++) STEPS.push(i / 20);   // fine steps, so a tall stage reports often enough
   function motionOff() { return RM.matches || document.documentElement.getAttribute("data-motion") === "off"; }
   RH.motionOff = motionOff;
 
@@ -169,7 +170,8 @@
     else setPill("ready");
 
     players.push(p);
-    new IntersectionObserver(function (es) { p.ratio = es[0].isIntersecting ? es[0].intersectionRatio : 0; conduct(); }, { threshold: [0, .25, .5, .6, .75, .9, 1] }).observe(stage);
+    // a stage taller than twice the screen (the receipts demo on phones) can never be half visible, so filling half the screen counts too
+    new IntersectionObserver(function (es) { var e = es[0], vh = e.rootBounds ? e.rootBounds.height : innerHeight; p.ratio = e.isIntersecting ? Math.max(e.intersectionRatio, Math.min(1, e.intersectionRect.height / vh)) : 0; conduct(); }, { threshold: STEPS }).observe(stage);
     return { ctx: ctx, handoff: handoff, restart: restart };
   };
 
