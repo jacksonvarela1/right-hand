@@ -100,6 +100,9 @@
     progress();
     if (matchMedia("(hover: hover) and (pointer: fine)").matches) { spotlight(); magnet(); }
     ripple();
+    folder();
+    cardGlide();
+    d.addEventListener("touchstart", function () {}, { passive: true }); // iOS only paints :active with a touch listener present
     reveals();
     d.addEventListener("rh:motion", function (e) { if (e.detail && e.detail.off) stopAll(); });
   }
@@ -255,7 +258,7 @@
     queue = [];
     $$("[data-fx]").forEach(settle);
     finishers.forEach(function (f) { f(); });
-    $$(".fx-mag").forEach(function (b) { b.style.translate = ""; });
+    $$(".fx-mag").forEach(function (b) { b.style.translate = ""; b.style.scale = ""; });
     $$(".fx-lit").forEach(function (c) { c.classList.remove("fx-lit"); });
   }
 
@@ -335,18 +338,83 @@
     });
   }
   function magnet() {
+    /* The primary button is pulled toward the pointer on a spring, stretches a little along the pull, and snaps back past center. */
+    var STIFF = 180, DAMP = 14, PULLX = 12, PULLY = 8;
     $$(".ctas .btn:not(.ghost), .svc-cta .btn, .c-acts .btn[type=submit]").forEach(function (b) {
       if (b.closest(".stage, dialog")) return;
-      var r = null;
+      var r = null, raf = 0, last = 0, x = 0, y = 0, vx = 0, vy = 0, tx = 0, ty = 0;
       b.classList.add("fx-mag");
-      b.addEventListener("pointerenter", function () { b.style.translate = ""; r = b.getBoundingClientRect(); });
+      function clear() { x = y = vx = vy = tx = ty = 0; b.style.translate = ""; b.style.scale = ""; }
+      function tick(now) {
+        raf = 0;
+        if (off()) { r = null; clear(); return; }
+        var dt = Math.min(.032, (now - last) / 1000); last = now;
+        vx += ((tx - x) * STIFF - vx * DAMP) * dt; vy += ((ty - y) * STIFF - vy * DAMP) * dt;
+        x += vx * dt; y += vy * dt;
+        if (Math.abs(tx - x) + Math.abs(ty - y) < .04 && Math.abs(vx) + Math.abs(vy) < .4) {
+          x = tx; y = ty; vx = vy = 0;
+          if (!tx && !ty) { clear(); return; }
+        } else raf = requestAnimationFrame(tick);
+        var sx = Math.min(.06, Math.abs(x) / PULLX * .03 + Math.abs(vx) / 400 * .03), sy = Math.min(.06, Math.abs(y) / PULLY * .03 + Math.abs(vy) / 400 * .03);
+        b.style.translate = x.toFixed(2) + "px " + y.toFixed(2) + "px";
+        b.style.scale = (1 + sx - sy * .5).toFixed(4) + " " + (1 + sy - sx * .5).toFixed(4);
+      }
+      function run() { if (!raf) { last = performance.now(); raf = requestAnimationFrame(tick); } }
+      b.addEventListener("pointerenter", function () { r = b.getBoundingClientRect(); });
       b.addEventListener("pointermove", function (e) {
         if (off() || !r) return;
         var dx = (e.clientX - r.left - r.width / 2) / (r.width / 2), dy = (e.clientY - r.top - r.height / 2) / (r.height / 2);
-        b.style.translate = (Math.max(-1, Math.min(1, dx)) * 6).toFixed(1) + "px " + (Math.max(-1, Math.min(1, dy)) * 4).toFixed(1) + "px";
+        tx = Math.max(-1, Math.min(1, dx)) * PULLX; ty = Math.max(-1, Math.min(1, dy)) * PULLY; run();
       });
-      b.addEventListener("pointerleave", function () { r = null; b.style.translate = ""; });
+      b.addEventListener("pointerleave", function () { r = null; tx = ty = 0; run(); });
     });
+  }
+
+  /* ---------- service cards: the opened card grows into its panel and its neighbours glide to their new places ---------- */
+  function cardGlide() {
+    d.addEventListener("click", function (e) {
+      var btn = e.target.closest && e.target.closest(".svc > button");
+      var grid = btn && btn.closest(".svc-grid");
+      if (!grid || off()) return;
+      var cards = $$(".svc", grid), first = cards.map(function (c) { return c.getBoundingClientRect(); });
+      var card = btn.parentNode;
+      // this listener runs in the capture phase, before site.js toggles the card; the next frame sees the new layout
+      requestAnimationFrame(function () {
+        var moved = 0;
+        cards.forEach(function (c, i) {
+          var a = first[i], b = c.getBoundingClientRect(), dx = a.left - b.left, dy = a.top - b.top, grow = b.width - a.width;
+          if (Math.abs(dx) < 1 && Math.abs(dy) < 1 && Math.abs(grow) < 1) return;
+          if (c === card) moved = b.top;
+          var from = { transform: "translate(" + dx.toFixed(1) + "px," + dy.toFixed(1) + "px)" }, to = { transform: "none" };
+          if (grow > 1) { from.clipPath = "inset(0 " + grow.toFixed(1) + "px 0 0 round 12px)"; to.clipPath = "inset(0 0 0 0 round 12px)"; }
+          c.animate([from, to], { duration: 520, easing: "cubic-bezier(.23,1,.32,1)" });
+        });
+        // a card that lands low on the screen comes up so its details are in view
+        if (card.hasAttribute("data-open") && moved > innerHeight * .55) window.scrollBy({ top: moved - 96, behavior: "smooth" });
+      });
+    }, true);
+  }
+
+  /* ---------- the Admin Map folder: the sheet comes out as the offer scrolls in; a visitor can tuck it back ---------- */
+  function folder() {
+    var f = $("#af"), sheet = f && $("#amap", f), tog = f && $(".af-tog", f);
+    if (!f || !sheet || !tog) return;
+    function set(shut, byHand) {
+      f.classList.toggle("af-shut", shut);
+      tog.textContent = shut ? "Open" : "Tuck away";
+      tog.setAttribute("aria-expanded", String(!shut));
+      if (shut && byHand) sheet.setAttribute("aria-hidden", "true"); else sheet.removeAttribute("aria-hidden");
+    }
+    tog.addEventListener("click", function () { set(!f.classList.contains("af-shut"), true); });
+    finishers.push(function () { set(false); });
+    if (off() || !("IntersectionObserver" in window) || f.getBoundingClientRect().top < innerHeight * .8) return;
+    set(true);
+    var io = new IntersectionObserver(function (es) {
+      if (!es[0].isIntersecting) return;
+      io.disconnect();
+      later(function () { set(false); }, 160);
+    }, { threshold: .3 });
+    io.observe(f);
   }
 
   /* ---------- 9. press ripple on primary buttons (animates the button's ::before) ---------- */

@@ -432,8 +432,11 @@
       <div class="ctas"><a class="btn" href="#checkup" data-go="checkup">Get my free admin check-up</a></div>
       <ul class="proof" data-fx="cascade" aria-label="The fine print"><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>We reply within one business day.</li><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>Your Admin Map within 3 business days.</li><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>Yours to keep, hire us or not.</li></ul>
     </div>
-    <figure class="amap bracket" data-fx="scan" id="amap" aria-labelledby="amap-t">
+    <div class="af" id="af">
+      <div class="af-back" aria-hidden="true"></div>
+      <figure class="amap bracket" id="amap" aria-labelledby="amap-t">
       <p class="t" id="amap-t">Admin Map</p>
+      <span class="af-stamp" aria-hidden="true">Yours to keep</span>
       <p class="s">Ozark Paws Grooming, Springdale (made-up shop) · sample</p>
       <ol>
         <li><b>Monthly expense review</b><span>We prepare, you approve · About 20 minutes of your time to review (sample estimate)</span><em class="st">Needs your OK</em></li>
@@ -446,6 +449,16 @@
         <p><b>Quote:</b> written after your check-up</p>
       </div>
     </figure>
+      <div class="af-front">
+        <p class="af-l" aria-hidden="true"><b>Your Admin Map</b><span>Within 3 business days</span></p>
+        <button type="button" class="af-tog" aria-expanded="true" aria-controls="amap">Tuck away</button>
+        <div class="af-plate" aria-hidden="true">
+          <p><span>Client</span>Your business</p>
+          <p><span>Prepared by</span>Right Hand NWA</p>
+          <p><span>Inside</span>Top 3 tasks to hand off, one quick win, a flat written quote</p>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
