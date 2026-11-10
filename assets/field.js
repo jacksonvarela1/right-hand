@@ -329,14 +329,18 @@
     sec.classList.add("st-live");
     sec.style.setProperty("--st-n", n - 1);
     var names = items.map(function (li) { return li.getAttribute("data-shape") || "mark"; }), slots = [], act = -1, rx = 0, tx = 0, wake;
+    // progress is measured against the pinned stage (100svh), which does not change when a phone's browser bar slides in and out
+    var pin = $(".st-pin", sec) || sec, ph = pin.offsetHeight;
+    if (W.ResizeObserver) new ResizeObserver(function () { ph = pin.offsetHeight; }).observe(pin); else W.addEventListener("resize", function () { ph = pin.offsetHeight; });
     function slotAt(i) { if (slots[i] === undefined) slots[i] = f.add(shape(names[i])); return slots[i]; }
     // the first is needed as soon as the section scrolls in; the rest are built one per idle slice
     slotAt(0);
     (function more(i) { if (i < n) idle(function () { slotAt(i); more(i + 1); }); })(1);
 
     function frame(now) {
-      var r = sec.getBoundingClientRect(), total = r.height - W.innerHeight, p = total > 0 ? clamp(-r.top / total, 0, 1) * (n - 1) : 0, still = off();
-      var a = clamp(Math.round(p), 0, n - 1), i = Math.min(p | 0, n - 2), m = clamp((p - i - .2) / .6, 0, 1), wide = W.innerWidth > 860, end = ease(clamp(p - (n - 2), 0, 1));
+      var r = sec.getBoundingClientRect(), total = r.height - (ph || W.innerHeight), p = total > 0 ? clamp(-r.top / total, 0, 1) * (n - 1) : 0, still = off();
+      // a chapter changes only once the scroll is clearly past the halfway point, so a small wobble cannot flicker between two
+      var a = act < 0 || Math.abs(p - act) > .58 ? clamp(Math.round(p), 0, n - 1) : act, i = Math.min(p | 0, n - 2), m = clamp((p - i - .2) / .6, 0, 1), wide = W.innerWidth > 860, end = ease(clamp(p - (n - 2), 0, 1));
       if (a !== act) { act = a; items.forEach(function (li, j) { li.classList.toggle("on", j === a); li.classList.toggle("was", j < a); }); }
       if (bar) bar.style.setProperty("--p", (p / (n - 1)).toFixed(3));
       if (still) m = m < .5 ? 0 : 1;

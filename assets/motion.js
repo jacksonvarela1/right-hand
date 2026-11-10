@@ -155,6 +155,9 @@
   }
 
   /* ---------- 4. entrances ---------- */
+  // which way the page is moving: a section that comes into view while you scroll back up is shown settled, not animated
+  var goingUp = false, lastY = scrollY;
+  addEventListener("scroll", function () { var y = scrollY; if (y !== lastY) goingUp = y < lastY; lastY = y; }, { passive: true });
   function reveals() {
     // markup that site.js renders gets its effects here
     $$(".svc-grid").forEach(function (g) { if (!g.hasAttribute("data-fx")) { g.setAttribute("data-fx", "cascade"); g.setAttribute("data-edge", ""); } });
@@ -167,8 +170,8 @@
     todo.forEach(prep);
     html.classList.add("fx");
     fxio = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (!e.isIntersecting) return; fxio.unobserve(e.target); if (introOn) queue.push(e.target); else fire(e.target); });
-    }, { threshold: 0, rootMargin: "0px 0px -12% 0px" });
+      es.forEach(function (e) { if (!e.isIntersecting) return; fxio.unobserve(e.target); if (introOn) queue.push(e.target); else if (goingUp || e.boundingClientRect.top < 0) settle(e.target); else fire(e.target); });
+    }, { threshold: 0, rootMargin: "100% 0px -12% 0px" });
     todo.forEach(function (el) { fxio.observe(el); });
   }
   function prep(el) {

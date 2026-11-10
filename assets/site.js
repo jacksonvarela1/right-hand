@@ -36,8 +36,11 @@
   });
 
   /* ---------- reveals and swooshes ---------- */
+  // scrolling back up: whatever comes into view is shown as it is (see .rv-now in field.css)
+  var upward = false, lastY = window.scrollY;
+  window.addEventListener("scroll", function () { var y = window.scrollY; if (y !== lastY) upward = y < lastY; lastY = y; }, { passive: true });
   if ("IntersectionObserver" in window) {
-    var rio = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); rio.unobserve(e.target); } }); }, { threshold: .15, rootMargin: "0px 0px -6% 0px" });
+    var rio = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { if (upward || e.boundingClientRect.top < 0) e.target.classList.add("rv-now"); e.target.classList.add("in"); rio.unobserve(e.target); } }); }, { threshold: .15, rootMargin: "100% 0px -6% 0px" });
     $$("[data-reveal], .sw").forEach(function (el) { rio.observe(el); });
   } else $$("[data-reveal], .sw").forEach(function (el) { el.classList.add("in"); });
 

@@ -1,6 +1,9 @@
 /* Right Hand NWA: the particle field (assets/field.js), the three hero keys and the scroll story. Loads after close.css.
    Everything here has a finished still state: no JS, no WebGL, reduced motion and paused motion all get a complete page. */
 
+/* scrolling back up: anything that comes in from the top of the screen is shown as it is, with no fade or slide */
+.js-motion [data-reveal].rv-now,.sw.rv-now::after{transition:none!important}
+
 /* ---------- one hot color: the "your move" moments only (primary buttons, the approve key, a few sparks in the field) ---------- */
 .cta-pill{background:var(--hot);color:var(--navy-950);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22),0 14px 30px -12px rgba(5,19,38,.6)}
 .cta-pill:hover{background:var(--hot-2)}
@@ -8,7 +11,7 @@
 
 /* ---------- hero: copy on the left, the field on the right ---------- */
 .hero.has-fld .hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
-.hero.has-fld h1{max-width:none;font-size:clamp(2.5rem,1.3rem + 3.6vw,4.1rem);line-height:1.03;text-wrap:balance}
+.hero.has-fld h1{max-width:none;font-size:clamp(2.1rem,1.2rem + 3.3vw,3.75rem);line-height:1.04;text-wrap:balance}
 .fld{position:relative;height:min(68vh,600px);min-height:340px}
 .fld canvas{position:absolute;left:-16%;top:-10%;width:132%;height:120%;display:none;pointer-events:none}
 .fld.is-live canvas{display:block}
@@ -16,7 +19,7 @@
 .fld.is-live .fld-still{display:none}
 .fld-say{position:relative;min-height:1.5em;text-align:center;font:600 1.0625rem/1.5 var(--font-sans);color:#FFF}
 .fld:not(.is-live)~.fld-say{display:none}
-@media (max-width:400px){.fld-say{min-height:3em}}
+@media (max-width:370px){.fld-say{min-height:3em}}
 .fld-cap{position:relative;margin-top:2px;text-align:center;font:500 var(--fs-micro)/1.5 var(--font-mono);letter-spacing:.06em;color:var(--navy-300)}
 .hero.has-fld .hero-glow{inset:4% 8% 8% 8%}
 
@@ -41,7 +44,7 @@
 @media (forced-colors:active){.key .cap{border:1px solid ButtonText}.key[aria-pressed=true] .cap{border:3px solid Highlight}}
 /* phones have no header Pause button, so the hero carries one */
 .fld-pause{display:none}
-@media (max-width:560px){.js .fld-pause{display:block;position:relative;min-height:44px;margin:0 auto;color:var(--navy-200);font-size:var(--fs-sm)}}
+@media (max-width:560px){.js .fld-pause{display:block;position:relative;min-height:44px;margin:-4px auto -6px;color:var(--navy-200);font-size:var(--fs-sm)}}
 
 @media (max-width:1020px){
   /* on one column the field sits between the headline and the keys that drive it */
@@ -56,7 +59,7 @@
   .hero.has-fld .curious{order:7}
   .hero.has-fld .lead{order:8}
   .hero.has-fld .towns{order:9}
-  .fld{height:min(30vh,260px);height:min(30svh,260px);min-height:190px}
+  .fld{height:min(27vh,240px);height:min(27svh,240px);min-height:180px}
   .fld-cap{display:none}
   .fld canvas{left:-8%;width:116%}
 }
