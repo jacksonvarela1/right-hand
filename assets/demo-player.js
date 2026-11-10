@@ -32,13 +32,21 @@
   function motionOff() { return RM.matches || document.documentElement.getAttribute("data-motion") === "off"; }
   RH.motionOff = motionOff;
 
-  /* ---------- conductor: only the most visible demo plays ---------- */
-  var players = [];
+  /* ---------- conductor: only the most visible demo plays, and never while the page is being scrolled ---------- */
+  var players = [], moving = false, moveT = 0;
   function conduct() {
     var best = null;
     players.forEach(function (p) { if (p.ratio >= 0.5 && (!best || p.ratio > best.ratio)) best = p; });
-    players.forEach(function (p) { if (p === best && !document.hidden) p._wake(); else p._sleep(); });
+    players.forEach(function (p) { if (p === best && !document.hidden) { if (moving) p._hold(); else p._wake(); } else p._sleep(); });
   }
+  // A demo rewrites its stage as it plays. That is work a phone should not be doing in the middle of a scroll, so the
+  // playing demo holds its place (same pill, same button) and carries on a moment after the page comes to rest.
+  var movedAt = 0;
+  function rest() { if (performance.now() - movedAt < 160) moveT = setTimeout(rest, 170); else { moving = false; conduct(); } }
+  window.addEventListener("scroll", function () {
+    movedAt = performance.now();   // one timer for the whole scroll, not one per scroll event
+    if (!moving) { moving = true; players.forEach(function (p) { p._hold(); }); moveT = setTimeout(rest, 170); }
+  }, { passive: true });
   document.addEventListener("visibilitychange", conduct);
   RH.conductor = { conduct: conduct, players: players };
 
@@ -67,7 +75,7 @@
       stage.appendChild(c); cursors[w] = c;
     });
 
-    var st = { i: 0, loop: 0, timer: 0, due: 0, left: 0, running: false, auto: true, handed: false, done: false, anims: [] };
+    var st = { i: 0, loop: 0, timer: 0, due: 0, left: 0, running: false, held: false, auto: true, handed: false, done: false, anims: [] };
     var p = { ratio: 0, root: root };
 
     var ctx = {
@@ -118,10 +126,18 @@
       try { s.run(ctx); } catch (e) { if (window.console) console.error(e); }
       sched(st.i < steps.length ? steps[st.i].d : 1200);
     }
-    function pause() { if (!st.running) return; clearT(); st.left = Math.max(0, st.due - Date.now()); st.running = false; st.anims.forEach(function (a) { try { a.pause(); } catch (e) {} }); setPill(st.handed ? "turn" : "ready"); pillText.textContent = st.handed ? "Your turn" : "Paused"; }
+    // quiet: a hold while the page scrolls. The clock and the animations stop; the pill and the button are left alone.
+    function pause(quiet) {
+      if (st.running) {
+        clearT(); st.left = Math.max(0, st.due - Date.now()); st.running = false; st.anims.forEach(function (a) { try { a.pause(); } catch (e) {} });
+        st.held = !!quiet; if (quiet) return;
+      } else if (quiet || !st.held) return;
+      st.held = false;
+      setPill(st.handed ? "turn" : "ready"); pillText.textContent = st.handed ? "Your turn" : "Paused";
+    }
     function resume() {
       if (st.running || st.handed || st.done || !st.auto || motionOff()) return;
-      st.running = true; setPill("playing");
+      st.running = true; if (!st.held) setPill("playing"); st.held = false;
       st.anims.forEach(function (a) { try { a.play(); } catch (e) {} });
       sched(st.left || (steps[st.i] ? steps[st.i].d : 400)); st.left = 0;
     }
@@ -129,20 +145,21 @@
     function park() { st.running = false; st.done = true; clearT(); finishAnims(); ctx.hideCursors(); if (cfg.finalState) cfg.finalState(ctx); setPill("turn"); handoff(true); }
     function handoff(silent) {
       if (st.handed) return;
-      st.handed = true; st.auto = false; st.running = false; clearT(); finishAnims(); ctx.hideCursors();
+      st.handed = true; st.auto = false; st.running = false; st.held = false; clearT(); finishAnims(); ctx.hideCursors();
       live.setAttribute("aria-live", "polite"); setPill("turn");
       root.classList.add("handed");
       if (cfg.onHandoff) cfg.onHandoff(ctx);
       if (!silent) conduct();
     }
     function restart() {
-      clearT(); finishAnims(); st.handed = false; st.done = false; st.auto = true; st.i = 0; st.loop = 0; st.left = 0;
+      clearT(); finishAnims(); st.handed = false; st.done = false; st.held = false; st.auto = true; st.i = 0; st.loop = 0; st.left = 0;
       root.classList.remove("handed"); live.setAttribute("aria-live", "off");
       if (cfg.reset) cfg.reset(ctx);
       st.running = false; resume();
     }
     p._wake = function () { if (!st.handed && !st.done && st.auto) resume(); };
     p._sleep = function () { pause(); };
+    p._hold = function () { pause(true); };
 
     btn.addEventListener("click", function () {
       if (motionOff()) {
@@ -153,7 +170,7 @@
         setPill("step"); if (st.i >= steps.length) { pillText.textContent = "Done. Your turn"; if (!st.handed) handoff(true); }
         return;
       }
-      if (st.running) { handoff(); return; }
+      if (st.running || st.held) { handoff(); return; }
       restart();
       var r = root.getBoundingClientRect(); if (r.top < 0 || r.bottom > innerHeight) root.scrollIntoView({ block: "center", behavior: "smooth" });
       p.ratio = 1; conduct();

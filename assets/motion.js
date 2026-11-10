@@ -21,6 +21,10 @@
   var EASE = "cubic-bezier(.23,1,.32,1)", EASE_IO = "cubic-bezier(.65,0,.35,1)";
   var LAND = W.CSS && CSS.supports && CSS.supports("animation-timing-function", "linear(0, 1)") ? "linear(0,.13 6%,.45 13%,.78 20%,.97 27%,1.04 34%,1.05 40%,1.03 48%,1.005 60%,.998 75%,1)" : EASE;
   var timers = [], finishers = [], introOn = false, queue = [], fxio = null;
+  // Phones and tablets get the calm tier: each block makes one short rise instead of word-by-word, card-by-card choreography.
+  // Every extra animated piece is another layer to build while the page is moving, which is what makes a scroll stutter.
+  var LITE = W.matchMedia("(pointer: coarse), (max-width: 900px)").matches;
+  if (LITE) html.classList.add("fx-lite");
   function later(fn, ms) { var t = setTimeout(fn, ms); timers.push(t); return t; }
 
   /* ---------- 1. intro: first visit of the session, home page only, at most 1.4 s, any click, key or scroll skips ---------- */
@@ -86,7 +90,7 @@
     introOn = false;
     html.classList.remove("rh-intro", "fx-intro-live");
     d.dispatchEvent(new CustomEvent("rh:intro-done"));
-    var q = queue; queue = []; q.forEach(fire);
+    var q = queue; queue = []; q.forEach(function (el) { fire(el); });
   }
 
   // deferred scripts run before DOMContentLoaded, so this waits for site.js and the demos to build their markup
@@ -155,9 +159,17 @@
   }
 
   /* ---------- 4. entrances ---------- */
-  // which way the page is moving: a section that comes into view while you scroll back up is shown settled, not animated
-  var goingUp = false, lastY = scrollY;
-  addEventListener("scroll", function () { var y = scrollY; if (y !== lastY) goingUp = y < lastY; lastY = y; }, { passive: true });
+  // An entrance plays only for something arriving at the bottom of the screen. Whatever comes in from above (scrolling back
+  // up), or is already well up the screen when it is first seen (a fast flick), is shown settled. The observer's own numbers
+  // say which, so nothing has to read the scroll position while the page is moving.
+  // A flick (the trigger line overshot by more than FLICK px in one frame) settles everything for a moment, too.
+  var FLICK = LITE ? 40 : 110, flickAt = -1e9;
+  function late(e) {
+    var rb = e.rootBounds; if (!rb) return e.boundingClientRect.top < 0;
+    var over = rb.bottom - e.boundingClientRect.top;
+    if (over > FLICK) flickAt = e.time;
+    return over > rb.bottom * .4 || e.time - flickAt < 450;
+  }
   function reveals() {
     // markup that site.js renders gets its effects here
     $$(".svc-grid").forEach(function (g) { if (!g.hasAttribute("data-fx")) { g.setAttribute("data-fx", "cascade"); g.setAttribute("data-edge", ""); } });
@@ -166,12 +178,13 @@
     if (off() || !HAS_IO) { els.forEach(settle); return; }
     // anything already on screen is settled as it is, so nothing blinks out (the intro covers the screen, so it waits)
     var vh = innerHeight, rs = els.map(function (el) { return el.getBoundingClientRect(); });
-    var todo = els.filter(function (el, i) { var r = rs[i], seen = !introOn && r.top < vh && r.bottom > 0; if (seen) settle(el); return !seen; });
-    todo.forEach(prep);
+    var todo = els.filter(function (el, i) { var r = rs[i], seen = !introOn && r.top < vh && r.bottom > 0; if (seen || LITE) settle(el); return !seen; });
+    // calm tier: everything is already in its finished state; what is still below the screen just waits, hidden
+    if (LITE) todo.forEach(function (el) { el.classList.add("fx-wait"); }); else todo.forEach(prep);
     html.classList.add("fx");
     fxio = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (!e.isIntersecting) return; fxio.unobserve(e.target); if (introOn) queue.push(e.target); else if (goingUp || e.boundingClientRect.top < 0) settle(e.target); else fire(e.target); });
-    }, { threshold: 0, rootMargin: "100% 0px -12% 0px" });
+      es.forEach(function (e) { if (!e.isIntersecting) return; fxio.unobserve(e.target); if (introOn) queue.push(e.target); else if (late(e)) settle(e.target); else fire(e.target, e.boundingClientRect.height); });
+    }, { threshold: 0, rootMargin: LITE ? "100% 0px 0px 0px" : "100% 0px -12% 0px" });
     todo.forEach(function (el) { fxio.observe(el); });
   }
   function prep(el) {
@@ -180,7 +193,13 @@
     else if (t === "head") { var eb = $(":scope > .eyebrow", el), h = $("h2", el); if (eb) scrPrep(eb); if (h) words(h); }
     else if (t === "scramble") scrPrep(el);
   }
-  function fire(el) {
+  function fire(el, hgt) {
+    if (LITE) {
+      if (!el.classList.contains("fx-wait")) return;
+      el.classList.remove("fx-wait");
+      if (!off() && el.animate) el.animate([{ opacity: 0, transform: "translateY(16px)" }, { opacity: 1, transform: "none" }], { duration: 480, easing: EASE });
+      return;
+    }
     if (el.classList.contains("fx-in")) return;
     if (off()) { settle(el); return; }
     var t = el.getAttribute("data-fx");
@@ -191,11 +210,12 @@
       var h = $("h2", el), n = h ? +h.style.getPropertyValue("--n") || 4 : 4;
       later(function () { el.classList.add("fx-done"); }, n * 42 + 1400);
     } else if (t === "cascade") later(function () { el.classList.add("fx-done"); }, Math.min(el.children.length, 11) * 65 + 1300);
-    else if (t === "scan") scan(el);
+    else if (t === "scan") scan(el, hgt);
     else if (t === "scramble") { var s = $(".fx-scr", el); if (s) scramble(s, 620); later(function () { el.classList.add("fx-done"); }, 700); }
     else el.classList.add("fx-done");
   }
   function settle(el) {
+    if (el.classList.contains("fx-wait")) { el.classList.remove("fx-wait"); if (el.classList.contains("fx-done")) return; }
     el.classList.add("fx-in", "fx-done");
     $$(".sw", el).forEach(function (s) { s.classList.add("in"); });
     $$(".fx-scr", el).forEach(function (v) { v._stop = true; var t = v.getAttribute("data-t"); if (t) v.textContent = t; });
@@ -245,8 +265,9 @@
     })(t0);
   }
   // scan-line wipe: a cover the color of the band shrinks away under a blue beam
-  function scan(el) {
-    var h = el.offsetHeight + 24, w = d.createElement("span");
+  function scan(el, hgt) {
+    // the observer has already measured the block; asking again here would force a layout in the middle of a scroll
+    var h = (hgt || el.offsetHeight) + 24, w = d.createElement("span");
     w.className = "fx-scan"; w.setAttribute("aria-hidden", "true"); w.innerHTML = "<b></b><i></i>";
     el.appendChild(w);
     var o = { duration: Math.min(1100, 520 + h * .45), delay: +(el.getAttribute("data-fx-delay") || 0), easing: EASE_IO, fill: "both" };
@@ -275,6 +296,9 @@
     el.innerHTML = '<span class="hud-n">01</span><span class="hud-ticks">' + tops.map(function () { return "<i></i>"; }).join("") + '</span><span class="hud-of">/ ' + pad(tops.length) + '</span><span class="hud-l"></span>';
     d.body.appendChild(el);
     var num = $(".hud-n", el), lab = $(".hud-l", el), ticks = $$(".hud-ticks i", el), nav = $$('.top nav a[href^="#"]'), on = all.map(function () { return false; }), now = -1;
+    // the HUD is hidden on phones (motion.css), so nothing is painted into it there
+    var shown = W.matchMedia("(min-width: 768px)");
+    if (shown.addEventListener) shown.addEventListener("change", function () { if (shown.matches && now >= 0) paint(now); });
     function label(s) {
       var t = s.getAttribute("data-hud"); if (t) return t;
       var e = $(".eyebrow", s), h = $("h1, h2", s);
@@ -292,7 +316,7 @@
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (e) { on[all.indexOf(e.target)] = e.isIntersecting; });
       var i = on.lastIndexOf(true);
-      if (i >= 0 && i !== now) { now = i; paint(i); }
+      if (i >= 0 && i !== now) { now = i; if (shown.matches) paint(i); }
     }, { rootMargin: "-45% 0px -54% 0px" });
     all.forEach(function (s) { io.observe(s); });
   }
@@ -311,11 +335,15 @@
   function progress() {
     var rail = $(".progress-rail");
     if (!rail || (W.CSS && CSS.supports && CSS.supports("animation-timeline: scroll()"))) return;
-    var raf = 0;
+    // a phone gets no fallback line: keeping it in step would mean measuring the page on every scroll frame
+    if (W.matchMedia("(pointer: coarse)").matches) return;
+    var raf = 0, h = 0;
+    function measure() { h = html.scrollHeight - innerHeight; }
+    measure(); addEventListener("resize", measure); addEventListener("load", measure);
+    if (W.ResizeObserver) new ResizeObserver(measure).observe(d.body);
     function paint() {
       raf = 0;
       if (off()) { rail.style.transform = ""; return; }
-      var h = html.scrollHeight - innerHeight;
       rail.style.transform = "scaleX(" + (h > 0 ? Math.min(1, Math.max(0, scrollY / h)) : 0).toFixed(4) + ")";
     }
     addEventListener("scroll", function () { if (!raf) raf = requestAnimationFrame(paint); }, { passive: true });

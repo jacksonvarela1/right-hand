@@ -36,11 +36,9 @@
   });
 
   /* ---------- reveals and swooshes ---------- */
-  // scrolling back up: whatever comes into view is shown as it is (see .rv-now in field.css)
-  var upward = false, lastY = window.scrollY;
-  window.addEventListener("scroll", function () { var y = window.scrollY; if (y !== lastY) upward = y < lastY; lastY = y; }, { passive: true });
+  // whatever comes into view from above (scrolling back up) is shown as it is (see .rv-now in field.css)
   if ("IntersectionObserver" in window) {
-    var rio = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { if (upward || e.boundingClientRect.top < 0) e.target.classList.add("rv-now"); e.target.classList.add("in"); rio.unobserve(e.target); } }); }, { threshold: .15, rootMargin: "100% 0px -6% 0px" });
+    var rio = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { if (e.boundingClientRect.top < 0) e.target.classList.add("rv-now"); e.target.classList.add("in"); rio.unobserve(e.target); } }); }, { threshold: .15, rootMargin: "100% 0px -6% 0px" });
     $$("[data-reveal], .sw").forEach(function (el) { rio.observe(el); });
   } else $$("[data-reveal], .sw").forEach(function (el) { el.classList.add("in"); });
 
@@ -51,8 +49,17 @@
       if (off()) return;
       // a number with a "+", "th" or "%" after it keeps its finished width while it counts (close.css makes it inline-block)
       if (el.tagName === "SPAN") el.style.minWidth = el.getBoundingClientRect().width + "px";
-      var t0 = performance.now(), ms = 1100;
-      requestAnimationFrame(function f(t) { var k = Math.max(0, Math.min(1, (t - t0) / ms)), e = 1 - Math.pow(1 - k, 3); /* the first frame can be stamped before t0: never show "-0" */ el.textContent = Math.round(to * e).toLocaleString("en-US"); if (k < 1) requestAnimationFrame(f); });
+      // While it counts, the block that holds the number keeps a fixed height and is fenced off (contain), so a new figure
+      // every frame is laid out inside that block only. Without the fence each figure re-laid-out the whole page mid-scroll.
+      var box = el.tagName === "SPAN" ? el.parentNode : el, bh = box.getBoundingClientRect().height;
+      var fence = bh > 0 && window.CSS && CSS.supports && CSS.supports("contain", "size layout") && getComputedStyle(box).display === "block";
+      if (fence) { box.style.height = bh + "px"; box.style.contain = "size layout"; }
+      var t0 = performance.now(), ms = 1100, shown = "";
+      requestAnimationFrame(function f(t) {
+        var k = Math.max(0, Math.min(1, (t - t0) / ms)), e = 1 - Math.pow(1 - k, 3), s = Math.round(to * e).toLocaleString("en-US");   // the first frame can be stamped before t0: never show "-0"
+        if (s !== shown) { shown = s; el.textContent = s; }
+        if (k < 1) requestAnimationFrame(f); else if (fence) { box.style.contain = ""; box.style.height = ""; }
+      });
     });
   });
 

@@ -60,6 +60,8 @@
     return Date.now() < busyUntil;
   }
   ["pointerdown", "keydown"].forEach(function (ev) { document.addEventListener(ev, function () { busyUntil = Date.now() + 4000; }, true); });
+  // scrolling is interaction too: a dialog that opens under a moving thumb stops the page dead
+  window.addEventListener("scroll", function () { busyUntil = Math.max(busyUntil, Date.now() + 2500); }, { passive: true });
   function open(force) {
     if (shown && !force) return;
     if (!force && (recent() || busy())) { if (!force && !recent()) setTimeout(function () { open(false); }, 5000); return; }

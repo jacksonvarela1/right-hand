@@ -127,7 +127,7 @@ ul,ol{margin:0;padding:0}
 .motion-btn{min-height:36px;padding:0 12px;font:600 .8125rem var(--font-sans);color:var(--navy-200);background:none;border:1px solid var(--navy-600);border-radius:var(--r-sm);cursor:pointer}
 .motion-btn:hover{color:#FFF;border-color:var(--navy-300)}
 .progress-rail{position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--blue-500);transform-origin:left;transform:scaleX(0)}
-@supports (animation-timeline:scroll()){@media (prefers-reduced-motion:no-preference){.progress-rail{animation:rail linear both;animation-timeline:scroll(root)}}}
+@supports (animation-timeline:scroll()){@media (prefers-reduced-motion:no-preference) and (pointer:fine){.progress-rail{animation:rail linear both;animation-timeline:scroll(root)}}}
 @keyframes rail{to{transform:scaleX(1)}}
 @media (max-width:1100px){.top nav{display:none}}
 @media (max-width:560px){.motion-btn{display:none}.top .btn.sm{padding:9px 12px;font-size:.875rem}}
