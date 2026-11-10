@@ -1,0 +1,142 @@
+/* Ticket rail: the jump links at the top of Live demos, hung like order tickets on a steel rail.
+   Markup: .rail > .rail-bar + ul.rail-list > li.rail-item > a.tk-link > .tk-swing > (.tk-hook, .tk-lift > (.tk-clip, .tk-paper)).
+   - Works with no JS: tickets hang still at their rest angles and are plain links.
+   - rail.js swings .tk-swing (rotate only). Hover lift, shadow and arrow are CSS, driven by --tk-up and --tk-tug.
+   - Every transition sits behind .js-motion, so reduced motion and the Pause motion button get instant state changes.
+   - The one saturated color is --hot, used once per ticket, on the arrow. */
+
+.rail{
+  --tk-paper:#FBF6EC;--tk-ink:#1B2A41;--tk-ink-2:#465367;--tk-hot:var(--hot,#FF4B33);
+  --rail-y:24px;--rail-h:10px;--rail-gap:16px;
+  --tk-pad:13px;--tk-fs-title:.9375rem;--tk-fs-town:.65625rem;--tk-fs-go:.75rem;--tk-minh:190px;--tk-neck:15px;--tk-clip-w:36px;
+  --tk-tear-a:polygon(0 0,100% 0,100% calc(100% - 3px),97.3% 100%,96.2% calc(100% - 2.5px),93.2% 100%,91.3% calc(100% - 2.6px),88.9% 100%,87.5% calc(100% - 3.6px),85.3% 100%,83.6% calc(100% - 4.4px),81.4% 100%,79.5% calc(100% - 3.3px),77.1% calc(100% - 1px),75.3% calc(100% - 3.3px),73.4% 100%,70.5% calc(100% - 3.6px),68.8% calc(100% - .1px),66.8% calc(100% - 4.4px),65.2% 100%,62.9% calc(100% - 3.1px),60.3% 100%,58.2% calc(100% - 3.7px),55.9% 100%,53.9% calc(100% - 4.7px),51.9% 100%,50.4% calc(100% - 3.7px),48.4% calc(100% - 1.2px),45.9% calc(100% - 3.7px),44.2% 100%,41.4% calc(100% - 2.4px),39.3% 100%,37.2% calc(100% - 3.8px),35.1% 100%,33.2% calc(100% - 3.5px),31% 100%,29.2% calc(100% - 3.7px),26.7% 100%,24.8% calc(100% - 4.7px),23.4% calc(100% - 1.2px),21% calc(100% - 2.9px),19.4% calc(100% - 1.1px),16.9% calc(100% - 2.9px),14.6% 100%,12.4% calc(100% - 3.3px),10.6% calc(100% - 1.1px),8.1% calc(100% - 4.2px),6% 100%,4% calc(100% - 3.8px),2.3% calc(100% - .5px),0 calc(100% - 3.3px));
+  --tk-tear-b:polygon(0 0,100% 0,100% calc(100% - 3px),97.2% 100%,95.6% calc(100% - 4.2px),94.1% calc(100% - .3px),91.5% calc(100% - 4.8px),89.7% 100%,87.6% calc(100% - 4.8px),85.6% 100%,83.8% calc(100% - 4.8px),81.1% calc(100% - 1.1px),79.3% calc(100% - 4.7px),77.6% 100%,74.9% calc(100% - 3.8px),73.6% 100%,70.8% calc(100% - 3.5px),68.9% 100%,66.4% calc(100% - 3.1px),64.6% 100%,62.8% calc(100% - 4.5px),60.3% calc(100% - .7px),58.4% calc(100% - 4.1px),55.7% calc(100% - .5px),54.5% calc(100% - 3.7px),52.8% calc(100% - .5px),50.4% calc(100% - 3.7px),47.9% 100%,46.3% calc(100% - 4px),43.7% 100%,41.8% calc(100% - 4.4px),40.1% 100%,37.8% calc(100% - 3.1px),36% calc(100% - 1.2px),33.5% calc(100% - 3.6px),30.5% 100%,29.2% calc(100% - 3.3px),27.6% calc(100% - .5px),24.7% calc(100% - 4.7px),23.5% 100%,20.9% calc(100% - 2.9px),19.5% calc(100% - .5px),16.9% calc(100% - 2.5px),14.9% 100%,12.7% calc(100% - 3.3px),10.8% 100%,8.7% calc(100% - 4.6px),6.7% 100%,4.1% calc(100% - 4.8px),1.4% 100%,0 calc(100% - 3.7px));
+  position:relative;contain:layout;margin:0;
+}
+/* sizes follow the width of the rail itself, so six tickets fit from 761px up */
+@supports (width:1cqi){
+  .rail{container-type:inline-size;
+    --rail-gap:clamp(10px,1.9cqi,22px);--tk-pad:clamp(10px,1.3cqi,15px);
+    --tk-fs-title:clamp(.8125rem,1.6cqi,1.125rem);--tk-fs-town:clamp(.625rem,.96cqi,.6875rem);--tk-fs-go:clamp(.6875rem,1.1cqi,.78125rem);
+    --tk-minh:clamp(154px,19.6cqi,220px);--tk-clip-w:clamp(30px,3.4cqi,38px)}
+}
+
+/* a soft pool of light on the wall behind the rail, so the paper shadows have something to fall on */
+.rail::before{content:"";position:absolute;z-index:0;left:-3%;right:-3%;top:-90px;bottom:-60px;pointer-events:none;
+  background:radial-gradient(50% 50% at 50% 46%,rgba(95,159,250,.13),rgba(95,159,250,.055) 50%,rgba(95,159,250,0) 100%)}
+
+/* ---------- the rail: brushed steel bar with end brackets ---------- */
+.rail-bar{position:absolute;z-index:1;left:0;right:0;top:calc(var(--rail-y) - var(--rail-h)/2);height:var(--rail-h);border-radius:calc(var(--rail-h)/2);pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(255,255,255,0) 0,rgba(255,255,255,.2) 14%,rgba(255,255,255,0) 31%,rgba(5,19,38,.16) 49%,rgba(255,255,255,.16) 68%,rgba(255,255,255,0) 84%,rgba(5,19,38,.12) 100%),
+    linear-gradient(180deg,#7A8697 0,#F5F7FA 15%,#D5DBE4 29%,#9BA7B7 52%,#667386 74%,#3A4658 100%);
+  box-shadow:0 10px 14px -6px rgba(0,3,10,.8)}
+.rail-bar::before,.rail-bar::after{content:"";position:absolute;top:50%;width:16px;height:34px;margin-top:-17px;border-radius:4px;
+  background:
+    radial-gradient(circle at 50% 7px,#263040 0 1.5px,rgba(255,255,255,.4) 1.6px 2.5px,rgba(255,255,255,0) 2.6px),
+    radial-gradient(circle at 50% calc(100% - 7px),#263040 0 1.5px,rgba(255,255,255,.4) 1.6px 2.5px,rgba(255,255,255,0) 2.6px),
+    linear-gradient(90deg,#465264 0,#A9B3C1 42%,#E1E6EC 55%,#6B7789 100%);
+  box-shadow:0 0 0 1px rgba(5,19,38,.55),0 8px 12px -4px rgba(0,3,10,.75)}
+.rail-bar::before{left:-6px}
+.rail-bar::after{right:-6px}
+
+/* ---------- the row of tickets ---------- */
+.rail-list{position:relative;z-index:2;list-style:none;margin:0;padding:var(--rail-y) 0 0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0 var(--rail-gap);align-items:start}
+/* contain:layout keeps a swinging ticket from ever widening the page or the phone scroller */
+.rail-item{display:flex;justify-content:center;min-width:0;contain:layout}
+/* hand-hung: each ticket gets its own rest angle and hang length */
+.rail-item:nth-child(1){--tk-rest:-1.7deg;--tk-drop:5px}
+.rail-item:nth-child(2){--tk-rest:1.1deg;--tk-drop:12px}
+.rail-item:nth-child(3){--tk-rest:-.6deg;--tk-drop:1px}
+.rail-item:nth-child(4){--tk-rest:2deg;--tk-drop:8px}
+.rail-item:nth-child(5){--tk-rest:-1.2deg;--tk-drop:13px}
+.rail-item:nth-child(6){--tk-rest:.8deg;--tk-drop:4px}
+.rail-item:nth-child(even){--tk-tear:var(--tk-tear-b)}
+.rail-item:focus-within{z-index:3}
+
+.tk-link{--tk-up:0;--tk-tug:0;position:relative;display:block;width:100%;max-width:186px;color:var(--tk-ink);text-decoration:none;outline:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+/* a little slack around the link so the pointer stays on the ticket while it straightens */
+.tk-link::after{content:"";position:absolute;inset:0 -6px -8px}
+.tk-link:focus-visible{--tk-up:1}
+.tk-link:active{--tk-tug:1}
+@media (hover:hover){
+  .tk-link:hover{--tk-up:1}
+  .rail-item:hover{z-index:3}
+}
+
+/* the pendulum: pivots where the ring sits on the rail. rail.js writes rotate() here while motion is on */
+.tk-swing{position:relative;display:block;transform-origin:50% 0;transform:rotate(calc(var(--tk-rest,0deg)*(1 - var(--tk-up))))}
+
+/* ring around the rail and the wire down to the clip */
+.tk-hook{position:absolute;left:50%;top:0;width:14px;height:calc(var(--tk-neck) + var(--tk-drop,6px) + 12px);margin-left:-7px;pointer-events:none}
+.tk-hook::before{content:"";position:absolute;left:0;top:-9px;width:14px;height:18px;border-radius:4px;
+  background:linear-gradient(90deg,#4E5A6C 0,#C9D0D9 30%,#F6F8FA 46%,#A7B1BE 68%,#566274 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(5,19,38,.45),0 0 0 1px rgba(5,19,38,.35),0 3px 4px -1px rgba(0,3,10,.6)}
+.tk-hook::after{content:"";position:absolute;left:50%;top:8px;bottom:0;width:3px;margin-left:-1.5px;border-radius:1px;
+  background:linear-gradient(90deg,#69758A 0,#E9EDF2 50%,#7C8798 100%)}
+
+/* the part that comes toward you on hover and gets tugged on press */
+.tk-lift{position:relative;display:block;padding-top:calc(var(--tk-neck) + var(--tk-drop,6px));transform-origin:50% calc(var(--tk-neck) + var(--tk-drop,6px));
+  transform:translateY(calc(var(--tk-up)*-5px + var(--tk-tug)*6px)) scale(calc(1 + var(--tk-up)*.05 - var(--tk-tug)*.015))}
+
+/* clip jaw: a small bulldog clip seen from the front */
+.tk-clip{position:absolute;z-index:2;left:50%;top:calc(var(--tk-neck) + var(--tk-drop,6px));width:var(--tk-clip-w);height:18px;margin-left:calc(var(--tk-clip-w)/-2);pointer-events:none;
+  clip-path:polygon(4px 0,calc(100% - 4px) 0,100% 100%,0 100%);border-radius:3px 3px 1px 1px;
+  background:
+    linear-gradient(90deg,rgba(5,19,38,.28) 0,rgba(5,19,38,0) 16%,rgba(5,19,38,0) 84%,rgba(5,19,38,.28) 100%),
+    linear-gradient(180deg,#5C6879 0,#F7F9FB 13%,#C7CED8 27%,#6C788B 37%,#3F4B5D 41%,#BCC5D0 46%,#A5AFBC 70%,#74808F 100%)}
+
+/* ---------- the paper ---------- */
+.tk-paper{position:relative;z-index:0;display:flex;flex-direction:column;min-height:var(--tk-minh);margin-top:10px;padding:calc(var(--tk-pad) + 13px) var(--tk-pad) calc(var(--tk-pad) + 6px);border-radius:2px}
+/* the sheet itself, with a torn bottom edge. Shading only: lighter at the top, a little shade under the clip and along the tear */
+.tk-paper::before{content:"";position:absolute;z-index:-1;inset:0;border-radius:2px 2px 0 0;clip-path:var(--tk-tear,var(--tk-tear-a));
+  background:
+    radial-gradient(27px 7px at 50% 9px,rgba(27,42,65,.26),rgba(27,42,65,0) 100%),
+    linear-gradient(98deg,rgba(255,255,255,.62) 0,rgba(255,255,255,0) 26%,rgba(27,42,65,0) 68%,rgba(27,42,65,.055) 100%),
+    linear-gradient(180deg,#FFFDF7 0,var(--tk-paper) 28%,#F8F1E4 72%,#EEE5D3 100%)}
+/* the shadow the paper throws on the wall. It drops and grows when the ticket comes forward */
+.tk-paper::after{content:"";position:absolute;z-index:-2;inset:20px 10px 8px;border-radius:3px;background:rgba(0,3,10,.62);box-shadow:0 12px 18px 3px rgba(0,3,10,.62);transform-origin:50% 0;
+  opacity:calc(.8 + var(--tk-up)*.2);transform:translateY(calc(var(--tk-up)*10px)) scale(calc(1 + var(--tk-up)*.04))}
+.tk-link:focus-visible .tk-paper{outline:3px solid var(--focus,#5F9FFA);outline-offset:3px}
+
+.tk-town{display:block;padding-bottom:.8em;margin-bottom:.95em;font:500 var(--tk-fs-town)/1.3 var(--font-mono,ui-monospace,Consolas,monospace);letter-spacing:.14em;text-transform:uppercase;color:var(--tk-ink-2);
+  background:repeating-linear-gradient(90deg,rgba(27,42,65,.42) 0 3px,rgba(27,42,65,0) 3px 7px) 0 100%/100% 1px no-repeat}
+.tk-title{display:block;font:800 var(--tk-fs-title)/1.17 var(--font-sans,system-ui,sans-serif);letter-spacing:-.02em;text-wrap:balance;color:var(--tk-ink)}
+.tk-go{display:flex;align-items:center;justify-content:space-between;gap:4px;white-space:nowrap;margin-top:auto;padding-top:14px;font:600 var(--tk-fs-go)/1.2 var(--font-sans,system-ui,sans-serif);letter-spacing:.005em;color:var(--tk-ink-2)}
+/* the one spot of color: a down arrow that fills in when the ticket is yours to pull */
+.tk-dot{position:relative;flex:none;display:grid;place-items:center;width:22px;height:22px;margin:-2px -3px -2px 0}
+.tk-dot::before{content:"";position:absolute;inset:0;border-radius:50%;background:var(--tk-hot);transform:scale(var(--tk-up))}
+.tk-arrow{position:relative;display:block;width:13px;height:13px;overflow:visible;color:var(--tk-hot);transform:translateY(calc(var(--tk-up)*1px))}
+.tk-link:focus-visible .tk-arrow{color:#FFF9F0}
+@media (hover:hover){.tk-link:hover .tk-arrow{color:#FFF9F0}}
+
+/* ---------- motion (only when the visitor allows it) ---------- */
+.js-motion .tk-swing{will-change:transform}
+.js-motion .tk-lift{transition:transform .38s var(--ease-land)}
+.js-motion .tk-link:active .tk-lift{transition:transform .14s var(--ease-out)}
+.js-motion .tk-paper::after{transition:opacity .3s ease,transform .38s var(--ease-out)}
+.js-motion .tk-dot::before{transition:transform .3s var(--ease-out)}
+.js-motion .tk-arrow{transition:color .16s ease,transform .3s var(--ease-out)}
+
+/* ---------- phones: the rail runs edge to edge and the tickets slide along it ---------- */
+@media (max-width:760px){
+  .rail{--rail-gap:14px;--tk-pad:16px;--tk-fs-title:1.125rem;--tk-fs-town:.6875rem;--tk-fs-go:.8125rem;--tk-minh:224px;--tk-clip-w:38px;
+    margin:0 calc(var(--pad-x,18px)*-1) -12px}
+  .rail::before{left:0;right:0}
+  .rail-bar{border-radius:0}
+  .rail-bar::before,.rail-bar::after{content:none}
+  .rail-list{display:flex;gap:0 var(--rail-gap);padding:var(--rail-y) var(--pad-x,18px) 40px;overflow-x:auto;overflow-y:hidden;
+    scroll-snap-type:x mandatory;scroll-padding:0 var(--pad-x,18px);overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
+    scrollbar-width:thin;scrollbar-color:rgba(167,181,202,.35) transparent}
+  .rail-item{flex:0 0 200px;scroll-snap-align:start}
+  .tk-link{max-width:none}
+}
+@media (max-width:760px) and (pointer:coarse){
+  .rail-list{scrollbar-width:none}
+  .rail-list::-webkit-scrollbar{display:none}
+}
+
+@media (forced-colors:active){
+  .tk-paper{border:1px solid LinkText}
+  .rail-bar{border:1px solid CanvasText}
+}

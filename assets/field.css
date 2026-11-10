@@ -13,6 +13,8 @@
 .fld.is-live canvas{display:block}
 .fld-still{position:absolute;left:50%;top:50%;width:min(52%,300px);transform:translate(-50%,-50%);overflow:visible}
 .fld.is-live .fld-still{display:none}
+.fld-say{position:relative;min-height:1.5em;text-align:center;font:600 1.0625rem/1.5 var(--font-sans);color:#FFF}
+.fld-say:empty{display:none}
 .fld-cap{position:relative;margin-top:2px;text-align:center;font:500 var(--fs-micro)/1.5 var(--font-mono);letter-spacing:.06em;color:var(--navy-300)}
 .hero.has-fld .hero-glow{inset:4% 8% 8% 8%}
 
@@ -91,9 +93,14 @@
   .st-live .st-ch .btn{margin-top:16px}
 }
 
+/* ---------- closing: the offer spelled out in points, beside the check-up form ---------- */
+.cl-fld{display:none;position:relative;height:clamp(92px,15vw,150px);margin:22px 0 2px}
+.cl-fld.is-live{display:block}
+.cl-fld canvas{position:absolute;left:0;top:-50%;width:100%;height:200%;pointer-events:none}
+
 /* ---------- the corridor queue (moved out of the hero) ---------- */
 .corridor{margin-top:clamp(2.5rem,1.5rem + 3vw,4.5rem)}
 .corridor-h{margin-bottom:22px;font-size:var(--fs-h3);font-weight:700;letter-spacing:-.01em;color:var(--ink)}
 .corridor .win{max-width:920px}
 
-@media print{.st-cv,.fld canvas{display:none!important}}
+@media print{.st-cv,.fld canvas,.cl-fld{display:none!important}}

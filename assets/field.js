@@ -47,8 +47,8 @@
     return byX(out);
   }
   // a drawing from RHShapes becomes N points, denser where the drawing is more opaque
-  function sample(name, seed) {
-    var fn = SH.draw && SH.draw[name];
+  function sample(name, seed) { return cloud(SH.draw && SH.draw[name], seed); }
+  function cloud(fn, seed) {
     if (!fn) return ring(seed);
     var S = SH.size || 320, c = d.createElement("canvas"), x, px, idx = [], cum = [], tot = 0, i, k, t, lo, hi, mid, id, r = rng(seed), out = new Float32Array(N * 3);
     c.width = c.height = S;
@@ -97,7 +97,7 @@
   /* ---------- the renderer ---------- */
   var VS = [
     "attribute vec3 aFrom;attribute vec3 aTo;attribute vec4 aSeed;",
-    "uniform float uMix;uniform float uTime;uniform float uSize;uniform float uScale;uniform float uHot;uniform float uBurst;",
+    "uniform float uMix;uniform float uTime;uniform float uSize;uniform float uScale;uniform float uHot;uniform float uBurst;uniform float uJit;",
     "uniform vec2 uFit;uniform vec2 uOffset;uniform vec2 uRot;uniform vec2 uPtr;",
     "varying float vHot;varying float vA;varying float vTint;",
     "void main(){",
@@ -105,8 +105,8 @@
     " vec3 p=mix(aFrom,aTo,m);",
     " float fly=sin(m*3.14159265);",
     " vec3 n=vec3(sin(aSeed.y*61.+uTime*.9+p.y*4.),cos(aSeed.z*53.+uTime*.8+p.x*4.),sin(aSeed.w*47.+uTime*.7+p.x*2.));",
-    " p+=n*(.009+fly*(.07+.2*aSeed.y));",
-    " p.z+=fly*(aSeed.w-.5)*.8;",
+    " p+=n*uJit*(.009+fly*(.07+.2*aSeed.y));",
+    " p.z+=fly*(aSeed.w-.5)*.8*uJit;",
     " vec2 dp=p.xy-uPtr;p.xy+=dp*(.03/(dot(dp,dp)+.03));",
     " p*=1.+uBurst*(.2+aSeed.y*.7);",
     " float cy=cos(uRot.x),sy=sin(uRot.x),cx=cos(uRot.y),sx=sin(uRot.y);",
@@ -143,7 +143,7 @@
       if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return false;
       gl.useProgram(prog);
       ["aFrom", "aTo", "aSeed"].forEach(function (n) { loc[n] = gl.getAttribLocation(prog, n); gl.enableVertexAttribArray(loc[n]); });
-      ["uMix", "uTime", "uSize", "uScale", "uHot", "uBurst", "uFit", "uOffset", "uRot", "uPtr"].forEach(function (n) { loc[n] = gl.getUniformLocation(prog, n); });
+      ["uMix", "uTime", "uSize", "uScale", "uHot", "uBurst", "uJit", "uFit", "uOffset", "uRot", "uPtr"].forEach(function (n) { loc[n] = gl.getUniformLocation(prog, n); });
       gl.disable(gl.DEPTH_TEST); gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE); gl.clearColor(0, 0, 0, 0);
       buf(seeds); gl.vertexAttribPointer(loc.aSeed, 4, gl.FLOAT, false, 0, 0);
       bufs = data.map(function (a, i) { return buf(a, i === 0); });
@@ -180,7 +180,8 @@
       s = Math.min(w, h) * (u.scale || 1);
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.uniform1f(loc.uMix, u.mix); gl.uniform1f(loc.uTime, u.time); gl.uniform1f(loc.uScale, u.scale || 1);
-      gl.uniform1f(loc.uSize, clamp(s / 270, 1.4, 2.9) * dpr);
+      gl.uniform1f(loc.uSize, clamp(s / 270, 1.4, 2.9) * dpr * (u.size || 1));
+      gl.uniform1f(loc.uJit, u.jit === undefined ? 1 : u.jit);
       gl.uniform1f(loc.uHot, u.hot); gl.uniform1f(loc.uBurst, u.burst || 0);
       gl.uniform2f(loc.uFit, Math.min(w, h) / w, Math.min(w, h) / h);
       gl.uniform2f(loc.uOffset, u.offX || 0, u.offY || 0);
@@ -207,12 +208,13 @@
 
   /* ---------- hero: three keys, one cloud ---------- */
   function hero() {
-    var sec = $(".hero"), host = $("#fld"), cv = host && $("canvas", host), trio = sec && $(".trio", sec), cap = $("#fld-cap");
+    var sec = $(".hero"), host = $("#fld"), cv = host && $("canvas", host), trio = sec && $(".trio", sec), cap = $("#fld-cap"), say = $("#fld-say");
     if (!sec || !cv) return;
     var f = makeField(cv);
     if (!f) return;
     host.classList.add("is-live");
     var order = ["doc", "lens", "mark"], slot = { pile: f.add(shape("pile")) }, keys = [];
+    var SAY = { doc: "AI writes the first pass.", lens: "A person on our team reads every piece.", mark: "Nothing goes out without your OK." };
     order.forEach(function (n) { slot[n] = f.add(shape(n)); });
     var at = -1, to = slot.pile, mix = 1, anim = null, next = 0, held = 0, hot = .05, burst = 0, rx = 0, ry = 0, tx = 0, ty = 0, px = 9, py = 9, t0 = performance.now(), wake;
     f.pair(slot.pile, slot.pile);
@@ -223,6 +225,7 @@
       f.pair(from, to);
       if (off()) { mix = 1; anim = null; } else { mix = 0; anim = { t: now, d: dur || 1500 }; }
       keys.forEach(function (k, j) { k.setAttribute("aria-pressed", String(j === i)); });
+      if (say) say.textContent = SAY[order[i]] || "";
       if (wake) wake();
     }
     function frame(now) {
@@ -311,6 +314,37 @@
     W.addEventListener("scroll", wake, { passive: true }); // paused motion still follows the scroll, one still frame at a time
   }
 
-  function init() { hero(); story(); }
+  /* ---------- closing: the offer, spelled out in points beside the check-up form ---------- */
+  function closer() {
+    var host = $("#cl-fld"), cv = host && $("canvas", host);
+    if (!host || !cv) return;
+    var WORDS = ["Free.", "30 minutes.", "Yours to keep."], FONT = 'px "Plus Jakarta Sans",system-ui,sans-serif', f = makeField(cv);
+    if (!f) return;
+    function build() {
+      var S = SH.size || 320, m = d.createElement("canvas").getContext("2d"), widest = 1, size;
+      m.font = "800 100" + FONT;
+      WORDS.forEach(function (t) { widest = Math.max(widest, m.measureText(t).width); });
+      size = Math.min(54, 100 * (S - 20) / widest);
+      var slots = WORDS.map(function (t, i) {
+        return f.add(cloud(function (x) { x.fillStyle = "#fff"; x.textBaseline = "middle"; x.font = "800 " + size.toFixed(1) + FONT; x.fillText(t, 10, S / 2); }, 41 + i));
+      });
+      var at = 0, mix = 1, anim = null, next = 0, wake;
+      host.classList.add("is-live");
+      f.pair(slots[0], slots[0]);
+      wake = loop(host, function (now) {
+        var still = off(), ratio = cv.clientHeight ? cv.clientWidth / cv.clientHeight : 1.5;
+        if (still) { mix = 1; anim = null; }
+        else if (anim) { mix = clamp((now - anim.t) / anim.d, 0, 1); if (mix >= 1) { anim = null; next = now + 2300; } }
+        else if (!next) next = now + 1800;
+        else if (now > next) { f.pair(slots[at], slots[(at + 1) % slots.length]); at = (at + 1) % slots.length; mix = 0; anim = { t: now, d: 1400 }; }
+        f.draw({ mix: mix, time: still ? 0 : now / 1000, rotX: still ? 0 : Math.sin(now / 2400) * .05, rotY: 0, ptrX: 9, ptrY: 9, scale: ratio * .97, hot: .07, burst: 0, jit: .3, size: .72 });
+        return !still;
+      });
+      f.onrestore = wake;
+    }
+    if (d.fonts && d.fonts.load) d.fonts.load("800 40" + FONT).then(build, build); else build();
+  }
+
+  function init() { hero(); story(); closer(); }
   if (d.readyState === "loading") d.addEventListener("DOMContentLoaded", init); else init();
 })();
