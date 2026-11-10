@@ -14,14 +14,14 @@
 
   // spring, in degrees and seconds
   var K = 96;            // stiffness: about 1.5 swings a second
-  var ZETA = 0.26;       // damping ratio: a first swing dies out in about 1.5 s
+  var ZETA = 0.3;        // damping ratio: the first swing of the whole row dies out in about 1.5 s
   var HOT_K = 1.9, HOT_C = 2.6;   // a hovered ticket is held: stiffer and close to critically damped
   var MAX_A = 11;        // never swing further than this
   var DT_MAX = 0.034;    // clamp the step so a slow frame cannot blow the spring up
   var GY = 0.16, GX = 0.5, F_MAX = 440;   // push per px/s of page scroll and of sideways scroll, and its ceiling
   var EASE = 0.06;       // seconds the push takes to build and fade
   var LAG = 0.04;        // seconds of delay per ticket, so a push travels left to right
-  var KICK_IN = 88, STAGGER = 75, KICK_NEAR = 55;   // first swing, its delay per ticket, and the neighbour nudge (deg/s)
+  var KICK_IN = 92, STAGGER = 60, KICK_NEAR = 58;   // first swing, its delay per ticket, and the neighbour nudge (deg/s)
   var VARY = [1, 0.93, 1.07, 0.97, 0.9, 1.04];      // tickets hang at slightly different lengths, so they drift out of step
 
   function allowed() {
@@ -43,12 +43,13 @@
       var k = K * VARY[i % VARY.length];
       return { el: el, rest: rest, a: rest, v: 0, f: 0, k: k, c: 2 * ZETA * Math.sqrt(k), hover: false, focus: false, drawn: null, nudged: 0 };
     });
-    var queue = [];              // delayed kicks: { i, v, at }
+    var queue = [];              // delayed kicks: { i, v, at }, timed on the loop clock below
     var live = false;            // motion is allowed
     var onScreen = !("IntersectionObserver" in w);
     var seen = onScreen;         // enough of the rail is showing for the first swing
     var entered = false;
     var id = 0, last = 0, lastY = 0, lastX = 0, push = 0;
+    var clock = 0;               // seconds the loop has simulated. A dropped frame cannot bunch the staggered kicks together
 
     function draw(s, force) {
       var a = Math.round(s.a * 1000) / 1000;
@@ -68,12 +69,12 @@
     function kick(i, v, delay) {
       var s = S[i];
       if (!s) return;
-      if (delay) queue.push({ i: i, v: v, at: w.performance.now() + delay });
+      if (delay) queue.push({ i: i, v: v, at: clock + delay / 1000 });
       else s.v += v;
     }
     // the rail gets bumped at its left end and the swing runs down the row
     function entrance(scale) {
-      for (var i = 0; i < S.length; i++) kick(i, -KICK_IN * scale * (1 - i * 0.045), i * STAGGER + 1);
+      for (var i = 0; i < S.length; i++) kick(i, -KICK_IN * scale * (1 - i * 0.045), i * STAGGER + 10);
     }
     // the pointer lands on ticket i: the tickets either side lean away from it
     function nudge(i, scale) {
@@ -90,15 +91,16 @@
       last = t;
       if (real <= 0) real = 1 / 60;                      // first frame after waking has no gap to measure
       var dt = real > DT_MAX ? DT_MAX : real;
+      clock += dt;
 
       // scroll speed becomes a sideways push, smoothed, then handed down the row with a small delay per ticket
       var y = w.pageYOffset || 0, x = list.scrollLeft || 0;
-      var drive = clamp(-((y - lastY) * GY + (x - lastX) * GX) / real, -F_MAX, F_MAX);
+      var drive = clamp(-((y - lastY) * GY + (x - lastX) * GX) / real, -F_MAX * 6, F_MAX * 6);
       lastY = y; lastX = x;
       push += (drive - push) * (1 - Math.exp(-dt / EASE));
-      var src = push, al = 1 - Math.exp(-dt / LAG);
+      var src = clamp(push, -F_MAX, F_MAX), al = 1 - Math.exp(-dt / LAG);
 
-      for (var q = queue.length - 1; q >= 0; q--) if (t >= queue[q].at) { S[queue[q].i].v += queue[q].v; queue.splice(q, 1); }
+      for (var q = queue.length - 1; q >= 0; q--) if (clock >= queue[q].at) { S[queue[q].i].v += queue[q].v; queue.splice(q, 1); }
 
       var busy = queue.length > 0 || Math.abs(push) > 1;
       for (var i = 0; i < S.length; i++) {
