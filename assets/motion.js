@@ -322,7 +322,7 @@
 
   /* ---------- 8. fine pointers: a soft spotlight follows the cursor on dark cards; primary CTAs lean toward it ---------- */
   function spotlight() {
-    $$(".pstat, .team > li, .hero .win, .terms, .demo, .line-links a, .page-cta .wrap").forEach(function (card) {
+    $$(".pstat, .team > li, .win, .terms, .demo, .line-links a, .page-cta .wrap").forEach(function (card) {
       if (card.closest(".stage")) return;
       var clip = d.createElement("span");
       clip.className = "fx-spot-clip"; clip.setAttribute("aria-hidden", "true"); clip.innerHTML = '<span class="fx-spot"></span>';

@@ -526,3 +526,7 @@ footer .linkbtn{color:var(--navy-200);font-weight:500;padding:0}
 .team-mail a,.close-alt a,footer a{display:inline-block;padding:3px 0}
 /* touch: small buttons and chips at least 44px tall. It sits after the base .chip and .bar-btn rules so it wins (demo stages keep their own sizes) */
 @media (pointer:coarse){.btn.sm,.chip:not(.stage *),.bar-btn,.q-ask .q-approve{min-height:44px}}
+
+/* One hot color (2026-11-10), reserved for "your move": primary buttons and the owner's approve actions. */
+:root{--hot:#FF4B33;--hot-2:#FF6A55}
+:root,.dark,.q-ask .q-approve,.composer .btn,.int-card .btn{--btn-bg:var(--hot);--btn-bg-hover:var(--hot-2);--btn-ink:var(--navy-950)}

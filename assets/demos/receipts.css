@@ -75,7 +75,7 @@
 #demo-receipts .rs-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding-top:10px;border-top:1px solid var(--gray-200)}
 #demo-receipts .rs-by{flex:1 1 100%;font:500 .75rem var(--font-mono);color:var(--navy-600)}
 #demo-receipts .rs-approve[aria-disabled=true],#demo-receipts .rs-approve[aria-disabled=true]:hover{opacity:.5;cursor:default;background:var(--btn-bg);border-color:var(--btn-bg)}
-#demo-receipts .rs-approve{--btn-bg:var(--blue-600);--btn-bg-hover:var(--blue-700);--btn-ink:#FFFFFF}
+#demo-receipts .rs-approve{--btn-bg:var(--hot);--btn-bg-hover:var(--hot-2);--btn-ink:var(--navy-950)}
 #demo-receipts .rs-stamp{position:absolute;right:14px;bottom:10px;padding:6px 12px;border:2.5px solid var(--green-700);border-radius:6px;color:var(--green-700);font:800 1.125rem/1 var(--font-sans);letter-spacing:.06em;text-transform:uppercase;text-align:center;transform:rotate(-6deg) scale(1.3);opacity:0;pointer-events:none;background:rgba(255,255,255,.9)}
 #demo-receipts .rs-stamp small{display:block;margin-top:3px;font:600 .625rem var(--font-mono);letter-spacing:.02em;text-transform:none}
 #demo-receipts .rc-sheet.approved .rs-stamp{opacity:1;transform:rotate(-6deg) scale(1);transition:opacity .2s ease,transform .32s var(--ease-land)}

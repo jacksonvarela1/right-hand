@@ -1,0 +1,99 @@
+/* Right Hand NWA: the particle field (assets/field.js), the three hero keys and the scroll story. Loads after close.css.
+   Everything here has a finished still state: no JS, no WebGL, reduced motion and paused motion all get a complete page. */
+
+/* ---------- one hot color: the "your move" moments only (primary buttons, the approve key, a few sparks in the field) ---------- */
+.cta-pill{background:var(--hot);color:var(--navy-950);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22),0 14px 30px -12px rgba(5,19,38,.6)}
+.cta-pill:hover{background:var(--hot-2)}
+
+/* ---------- hero: copy on the left, the field on the right ---------- */
+.hero.has-fld .hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.hero.has-fld h1{max-width:none;font-size:clamp(2.5rem,1.3rem + 3.6vw,4.1rem);line-height:1.03;text-wrap:balance}
+.fld{position:relative;height:min(68vh,600px);min-height:340px}
+.fld canvas{position:absolute;left:-16%;top:-10%;width:132%;height:120%;display:none;pointer-events:none}
+.fld.is-live canvas{display:block}
+.fld-still{position:absolute;left:50%;top:50%;width:min(52%,300px);transform:translate(-50%,-50%);overflow:visible}
+.fld.is-live .fld-still{display:none}
+.fld-cap{position:relative;margin-top:2px;text-align:center;font:500 var(--fs-micro)/1.5 var(--font-mono);letter-spacing:.06em;color:var(--navy-300)}
+.hero.has-fld .hero-glow{inset:4% 8% 8% 8%}
+
+/* the three chips become keys you can press */
+.trio.keys{gap:14px 12px;margin-top:24px}
+.trio.keys li{padding:6px 0 0;border:0;border-radius:0;background:none}
+.key{all:unset;box-sizing:border-box;display:block;border-radius:12px;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+.key .cap{position:relative;display:inline-flex;align-items:center;gap:7px;min-height:46px;padding:0 17px 2px;border-radius:11px;font:600 .9375rem/1 var(--font-sans);color:var(--navy-100);white-space:nowrap;
+  background:linear-gradient(180deg,#203D66 0%,#152B4C 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18),inset 0 -1px 0 rgba(0,0,0,.4),0 6px 0 #071528,0 7px 0 1px rgba(3,10,22,.7),0 16px 20px -10px rgba(0,0,0,.75);
+  transform:translateY(-6px);transition:transform .16s var(--ease-out),box-shadow .16s var(--ease-out),color .2s ease,background-color .2s ease}
+.key .cap b{color:var(--blue-300);font-weight:800}
+.key .cap::after{content:"";position:absolute;left:15px;right:15px;bottom:7px;height:2px;border-radius:2px;background:var(--blue-400);opacity:0;transition:opacity .2s ease}
+@media (hover:hover){.key:hover .cap{transform:translateY(-7px);color:#FFF}}
+.key:active .cap,.key[aria-pressed=true] .cap{transform:translateY(-1px);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),inset 0 -1px 0 rgba(0,0,0,.4),0 1px 0 #071528,0 2px 0 1px rgba(3,10,22,.7),0 6px 10px -6px rgba(0,0,0,.75)}
+.key:active .cap{transform:none}
+.key[aria-pressed=true] .cap{color:#FFF}
+.key[aria-pressed=true] .cap::after{opacity:1;box-shadow:0 0 10px var(--blue-400)}
+.key[data-k=mark][aria-pressed=true] .cap::after{background:var(--hot);box-shadow:0 0 12px var(--hot)}
+.key[data-k=mark][aria-pressed=true] .cap b{color:var(--hot-2)}
+.key:focus-visible{outline:3px solid var(--focus);outline-offset:5px}
+
+@media (max-width:1020px){
+  /* on one column the field sits between the headline and the keys that drive it */
+  .hero.has-fld .hero-grid{grid-template-columns:minmax(0,1fr);gap:0}
+  .hero.has-fld .hero-copy{display:contents}
+  .hero.has-fld .hero-copy > .eyebrow{order:1}
+  .hero.has-fld h1{order:2}
+  .hero.has-fld .hero-visual{order:3;margin-top:6px}
+  .hero.has-fld .trio{order:4;margin-top:14px;justify-content:center}
+  .hero.has-fld .lead{order:5}
+  .hero.has-fld .ctas{order:6}
+  .hero.has-fld .micro{order:7}
+  .hero.has-fld .towns{order:8}
+  .fld{height:min(40vh,340px);height:min(40svh,340px);min-height:250px}
+  .fld canvas{left:-8%;width:116%}
+}
+@media (max-width:420px){.trio.keys{gap:12px 8px}.key .cap{padding:0 12px 2px;font-size:.875rem}.key .cap::after{left:11px;right:11px}}
+
+/* ---------- story: a plain list by default ---------- */
+.story{position:relative;background:var(--navy-950)}
+.st-pin{position:relative;padding:var(--section-y) 0}
+.st-cv{display:none}
+.story h2{margin-top:14px;max-width:16ch;color:#FFF}
+.st-list{list-style:none;margin-top:var(--section-head-gap);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(1.5rem,1rem + 2vw,2.5rem) var(--gutter)}
+.st-ch h3{color:#FFF}
+.st-ch p{margin-top:6px;color:var(--navy-200);max-width:26em}
+.st-ch .btn{margin-top:16px}
+.st-prog{display:none}
+@media (max-width:860px){.st-list{grid-template-columns:minmax(0,1fr)}}
+
+/* live: the section pins and the scroll scrubs the field from chapter to chapter */
+.st-live{height:calc(100vh + var(--st-n,5)*70vh);height:calc(100svh + var(--st-n,5)*70svh)}
+.st-live .st-pin{position:sticky;top:0;height:100vh;height:100svh;padding:0;overflow:hidden}
+.st-live .st-cv{display:block;position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.st-live .st-pin::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,var(--navy-950) 0%,rgba(5,19,38,.86) 30%,rgba(5,19,38,0) 58%)}
+.st-live .st-in{position:relative;z-index:1;height:100%;display:flex;align-items:center}
+.st-live .st-copy{width:min(100%,33rem);padding-top:66px}
+.st-live h2{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.st-live .st-list{position:relative;display:block;margin-top:18px;min-height:19rem}
+.st-live .st-ch{position:absolute;left:0;right:0;top:0;opacity:0;visibility:hidden;transform:translateY(30px);transition:opacity .4s ease,transform .6s var(--ease-out),visibility 0s .4s}
+.st-live .st-ch.was{transform:translateY(-30px)}
+.st-live .st-ch.on{opacity:1;visibility:visible;transform:none;transition-delay:0s}
+.st-live .st-ch h3{font-size:clamp(2.75rem,1.5rem + 5.2vw,5.5rem);font-weight:800;line-height:.98;letter-spacing:-.04em;text-wrap:balance}
+.st-live .st-ch p{margin-top:20px;font-size:var(--fs-lead);line-height:1.5;max-width:22em}
+.st-live .st-ch .btn{margin-top:26px}
+.st-live .st-prog{display:block;position:relative;margin-top:8px;height:2px;width:min(100%,15rem);background:rgba(167,181,202,.22)}
+.st-live .st-prog i{position:absolute;inset:0;background:var(--blue-400);transform-origin:left;transform:scaleX(var(--p,0))}
+@media (max-width:860px){
+  .st-live .st-pin::after{background:linear-gradient(0deg,var(--navy-950) 0%,rgba(5,19,38,.9) 34%,rgba(5,19,38,0) 60%)}
+  .st-live .st-in{align-items:flex-end}
+  .st-live .st-copy{padding:0 0 calc(92px + env(safe-area-inset-bottom))}
+  .st-live .st-list{min-height:12.5rem;margin-top:10px}
+  .st-live .st-ch h3{font-size:clamp(2.5rem,1.4rem + 6vw,3.6rem)}
+  .st-live .st-ch p{margin-top:12px}
+  .st-live .st-ch .btn{margin-top:16px}
+}
+
+/* ---------- the corridor queue (moved out of the hero) ---------- */
+.corridor{margin-top:clamp(2.5rem,1.5rem + 3vw,4.5rem)}
+.corridor-h{margin-bottom:22px;font-size:var(--fs-h3);font-weight:700;letter-spacing:-.01em;color:var(--ink)}
+.corridor .win{max-width:920px}
+
+@media print{.st-cv,.fld canvas{display:none!important}}
