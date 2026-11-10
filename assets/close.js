@@ -169,7 +169,7 @@
   (function pill() {
     var p = $("#cta-pill"), hero = $(".hero");
     if (!p || !hero || !("IntersectionObserver" in W)) return;
-    var hide = [$("#first-handoff"), $("#checkup"), $("footer")].filter(Boolean), seen = hide.map(function () { return false; }), heroIn = true;
+    var hide = [$("#story"), $("#signup"), $("#first-handoff"), $("#checkup"), $("footer")].filter(Boolean), seen = hide.map(function () { return false; }), heroIn = true;
     function paint() { p.classList.toggle("on", !heroIn && seen.indexOf(true) < 0); }
     new IntersectionObserver(function (es) { heroIn = es[es.length - 1].isIntersecting; paint(); }).observe(hero);
     // the top 84px sit under the sticky header (scroll-padding-top): a section tucked under it, or just touching that line, is not on screen

@@ -6,7 +6,7 @@
    - The one saturated color is --hot, used once per ticket, on the arrow. */
 
 .rail{
-  --tk-paper:#FBF6EC;--tk-ink:#1B2A41;--tk-ink-2:#465367;--tk-hot:var(--hot,#FF4B33);
+  --tk-paper:#FBF6EC;--tk-ink:#1B2A41;--tk-ink-2:#465367;--tk-hot:var(--blue-600,#1B6BD1);
   --rail-y:24px;--rail-h:10px;--rail-gap:16px;
   --tk-pad:13px;--tk-fs-title:.9375rem;--tk-fs-town:.65625rem;--tk-fs-go:.75rem;--tk-minh:190px;--tk-neck:15px;--tk-clip-w:36px;--tk-track:.12em;
   --tk-tear-a:polygon(0 0,100% 0,100% calc(100% - 3px),97.3% 100%,96.2% calc(100% - 2.5px),93.2% 100%,91.3% calc(100% - 2.6px),88.9% 100%,87.5% calc(100% - 3.6px),85.3% 100%,83.6% calc(100% - 4.4px),81.4% 100%,79.5% calc(100% - 3.3px),77.1% calc(100% - 1px),75.3% calc(100% - 3.3px),73.4% 100%,70.5% calc(100% - 3.6px),68.8% calc(100% - .1px),66.8% calc(100% - 4.4px),65.2% 100%,62.9% calc(100% - 3.1px),60.3% 100%,58.2% calc(100% - 3.7px),55.9% 100%,53.9% calc(100% - 4.7px),51.9% 100%,50.4% calc(100% - 3.7px),48.4% calc(100% - 1.2px),45.9% calc(100% - 3.7px),44.2% 100%,41.4% calc(100% - 2.4px),39.3% 100%,37.2% calc(100% - 3.8px),35.1% 100%,33.2% calc(100% - 3.5px),31% 100%,29.2% calc(100% - 3.7px),26.7% 100%,24.8% calc(100% - 4.7px),23.4% calc(100% - 1.2px),21% calc(100% - 2.9px),19.4% calc(100% - 1.1px),16.9% calc(100% - 2.9px),14.6% 100%,12.4% calc(100% - 3.3px),10.6% calc(100% - 1.1px),8.1% calc(100% - 4.2px),6% 100%,4% calc(100% - 3.8px),2.3% calc(100% - .5px),0 calc(100% - 3.3px));

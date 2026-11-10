@@ -530,3 +530,10 @@ footer .linkbtn{color:var(--navy-200);font-weight:500;padding:0}
 /* One hot color (2026-11-10), reserved for "your move": primary buttons and the owner's approve actions. */
 :root{--hot:#FF4B33;--hot-2:#FF6A55}
 :root,.dark,.q-ask .q-approve,.composer .btn,.int-card .btn{--btn-bg:var(--hot);--btn-bg-hover:var(--hot-2);--btn-ink:var(--navy-950)}
+.top .btn.sm{background:transparent;color:#FFF;border-color:var(--hot)}
+.top .btn.sm:hover{background:rgba(255,75,51,.16);border-color:var(--hot-2)}
+.composer{--focus:var(--blue-600)}
+/* no JavaScript: the corridor queue shows its statuses, and controls that need scripts are hidden */
+html:not(.js) .q-st{opacity:1}
+html:not(.js) .q-st .ck path{stroke-dashoffset:0}
+html:not(.js) .q-approve,html:not(.js) .motion-btn{display:none}
