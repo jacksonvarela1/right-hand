@@ -48,7 +48,8 @@
   .hero.has-fld .lead{order:5}
   .hero.has-fld .ctas{order:6}
   .hero.has-fld .micro{order:7}
-  .hero.has-fld .towns{order:8}
+  .hero.has-fld .curious{order:8}
+  .hero.has-fld .towns{order:9}
   .fld{height:min(40vh,340px);height:min(40svh,340px);min-height:250px}
   .fld canvas{left:-8%;width:116%}
 }
@@ -93,6 +94,37 @@
   .st-live .st-ch .btn{margin-top:16px}
 }
 
+/* ---------- sign-up band: leave an email, watch it go ---------- */
+.sg{position:relative;overflow:hidden;background:var(--navy-950);padding:clamp(3.5rem,2.5rem + 4vw,6rem) 0 clamp(4rem,3rem + 4vw,6.5rem);text-align:center}
+.sg-in{position:relative;max-width:42rem;margin:0 auto;padding:0 var(--pad-x)}
+.sg-fld{display:none;position:relative;height:clamp(150px,20vw,210px);margin-bottom:14px}
+.sg-fld.is-live{display:block}
+.sg-fld canvas{position:absolute;left:50%;top:-30%;width:100vw;height:160%;transform:translateX(-50%);pointer-events:none}
+.sg h2{margin-top:12px;color:#FFF}
+.sg .lead{margin:16px auto 0;color:var(--navy-200)}
+.sg-form{position:relative;display:flex;gap:10px;margin-top:28px}
+.sg-field{position:relative;flex:1;min-width:0}
+.sg-field input{width:100%;min-height:58px;padding:0 18px;border:1.5px solid var(--navy-500);border-radius:12px;background:rgba(18,40,70,.7);color:#FFF;font:500 1.0625rem/1.2 var(--font-sans);transition:border-color .2s ease,box-shadow .2s ease}
+.sg-field input::placeholder{color:var(--navy-300)}
+.sg-field input:focus-visible{outline:0;border-color:var(--blue-400);box-shadow:0 0 0 3px rgba(95,159,250,.35)}
+.sg-field input[aria-invalid=true]{border-color:var(--red-300)}
+.sg-field::after{content:"";position:absolute;left:14px;right:14px;bottom:7px;height:2px;border-radius:2px;background:var(--hot);transform:scaleX(var(--fill,0));transform-origin:left;transition:transform .25s var(--ease-out)}
+.sg-armed .sg-field input{border-color:var(--hot)}
+.sg-form .btn{min-height:58px;padding-left:26px;padding-right:26px}
+.sg-status{min-height:1.5em;margin-top:10px;font-size:.9375rem;font-weight:600;color:var(--red-300)}
+.sg-status a{color:#FFF}
+.sg-fine{margin:6px auto 0;max-width:34em;font-size:.8125rem;line-height:1.5;color:var(--navy-300)}
+.sg-sent .sg-fine,.sg-sent .sg-status,.sg-sent .lead,.sg-sent .eyebrow,.sg-sent h2{display:none}
+.sg-done{margin-top:22px}
+.sg-done h3{color:#FFF;font-size:var(--fs-h2);font-weight:700;line-height:1.08;letter-spacing:-.025em;outline:0}
+.sg-done p{margin-top:8px;color:var(--navy-200)}
+.sg-done .btn{margin-top:18px}
+.js-motion .sg-done:not([hidden]){animation:fx-up .5s var(--ease-out) backwards}
+@media (max-width:560px){.sg-form{flex-direction:column}.sg-form .btn{width:100%}}
+.curious{margin-top:12px;font-size:var(--fs-sm)}
+.curious a,.st-alt{color:var(--blue-300);font-weight:600;text-underline-offset:4px}
+.st-alt{display:inline-block;margin:14px 0 0 14px;font-size:.9375rem}
+
 /* ---------- closing: the offer spelled out in points, beside the check-up form ---------- */
 .cl-fld{display:none;position:relative;height:clamp(92px,15vw,150px);margin:22px 0 2px}
 .cl-fld.is-live{display:block}
@@ -103,4 +135,4 @@
 .corridor-h{margin-bottom:22px;font-size:var(--fs-h3);font-weight:700;letter-spacing:-.01em;color:var(--ink)}
 .corridor .win{max-width:920px}
 
-@media print{.st-cv,.fld canvas,.cl-fld{display:none!important}}
+@media print{.st-cv,.fld canvas,.cl-fld,.sg-fld{display:none!important}}

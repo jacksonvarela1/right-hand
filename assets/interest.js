@@ -8,6 +8,44 @@
   var KEY = "rhnwa-interest";
   var DAYS = 30;
   var RM = matchMedia("(prefers-reduced-motion: reduce)");
+  // The inline form (#signup) saves to the same list as the pop-up. It tells the page what is happening through
+  // "rh:signup" events (type, armed, sent, fail) so assets/field.js can animate the envelope; it works without that file.
+  function send(data) {
+    var body = new URLSearchParams();
+    Object.keys(FIELDS).forEach(function (k) { body.append(FIELDS[k], data[k] || ""); });
+    // Google Forms does not send CORS headers, so the reply is opaque: a resolved fetch means it was delivered.
+    return fetch(ENDPOINT, { method: "POST", mode: "no-cors", body: body }).then(function () { store("joined"); });
+  }
+  (function inline() {
+    var sec = document.getElementById("signup"), f = sec && sec.querySelector("form");
+    if (!f) return;
+    var email = f.elements.email, st = sec.querySelector("[data-status]"), dn = sec.querySelector("[data-done]"), btn = f.querySelector("button[type=submit]"), field = sec.querySelector(".sg-field");
+    function tell(type) { try { document.dispatchEvent(new CustomEvent("rh:signup", { detail: { type: type } })); } catch (e) {} }
+    email.addEventListener("input", function () {
+      var ok = email.value.trim() !== "" && email.checkValidity();
+      sec.classList.toggle("sg-armed", ok);
+      if (field) field.style.setProperty("--fill", ok ? "1" : Math.min(.9, email.value.length / 24).toFixed(3));
+      email.removeAttribute("aria-invalid"); st.textContent = "";
+      tell(ok ? "armed" : "type");
+    });
+    f.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (!email.value.trim() || !email.checkValidity()) { email.setAttribute("aria-invalid", "true"); st.textContent = "Add a valid email address."; email.focus(); return; }
+      if (f.elements._honey && f.elements._honey.value) return;
+      btn.disabled = true; st.textContent = "Sending…";
+      send({ email: email.value.trim(), business: "", city: "", interests: "(inline form)", source: location.href + " | inline form" + (document.referrer ? " | ref " + document.referrer : "") })
+        .then(function () {
+          st.textContent = ""; f.hidden = true; dn.hidden = false; sec.classList.add("sg-sent");
+          var h = dn.querySelector("h3"); if (h) { h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: true }); }
+          tell("sent");
+        })
+        .catch(function () {
+          btn.disabled = false;
+          st.innerHTML = 'That didn’t go through. <a href="mailto:righthandnwa@gmail.com?subject=Interested%20in%20Right%20Hand%20NWA">Email us instead</a>.';
+          tell("fail");
+        });
+    });
+  })();
   var dlg = document.getElementById("interest");
   if (!dlg) return;
   var form = dlg.querySelector("form"), status = dlg.querySelector("[data-status]"), done = dlg.querySelector("[data-done]");

@@ -345,6 +345,52 @@
     if (d.fonts && d.fonts.load) d.fonts.load("800 40" + FONT).then(build, build); else build();
   }
 
-  function init() { hero(); story(); closer(); }
+  /* ---------- sign-up: an envelope that wakes as you type and flies off when the email is sent ---------- */
+  function rr(x, l, t, w, h, r) { x.beginPath(); x.moveTo(l + r, t); x.arcTo(l + w, t, l + w, t + h, r); x.arcTo(l + w, t + h, l, t + h, r); x.arcTo(l, t + h, l, t, r); x.arcTo(l, t, l + w, t, r); x.closePath(); }
+  function drawMail(x) {
+    x.save();
+    x.lineJoin = "round"; x.lineCap = "round"; x.strokeStyle = "#fff"; x.fillStyle = "rgba(255,255,255,.16)";
+    rr(x, 38, 84, 244, 152, 16); x.fill(); x.lineWidth = 11; x.stroke();
+    x.beginPath(); x.moveTo(46, 94); x.lineTo(160, 176); x.lineTo(274, 94); x.stroke();
+    x.globalAlpha = .75; x.lineWidth = 7; x.beginPath(); x.moveTo(48, 228); x.lineTo(124, 160); x.moveTo(272, 228); x.lineTo(196, 160); x.stroke();
+    x.restore();
+  }
+  function signup() {
+    var sec = $("#signup"), host = sec && $(".sg-fld", sec), cv = host && $("canvas", host);
+    if (!sec || !cv) return;
+    var f = makeField(cv);
+    if (!f) return;
+    host.classList.add("is-live");
+    var mail = f.add(cloud(drawMail, 61)), mark = f.add(shape("mark")), pile = f.add(shape("pile"));
+    var phase = "idle", t = 0, kick = 0, hot = .06, armed = false, wake;
+    f.pair(mail, mail);
+    wake = loop(host, function (now) {
+      var still = off(), k, u = { mix: 1, time: still ? 0 : now / 1000, rotX: still ? 0 : Math.sin(now / 2600) * .16, rotY: still ? 0 : Math.sin(now / 3700) * .05, ptrX: 9, ptrY: 9, scale: 1.12, offX: 0, offY: 0, hot: hot, burst: 0 };
+      kick *= .88;
+      hot += ((phase === "idle" ? (armed ? .45 : .06) : phase === "fly" ? 1 : .4) - hot) * .09;
+      u.hot = hot; u.burst = still ? 0 : kick * .06;
+      if (phase === "fly") {
+        if (still) { phase = "done"; f.pair(mark, mark); }
+        else {
+          k = clamp((now - t) / 750, 0, 1);
+          u.offX = k * k * 2.4; u.offY = k * k * .9; u.scale = 1.12 * (1 - .5 * k); u.rotX += k * .9; u.burst = (1 - k) * .12;
+          if (k >= 1) { phase = "land"; t = now; f.pair(pile, mark); u.offX = u.offY = 0; }
+        }
+      }
+      if (phase === "land") { u.mix = still ? 1 : clamp((now - t) / 1500, 0, 1); if (u.mix >= 1) { phase = "done"; f.pair(mark, mark); kick = 1; } }
+      if (phase === "land" || phase === "done") u.scale = .8;
+      f.draw(u);
+      return !still;
+    });
+    f.onrestore = wake;
+    d.addEventListener("rh:signup", function (e) {
+      var type = e.detail && e.detail.type;
+      if (type === "type" || type === "armed") { armed = type === "armed"; kick = Math.min(1, kick + .45); }
+      else if (type === "sent" && phase === "idle") { phase = "fly"; t = performance.now(); kick = 1; }
+      wake();
+    });
+  }
+
+  function init() { hero(); story(); signup(); closer(); }
   if (d.readyState === "loading") d.addEventListener("DOMContentLoaded", init); else init();
 })();
