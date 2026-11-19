@@ -322,36 +322,7 @@ footer{--mark-box:#FFFFFF}
   .step p{grid-column:1/-1;margin-top:4px;max-width:34em}
 }
 
-/* the prototypes */
-.demos-band{background:var(--navy-950)}
-.demo{position:relative;margin-top:clamp(3rem,2rem + 3vw,5rem);background:var(--navy-900);border-radius:var(--r-lg);box-shadow:var(--sh-d);scroll-margin-top:90px}
-.demo-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 24px;align-items:end;padding:22px 24px 0}
-.demo-head .num{font:600 .8125rem var(--font-mono);color:var(--blue-400)}
-.demo-head h3{grid-column:1;color:#FFF}
-.demo-head p{grid-column:1;color:var(--navy-300);max-width:46em}
-.proto-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:18px 24px 0;padding:8px 8px 8px 14px;border:1px solid rgba(167,181,202,.14);border-radius:var(--r-md);background:var(--navy-850)}
-.proto-title{margin-right:auto;font:600 .875rem/1.2 var(--font-mono);color:var(--navy-200);letter-spacing:.02em}
-.pill{display:inline-flex;align-items:center;gap:7px;font:600 .8125rem var(--font-mono);color:var(--blue-300);white-space:nowrap}
-.pill i{width:7px;height:7px;border-radius:2px;background:currentColor}
-.pill.playing i{animation:blink 1.6s steps(1,end) infinite}
-.pill.turn{color:var(--amber-300)}
-@keyframes blink{50%{opacity:.25}}
-.bar-btn{min-height:34px;padding:0 12px;font:600 .8125rem/1 var(--font-mono);color:#FFF;background:none;border:1px solid var(--navy-500);border-radius:var(--r-sm);cursor:pointer;white-space:nowrap}
-.bar-btn:hover{border-color:var(--navy-200)}
-.stage{position:relative;margin:14px 24px 0;min-height:var(--stage-h,420px);border-radius:var(--r-md);overflow:hidden}
-.stage-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 16px;margin:12px 24px 0;font:500 var(--fs-micro)/1.5 var(--font-mono);letter-spacing:.04em;color:var(--navy-400)}
-.demo-cta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px;margin:20px 24px 0;padding:18px 0 24px;border-top:1px solid rgba(167,181,202,.12);color:var(--navy-100);font-weight:600;font-size:1.0625rem}
-.demo-notes{margin:14px 24px 0;display:grid;gap:4px;font-size:var(--fs-sm);color:var(--navy-300);list-style:none}
-@media (max-width:600px){.demo-head,.proto-bar,.stage,.stage-foot,.demo-cta,.demo-notes{margin-left:12px;margin-right:12px}.demo-head{padding:18px 12px 0;grid-template-columns:minmax(0,1fr)}}
-/* cursors */
-.cursor{position:absolute;left:0;top:0;z-index:20;pointer-events:none;opacity:0;display:flex;align-items:flex-start;gap:4px;transition:transform .7s var(--ease-io),opacity .2s ease}
-.cursor svg{width:18px;height:18px;fill:var(--navy-900);stroke:#FFF;stroke-width:1.3;transition:transform .12s ease;transform-origin:2px 1px}
-.cursor span{margin-top:14px;font:600 .6875rem/1 var(--font-mono);color:#FFF;background:var(--navy-900);padding:4px 7px;border-radius:4px;box-shadow:0 0 0 1px rgba(255,255,255,.25)}
-.cursor-rh i{display:block;width:14px;height:14px;margin-top:2px;border:2.5px solid #FFF;border-radius:4px;box-shadow:3px -3px 0 0 var(--blue-500)}
-.cursor-rh span{background:var(--blue-700)}
-.cursor.down svg,.cursor.down i{transform:scale(.88)}
-@media (prefers-reduced-motion:reduce){.cursor{display:none}}
-html[data-motion=off] .cursor{display:none}
+/* the prototypes: the ticket rail, the lab card and the shared prototype chrome are in assets/lab.css */
 
 /* shared check draw */
 .ck{fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
@@ -564,8 +535,8 @@ footer .lockup b{color:#FFF;font-size:1.0625rem}
 .close-alt a,.foot-line a{display:inline-block;padding:3px 0}
 /* the two "leave your email" links and the email address are full-height tap targets on touch screens */
 @media (pointer:coarse){.close-alt a{display:inline;padding:12px 0;white-space:nowrap}}
-/* touch: small buttons and chips at least 44px tall. It sits after the base .chip and .bar-btn rules so it wins (demo stages keep their own sizes) */
-@media (pointer:coarse){.btn.sm,.chip:not(.stage *),.bar-btn,.q-ask .q-approve{min-height:44px}}
+/* touch: small buttons and chips at least 44px tall. It sits after the base .chip rule so it wins (prototype stages keep their own sizes) */
+@media (pointer:coarse){.btn.sm,.chip:not(.stage *),.q-ask .q-approve{min-height:44px}}
 
 /* One hot color (2026-11-10), reserved for "your move": primary buttons and the owner's approve actions. */
 :root{--hot:#FF4B33;--hot-2:#FF6A55}

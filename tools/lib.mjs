@@ -48,6 +48,10 @@ export function between(html, name) {
   return must(m, "marker " + name + " in index.html")[1];
 }
 
+// The prototypes on the home page, in the order of their panels: <section class="demo" id="demo-<name>">.
+// Each has assets/demos/<name>.js and assets/demos/<name>.css; the count is used wherever a page says how many there are.
+export const prototypes = (html) => must([...html.matchAll(/<section class="demo" id="demo-([a-z0-9-]+)"/g)].map((m) => m[1]), "prototype panels (section.demo#demo-<name>) in index.html");
+
 /* ---------- 3. the catalog ---------- */
 export function loadServices() {
   const win = {};

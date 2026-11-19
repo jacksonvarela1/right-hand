@@ -56,7 +56,7 @@ window.RH_SERVICES = {
         {
           id: "quotes", name: "Quotes and estimates",
           sum: "Quotes drafted from your own price sheet and a job-site voice note.",
-          tag: "ai", who: ["home", "auto", "supplier"],
+          tag: "ai", who: ["home", "auto", "supplier"], demo: "#demo-quotes",
           rows: {
             handoff: "Your price sheet and a quick voice note or photos from the job site.",
             back: "A clean quote ready for your review, plus a follow-up if the customer goes quiet.",
@@ -484,7 +484,7 @@ window.RH_SERVICES = {
         {
           id: "reviewreply", name: "Review reply drafts",
           sum: "A reply drafted in your voice for every review, good or bad.",
-          tag: "ai", who: ["shops", "salons", "auto"],
+          tag: "ai", who: ["shops", "salons", "auto"], demo: "#demo-reviews",
           rows: {
             handoff: "Manager access to your review profiles and a few past replies you liked.",
             back: "A drafted reply for every review, good or bad, in your voice and waiting for your OK.",

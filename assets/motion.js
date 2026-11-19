@@ -28,7 +28,7 @@
   if (LITE) html.classList.add("fx-lite");
   function later(fn, ms) { var t = setTimeout(fn, ms); timers.push(t); return t; }
 
-  // deferred scripts run before DOMContentLoaded, so this waits for site.js and the demos to build their markup
+  // deferred scripts run before DOMContentLoaded, so this waits for site.js to build its markup (the prototypes arrive later, through assets/lab.js)
   if (d.readyState === "complete") init(); else d.addEventListener("DOMContentLoaded", init);
 
   function init() {
@@ -282,7 +282,7 @@
 
   /* ---------- 8. fine pointers: a soft spotlight follows the cursor on dark cards; primary CTAs lean toward it ---------- */
   function spotlight() {
-    $$(".win, .terms, .demo, .line-links a, .page-cta .wrap").forEach(function (card) {
+    $$(".win, .terms, .lab, .line-links a, .page-cta .wrap").forEach(function (card) {
       if (card.closest(".stage")) return;
       var clip = d.createElement("span");
       clip.className = "fx-spot-clip"; clip.setAttribute("aria-hidden", "true"); clip.innerHTML = '<span class="fx-spot"></span>';

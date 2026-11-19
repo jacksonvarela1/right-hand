@@ -1,4 +1,4 @@
-/* Demo 02: Inbox sorted by 8 AM. Linden & Loom, Bentonville (made-up boutique, sample data). Right Hand sorts and drafts;
+/* Prototype 02: Inbox sorted by 8 AM. Linden & Loom, Bentonville (made-up boutique, sample data). Right Hand sorts and drafts;
    only the You cursor (or the visitor) approves. Uses RH.demo from demo-player.js. No timers: steps, and onfinish for Try one. */
 (function () {
   "use strict";
@@ -57,9 +57,9 @@
 
   function render() {
     gen++; cur = -1; busy = 0;
-    wrap.innerHTML = '<p class="tg">Sample data. Made-up boutique. The sorting is scripted for this demo.</p>' +
+    wrap.innerHTML = '<p class="tg">Made-up boutique · sample inbox</p>' +
       '<div class="inc"><h4>Incoming <span>8 overnight</span></h4><ol class="stream" aria-label="Incoming email, sample"></ol>' +
-      '<div class="try"' + (X.handedOff() ? "" : " hidden") + "><p>Try one (demo rules, not a live AI):</p><div>" +
+      '<div class="try"' + (X.handedOff() ? "" : " hidden") + "><p>Try one (scripted rules, not a live AI):</p><div>" +
       TRY.map(function (t, k) { return '<button type="button" class="chip" data-t="' + k + '">' + t[0] + "</button>"; }).join("") +
       '</div></div><div class="beam" aria-hidden="true"><i></i></div></div><div class="lanes">' +
       LN.map(function (n, l) { return '<section class="lane" data-l="' + l + '"><h4><span>' + n + "</span><b>0</b></h4><ul></ul></section>"; }).join("") +
@@ -140,7 +140,7 @@
     dr.querySelector("textarea").readOnly = true;
     each(dr.querySelectorAll("[data-o]"), function (x) { x.setAttribute("aria-disabled", "true"); });
     tag(i, "Sent", 1);
-    X.say("You approved it. Reply to " + e.f + " sent. Demo only, nothing leaves this page.");
+    X.say("You approved it. Reply to " + e.f + " sent. Prototype only, nothing leaves this page.");
   }
   function bill(i, b) {
     var e = C[i];
@@ -178,7 +178,7 @@
     C.push(e); L.push(li = liFor(C.length - 1));
     close();
     a = enter(li);
-    function done() { if (g !== gen) return; land(li); busy = 0; X.say("Demo rules put it in " + LN[e.l] + ". " + e.w); }
+    function done() { if (g !== gen) return; land(li); busy = 0; X.say("The scripted rules put it in " + LN[e.l] + ". " + e.w); }
     if (a) a.onfinish = done; else done();
   }
 

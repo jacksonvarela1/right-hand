@@ -1,6 +1,8 @@
-/* Right Hand NWA: shared demo player.
-   Every live demo on the page uses this. It owns autoplay, pause offscreen, the "only one demo plays at a time"
-   conductor, hand-off to the visitor, cursors, the live region and reduced-motion stepping.
+/* Right Hand NWA: shared prototype player.
+   Every prototype in the lab uses this. It owns autoplay, pause offscreen, the "only one prototype plays at a time"
+   conductor, hand-off to the visitor, cursors, the live region, reduced-motion stepping and the phone part switch.
+   It arrives late, with the prototypes (assets/lab.js loads them), and most panels are hidden when it starts: nothing
+   here measures a stage before it is on screen.
 
    USAGE (classic script, no modules):
      RH.demo({
@@ -10,8 +12,12 @@
        steps: [ { d: 600, run: function (ctx) { ... } }, ... ],   // d = wait (ms) before this step runs
        reset: function (ctx) { ... },                  // put the stage back to its first frame (before every loop)
        finalState: function (ctx) { ... },             // paint the finished state (reduced motion, parking)
-       onHandoff: function (ctx) { ... }               // switch the stage into interactive mode
+       onHandoff: function (ctx) { ... },              // switch the stage into interactive mode
+       views: [ { k: "note", label: "Voice note" }, ... ]   // optional: the parts shown one at a time on a phone
      });
+   Views: the player puts a row of buttons above the stage (.pv, styled in assets/lab.css) and keeps data-view on the
+   stage. The prototype's own stylesheet shows the row at phone width and hides the parts that are not in view; on wide
+   screens every part shows and data-view means nothing. Steps call ctx.view(k) so the part being worked on is in view.
 
    ctx = {
      root, stage,                 // elements
@@ -21,6 +27,7 @@
      press(who),                  // little press on the cursor
      hideCursors(),
      say(msg),                    // polite announcement (only after hand-off, or at loop end when opts.force)
+     view(k),                     // show part k (see Views); view() returns the part in view
      handedOff(), playing(), reduced
    }
 */
@@ -62,7 +69,7 @@
     var bar = root.querySelector(".proto-bar");
     if (!bar) {
       bar = document.createElement("div"); bar.className = "proto-bar";
-      bar.innerHTML = '<h3 class="proto-title"></h3><span class="pill"><i></i><span>Ready</span></span><button type="button" class="bar-btn" aria-pressed="false">Stop demo</button>';
+      bar.innerHTML = '<h3 class="proto-title"></h3><span class="pill"><i></i><span>Ready</span></span><button type="button" class="bar-btn" aria-pressed="false">Watch it play</button>';
       root.insertBefore(bar, stage);
     }
     if (cfg.title && bar.querySelector(".proto-title") && !bar.querySelector(".proto-title").textContent) bar.querySelector(".proto-title").textContent = cfg.title;
@@ -77,6 +84,28 @@
 
     var st = { i: 0, loop: 0, timer: 0, due: 0, left: 0, running: false, held: false, auto: true, handed: false, done: false, anims: [] };
     var p = { ratio: 0, root: root };
+
+    // phone part switch (see Views at the top). A visitor's press on it takes the prototype over, like any press on the stage.
+    var views = cfg.views && cfg.views.length > 1 ? cfg.views : null, pv = null, view = views ? views[0].k : "";
+    function setView(k) {
+      if (!views || k === view || !views.some(function (v) { return v.k === k; })) return;
+      view = k; stage.setAttribute("data-view", k);
+      Array.prototype.forEach.call(pv.children, function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-v") === k)); });
+      Object.keys(cursors).forEach(function (w) { cursors[w].style.opacity = "0"; });   // a cursor never points into a part that just left
+      if (cfg.onView) cfg.onView(ctx, k);
+    }
+    if (views) {
+      pv = document.createElement("div"); pv.className = "pv"; pv.setAttribute("role", "group"); pv.setAttribute("aria-label", "Parts of this prototype");
+      pv.innerHTML = views.map(function (v, i) { return '<button type="button" class="pv-b" data-v="' + v.k + '" aria-pressed="' + (i === 0) + '"><b>' + (i + 1) + "</b>" + RH.util.esc(v.label) + "</button>"; }).join("");
+      root.insertBefore(pv, stage);
+      stage.setAttribute("data-view", view);
+      pv.addEventListener("click", function (e) {
+        var b = e.target.closest ? e.target.closest(".pv-b") : null;
+        if (!b) return;
+        if (!st.handed) handoff();
+        setView(b.getAttribute("data-v"));
+      });
+    }
 
     var ctx = {
       root: root, stage: stage, reduced: motionOff(),
@@ -96,22 +125,31 @@
         if (!c.isConnected) stage.appendChild(c);   // a demo may re-render its stage
         o = o || {};
         var r = el.getBoundingClientRect(), s = stage.getBoundingClientRect();
+        if (!r.width && !r.height) { c.style.opacity = "0"; return; }   // the target is in a part that is not showing
         var x = r.left - s.left + r.width * (o.fx == null ? .55 : o.fx) + (o.dx || 0), y = r.top - s.top + r.height * (o.fy == null ? .55 : o.fy) + (o.dy || 0);
-        c.style.opacity = "1"; c.style.transform = "translate(" + Math.round(x) + "px," + Math.round(y) + "px)";
+        // a cursor that was out of sight appears where it is needed; only a cursor already on the stage glides there
+        var hid = c.style.opacity !== "1";
+        if (hid) c.style.transition = "none";
+        c.style.transform = "translate(" + Math.round(x) + "px," + Math.round(y) + "px)";
+        if (hid) { void c.offsetWidth; c.style.transition = ""; }
+        c.style.opacity = "1";
       },
       press: function (who) { var c = cursors[who]; if (!c) return; c.classList.add("down"); setTimeout(function () { c.classList.remove("down"); }, 130); },
       hideCursors: function () { Object.keys(cursors).forEach(function (k) { cursors[k].style.opacity = "0"; }); },
       say: function (msg, o) { if (!st.handed && !(o && o.force)) return; live.setAttribute("aria-live", "polite"); live.textContent = ""; setTimeout(function () { live.textContent = msg; }, 30); },
       handedOff: function () { return st.handed; },
-      playing: function () { return st.running; }
+      playing: function () { return st.running; },
+      view: function (k) { if (k == null) return view; setView(k); }
     };
 
     function setPill(kind) {
       pill.className = "pill " + kind;
-      pillText.textContent = kind === "playing" ? "Demo playing" : kind === "turn" ? "Your turn" : kind === "step" ? "Step " + (st.i) + " of " + steps.length : "Ready";
-      btn.textContent = kind === "playing" ? "Stop demo" : motionOff() ? "Next step" : "Watch the demo";
+      pillText.textContent = kind === "playing" ? "Playing" : kind === "turn" ? "Your turn" : kind === "step" ? "Step " + (st.i) + " of " + steps.length : "Ready";
+      label(kind === "playing" ? ["Stop and try it", "Stop"] : motionOff() ? ["Next step"] : st.handed || st.done ? ["Watch it again", "Replay"] : ["Watch it play", "Play"]);
       btn.setAttribute("aria-pressed", String(kind === "playing"));
     }
+    // the button's words, with a short form for the one-line bar on phones (assets/lab.css shows one or the other)
+    function label(t) { btn.innerHTML = t[1] ? '<span class="bl">' + t[0] + '</span><span class="bs">' + t[1] + "</span>" : t[0]; }
     function clearT() { clearTimeout(st.timer); st.timer = 0; }
     function sched(ms) { st.due = Date.now() + ms; st.timer = setTimeout(step, ms); }
     function step() {
@@ -154,25 +192,37 @@
     function restart() {
       clearT(); finishAnims(); st.handed = false; st.done = false; st.held = false; st.auto = true; st.i = 0; st.loop = 0; st.left = 0;
       root.classList.remove("handed"); live.setAttribute("aria-live", "off");
+      if (views) setView(views[0].k);
       if (cfg.reset) cfg.reset(ctx);
       st.running = false; resume();
     }
     p._wake = function () { if (!st.handed && !st.done && st.auto) resume(); };
     p._sleep = function () { pause(); };
     p._hold = function () { pause(true); };
+    // the lab closed this panel (assets/lab.js): a run that had started goes back to its first frame, so it plays from the
+    // top when the panel opens again. A prototype the visitor has taken over is left exactly as they left it.
+    p._rewind = function () {
+      p.ratio = 0;   // it is out of sight from this moment; the observer only says so a frame later, and must not find it playing
+      if (st.handed || st.done || (!st.running && !st.held && !st.i)) return;
+      clearT(); finishAnims(); st.running = false; st.held = false; st.i = 0; st.loop = 0; st.left = 0;
+      if (views) setView(views[0].k);
+      if (cfg.reset) cfg.reset(ctx);
+      ctx.hideCursors(); setPill("ready");
+    };
 
     btn.addEventListener("click", function () {
       if (motionOff()) {
         // reduced motion: step through by hand
-        if (st.i === 0 && cfg.reset) cfg.reset(ctx);
-        if (st.i >= steps.length) { st.i = 0; if (cfg.reset) cfg.reset(ctx); }
+        if (st.i >= steps.length) st.i = 0;
+        if (st.i === 0) { if (views) setView(views[0].k); if (cfg.reset) cfg.reset(ctx); }
         var s = steps[st.i++]; try { s.run(ctx); } catch (e) {}
         setPill("step"); if (st.i >= steps.length) { pillText.textContent = "Done. Your turn"; if (!st.handed) handoff(true); }
         return;
       }
       if (st.running || st.held) { handoff(); return; }
       restart();
-      var r = root.getBoundingClientRect(); if (r.top < 0 || r.bottom > innerHeight) root.scrollIntoView({ block: "center", behavior: "smooth" });
+      // the replay should be watched from its start: bring the bar (and the stage under it) back if it has scrolled away
+      var r = stage.getBoundingClientRect(); if (r.top < 0 || r.top > innerHeight * .5) bar.scrollIntoView({ block: "start", behavior: "smooth" });
       p.ratio = 1; conduct();
     });
     // a real click, key or focus inside the stage hands it over (never pointerdown, so scrolling thumbs don't stop it)
@@ -183,13 +233,16 @@
 
     // first frame
     if (cfg.reset) cfg.reset(ctx);
-    if (motionOff()) { if (cfg.finalState) cfg.finalState(ctx); st.handed = true; st.auto = false; root.classList.add("handed"); live.setAttribute("aria-live", "polite"); if (cfg.onHandoff) cfg.onHandoff(ctx); setPill("turn"); btn.textContent = "Next step"; }
+    if (motionOff()) { if (cfg.finalState) cfg.finalState(ctx); st.handed = true; st.auto = false; root.classList.add("handed"); live.setAttribute("aria-live", "polite"); if (cfg.onHandoff) cfg.onHandoff(ctx); setPill("turn"); }
     else setPill("ready");
+    // from here the bar's status and button are true (assets/lab.css keeps them out of sight on a panel without a player)
+    btn.disabled = false;
+    root.classList.add("live");
 
     players.push(p);
     // a stage taller than twice the screen (the receipts demo on phones) can never be half visible, so filling half the screen counts too
     new IntersectionObserver(function (es) { var e = es[0], vh = e.rootBounds ? e.rootBounds.height : innerHeight; p.ratio = e.isIntersecting ? Math.max(e.intersectionRatio, Math.min(1, e.intersectionRect.height / vh)) : 0; conduct(); }, { threshold: STEPS }).observe(stage);
-    return { ctx: ctx, handoff: handoff, restart: restart };
+    return { ctx: ctx, handoff: handoff, restart: restart, view: setView };
   };
 
   /* small helpers demos can share */

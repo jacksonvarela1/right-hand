@@ -141,7 +141,9 @@
   var EMAIL = "righthandnwa@gmail.com";
   var EATS = ["Missed calls and texts", "Email", "Receipts and expenses", "Invoices and follow-ups", "Scheduling", "Paperwork and files", "Setting up AI and automations", "Weekly numbers", "Reviews and Google profile", "Not sure"];
   var MODES = ["At my business", "Video", "Phone"];
-  var ASK = { calls: "Missed calls and texts", email: "Email", receipts: "Receipts and expenses", invoices: "Invoices and follow-ups", ai: "Setting up AI and automations", weekly: "Weekly numbers" };
+  // what a "Want this at your shop?" button ticks in the form (the prototype lab sets data-ask to the open prototype).
+  // A key that is not listed here but is a service in the catalog is added as a service the visitor asked about.
+  var ASK = { calls: "Missed calls and texts", email: "Email", receipts: "Receipts and expenses", invoices: "Invoices and follow-ups", ai: "Setting up AI and automations", weekly: "Weekly numbers", reviews: "Reviews and Google profile" };
   var from = (function () { try { var f = new URLSearchParams(location.search).get("from"); return f && /^[a-z0-9-]{1,20}$/i.test(f) ? f.toLowerCase() : ""; } catch (e) { return ""; } })();
   var composer = (function () {
     var form = $("#composer"), api = { ask: function () {}, update: function () {} };
@@ -226,7 +228,11 @@
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, fallback); else fallback();
       function fallback() { var dt = pre.closest("details"); if (dt) dt.open = true; var r = d.createRange(); r.selectNodeContents(pre); var s = getSelection(); s.removeAllRanges(); s.addRange(r); status.textContent = "Selected. Press Ctrl+C or Cmd+C to copy."; }
     });
-    api.ask = function (k) { var v = ASK[k]; if (!v) return; var b = $('[data-v="' + v + '"]', eats); if (b) { b.setAttribute("aria-pressed", "true"); update(); } };
+    api.ask = function (k) {
+      var v = ASK[k];
+      if (!v) { if (NAMES[k]) setPick(k, true); return; }
+      var b = $('[data-v="' + v + '"]', eats); if (b) { b.setAttribute("aria-pressed", "true"); update(); }
+    };
     // pre-fill from elsewhere on the page (assets/close.js): town, chips by their words, service picks by id.
     // o.clear lists what the caller set last time, so a second run replaces its own picks instead of piling up.
     api.prefill = function (o) {

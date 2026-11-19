@@ -1,4 +1,6 @@
-/* Demo 05: Automation builder (Flint Row Auto Care, sample). Every rule is scoped to #demo-automation. */
+/* Prototype 05: Automation builder (Flint Row Auto Care, sample). Every rule is scoped to #demo-automation.
+   On phones the flow and the inspector with its tests take turns in the same box (the player's part switch, .pv), and
+   neither is a scroller of its own: a thumb that lands on the stage always moves the page. */
 #demo-automation .stage{--stage-h:698px;--fw-h:350px;--low-h:312px;--focus:var(--blue-400);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:var(--fw-h) var(--low-h);gap:12px;padding:12px;background:var(--navy-950);color:var(--navy-50)}
 
 /* canvas: 24px dot grid, flow left to right */
@@ -81,15 +83,20 @@
   #demo-automation .tools{overflow:visible}
 }
 
-/* phones: one column, top to bottom, wires on a left spine, the question path bows out on the right */
+/* phones: one column, top to bottom, wires on a left spine, the question path bows out on the right.
+   One part at a time: the flow, or the step that is selected with the tests under it. Each part is as tall as its content. */
 @media (max-width:600px){
-  #demo-automation .stage{--stage-h:1050px;--fw-h:580px;grid-template-rows:var(--fw-h) 220px auto;padding:10px}
+  #demo-automation .pv{display:flex}
+  #demo-automation .stage{--stage-h:560px;grid-template-rows:none;align-content:start;padding:10px}
+  #demo-automation .fw,#demo-automation .inspector,#demo-automation .tools{overflow:visible}
+  #demo-automation .stage[data-view=flow] .inspector,#demo-automation .stage[data-view=flow] .tools,#demo-automation .stage[data-view=step] .fw{display:none}
+  #demo-automation .inspector{min-height:214px}
   #demo-automation .flow{align-items:flex-start;padding:12px 40px 12px 30px}
-  #demo-automation .nodes{grid-template-columns:minmax(0,1fr);gap:10px}
-  #demo-automation .node{display:block;min-height:0;padding:7px 10px 8px}
+  #demo-automation .nodes{grid-template-columns:minmax(0,1fr);gap:8px}
+  #demo-automation .node{display:block;min-height:0;padding:6px 10px 7px}
   #demo-automation .nk{margin-right:4px}
   #demo-automation .nt{font-size:.875rem}
-  #demo-automation .no{display:block;margin-top:2px}
+  #demo-automation .no{display:block;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   #demo-automation .wl{display:none}
   #demo-automation .idl{grid-template-columns:72px minmax(0,1fr)}
   #demo-automation .palette,#demo-automation .tests{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}

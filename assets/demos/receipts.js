@@ -1,6 +1,7 @@
-/* Demo 03: receipt to expense review. Ozark Paws Grooming (made-up shop, Springdale).
+/* Prototype 03: receipt to expense review. Ozark Paws Grooming (made-up shop, Springdale).
    Act 1 reads a receipt and matches it to the card charge. Act 2 is the October review sheet: the owner answers
-   the open questions and approves. Right Hand only prepares; the You cursor makes every decision. */
+   the open questions and approves. Right Hand only prepares; the You cursor makes every decision.
+   On phones the stage shows one part at a time (views "read", "match", "review"); the steps turn to the part in use. */
 (function () {
   "use strict";
   var root = document.getElementById("demo-receipts");
@@ -149,6 +150,7 @@
   fresh(); build();
   var player = RH.demo({
     root: root, title: "Receipt capture and monthly review · Ozark Paws Grooming", loops: 1,
+    views: [{ k: "read", label: "Receipt" }, { k: "match", label: "Card match" }, { k: "review", label: "Review" }],
     reset: function () { fresh(); build(); },
     finalState: function () {
       fresh(); build(); boxes(true); fill(false); match(); show(".rc-guess"); show(".rc-receipt");
@@ -163,11 +165,11 @@
       { d: 1350, run: function (c) { var b = q(".rc-beam"), h = q(".rc-paper").offsetHeight - 4; c.anim(b, [{ transform: "translateY(0)", opacity: 1 }, { transform: "translateY(" + h + "px)", opacity: 1, offset: .95 }, { transform: "translateY(" + h + "px)", opacity: 0 }], { duration: 1000, easing: "linear", fill: "none" }); } },
       { d: 800, run: function () { boxes(true); } },
       { d: 900, run: function (c) { fill(true, c); } },
-      { d: 1100, run: function () { match(); } },
+      { d: 1100, run: function (c) { c.view("match"); match(); } },
       { d: 900, run: function () { show(".rc-guess"); } },
       { d: 900, run: function (c) { c.cursor("you", q('.rc-opts [data-g="biz"]')); } },
       { d: 750, run: function (c) { c.press("you"); answer("online", "biz"); } },
-      { d: 1200, run: function (c) { c.cursor("you", q('[data-k="payapp"][data-v="contract"]')); } },
+      { d: 1200, run: function (c) { c.view("review"); c.cursor("you", q('[data-k="payapp"][data-v="contract"]')); } },
       { d: 750, run: function (c) { c.press("you"); answer("payapp", "contract"); } },
       { d: 1000, run: function (c) { c.cursor("you", q('[data-k="fee"][data-v="dup"]')); } },
       { d: 750, run: function (c) { c.press("you"); answer("fee", "dup"); } },
@@ -194,7 +196,7 @@
       st.rec = b.getAttribute("data-rec"); build(); st.ans = keep.ans; st.approved = keep.approved; st.prevTotal = keep.prevTotal; paintSheet(true);
       show(".rc-receipt"); show(".rc-try"); boxes(true); fill(false); match(); show(".rc-guess");
       var r = RECEIPTS[st.rec]; ctx.say("Read " + r.merchant + ", total " + money(r.total) + ". " + r.guess);
-      var nb = q('[data-rec="' + st.rec + '"]'); if (nb) nb.focus();
+      var nb = q('[data-rec="' + st.rec + '"]'); if (nb) nb.focus({ preventScroll: true });
       return;
     }
     if (b.classList.contains("rs-approve")) { if (st.approved) return; st.approved = true; paintSheet(true); ctx.say("Approved. October expenses are " + money(cats().total) + "."); var a = q(".rs-approve"); if (a) a.focus(); }

@@ -91,6 +91,7 @@ Quotes drafted from your own price sheet and a job-site voice note.
 - Where a person checks: A person checks every line against your price sheet. You set every price.
 - What we never do: We never set, change or discount a price, and never send a quote you have not approved.
 - Example: a Fayetteville landscaping crew records a two-minute walkthrough, and the quote is waiting for review before the truck leaves.
+- Prototype: https://righthandnwa.com/#demo-quotes
 
 #### Bills-due and renewals calendar
 
@@ -518,6 +519,7 @@ A reply drafted in your voice for every review, good or bad.
 - Where a person checks: A person checks every draft for tone and facts. You approve before it posts.
 - What we never do: We never argue with reviewers, share customer details or post a reply you have not approved.
 - Example: a Siloam Springs diner gets a calm, specific reply drafted for a one-star review about a long wait.
+- Prototype: https://righthandnwa.com/#demo-reviews
 
 #### Social posts and content calendar
 
@@ -690,7 +692,7 @@ Yes, anywhere in Benton and Washington counties, at your shop or a coffee shop. 
 
 ## Links
 
-- [Home page](https://righthandnwa.com/): who we are, how it works and what it costs, six prototypes on made-up businesses, promises and questions
+- [Home page](https://righthandnwa.com/): who we are, how it works and what it costs, eight prototypes on made-up businesses, promises and questions
 - [Services](https://righthandnwa.com/services/): the full services catalog
 - [About](https://righthandnwa.com/about/): the four people behind Right Hand NWA, every promise and every question
 - [Free check-up](https://righthandnwa.com/#checkup): a short form that sends your request to the team

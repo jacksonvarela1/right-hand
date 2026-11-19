@@ -1,4 +1,4 @@
-/* Right Hand NWA: demo 04, invoice follow-ups.
+/* Right Hand NWA: prototype 04, invoice follow-ups.
    Pinyon Hollow Landscapes is a made-up crew in Bella Vista. One sample invoice, followed from Day 0 to Day 46.
    Right Hand drafts each step and watches the bank feed. The owner approves anything that goes out.
    Built on the shared player (assets/demo-player.js, RH.demo). Classic script, no build step. */
@@ -400,7 +400,7 @@
     if (!e || !e.gate || S.ok[id]) return;
     approve(id, C);
     gs.focus({ preventScroll: true });
-    C.say((id === "e36" ? "Thank-you approved." : "Approved.") + " In this demo, nothing was sent.");
+    C.say((id === "e36" ? "Thank-you approved." : "Approved.") + " In this prototype, nothing was sent.");
   }
   function openLetter(id) {
     var e = E[id];
