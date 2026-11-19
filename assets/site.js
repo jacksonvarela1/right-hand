@@ -121,7 +121,23 @@
     composer.update();
   }
 
-  /* ---------- composer (mailto draft only) ---------- */
+  /* ---------- composer: the check-up request ----------
+     Sends the request to the Google Form named in assets/config.js (RH_CONFIG.checkup). Google Forms sends no CORS
+     headers, so the reply is opaque: a resolved fetch means the post reached Google; a rejected or timed-out one
+     means it did not, and the page says so and keeps the answers. With no endpoint it opens an email draft instead. */
+  var CK = (window.RH_CONFIG && window.RH_CONFIG.checkup) || {}, LEAD = "rh-lead";
+  // one way to reach the visitor: an email address, or a 10-digit US cell (a leading 1 is dropped)
+  function reach(v) {
+    v = String(v || "").trim();
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) return { via: "email", value: v };
+    if (v.indexOf("@") < 0) { var n = v.replace(/\D/g, ""); if (n.length === 11 && n.charAt(0) === "1") n = n.slice(1); if (n.length === 10) return { via: "text", value: "(" + n.slice(0, 3) + ") " + n.slice(3, 6) + "-" + n.slice(6) }; }
+    return null;
+  }
+  // where the visitor came from, without the query string (so no ad click ids are stored)
+  function source() {
+    var ref = ""; try { ref = d.referrer ? new URL(d.referrer).hostname : ""; } catch (e) {}
+    return [from ? "from " + from : "", ref ? "via " + ref : "direct", location.hostname + location.pathname].filter(Boolean).join(" | ");
+  }
   var EMAIL = "righthandnwa@gmail.com";
   var EATS = ["Missed calls and texts", "Email", "Receipts and expenses", "Invoices and follow-ups", "Scheduling", "Paperwork and files", "Setting up AI and automations", "Weekly numbers", "Reviews and Google profile", "Not sure"];
   var MODES = ["At my business", "Video", "Phone"];
@@ -131,6 +147,8 @@
     var form = $("#composer"), api = { ask: function () {}, update: function () {} };
     if (!form) return api;
     var eats = $("#c-eats"), mode = $("#c-mode"), pre = $("#c-preview"), status = $("#c-status"), conf = $("#c-confirm"), pl = $("#c-picks");
+    var mail = $("#c-mail"), sendBtn = $("#c-send"), back = $("#c-back"), confMsg = $("#c-confirm-msg"), busy = false;
+    function mailtoHref(m) { return "mailto:" + EMAIL + "?subject=" + encodeURIComponent(m.subject) + "&body=" + encodeURIComponent(m.body); }
     function chipset(host, list) { host.innerHTML = list.map(function (x) { return '<button type="button" class="chip" aria-pressed="false" data-v="' + esc(x) + '">' + esc(x) + '</button>'; }).join(""); }
     chipset(eats, EATS); chipset(mode, MODES);
     function sel(host) { return $$('[aria-pressed="true"]', host).map(function (b) { return b.getAttribute("data-v"); }); }
@@ -139,7 +157,7 @@
     function msg() {
       var biz = val("business") || "{business}", town = val("town") || "{town}";
       var subject = "Free 30-minute check-up: " + biz + ", " + town;
-      var lines = ["Hi Right Hand NWA,", "", "I'd like a free 30-minute check-up.", "", "Name: " + (val("name") || "{name}"), "Business: " + biz + " in " + town];
+      var lines = ["Hi Right Hand NWA,", "", "I'd like a free 30-minute check-up.", "", "Name: " + (val("name") || "{name}"), "Reach me at: " + (val("contact") || "{cell or email}"), "Business: " + biz + " in " + town];
       var e = sel(eats); if (e.length) lines.push("What eats the most time: " + e.join(", "));
       if (picks.length) lines.push("Services I'm curious about: " + picks.map(function (p) { return p.name; }).join(", "));
       var m = sel(mode), t = val("times"); if (m.length || t) lines.push("How and when to meet: " + [m.join(" or "), t].filter(Boolean).join(", "));
@@ -149,6 +167,7 @@
     }
     function update() {
       var m = msg(); pre.textContent = "To: " + EMAIL + "\nSubject: " + m.subject + "\n\n" + m.body;
+      if (mail) mail.href = mailtoHref(m);
       if (pl) { pl.hidden = !picks.length; pl.textContent = picks.length ? "Services you asked about: " + picks.map(function (p) { return p.name; }).join(", ") + "." : ""; }
     }
     form.addEventListener("input", function (e) {
@@ -161,22 +180,51 @@
     function clearErr(el) { el.removeAttribute("aria-invalid"); var er = $("#" + el.id + "-err"); if (er) er.hidden = true; }
     function valid() {
       var bad = null;
-      ["name", "business", "town"].forEach(function (n) { var el = form.elements[n]; if (!el.value.trim()) { setErr(el); if (!bad) bad = el; } else clearErr(el); });
+      ["name", "contact", "business", "town"].forEach(function (n) { var el = form.elements[n], ok = n === "contact" ? !!reach(el.value) : !!el.value.trim(); if (!ok) { setErr(el); if (!bad) bad = el; } else clearErr(el); });
       if (bad) { status.textContent = "A few things are missing. They are marked above."; status.classList.add("bad"); bad.focus(); return false; }
       status.textContent = ""; status.classList.remove("bad"); return true;
     }
-    form.addEventListener("submit", function (e) {
-      e.preventDefault(); if (!valid()) return;
-      var m = msg();
-      location.href = "mailto:" + EMAIL + "?subject=" + encodeURIComponent(m.subject) + "&body=" + encodeURIComponent(m.body);
+    function done(r) {
+      var first = val("name").split(/\s+/)[0];
+      $("#c-confirm-h").textContent = "Got it" + (first ? ", " + first : "") + ". Your check-up request is in.";
+      confMsg.textContent = "One of us will " + (r.via === "text" ? "text you at " : "email you at ") + r.value + " within one business day to set a time.";
+      status.textContent = ""; status.classList.remove("bad");
+      sendBtn.textContent = "Request sent"; sendBtn.disabled = true;
       conf.hidden = false; setTimeout(function () { conf.focus(); }, 50);
+      try { localStorage.setItem(LEAD, JSON.stringify({ t: Date.now(), via: r.via })); } catch (e) {}
       d.dispatchEvent(new CustomEvent("rh:draft"));   // assets/close.js plays the success moment
+    }
+    function failed() {
+      busy = false; sendBtn.disabled = false; sendBtn.textContent = "Send my request";
+      status.textContent = "That did not go through from this connection. Your answers are still here. Try again, or use one of the other ways just above."; status.classList.add("bad");
+    }
+    form.addEventListener("submit", function (e) {
+      e.preventDefault(); if (busy || !valid()) return;
+      var m = msg(), r = reach(val("contact"));
+      if (!CK.endpoint || !window.fetch) {   // nowhere to send it: hand the visitor their own email draft, and claim nothing
+        location.href = mailtoHref(m);
+        status.classList.remove("bad"); status.textContent = "Your email app should open with the message written. Nothing opened? Use one of the other ways just above.";
+        return;
+      }
+      if (form.elements.website.value) { done(r); return; }   // the hidden trap field is filled: a bot. Say thanks, send nothing.
+      busy = true; sendBtn.disabled = true; sendBtn.textContent = "Sending…";
+      var F = CK.fields || {}, body = new URLSearchParams(), ea = sel(eats), md = sel(mode), tm = val("times");
+      var details = ["CHECK-UP REQUEST", "reach by " + r.via];
+      if (ea.length) details.push("eats time: " + ea.join(", "));
+      if (picks.length) details.push("services: " + picks.map(function (p) { return p.name; }).join(", "));
+      if (md.length || tm) details.push("meet: " + [md.join(" or "), tm].filter(Boolean).join(", "));
+      var data = { contact: r.value, who: val("name") + " · " + val("business"), town: val("town"), details: details.join(" | ").slice(0, 1500), source: source() };
+      Object.keys(data).forEach(function (k) { if (F[k]) body.append(F[k], data[k]); });
+      var ac = window.AbortController ? new AbortController() : null;
+      var timer = setTimeout(function () { if (ac) ac.abort(); else if (busy) failed(); }, CK.timeoutMs || 8000);
+      fetch(CK.endpoint, { method: "POST", mode: "no-cors", body: body, signal: ac ? ac.signal : undefined })
+        .then(function () { clearTimeout(timer); if (busy) { busy = false; done(r); } }, function () { clearTimeout(timer); if (busy) failed(); });
     });
     $("#c-copy").addEventListener("click", function () {
       var m = msg(), text = "To: " + EMAIL + "\nSubject: " + m.subject + "\n\n" + m.body;
       function ok() { status.classList.remove("bad"); status.textContent = "Copied. Paste it into an email to " + EMAIL + "."; }
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, fallback); else fallback();
-      function fallback() { var r = d.createRange(); r.selectNodeContents(pre); var s = getSelection(); s.removeAllRanges(); s.addRange(r); status.textContent = "Selected. Press Ctrl+C or Cmd+C to copy."; }
+      function fallback() { var dt = pre.closest("details"); if (dt) dt.open = true; var r = d.createRange(); r.selectNodeContents(pre); var s = getSelection(); s.removeAllRanges(); s.addRange(r); status.textContent = "Selected. Press Ctrl+C or Cmd+C to copy."; }
     });
     api.ask = function (k) { var v = ASK[k]; if (!v) return; var b = $('[data-v="' + v + '"]', eats); if (b) { b.setAttribute("aria-pressed", "true"); update(); } };
     // pre-fill from elsewhere on the page (assets/close.js): town, chips by their words, service picks by id.
@@ -193,6 +241,8 @@
       update();
     };
     api.update = update;
+    // a visitor who already asked sees it, with a way to chase us
+    try { var L = JSON.parse(localStorage.getItem(LEAD) || "null"); if (L && L.t && Date.now() - L.t < 14 * 864e5 && back) { back.textContent = "You asked for a check-up on " + new Date(L.t).toLocaleDateString("en-US", { month: "short", day: "numeric" }) + ". Not heard from us? Message us on Instagram or email " + EMAIL + " and we will find it."; back.hidden = false; } } catch (e) {}
     update();
     return api;
   })();

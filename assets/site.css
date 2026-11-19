@@ -698,3 +698,20 @@ details.more[open] > summary svg{transform:rotate(45deg)}
   .top .lockup .mark{view-transition-name:rh-mark}
   ::view-transition-old(root),::view-transition-new(root){animation-duration:.22s}
 }
+
+/* check-up request: contact hint, the "what we receive" disclosure, other ways to reach us, the returning-visitor line */
+.composer .hint{margin-top:4px;font-size:.8125rem;line-height:1.4;color:var(--navy-600)}
+.c-see{margin-top:14px}
+.c-see summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-size:.9375rem;font-weight:600;color:var(--navy-700)}
+.c-see .preview{margin-top:0}
+.composer .c-doors{margin-top:12px;line-height:1.7}
+.composer .c-doors a,.composer .c-doors .linkbtn{color:var(--blue-700);font-weight:600;text-decoration:underline;text-underline-offset:4px}
+.composer .c-back{margin-top:10px;padding:10px 12px;border-radius:var(--r-sm);background:var(--navy-50);color:var(--navy-900)}
+.composer .btn[disabled]{opacity:.7;cursor:progress}
+.c-more{margin-top:14px;border-top:1px solid var(--gray-200)}
+.c-more summary{cursor:pointer;min-height:44px;display:flex;align-items:center;gap:6px;font-size:.9375rem;font-weight:600;color:var(--navy-900)}
+.c-more .opt{font-weight:400;color:var(--navy-600)}
+.c-more summary,.c-see summary{list-style:none}
+.c-more summary::-webkit-details-marker,.c-see summary::-webkit-details-marker{display:none}
+.c-more summary::after,.c-see summary::after{content:"+";margin-left:auto;font-weight:400;font-size:1.25rem;line-height:1;color:var(--navy-600)}
+.c-more[open] > summary::after,.c-see[open] > summary::after{content:"\2212"}

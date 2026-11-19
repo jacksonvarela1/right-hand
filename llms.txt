@@ -96,7 +96,7 @@ Honest listings and real reviews only. We never write reviews.
 
 Free. No card, no obligation to hire us. No books, bank statements or passwords needed. You keep the Admin Map whether you hire us or not. About 35 minutes of your time: 30 to talk, 5 to read your map.
 
-To ask for one: email righthandnwa@gmail.com, or use the form at https://righthandnwa.com/#checkup, which writes the email in your own email app for you to send.
+To ask for one: email righthandnwa@gmail.com, or use the form at https://righthandnwa.com/#checkup. It asks for your name, a cell number or email, your business and your town, and sends the request to the team.
 
 ## What it costs
 
@@ -120,7 +120,7 @@ To ask for one: email righthandnwa@gmail.com, or use the form at https://rightha
 - [Home page](https://righthandnwa.com/): who we are, how it works and what it costs, six prototypes on made-up businesses, promises and questions
 - [Services](https://righthandnwa.com/services/): the full services catalog
 - [About](https://righthandnwa.com/about/): the four people behind Right Hand NWA, every promise and every question
-- [Free check-up](https://righthandnwa.com/#checkup): writes a check-up request email in your own email app
+- [Free check-up](https://righthandnwa.com/#checkup): a short form that sends your request to the team
 - [Full catalog and answers as text](https://righthandnwa.com/llms-full.txt): every service with all six details, promises and FAQ answers
 - [Instagram @righthandnwa](https://www.instagram.com/righthandnwa/)
 - [Email righthandnwa@gmail.com](mailto:righthandnwa@gmail.com)

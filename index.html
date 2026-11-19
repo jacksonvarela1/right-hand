@@ -48,6 +48,7 @@
 <script src="assets/demo-player.js" defer></script>
 <script src="assets/services-data.js" defer></script>
 <script src="assets/nwa-map.js" defer></script>
+<script src="assets/config.js" defer></script>
 <script src="assets/site.js" defer></script>
 <script src="assets/demos/calls.js" defer></script>
 <script src="assets/demos/inbox.js" defer></script>
@@ -523,21 +524,26 @@
     </div>
     <form class="composer bracket" data-fx="scan" id="composer" novalidate aria-labelledby="comp-h">
       <h3 id="comp-h">Get your free 30-minute check-up</h3>
-      <p class="sub">Fill in three things. Your email app opens with the message written. You hit send.</p>
+      <p class="sub">Four things and you're done. One of us replies within one business day to set a time.</p>
+      <p class="fine c-back" id="c-back" hidden></p>
       <div class="field"><label for="c-name">Your name</label><input id="c-name" name="name" autocomplete="name" required aria-describedby="c-name-err"><p class="err" id="c-name-err" hidden>Add your name so we know who to reply to.</p></div>
+      <div class="field"><label for="c-contact">Your cell or email</label><input id="c-contact" name="contact" inputmode="email" autocapitalize="off" autocomplete="off" required aria-describedby="c-contact-hint c-contact-err"><p class="hint" id="c-contact-hint">We reply the way you reach us: a text to a cell, an email to an email.</p><p class="err" id="c-contact-err" hidden>Add a 10-digit cell number or a full email address.</p></div>
+      <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px">
       <div class="two">
         <div class="field"><label for="c-biz">Business name</label><input id="c-biz" name="business" autocomplete="organization" required aria-describedby="c-biz-err"><p class="err" id="c-biz-err" hidden>Add your business name.</p></div>
         <div class="field"><label for="c-town">Town</label><select id="c-town" name="town" required aria-describedby="c-town-err"><option value="">Pick your town</option><option>Bentonville</option><option>Rogers</option><option>Springdale</option><option>Fayetteville</option><option>Bella Vista</option><option>Siloam Springs</option><option>Lowell</option><option>Cave Springs</option><option>Centerton</option><option>Farmington</option><option>Prairie Grove</option><option>Other NWA town</option></select><p class="err" id="c-town-err" hidden>Pick your town.</p></div>
       </div>
+      <details class="c-more"><summary>Add details <span class="opt">(optional)</span></summary>
       <div class="field"><fieldset><legend>What eats the most time? <span class="opt">(optional)</span></legend><div class="chips" id="c-eats"></div></fieldset></div>
       <div class="field"><fieldset><legend>How and when to meet <span class="opt">(optional)</span></legend><div class="chips" id="c-mode"></div></fieldset><label class="sr-only" for="c-times">Days and times that work</label><input id="c-times" name="times" placeholder="Days and times that work, like Tue or Thu mornings"></div>
+      </details>
       <p class="fine pick-line" id="c-picks" hidden></p>
-      <p class="ws-h fine">Your message</p>
-      <pre class="preview" id="c-preview" aria-live="off"></pre>
-      <div class="c-acts"><button type="submit" class="btn">Open my email to send it</button><button type="button" class="btn ghost" id="c-copy">Copy the message instead</button></div>
+      <details class="c-see"><summary>See exactly what we receive</summary><pre class="preview" id="c-preview" aria-live="off"></pre></details>
+      <div class="c-acts"><button type="submit" class="btn" id="c-send">Send my request</button></div>
+      <p class="fine c-doors">Rather not use a form? <a href="https://ig.me/m/righthandnwa" target="_blank" rel="noopener noreferrer">Message us on Instagram</a>, <a href="mailto:righthandnwa@gmail.com" id="c-mail">open an email draft</a> or <button type="button" class="linkbtn" id="c-copy">copy the message</button>.</p>
       <ul class="proof" data-fx="cascade" aria-label="The fine print"><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>Free. Nothing to buy.</li><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>You keep the plan.</li><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>We reply within one business day.</li></ul>
       <p class="c-status" id="c-status" role="status"></p>
-      <div class="confirm" id="c-confirm" hidden tabindex="-1"><p><b>Your email app should be open with the message ready. Hit send there.</b> One of us replies within one business day from righthandnwa@gmail.com. Nothing opened? Copy the message and email <a href="mailto:righthandnwa@gmail.com">righthandnwa@gmail.com</a>.</p></div>
+      <div class="confirm" id="c-confirm" hidden tabindex="-1"><p><b id="c-confirm-h">Your check-up request is in.</b> <span id="c-confirm-msg">One of us replies within one business day to set a time.</span> Nothing by tomorrow evening? <a href="https://ig.me/m/righthandnwa" target="_blank" rel="noopener noreferrer">Message us on Instagram</a> or email <a href="mailto:righthandnwa@gmail.com">righthandnwa@gmail.com</a> and we will find it.</p></div>
     </form>
   </div>
 </section>
@@ -614,7 +620,7 @@
       <li><a href="about/">About</a></li>
       <li><a href="https://www.instagram.com/righthandnwa/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
     </ul></nav>
-    <p class="fine"><!-- page-fine:start -->We are not a CPA firm, law firm or payroll provider. Nothing here is tax, legal or accounting advice. Every demo business on this page is made up. Nothing you type in the prototypes or the check-up form is sent anywhere: the check-up form only writes an email draft in your own email app. The email sign-up sends us your email address, the address of this page and the address of the page that linked you here.<!-- page-fine:end --></p>
+    <p class="fine"><!-- page-fine:start -->We are not a CPA firm, law firm or payroll provider. Nothing here is tax, legal or accounting advice. Every demo business on this page is made up. Nothing you type in the prototypes leaves this page. The check-up form and the email sign-up send what you enter, the address of this page and the address of the page that linked you here to our private list, a Google Form our team owns. It is never sold or shared.<!-- page-fine:end --></p>
   </div>
 </footer>
 <!-- chrome:footer:end -->

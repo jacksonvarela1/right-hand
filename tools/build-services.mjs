@@ -143,7 +143,7 @@ const LINKS = [
   "- [Home page](" + SITE + "): who we are, how it works and what it costs, six prototypes on made-up businesses, promises and questions",
   "- [Services](" + SITE + "services/): the full services catalog",
   "- [About](" + SITE + "about/): the four people behind Right Hand NWA, every promise and every question",
-  "- [Free check-up](" + SITE + "#checkup): writes a check-up request email in your own email app",
+  "- [Free check-up](" + SITE + "#checkup): a short form that sends your request to the team",
   "- [Full catalog and answers as text](" + SITE + "llms-full.txt): every service with all six details, promises and FAQ answers",
   "- [Instagram @righthandnwa](" + INSTAGRAM + ")",
   "- [Email " + EMAIL + "](mailto:" + EMAIL + ")"
@@ -157,7 +157,7 @@ const llms = [
   "## Services", "", "Prices: " + S.priceLine, "",
   ...S.lines.flatMap((l) => ["### " + l.name, "", ...(l.note ? [l.note, ""] : []), ...l.items.map((s) => "- " + s.name + ": " + s.sum), ""]),
   ...CHECKUP,
-  "To ask for one: email " + EMAIL + ", or use the form at " + SITE + "#checkup, which writes the email in your own email app for you to send.", "",
+  "To ask for one: email " + EMAIL + ", or use the form at " + SITE + "#checkup. It asks for your name, a cell number or email, your business and your town, and sends the request to the team.", "",
   ...COST,
   "## What we never do", "", ...NEVER, "",
   "## Links", "", ...LINKS, ""
