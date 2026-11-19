@@ -1,4 +1,4 @@
-/* Right Hand NWA: interest pop-up. One small dialog, shown once per visitor, never during interaction. */
+/* Right Hand NWA: the email sign-up, inline (#signup) and as a dialog (#interest) that opens only on an explicit tap. */
 (function () {
   "use strict";
   // Sign-ups go to a Google Form owned by righthandnwa@gmail.com (responses tab plus email alerts).
@@ -6,7 +6,6 @@
   var FIELDS = { email: "entry.848100374", business: "entry.1907144585", city: "entry.736194494", interests: "entry.537803960", source: "entry.2127818100" };
   var INSTAGRAM = "https://www.instagram.com/righthandnwa/";
   var KEY = "rhnwa-interest";
-  var DAYS = 30;
   var RM = matchMedia("(prefers-reduced-motion: reduce)");
   // The inline form (#signup) saves to the same list as the pop-up. It tells the page what is happening through
   // "rh:signup" events (type, armed, sent, fail) so assets/field.js can animate the envelope; it works without that file.
@@ -50,22 +49,12 @@
   if (!dlg) return;
   var form = dlg.querySelector("form"), status = dlg.querySelector("[data-status]"), done = dlg.querySelector("[data-done]");
   function store(v) { try { localStorage.setItem(KEY, JSON.stringify({ v: v, t: Date.now() })); } catch (e) {} }
-  function recent() { try { var o = JSON.parse(localStorage.getItem(KEY) || "null"); return o && (o.v === "joined" || Date.now() - o.t < DAYS * 864e5); } catch (e) { return false; } }
-  var shown = false, idleT = 0, busyUntil = 0;
-  function busy() {
-    if (document.documentElement.classList.contains("presenting")) return true;
-    if (document.querySelector("dialog[open]")) return true;
-    var a = document.activeElement;
-    if (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) return true;
-    return Date.now() < busyUntil;
-  }
-  ["pointerdown", "keydown"].forEach(function (ev) { document.addEventListener(ev, function () { busyUntil = Date.now() + 4000; }, true); });
-  // scrolling is interaction too: a dialog that opens under a moving thumb stops the page dead
-  window.addEventListener("scroll", function () { busyUntil = Math.max(busyUntil, Date.now() + 2500); }, { passive: true });
-  function open(force) {
-    if (shown && !force) return;
-    if (!force && (recent() || busy())) { if (!force && !recent()) setTimeout(function () { open(false); }, 5000); return; }
-    shown = true;
+  // The dialog opens only when a visitor asks for it (any [data-open-interest] link). It never opens by itself:
+  // no timer, no scroll trigger, no exit intent.
+  function open() {
+    if (dlg.open) return;
+    var other = document.querySelector("dialog[open]");
+    if (other && typeof other.close === "function") other.close();   // the menu sheet hands over
     if (typeof dlg.showModal === "function") dlg.showModal(); else dlg.setAttribute("open", "");
     var first = dlg.querySelector("input[type=email]"); if (first) setTimeout(function () { first.focus(); }, 60);
   }
@@ -75,15 +64,7 @@
     if (e.target.closest("[data-close]")) { close(true); return; }
     if (e.target === dlg) { var r = dlg.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) close(true); }
   });
-  // triggers: 25 seconds in, reaching the services section, or leaving the page on desktop
-  idleT = setTimeout(function () { open(false); }, 25000);
-  var svc = document.getElementById("services");
-  if (svc && "IntersectionObserver" in window) {
-    var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { io.disconnect(); setTimeout(function () { open(false); }, 1500); } }, { threshold: .25 });
-    io.observe(svc);
-  }
-  if (matchMedia("(pointer:fine)").matches) document.addEventListener("mouseout", function (e) { if (!e.relatedTarget && e.clientY <= 0) open(false); });
-  document.querySelectorAll("[data-open-interest]").forEach(function (b) { b.addEventListener("click", function (e) { e.preventDefault(); open(true); }); });
+  document.querySelectorAll("[data-open-interest]").forEach(function (b) { b.addEventListener("click", function (e) { e.preventDefault(); open(); }); });
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     var email = form.elements.email;
@@ -114,5 +95,5 @@
         status.innerHTML = 'That didn’t go through. <a href="mailto:righthandnwa@gmail.com?subject=Interested%20in%20Right%20Hand%20NWA&body=' + mbody + '">Email us instead</a>.';
       });
   });
-  window.RHInterest = { open: function () { open(true); }, instagram: INSTAGRAM };
+  window.RHInterest = { open: open, instagram: INSTAGRAM };
 })();

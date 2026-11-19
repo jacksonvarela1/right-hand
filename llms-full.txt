@@ -1,6 +1,6 @@
 # Right Hand NWA: full services catalog and answers
 
-> Right Hand NWA is a Northwest Arkansas team that takes receipts, invoices, follow-ups, scheduling and paperwork off small business owners' plates, and sets up AI that drafts the busywork. AI drafts, a person on the team checks every piece, and the owner approves: nothing goes out in an owner's name until they have approved it. It is run by four University of Arkansas students. The one offer is a free 30-minute admin and AI check-up, and Your Admin Map follows within 3 business days.
+> Right Hand NWA is admin and AI help for Northwest Arkansas small businesses, run by four University of Arkansas students. The team takes receipts, invoices, missed calls, follow-ups, scheduling and paperwork off small business owners' plates, and sets up AI that drafts the busywork. AI drafts, a person on the team checks every piece, and the owner approves: nothing goes out in an owner's name until they have approved it. The first step is a free 30-minute check-up, and Your Admin Map follows within 3 business days.
 
 Source: https://righthandnwa.com/. Short version: https://righthandnwa.com/llms.txt
 
@@ -11,19 +11,27 @@ Source: https://righthandnwa.com/. Short version: https://righthandnwa.com/llms.
 - Method: AI drafts, we check, you approve. A person on the team checks every piece. Automatic messages, like a missed-call text, only ever use wording the owner approved.
 - Area: anywhere in Benton and Washington counties, Arkansas, including Bentonville, Rogers, Springdale, Fayetteville, Bella Vista, Siloam Springs, Lowell, Cave Springs, Centerton, Farmington, Prairie Grove and Pea Ridge. In person at the business or a coffee shop, or by video or phone.
 - Contact: righthandnwa@gmail.com (reply within one business day). Instagram: @righthandnwa (https://www.instagram.com/righthandnwa/).
-- Pricing: the check-up is free. After that, a flat monthly price is quoted in writing before any work starts, based on the tasks the owner picks. No prices are published.
-- What we are not: we are not a CPA firm, law firm or payroll provider. If something needs one, we say so.
+- Pricing: the check-up is free. After that, one flat monthly price is quoted in writing before any work starts, based on the tasks the owner hands off. No prices are published.
+- We are not a CPA firm, law firm or payroll provider. If something needs one, we say so.
 
 ## How it works
 
 1. Check-up: 30 minutes at your shop or on video. We list your recurring admin with you.
 2. Admin Map: Within 3 business days: your top 3 handoffs, what AI drafts, what stays yours, and a flat quote if you want one.
-3. One-month pilot: We take one or two tasks. You approve every piece. AI drafts / We check / You approve
+3. One-month pilot: We take one or two tasks. You approve every piece.
 4. Monthly help: Month to month. Add or drop tasks any time. Stop with one email.
+
+## What it costs
+
+- The check-up: free. 30 minutes. No card, no obligation to hire us.
+- Your Admin Map: free, and yours to keep.
+- After that, only if you want help: one flat monthly price, in writing, before any work starts. It depends on which tasks you hand off, and your quote is good for 30 days.
+- Start small: a one-month pilot on one or two tasks, then month to month. No cancellation fee. Stop with one email.
+- No surprise tools: we start with what you already pay for, and if something new would help, you see the cost first.
 
 ## Services
 
-Every service lists what you hand off, what you get back, where AI helps, where a person checks, what we never do, and an example. Prices: Quoted after your check-up, based on volume.
+Every service lists what you hand off, what you get back, where AI helps, where a person checks, what we never do, and an example. Prices: One flat monthly price, in writing, before any work starts.
 
 ### Money admin
 
@@ -41,7 +49,7 @@ Receipts and bills gathered in one place, sorted, with questions flagged weekly.
 - Where a person checks: A person checks every category. You or your bookkeeper approve.
 - What we never do: We never file taxes and never hold your bank logins.
 - Example: a Springdale food truck snaps receipts at the commissary all week, and by Friday they are sorted with three questions waiting.
-- Live demo: https://righthandnwa.com/#demo-receipts
+- Prototype: https://righthandnwa.com/#demo-receipts
 
 #### Monthly expense review
 
@@ -55,7 +63,7 @@ Totals by category each month, checked against last month and traced to receipts
 - Where a person checks: A person traces every line to its transaction and receipt before you see it.
 - What we never do: We never change your books without your OK, file anything or move money.
 - Example: a Cave Springs insurance agency sees software costs jump in March, and the review flags a duplicate charge to ask about.
-- Live demo: https://righthandnwa.com/#demo-receipts
+- Prototype: https://righthandnwa.com/#demo-receipts
 
 #### Invoices and overdue follow-ups
 
@@ -69,7 +77,7 @@ Reminders on, past-due follow-ups drafted, and a weekly who-owes-what list.
 - Where a person checks: A person checks each draft against the invoice. You approve the wording before anything sends.
 - What we never do: We never collect or move money, change terms, add fees or threaten anyone.
 - Example: a Rogers HVAC company after a cold snap has forty open invoices, and Monday's list shows who to nudge first.
-- Live demo: https://righthandnwa.com/#demo-invoices
+- Prototype: https://righthandnwa.com/#demo-invoices
 
 #### Quotes and estimates
 
@@ -139,7 +147,7 @@ Your inbox sorted daily, with replies drafted in your voice for you to send.
 - Where a person checks: A person checks the daily list and every draft. You send.
 - What we never do: We never agree to prices or dates you have not set, and never delete mail permanently.
 - Example: a Bentonville supplier office has its inbox sorted before 8 AM, with five reply drafts ready to review.
-- Live demo: https://righthandnwa.com/#demo-inbox
+- Prototype: https://righthandnwa.com/#demo-inbox
 
 #### Missed-call text-back and booking
 
@@ -153,7 +161,7 @@ Missed callers get an instant text offering your real open slots.
 - Where a person checks: A person sets up carrier registration (A2P 10DLC) with you before anything sends, then checks the message log weekly.
 - What we never do: We never send marketing blasts, text before registration is approved, or ignore a STOP reply.
 - Example: a Springdale auto shop misses a call during an oil change, and the caller picks Thursday at 10, held until the owner confirms.
-- Live demo: https://righthandnwa.com/#demo-calls
+- Prototype: https://righthandnwa.com/#demo-calls
 
 #### AI phone answering, inbound only
 
@@ -387,7 +395,7 @@ Your apps pass work to each other, documented and checked every month.
 - Where a person checks: Each automation is documented in one line, test-run with you and log-checked monthly.
 - What we never do: We never automate payments, payroll or anything that sends money.
 - Example: a Cave Springs cleaning company marks a job done, and the photos file themselves and the review request is queued.
-- Live demo: https://righthandnwa.com/#demo-automation
+- Prototype: https://righthandnwa.com/#demo-automation
 
 #### AI email drafting in your inbox
 
@@ -414,7 +422,7 @@ One page every Monday from your own numbers, reviewed by a person first.
 - Where a person checks: A person checks every number against the source before it reaches you.
 - What we never do: We never present a forecast as fact or fill a gap with a guess.
 - Example: a Rogers auto shop owner reads Monday's page over coffee and sees that missed calls doubled on Saturday.
-- Live demo: https://righthandnwa.com/#demo-report
+- Prototype: https://righthandnwa.com/#demo-report
 
 #### AI starter workshop
 
@@ -562,9 +570,9 @@ How a customer finds and reaches you on a phone, scored with you.
 
 We will point you to a licensed pro when something needs one.
 
-## How you can buy it
+## Ways to work with us
 
-### Free NWA Admin and AI Check-up
+### Free 30-minute check-up
 
 30 minutes with us, then Your Admin Map in 3 business days: what to hand off first and what stays with you.
 
@@ -574,7 +582,7 @@ One or two tasks for one month, every piece approved by you.
 
 ### Right Hand Desk, monthly
 
-Ongoing admin from the same team every month, sized to your volume.
+Ongoing admin from the same team every month, sized to the tasks you hand off.
 
 - Desk Basics: books prep and receipts, invoice follow-ups, Monday brief.
 - Desk Standard: Basics plus inbox triage, scheduling and reminders, and review reply drafts.
@@ -588,11 +596,11 @@ Fixed scope: text-back, phone answering, chat assistant, lead intake, CRM, autom
 
 A half day for owner and staff, plus a follow-up a month later. Sold alone or with any build.
 
-Quoted after your check-up, based on volume.
+One flat monthly price, in writing, before any work starts.
 
 ## The free check-up
 
-**Free NWA Admin and AI Check-up**
+**Free 30-minute check-up**
 
 - A 30-minute conversation at your business anywhere in Benton or Washington County, or by video or phone.
 - We walk through your week together and list every recurring admin task and roughly how long it takes you.
@@ -600,17 +608,17 @@ Quoted after your check-up, based on volume.
 - One quick win you can do yourself this week with tools you already pay for.
 - If you want help, a flat written quote, good for 30 days. No pressure.
 
-Free. Nothing to buy, now or later. No books, bank statements or passwords needed. You keep the Admin Map whether you hire us or not. About 35 minutes of your time: 30 to talk, 5 to read your map.
+Free. No card, no obligation to hire us. No books, bank statements or passwords needed. You keep the Admin Map whether you hire us or not. About 35 minutes of your time: 30 to talk, 5 to read your map.
 
 ## Promises
 
 - You approve before anything is sent, filed or final. Automatic messages, like a missed-call text, only ever use wording you approved.
 - We reply to your email within one business day.
+- If we make a mistake in work you approved, we fix it at no charge.
+- Stop any time. Within 2 business days we remove our access, hand back every file and how-to we made, and confirm it in writing.
 - Your Admin Map arrives within 3 business days of your check-up.
 - One named person owns each of your tasks.
 - We ask for the least access a task needs, and never for your passwords.
-- Stop any time. Within 2 business days we remove our access, hand back every file and how-to we made, and confirm it in writing.
-- If we make a mistake in work you approved, we fix it at no charge.
 
 ## How we handle your logins and data
 
@@ -623,7 +631,7 @@ Free. Nothing to buy, now or later. No books, bank statements or passwords neede
 - We tell you in writing which tools, including AI tools, touch your data, and we use settings that keep it out of AI model training.
 - When you stop, we remove our access within 2 business days.
 
-What we are not: we are not a CPA firm, law firm or payroll provider. If something needs one, we say so.
+We are not a CPA firm, law firm or payroll provider. If something needs one, we say so.
 
 ## What we never do
 
@@ -632,7 +640,6 @@ What we are not: we are not a CPA firm, law firm or payroll provider. If somethi
 - We never touch your bank or move money.
 - We never write reviews. Honest listings and real reviews only.
 - We never sell or share your data, and we use settings that keep it out of AI model training.
-- We are not a CPA firm, law firm or payroll provider. If something needs one, we say so.
 - Always stays with you or a licensed pro: Tax prep and filing; Payroll processing and filing; Legal advice, contracts and formal HR policy; Moving money, paying bills or collecting debts; Signing anything; Outbound AI voice calls to your customers; Patient or health records.
 
 ## Questions and answers
@@ -641,17 +648,25 @@ What we are not: we are not a CPA firm, law firm or payroll provider. If somethi
 
 The check-up is free, with nothing to buy. If you want help after that, we quote a flat monthly price in writing before any work starts, based on the tasks you pick. Tool costs, like a texting plan, are paid by you directly to the vendor, and we show them before you decide.
 
-### Do I have to give you my passwords or bank login?
+### You're students. Why should I trust you with my business?
 
-No, and please don't send them. The check-up needs no logins at all. If you hire us, you invite us as a user in the tools you already use, so you can see what we can reach and remove us in one click. We never touch your bank or move money.
+Fair question. We are four University of Arkansas students who work in Northwest Arkansas. For you, that means a short client list, a named person on every task, and work you can check line by line. Try the prototypes on this page and judge the work yourself.
 
 ### Is AI going to talk to my customers?
 
 Only if you want it to, and only from answers you approved. A phone or chat assistant says it is an assistant and hands anything else to you. Everything else AI does is a draft that one of us checks and you approve. If you'd rather we skip AI on a task, we do it by hand.
 
-### You're students. Why should I trust you with my business?
+### Do I have to give you my passwords or bank login?
 
-Fair question. We are four University of Arkansas students who work in Northwest Arkansas. For you, that means a short client list, a named person on every task, and work you can check line by line. It does not mean we are CPAs, attorneys or a payroll company, and we will tell you when something needs one. Try the demos on this page and judge the work yourself.
+No, and please don't send them. The check-up needs no logins at all. If you hire us, you invite us as a user in the tools you already use, so you can see what we can reach and remove us in one click. We never touch your bank or move money.
+
+### What if you get something wrong?
+
+You see the sources and the math before anything is final, and anything we can't match to a record comes to you as a question. If a mistake slips through in work you approved, we fix it at no charge.
+
+### What if I want to stop?
+
+Email us. It is month to month with no cancellation fee. Within 2 business days we remove our access, hand back every file and how-to, and confirm it in writing.
 
 ### What happens over school breaks or when you graduate?
 
@@ -665,14 +680,6 @@ Wherever possible it stays in your own accounts. We tell you in writing which to
 
 The ones you already pay for, where possible: Google Workspace or Microsoft 365, your accounting and booking tools, your phone system. If something new would help, we tell you what it costs and you decide.
 
-### What if I want to stop?
-
-Email us. It is month to month with no cancellation fee. Within 2 business days we remove our access, hand back every file and how-to, and confirm it in writing.
-
-### What if you get something wrong?
-
-You see the sources and the math before anything is final, and anything we can't match to a record comes to you as a question. If a mistake slips through in work you approved, we fix it at no charge.
-
 ### Will this replace my bookkeeper or CPA?
 
 No. We get the paperwork ready so they get clean records. Tax, payroll, legal decisions and moving money stay with them and with you.
@@ -683,9 +690,9 @@ Yes, anywhere in Benton and Washington counties, at your shop or a coffee shop. 
 
 ## Links
 
-- [Home page](https://righthandnwa.com/): the method, six live demos on made-up businesses, every service, promises, team and FAQ
+- [Home page](https://righthandnwa.com/): who we are, how it works and what it costs, six prototypes on made-up businesses, promises and questions
 - [Services](https://righthandnwa.com/services/): the full services catalog
-- [About](https://righthandnwa.com/about/): the four people behind Right Hand NWA
+- [About](https://righthandnwa.com/about/): the four people behind Right Hand NWA, every promise and every question
 - [Free check-up](https://righthandnwa.com/#checkup): writes a check-up request email in your own email app
 - [Full catalog and answers as text](https://righthandnwa.com/llms-full.txt): every service with all six details, promises and FAQ answers
 - [Instagram @righthandnwa](https://www.instagram.com/righthandnwa/)

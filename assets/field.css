@@ -1,8 +1,13 @@
 /* Right Hand NWA: the particle field (assets/field.js), the three hero keys and the scroll story. Loads after close.css.
    Everything here has a finished still state: no JS, no WebGL, reduced motion and paused motion all get a complete page. */
 
-/* scrolling back up: anything that comes in from the top of the screen is shown as it is, with no fade or slide */
-.js-motion [data-reveal].rv-now,.sw.rv-now::after{transition:none!important}
+/* The hero's final layout is reserved as soon as scripts are on (html.js, set in boot.js before first paint): the caption
+   line and the three keys already have the size they will have once field.js has run, so nothing beside or below them
+   moves when the field starts. */
+.js .hero-visual .fld-say{display:block}
+.js .hero-visual .trio{gap:14px 12px;margin-top:24px}
+.js .hero-visual .trio:not(.keys) li{min-height:46px;margin-top:6px;padding:0 17px 2px;border-radius:11px}
+@media (max-width:420px){.js .hero-visual .trio{gap:12px 8px}.js .hero-visual .trio:not(.keys) li{padding:0 12px 2px;font-size:.875rem}}
 
 /* ---------- one hot color: the "your move" moments only (primary buttons, the approve key, a few sparks in the field) ---------- */
 .cta-pill{background:var(--hot);color:var(--navy-950);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22),0 14px 30px -12px rgba(5,19,38,.6)}
@@ -10,7 +15,7 @@
 .top .btn:not(.ghost)::after{z-index:-1;opacity:.5}
 
 /* ---------- hero: copy on the left, the field on the right ---------- */
-.hero.has-fld .hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.hero.has-fld .hero-grid{grid-template-columns:minmax(0,1.14fr) minmax(0,.86fr)}
 .hero.has-fld h1{max-width:none;font-size:clamp(2.1rem,1.2rem + 3.3vw,3.75rem);line-height:1.04;text-wrap:balance}
 .fld{position:relative;height:min(68vh,600px);min-height:340px}
 .fld canvas{position:absolute;left:-16%;top:-10%;width:132%;height:120%;display:none;pointer-events:none}
@@ -18,7 +23,7 @@
 .fld-still{position:absolute;left:50%;top:50%;width:min(52%,300px);transform:translate(-50%,-50%);overflow:visible}
 .fld.is-live .fld-still{display:none}
 .fld-say{position:relative;min-height:1.5em;text-align:center;font:600 1.0625rem/1.5 var(--font-sans);color:#FFF}
-.fld:not(.is-live)~.fld-say{display:none}
+html:not(.js) .fld-say{display:none}
 @media (max-width:370px){.fld-say{min-height:3em}}
 .fld-cap{position:relative;margin-top:2px;text-align:center;font:500 var(--fs-micro)/1.5 var(--font-mono);letter-spacing:.06em;color:var(--navy-300)}
 .hero.has-fld .hero-glow{inset:4% 8% 8% 8%}
@@ -42,74 +47,92 @@
 .key[data-k=mark][aria-pressed=true] .cap b{color:#FF8A78}
 .key:focus-visible{outline:3px solid var(--focus);outline-offset:5px}
 @media (forced-colors:active){.key .cap{border:1px solid ButtonText}.key[aria-pressed=true] .cap{border:3px solid Highlight}}
-/* phones have no header Pause button, so the hero carries one */
+/* the keys sit under the field they drive */
+.hero-visual .trio{justify-content:center}
+/* 760px and below the header has no Pause button, so the hero carries one under the keys (the menu sheet has one too) */
 .fld-pause{display:none}
-@media (max-width:560px){.js .fld-pause{display:block;position:relative;min-height:44px;margin:-4px auto -6px;color:var(--navy-200);font-size:var(--fs-sm)}}
+@media (max-width:760px){.js .fld-pause{display:block;position:relative;min-height:44px;margin:10px auto -6px;color:var(--navy-200);font-size:var(--fs-sm)}}
 
 @media (max-width:1020px){
-  /* on one column the field sits between the headline and the keys that drive it */
-  .hero.has-fld .hero-grid{grid-template-columns:minmax(0,1fr);gap:0}
-  .hero.has-fld .hero-copy{display:contents}
-  .hero.has-fld .hero-copy > .eyebrow{order:1}
-  .hero.has-fld h1{order:2}
-  .hero.has-fld .hero-visual{order:3;margin-top:6px}
-  .hero.has-fld .trio{order:4;margin-top:14px;justify-content:center}
-  .hero.has-fld .ctas{order:5;margin-top:20px}
-  .hero.has-fld .micro{order:6}
-  .hero.has-fld .curious{order:7}
-  .hero.has-fld .lead{order:8}
-  .hero.has-fld .towns{order:9}
-  .fld{height:min(27vh,240px);height:min(27svh,240px);min-height:180px}
-  .fld-cap{display:none}
+  /* one column, in reading order: the words and the buttons first, then the field and its keys */
+  .hero.has-fld .hero-grid{grid-template-columns:minmax(0,1fr);gap:clamp(1.25rem,1rem + 2vw,2.25rem)}
+  .fld{height:min(34vh,280px);height:min(34svh,280px);min-height:200px}
+  .fld-cap{margin-top:14px}
   .fld canvas{left:-8%;width:116%}
 }
+/* phones: the eyebrow, headline, sentence, both buttons and the line under them fit the first screen (down to 360 by 640) */
+@media (max-width:560px){
+  .hero{padding-top:18px}
+  .hero.has-fld h1{margin-top:10px;font-size:clamp(1.875rem,1rem + 4.4vw,2.25rem)}
+  .hero .lead{margin-top:12px;font-size:1.0625rem;line-height:1.5}
+  .hero .ctas{margin-top:16px;gap:10px}
+  .hero .ctas .btn{width:100%}
+  .hero .micro{margin-top:10px}
+}
+@media (max-width:380px){.hero .eyebrow{letter-spacing:.06em}}
+@media (max-width:340px){.hero .eyebrow{font-size:.6875rem;letter-spacing:.03em}}
 @media (max-width:420px){.trio.keys{gap:12px 8px}.key .cap{padding:0 12px 2px;font-size:.875rem}.key .cap::after{left:11px;right:11px}}
 
-/* ---------- story: a plain list by default ---------- */
+/* ---------- story: a plain list by default (no JS, reduced or paused motion, and every screen 900px and narrower):
+   three jobs we tick, then the one box that is yours. On a phone it is about one screen and nothing is pinned. ---------- */
 .story{position:relative;background:var(--navy-950)}
 .st-pin{position:relative;padding:var(--section-y) 0}
 .st-cv{display:none}
-.story h2{margin-top:14px;max-width:16ch;color:#FFF}
-.st-list{list-style:none;margin-top:var(--section-head-gap);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(1.5rem,1rem + 2vw,2.5rem) var(--gutter)}
+.st-copy::before{content:"";display:block;height:1px;max-width:48rem;margin-bottom:20px;background:linear-gradient(90deg,var(--accent) 0 48px,var(--rule) 48px)}
+.story h2{margin-top:10px;max-width:16ch;color:#FFF}
+.st-list{--sg:var(--gutter);list-style:none;margin-top:var(--section-head-gap);display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) minmax(21rem,1.2fr);gap:0 var(--sg)}
+.st-ch{position:relative;padding-top:46px}
+.st-ch::before{content:"";position:absolute;left:0;top:0;width:26px;height:26px;background:var(--green-300);-webkit-mask:var(--ck-box) center/100% 100% no-repeat;mask:var(--ck-box) center/100% 100% no-repeat}
+.st-ch:last-child::before{background:var(--hot)}
+.st-ch::after{content:"";position:absolute;left:36px;right:calc(var(--sg)*-1 + 10px);top:12.5px;height:1px;background:var(--rule)}
+.st-ch:last-child::after{content:none}
 .st-ch h3{color:#FFF}
 .st-ch p{margin-top:6px;color:var(--navy-200);max-width:26em}
-.st-ch .btn{margin-top:16px}
-.st-prog{display:none}
-@media (max-width:860px){.st-list{grid-template-columns:minmax(0,1fr)}}
+.st-ch .btn{margin-top:18px}
+.st-ch .micro{margin-top:12px;color:var(--navy-300)}
+.st-prog,.st-ticks{display:none}
+@media (max-width:1100px){
+  .st-list{grid-template-columns:minmax(0,1fr);max-width:40rem}
+  .st-ch{padding:0 0 22px 44px}
+  .st-ch:last-child{padding-bottom:0}
+  .st-ch::after{left:12.5px;right:auto;top:34px;bottom:4px;width:1px;height:auto}
+  .st-ch p{max-width:34em}
+}
+@media (max-width:560px){.st-ch .btn{width:100%}}
 
-/* live: the section pins and the scroll scrubs the field from chapter to chapter */
-.st-live{height:calc(100vh + var(--st-n,5)*70vh)}
-@supports (height:100svh){.st-live{height:calc(100svh + var(--st-n,5)*70svh)}}
+/* live (wide screens with motion on; field.js adds .st-live): the section pins and the scroll scrubs the field from job to job */
+/* three jobs and the OK: one screen for the stage plus --st-step of scrolling per change */
+.st-live{--st-step:70;height:calc(100vh + var(--st-n,3)*var(--st-step)*1vh)}
+@supports (height:100svh){.st-live{height:calc(100svh + var(--st-n,3)*var(--st-step)*1svh)}}
 .st-live .st-pin{position:sticky;top:0;height:100vh;height:100svh;padding:0;overflow:hidden}
 .st-live .st-cv{display:block;position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .st-live .st-pin::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(38% 50% at 70% 50%,rgba(47,128,237,.17),rgba(47,128,237,0) 72%)}
 .st-live .st-pin::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,var(--navy-950) 0%,rgba(5,19,38,.86) 30%,rgba(5,19,38,0) 58%)}
 .st-live .st-in{position:relative;z-index:1;height:100%;display:flex;align-items:center}
 .st-live .st-copy{width:min(100%,33rem);padding-top:66px}
+.st-live .st-copy::before{max-width:none}
 .st-live h2{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.st-live .st-list{position:relative;display:block;margin-top:18px;min-height:19rem}
+.st-live .st-list{position:relative;display:block;margin-top:16px;min-height:20rem}
 /* every chapter stays readable to a screen reader; only the one on screen can be seen or clicked */
-.st-live .st-ch{position:absolute;left:0;right:0;top:0;opacity:0;pointer-events:none;transform:translateY(30px);transition:opacity .4s ease,transform .6s var(--ease-out)}
+.st-live .st-ch{position:absolute;left:0;right:0;top:0;padding:0;opacity:0;pointer-events:none;transform:translateY(30px);transition:opacity .3s ease,transform .46s var(--ease-out)}
+.st-live .st-ch::before,.st-live .st-ch::after{content:none}
 .st-live .st-ch.was{transform:translateY(-30px)}
 .st-live .st-ch.on{opacity:1;pointer-events:auto;transform:none}
-.st-live .st-ch:not(.on) .btn,.st-live .st-ch:not(.on) .st-alt{visibility:hidden}
+.st-live .st-ch:not(.on) .btn{visibility:hidden}
 .st-live .st-ch h3{font-size:clamp(2.75rem,1.5rem + 5.2vw,5.5rem);font-weight:800;line-height:.98;letter-spacing:-.04em;text-wrap:balance}
 .st-live .st-ch p{margin-top:20px;font-size:var(--fs-lead);line-height:1.5;max-width:22em}
 .st-live .st-ch .btn{margin-top:26px}
-.st-live .st-prog{display:block;position:relative;margin-top:8px;height:2px;width:min(100%,15rem);background:rgba(167,181,202,.22)}
+.st-live .st-ch p.micro{margin-top:12px;font-size:var(--fs-sm);max-width:none}
+/* the week as four boxes: ticked as each job passes, and the last one, yours, in the hot color */
+.st-live .st-ticks{display:flex;flex-wrap:wrap;gap:8px 20px;list-style:none;font:500 var(--fs-micro)/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--navy-400)}
+.st-ticks li{display:inline-flex;align-items:center;gap:8px;transition:color .2s ease}
+.st-ticks li::before{content:"";flex:none;width:16px;height:16px;background:currentColor;-webkit-mask:var(--box) center/100% 100% no-repeat;mask:var(--box) center/100% 100% no-repeat}
+.st-ticks li.on{color:#FFF}
+.st-ticks li.done{color:var(--green-300)}
+.st-ticks li.done::before,.st-ticks li:last-child.on::before{-webkit-mask-image:var(--ck-box);mask-image:var(--ck-box)}
+.st-ticks li:last-child.on{color:var(--hot-2)}
+.st-live .st-prog{display:block;position:relative;margin-top:14px;height:2px;width:min(100%,22rem);background:rgba(167,181,202,.22)}
 .st-live .st-prog i{position:absolute;inset:0;background:var(--blue-400);transform-origin:left;transform:scaleX(var(--p,0))}
-@media (max-width:860px){
-  .st-live .st-pin::before{background:radial-gradient(78% 30% at 50% 33%,rgba(47,128,237,.17),rgba(47,128,237,0) 72%)}
-  .st-live .st-pin::after{background:linear-gradient(0deg,var(--navy-950) 0%,rgba(5,19,38,.9) 38%,rgba(5,19,38,0) 50%)}
-  .st-live .st-ch .btn{display:none}
-  .st-live .st-alt{margin-left:0}
-  .st-live .st-in{align-items:flex-end}
-  .st-live .st-copy{padding:0 0 calc(92px + env(safe-area-inset-bottom))}
-  .st-live .st-list{min-height:12.5rem;margin-top:10px}
-  .st-live .st-ch h3{font-size:clamp(2.5rem,1.4rem + 6vw,3.6rem)}
-  .st-live .st-ch p{margin-top:12px}
-  .st-live .st-ch .btn{margin-top:16px}
-}
 
 /* ---------- sign-up band: leave an email, watch it go ---------- */
 .sg{position:relative;overflow:hidden;background:var(--navy-950);padding:clamp(3.5rem,2.5rem + 4vw,6rem) 0 clamp(4rem,3rem + 4vw,6.5rem);text-align:center}
@@ -131,16 +154,16 @@
 .sg-status{min-height:1.5em;margin-top:10px;font-size:.9375rem;font-weight:600;color:var(--red-300)}
 .sg-status a{color:#FFF}
 .sg-fine{margin:6px auto 0;max-width:34em;font-size:.8125rem;line-height:1.5;color:var(--navy-300)}
-.sg-sent .sg-fine,.sg-sent .sg-status,.sg-sent .lead,.sg-sent .eyebrow,.sg-sent h2{display:none}
+.sg-sent .sg-fine,.sg-sent .sg-status,.sg-sent .lead,.sg-sent .eyebrow,.sg-sent h2,.sg-sent .sg-alt{display:none}
 .sg-done{margin-top:22px}
 .sg-done h3{color:#FFF;font-size:var(--fs-h2);font-weight:700;line-height:1.08;letter-spacing:-.025em;outline:0}
 .sg-done p{margin-top:8px;color:var(--navy-200)}
 .sg-done .btn{margin-top:18px}
 .js-motion .sg-done:not([hidden]){animation:fx-up .5s var(--ease-out) backwards}
 @media (max-width:560px){.sg-form{flex-direction:column}.sg-form .btn{width:100%}}
-.curious{margin-top:12px;font-size:var(--fs-sm)}
-.curious a,.st-alt{color:var(--blue-300);font-weight:600;text-underline-offset:4px}
-.st-alt{display:inline-block;margin:14px 0 0 14px;font-size:.9375rem}
+.sg-alt{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:4px 26px;margin-top:26px}
+.sg-alt a{display:inline-flex;align-items:center;gap:9px;min-height:44px;color:var(--navy-100);font-weight:600;text-underline-offset:4px}
+.sg-alt .i{width:20px;height:20px;color:var(--blue-300)}
 
 /* ---------- closing: the offer spelled out in points, beside the check-up form ---------- */
 .cl-fld{display:none;position:relative;height:clamp(92px,15vw,150px);margin:22px 0 2px}
@@ -148,9 +171,5 @@
 .cl-fld canvas{position:absolute;left:0;top:-50%;width:100%;height:200%;pointer-events:none}
 @media (max-width:900px){.cl-fld,.cl-fld.is-live{display:none}.close-grid > .composer{order:-1}}
 
-/* ---------- the corridor queue (moved out of the hero) ---------- */
-.corridor{margin-top:clamp(2.5rem,1.5rem + 3vw,4.5rem)}
-.corridor-h{margin-bottom:22px;font-size:var(--fs-h3);font-weight:700;letter-spacing:-.01em;color:var(--ink)}
-.corridor .win{max-width:920px}
 
 @media print{.st-cv,.fld canvas,.cl-fld,.sg-fld{display:none!important}}

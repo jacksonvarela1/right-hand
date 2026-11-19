@@ -1,4 +1,6 @@
-/* Right Hand NWA: page behavior (motion toggle, reveals, counters, method strip, steps, services and picker, Admin Map, composer, mobile bar). */
+/* Right Hand NWA: home page behavior (motion toggle, counters, the checks that draw themselves in the method strip, the steps
+   and the promises, the services a visitor asked about, composer). Section entrances and swooshes are in assets/motion.js;
+   the menu sheet and the phone bar are in assets/nav.js, which all three pages load. */
 (function () {
   "use strict";
   var d = document, html = d.documentElement;
@@ -17,8 +19,6 @@
   function later(fn, ms) { var t = setTimeout(fn, ms); timers.push(t); return t; }
   // assets/motion.js only takes over the motion button and the swooshes on pages without this script
   (window.RH = window.RH || {}).site = true;
-  // change a button's words without dropping the icon motion.js put in front of them
-  function relabel(el, t) { var n = el.lastChild; if (n && n.nodeType === 3) n.nodeValue = t; else el.textContent = t; }
 
   /* ---------- motion toggle ---------- */
   var mb = $("#motion-btn");
@@ -35,14 +35,7 @@
     d.dispatchEvent(new CustomEvent("rh:motion", { detail: { off: o } }));
   });
 
-  /* ---------- reveals and swooshes ---------- */
-  // whatever comes into view from above (scrolling back up) is shown as it is (see .rv-now in field.css)
-  if ("IntersectionObserver" in window) {
-    var rio = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { if (e.boundingClientRect.top < 0) e.target.classList.add("rv-now"); e.target.classList.add("in"); rio.unobserve(e.target); } }); }, { threshold: .15, rootMargin: "100% 0px -6% 0px" });
-    $$("[data-reveal], .sw").forEach(function (el) { rio.observe(el); });
-  } else $$("[data-reveal], .sw").forEach(function (el) { el.classList.add("in"); });
-
-  /* ---------- counters (tick once at 60% visible) ---------- */
+  /* ---------- counters (the number settles once, at 60% visible) ---------- */
   $$("[data-count]").forEach(function (el) {
     var to = +el.getAttribute("data-count");
     once(el, .6, function () {
@@ -54,7 +47,7 @@
       var box = el.tagName === "SPAN" ? el.parentNode : el, bh = box.getBoundingClientRect().height;
       var fence = bh > 0 && window.CSS && CSS.supports && CSS.supports("contain", "size layout") && getComputedStyle(box).display === "block";
       if (fence) { box.style.height = bh + "px"; box.style.contain = "size layout"; }
-      var t0 = performance.now(), ms = 1100, shown = "";
+      var t0 = performance.now(), ms = 480, shown = "";
       requestAnimationFrame(function f(t) {
         var k = Math.max(0, Math.min(1, (t - t0) / ms)), e = 1 - Math.pow(1 - k, 3), s = Math.round(to * e).toLocaleString("en-US");   // the first frame can be stamped before t0: never show "-0"
         if (s !== shown) { shown = s; el.textContent = s; }
@@ -63,7 +56,10 @@
     });
   });
 
-  /* ---------- method strip, steps, offer checks, promises, Admin Map ---------- */
+  /* ---------- method strip, steps, promises: boxes that tick themselves as each list scrolls in ---------- */
+  // html.seq is what holds a check un-drawn until its turn (site.css). It is set here, by the script that draws them,
+  // so if this file never runs every box simply shows ticked.
+  if (!off() && "IntersectionObserver" in window) html.classList.add("seq");
   var finishers = [];
   function finishAll() { finishers.forEach(function (f) { f(); }); }
   function seq(items, gap, each, done) {
@@ -75,30 +71,24 @@
     var chips = $$("li:not(.arrw)", loop);
     var endLoop = function () { chips.forEach(function (c, i) { c.classList.toggle("on", i === chips.length - 1); c.classList.add("lit"); }); };
     finishers.push(endLoop);
-    once(loop, .6, function () { seq(chips, 550, function (c) { chips.forEach(function (x) { x.classList.remove("on"); }); c.classList.add("on", "lit"); }, endLoop); });
+    once(loop, .6, function () { seq(chips, 140, function (c) { chips.forEach(function (x) { x.classList.remove("on"); }); c.classList.add("on", "lit"); }, endLoop); });
   }
   var steps = $$("#steps .step");
   if (steps.length) {
     var endSteps = function () { steps.forEach(function (s) { s.classList.remove("active"); s.classList.add("done"); }); };
     finishers.push(endSteps);
     once($("#steps"), .5, function () {
-      seq(steps, 900, function (s, i) { if (i) steps[i - 1].classList.replace("active", "done"); s.classList.add("active"); }, endSteps);
+      seq(steps, 120, function (s, i) { if (i) steps[i - 1].classList.replace("active", "done"); s.classList.add("active"); }, endSteps);
     });
   }
-  [["#inc", 260], ["#prom", 200]].forEach(function (p) {
+  // #prom-more sits inside a closed disclosure: its checks draw when a visitor opens it
+  [["#prom", 90], ["#prom-more", 90]].forEach(function (p) {
     var list = $(p[0]); if (!list) return;
     var cks = $$(".ck", list);
     var end = function () { cks.forEach(function (c) { c.classList.add("on"); }); };
     finishers.push(end);
     once(list, .3, function () { seq(cks, p[1], function (c) { c.classList.add("on"); }); });
   });
-  var amap = $("#amap");
-  if (amap) {
-    var sts = $$(".st", amap);
-    var approve = function (s) { s.classList.add("ok"); s.textContent = "Approved by you"; };
-    finishers.push(function () { sts.forEach(approve); });
-    once(amap, .5, function () { if (off()) { sts.forEach(approve); return; } later(function () { seq(sts, 700, approve); }, 900); });
-  }
 
   /* ---------- go to the check-up ---------- */
   function goCheckup(ask) {
@@ -115,90 +105,20 @@
     else later(function () { var f = $("#c-name"); if (f) f.focus({ preventScroll: true }); }, off() ? 0 : 700);
   });
 
-  /* ---------- services, filters and the picker ---------- */
-  /* services-render:start
-     tools/build-services.mjs runs this exact block in Node to write the static catalog into index.html,
-     so the static markup and the runtime markup cannot drift. Keep it free of DOM calls. */
-  var RENDER = (function () {
-    function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
-    var ICON = { receipt: "i-receipt", chat: "i-chat", calendar: "i-cal", folder: "i-folder", chip: "i-chip", pin: "i-pin" };
-    var KIND = { ai: ["ai", "AI drafts, we check, you approve"], we: ["", "We do it"], pro: ["", "Stays with a licensed pro"] };
-    var ROWS = [["handoff", "You hand off"], ["back", "You get back"], ["ai", "Where AI helps"], ["person", "Where a person checks"], ["never", "What we never do"], ["example", "Example"]];
-    function card(s) {
-      var k = KIND[s.tag] || KIND.we, id = "svc-" + s.id;
-      return '<li class="svc' + (s.tag === "ai" ? " is-ai" : "") + '" data-who="' + esc((s.who || []).join(" ")) + '" data-id="' + esc(s.id) + '"><button type="button" aria-expanded="false" aria-controls="' + id + '-more"><span class="nm">' + esc(s.name) + '</span><svg class="plus" aria-hidden="true"><use href="#i-plus"/></svg><span class="sum">' + esc(s.sum) + '</span><span class="kind ' + k[0] + '">' + k[1] + '</span></button>' +
-        '<div class="more" id="' + id + '-more"><div><dl>' + ROWS.map(function (r) { return s.rows && s.rows[r[0]] ? '<div><dt>' + r[1] + '</dt><dd>' + esc(s.rows[r[0]].replace(/^Example:\s*/, "")) + '</dd></div>' : ""; }).join("") + '</dl>' +
-        '<div class="pick"><button type="button" class="chip" aria-pressed="false" data-pick="' + esc(s.id) + '" data-name="' + esc(s.name) + '">Add to my Right Hand</button>' + (s.demo ? ' <a class="linkbtn" href="' + esc(s.demo) + '">See it in the demo</a>' : "") + '</div></div></div></li>';
-    }
-    // nl is "" in the browser and "\n" in the build; it only sits between cards and lines, where the grids ignore whitespace
-    function lines(S, nl) {
-      nl = nl || "";
-      return S.lines.map(function (l) {
-        return '<div class="svc-line" data-reveal><h3><span class="tile" aria-hidden="true"><svg class="i"><use href="#' + (ICON[l.icon] || "i-folder") + '"/></svg></span>' + esc(l.name) + (l.note ? '<span class="line-note">' + esc(l.note) + '</span>' : "") + '</h3><ul class="svc-grid">' + nl +
-          l.items.map(card).join(nl) + nl + '</ul></div>';
-      }).join(nl);
-    }
-    function stays(S) { return '<div class="svc pro stays-card" data-reveal><h3><span class="tile" aria-hidden="true"><svg class="i"><use href="#i-hand"/></svg></span>' + esc(S.stays.name) + '</h3><ul>' + S.stays.items.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + '</ul><p class="fine">We will point you to a licensed pro when something needs one.</p></div>'; }
-    function buy(S) { return '<h3 class="buy-h">How you can buy it</h3>' + S.buy.map(function (b) { return '<div><h4>' + esc(b.name) + '</h4><p>' + esc(b.text) + '</p>' + (b.tiers ? '<ul>' + b.tiers.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") + '</ul>' : "") + '</div>'; }).join("") + (S.priceLine ? '<p class="price-line">' + esc(S.priceLine) + '</p>' : ""); }
-    return { lines: lines, stays: stays, buy: buy, KIND: KIND, ROWS: ROWS };
-  })();
-  /* services-render:end */
+  /* ---------- services a visitor asked about ---------- */
+  // Set by the first-handoff quiz (assets/close.js, through RH.composer.prefill) and by "Ask about this in my check-up"
+  // links on the services page (?pick=<id>). Names come from assets/services-data.js, so no service card has to be on this page.
   var picks = [];
-  (function services() {
-    var S = window.RH_SERVICES, host = $("#svc-lines");
-    if (!host) return;
-    // index.html ships the catalog as static HTML (for crawlers and AI fetchers that skip JavaScript), so enhance it in place.
-    // A page whose markers are empty still renders from assets/services-data.js.
-    var stat = !!$(".svc[data-id]", host);
-    if (!stat && !S) return;
-    if (!stat) {
-      host.innerHTML = RENDER.lines(S);
-      var stays = $("#stays");
-      if (stays && S.stays && !$(".stays-card", stays)) stays.innerHTML = RENDER.stays(S);
-      var buy = $("#buy");
-      if (buy && S.buy && !$(".buy-h", buy)) buy.innerHTML = RENDER.buy(S);
-      // newly added nodes get the reveal treatment
-      if ("IntersectionObserver" in window && rio) $$("#services [data-reveal]:not(.in)").forEach(function (el) { rio.observe(el); }); else $$("#services [data-reveal]").forEach(function (el) { el.classList.add("in"); });
-    }
-
-    // filters
-    var who = $("#who"), live = $("#who-live"), cur = "";
-    if (who && S && S.who) {
-      who.innerHTML = '<button type="button" class="chip" aria-pressed="true" data-who="">All</button>' + S.who.map(function (w) { return '<button type="button" class="chip" aria-pressed="false" data-who="' + esc(w.id) + '">' + esc(w.label) + '</button>'; }).join("");
-      who.addEventListener("click", function (e) {
-        var b = e.target.closest("button"); if (!b) return;
-        cur = b.getAttribute("data-who");
-        $$("button", who).forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
-        var n = 0;
-        $$(".svc[data-who]", host).forEach(function (c) {
-          var hit = !cur || (" " + c.getAttribute("data-who") + " ").indexOf(" " + cur + " ") >= 0;
-          c.classList.toggle("dim", !!cur && !hit); c.classList.toggle("hit", !!cur && hit); if (hit) n++;
-        });
-        if (live) live.textContent = cur ? n + " services highlighted for " + b.textContent + "." : "Showing every service.";
-      });
-    }
-    // expand and pick
-    host.addEventListener("click", function (e) {
-      var pk = e.target.closest("[data-pick]");
-      if (pk) { setPick(pk.getAttribute("data-pick"), pk.getAttribute("aria-pressed") !== "true"); return; }
-      var b = e.target.closest(".svc > button"); if (!b) return;
-      var card = b.parentNode, open = b.getAttribute("aria-expanded") !== "true";
-      b.setAttribute("aria-expanded", String(open)); if (open) card.setAttribute("data-open", ""); else card.removeAttribute("data-open");
-    });
+  var NAMES = (function () {
+    var m = {}, S = window.RH_SERVICES;
+    if (S && S.lines) S.lines.forEach(function (l) { (l.items || []).forEach(function (x) { m[x.id] = x.name; }); });
+    return m;
   })();
-  // tick or untick one service card; the card, the picker bar and the composer all follow
   function setPick(id, on) {
-    var pk = $$("#svc-lines [data-pick]").filter(function (x) { return x.getAttribute("data-pick") === id; })[0];
-    if (!pk) return;
-    pk.setAttribute("aria-pressed", String(on)); relabel(pk, on ? "Added to my Right Hand" : "Add to my Right Hand");
-    pk.closest(".svc").classList.toggle("picked", on);
-    picks = picks.filter(function (p) { return p.id !== id; }); if (on) picks.push({ id: id, name: pk.getAttribute("data-name") });
-    paintPicker(); composer.update();
-  }
-  function paintPicker() {
-    var p = $("#picker"); if (!p) return;
-    p.hidden = !picks.length;
-    var l = $("[data-pick-list]", p); if (l) l.textContent = picks.length ? picks.map(function (x) { return x.name; }).join(", ") : "nothing picked yet";
+    if (!NAMES[id]) return;
+    picks = picks.filter(function (p) { return p.id !== id; });
+    if (on) picks.push({ id: id, name: NAMES[id] });
+    composer.update();
   }
 
   /* ---------- composer (mailto draft only) ---------- */
@@ -218,8 +138,8 @@
     function val(n) { return form.elements[n].value.trim(); }
     function msg() {
       var biz = val("business") || "{business}", town = val("town") || "{town}";
-      var subject = "Free admin check-up: " + biz + ", " + town;
-      var lines = ["Hi Right Hand NWA,", "", "I'd like a free admin check-up.", "", "Name: " + (val("name") || "{name}"), "Business: " + biz + " in " + town];
+      var subject = "Free 30-minute check-up: " + biz + ", " + town;
+      var lines = ["Hi Right Hand NWA,", "", "I'd like a free 30-minute check-up.", "", "Name: " + (val("name") || "{name}"), "Business: " + biz + " in " + town];
       var e = sel(eats); if (e.length) lines.push("What eats the most time: " + e.join(", "));
       if (picks.length) lines.push("Services I'm curious about: " + picks.map(function (p) { return p.name; }).join(", "));
       var m = sel(mode), t = val("times"); if (m.length || t) lines.push("How and when to meet: " + [m.join(" or "), t].filter(Boolean).join(", "));
@@ -229,9 +149,14 @@
     }
     function update() {
       var m = msg(); pre.textContent = "To: " + EMAIL + "\nSubject: " + m.subject + "\n\n" + m.body;
-      if (pl) { pl.hidden = !picks.length; pl.textContent = picks.length ? "From your Right Hand picks: " + picks.map(function (p) { return p.name; }).join(", ") + "." : ""; }
+      if (pl) { pl.hidden = !picks.length; pl.textContent = picks.length ? "Services you asked about: " + picks.map(function (p) { return p.name; }).join(", ") + "." : ""; }
     }
-    form.addEventListener("input", function (e) { if (e.target.getAttribute("aria-invalid") === "true" && e.target.value.trim()) clearErr(e.target); update(); });
+    form.addEventListener("input", function (e) {
+      if (e.target.getAttribute("aria-invalid") === "true" && e.target.value.trim()) clearErr(e.target);
+      // the "a few things are missing" line goes as soon as nothing is marked any more
+      if (status.classList.contains("bad") && !$('[aria-invalid="true"]', form)) { status.textContent = ""; status.classList.remove("bad"); }
+      update();
+    });
     function setErr(el) { el.setAttribute("aria-invalid", "true"); var er = $("#" + el.id + "-err"); if (er) er.hidden = false; }
     function clearErr(el) { el.removeAttribute("aria-invalid"); var er = $("#" + el.id + "-err"); if (er) er.hidden = true; }
     function valid() {
@@ -273,12 +198,11 @@
   })();
   RH.composer = composer;
 
-  /* ---------- mobile bottom bar ---------- */
-  var bar = $("#mobile-bar"), hero = $(".hero"), checkup = $("#checkup");
-  if (bar && hero && checkup && "IntersectionObserver" in window) {
-    var heroOut = false, compIn = false;
-    var paint = function () { bar.classList.toggle("on", heroOut && !compIn); };
-    new IntersectionObserver(function (es) { heroOut = !es[0].isIntersecting; paint(); }).observe(hero);
-    new IntersectionObserver(function (es) { compIn = es[0].isIntersecting; paint(); }).observe(checkup);
-  }
+  // a service carried over from the services page: index.html?pick=receipts#checkup (ids are checked against the catalog)
+  (function () {
+    try {
+      var q = new URLSearchParams(location.search).get("pick");
+      if (q && /^[a-z0-9,]{1,200}$/.test(q)) q.split(",").forEach(function (id) { setPick(id, true); });
+    } catch (e) {}
+  })();
 })();

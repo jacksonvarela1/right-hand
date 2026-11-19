@@ -3,12 +3,15 @@
    - Every moving effect is scoped under .js-motion (boot.js sets it when the visitor allows motion; the Pause motion
      button removes it), so reduced motion, paused motion and no-JS visitors get the finished, static page.
    - Hidden "before" states also need .fx, which motion.js adds only after it has settled everything already on
-     screen, so nothing blinks out on load.
+     screen, so nothing blinks out on load, and a motion.js that fails to load never leaves anything hidden.
+   - An entrance is over in under half a second and reads as assembling: the hairline draws, the label decodes, the
+     words step up, the bracket locks onto its corner. On phones (html.fx-lite) nothing is ever hidden: a block that
+     scrolls in settles into place with one short move.
    - Only transform and opacity animate (plus the brand's stroke draw on checks and the ghost-button trace).
-   - Static decoration (icons, hairlines, the ticker strip) is plain CSS, present from first paint: no layout shift. */
+   - Static decoration (icons, hairlines) is plain CSS, present from first paint: no layout shift.
+   - Nothing here covers the page: the hero is readable at first paint and the particle field gathering is the entrance. */
 
 :root{
-  --fx-arr:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 12'%3E%3Cpath d='M1.5 6h14M11 1.5L15.5 6 11 10.5' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   --fx-play:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 1.6v8.8a.6.6 0 0 0 .9.5l7-4.4a.6.6 0 0 0 0-1L3.9 1.1a.6.6 0 0 0-.9.5z'/%3E%3C/svg%3E");
   --fx-stop:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Crect x='2' y='2' width='8' height='8' rx='1.6'/%3E%3C/svg%3E");
   --fx-step:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M1.5 1.8v8.4a.6.6 0 0 0 .9.5l6-4.2a.6.6 0 0 0 0-1l-6-4.2a.6.6 0 0 0-.9.5z'/%3E%3Crect x='9' y='1.5' width='1.8' height='9' rx='.7'/%3E%3C/svg%3E");
@@ -17,82 +20,48 @@
   --fx-down:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M6 1.5v8.5M2.2 6.4L6 10.2l3.8-3.8' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
-/* ---------- 1. first-visit intro (home page, once per session) ---------- */
-/* boot.js marks html.rh-intro before first paint; this navy cover holds until motion.js puts the intro on top.
-   If motion.js never runs (or runs late), the cover clears itself by 1.5 s so the hero is never held back. */
-html.rh-intro:not(.fx-intro-live) body::after{content:"";position:fixed;inset:0;z-index:399;background:#051326;animation:fx-cover-off .2s 4s forwards}
-@keyframes fx-cover-off{to{opacity:0;visibility:hidden}}
-html.fx-intro-live .top .mark *{animation-play-state:paused}
-html.fx-intro-live .hero [data-reveal]{opacity:0!important;transform:translateY(16px)!important}
-.fx-intro{position:fixed;inset:0;z-index:400;display:grid;place-items:center;overflow:hidden;background:#051326;color:#FFF;cursor:pointer}
-.fx-ig{position:absolute;inset:0;-webkit-mask-image:radial-gradient(closest-side,#000 30%,transparent);mask-image:radial-gradient(closest-side,#000 30%,transparent)}
-.fx-ig-h{background:linear-gradient(180deg,rgba(149,192,254,.14) 1px,transparent 1px) center/100% 48px}
-.fx-ig-v{background:linear-gradient(90deg,rgba(149,192,254,.14) 1px,transparent 1px) center/48px 100%}
-.fx-ic{position:relative;display:grid;justify-items:center;gap:22px;padding:0 20px;text-align:center}
-.fx-mk{display:block;width:84px;height:84px;overflow:visible}
-.fx-mk .mk-br{fill:var(--blue-500);transform-box:fill-box}
-.fx-mk .mk-bx,.fx-mk .mk-ck{stroke:#FFF}
-.fx-mk .mk-bx{transform-box:fill-box;transform-origin:center}
-.fx-iw{position:relative;width:min(88vw,15ch);height:1.3em;font-size:clamp(1.9rem,1.2rem + 3vw,3rem);line-height:1.3}
-.fx-iw > span{position:absolute;left:50%;top:0;white-space:nowrap;transform:translateX(-50%)}
-.fx-iw-m{font:500 1em/1.3 var(--font-mono);letter-spacing:-.01em;color:var(--blue-300)}
-.fx-iw-m i{font-style:normal}
-.fx-iw-s{font:800 1em/1.3 var(--font-sans);letter-spacing:-.03em;opacity:0}
-.fx-iw-s b{font-weight:800;color:var(--blue-400)}
-.fx-it{font:500 .75rem/1.4 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--navy-300)}
-.fx-iscan{position:absolute;left:0;right:0;top:0;height:150px;background:linear-gradient(180deg,#95C0FE 0,#95C0FE 2px,rgba(47,128,237,.3) 2px,rgba(47,128,237,0) 100%);transform:translateY(110vh)}
-
-/* ---------- 2. section heads: hairline draws, mono eyebrow scrambles in, heading rises word by word ---------- */
-[data-fx=head]::before{content:"";display:block;height:1px;margin-bottom:20px;background:linear-gradient(90deg,var(--accent) 0 48px,var(--line) 48px);transform-origin:left center}
+/* ---------- 2. section heads: hairline draws, mono label decodes, heading steps up word by word (all inside 500ms) ---------- */
+[data-fx=head]::before{content:"";display:block;height:1px;margin-bottom:20px;background:linear-gradient(90deg,var(--accent) 0 48px,var(--rule) 48px);transform-origin:left center}
 .line-head[data-fx=head]::before{content:none}
-[data-fx=head] > .eyebrow{font-family:var(--font-mono);font-weight:500;letter-spacing:.14em}
 .fx-w{display:inline-block}
 .fx.js-motion [data-fx=head]:not(.fx-in)::before{transform:scaleX(0)}
 .fx.js-motion [data-fx=head]:not(.fx-in) > .eyebrow,.fx.js-motion [data-fx=head]:not(.fx-in) > .lead{opacity:0}
-.fx.js-motion [data-fx=head]:not(.fx-in) .fx-w{opacity:0;transform:translateY(.5em)}
-.js-motion [data-fx=head]:not(.fx-in) .sw::after{transform:scaleX(0)}
-.js-motion [data-fx=head].fx-in:not(.fx-done)::before{animation:fx-draw .9s var(--ease-out) backwards}
-.js-motion [data-fx=head].fx-in:not(.fx-done) .fx-w{animation:fx-rise .62s var(--ease-out) calc(var(--w,0)*42ms + 120ms) backwards}
-.js-motion [data-fx=head].fx-in:not(.fx-done) > .lead{animation:fx-up .6s var(--ease-out) .38s backwards}
-.js-motion [data-fx=head].fx-in .sw.in::after{transition-delay:calc(var(--n,4)*42ms + .42s)}
+.fx.js-motion [data-fx=head]:not(.fx-in) .fx-w{opacity:0;transform:translateY(.4em)}
+.js-motion [data-fx=head].fx-in:not(.fx-done)::before{animation:fx-draw .44s var(--ease-out) backwards}
+.js-motion [data-fx=head].fx-in:not(.fx-done) .fx-w{animation:fx-rise .3s var(--ease-out) calc(min(var(--w,0),8)*20ms + 30ms) backwards}
+.js-motion [data-fx=head].fx-in:not(.fx-done) > .lead{animation:fx-up .32s var(--ease-out) .14s backwards}
+.js-motion [data-fx=head].fx-in .sw.in::after{transition-duration:.34s;transition-delay:.14s}
 .fx.js-motion [data-fx=scramble]:not(.fx-in){opacity:0}
 
-/* ---------- 3. cascades (with an optional blue edge flash) ---------- */
+/* ---------- 3. cascades: the children land one after another (with an optional blue edge flash) ---------- */
 [data-edge] > *{position:relative}
 .fx.js-motion [data-fx=cascade]:not(.fx-in) > *{opacity:0}
-.js-motion [data-fx=cascade].fx-in:not(.fx-done) > *{animation:fx-up .56s var(--ease-out) calc(var(--k,0)*65ms) backwards}
-.js-motion [data-edge].fx-in:not(.fx-done) > *::before{content:"";position:absolute;inset:-1px;border:1.5px solid var(--blue-400);border-radius:inherit;pointer-events:none;animation:fx-edge 1s ease calc(var(--k,0)*65ms + 260ms) both}
-/* How it works: a dashed pipeline draws behind the four step cards */
-@media (min-width:961px){
-  .steps[data-fx]{position:relative;isolation:isolate}
-  .steps[data-fx]::before{content:"";position:absolute;left:14px;right:14px;top:34px;height:1px;z-index:-1;background:repeating-linear-gradient(90deg,var(--accent) 0 6px,transparent 6px 12px);opacity:.75;transform-origin:left center}
-  .fx.js-motion .steps[data-fx]:not(.fx-in)::before{transform:scaleX(0)}
-  .js-motion .steps[data-fx].fx-in:not(.fx-done)::before{animation:fx-draw 1.2s var(--ease-io) .1s backwards}
-}
+.js-motion [data-fx=cascade].fx-in:not(.fx-done) > *{animation:fx-up .32s var(--ease-out) calc(var(--k,0)*30ms) backwards}
+.js-motion [data-edge].fx-in:not(.fx-done) > *::before{content:"";position:absolute;inset:-1px;border:1.5px solid var(--blue-400);border-radius:inherit;pointer-events:none;animation:fx-edge .46s ease calc(var(--k,0)*30ms + 40ms) both}
 
-/* ---------- 4. scan-line wipe ---------- */
+/* ---------- 4. scan: the block steps in under a thin blue beam and its bracket locks onto the corner.
+   Nothing covers the block: it can be read while the beam passes. ---------- */
 [data-fx=scan]{position:relative}
 .fx.js-motion [data-fx=scan]:not(.fx-in){opacity:0}
-.fx-scan{position:absolute;inset:-12px;z-index:30;overflow:hidden;border-radius:var(--r-lg);pointer-events:none}
-.fx-scan > b{position:absolute;inset:0;background:var(--bg);transform-origin:50% 100%}
-.fx-scan > i{position:absolute;left:0;right:0;top:-88px;height:90px;background:linear-gradient(0deg,#5F9FFA 0,#5F9FFA 2px,rgba(47,128,237,.28) 2px,rgba(47,128,237,0) 100%)}
+.js-motion [data-fx=scan].fx-in:not(.fx-done){animation:fx-up .36s var(--ease-out) backwards}
+.js-motion .bracket[data-fx=scan].fx-in:not(.fx-done)::before,.js-motion [data-fx=scan].fx-in:not(.fx-done) .bracket::before{animation:fx-lock .46s var(--ease-out) .04s backwards}
+.fx-scan{position:absolute;inset:0;z-index:30;overflow:hidden;border-radius:inherit;pointer-events:none}
+.fx-scan > i{position:absolute;left:0;right:0;top:-60px;height:62px;background:linear-gradient(0deg,#5F9FFA 0,#5F9FFA 2px,rgba(47,128,237,.2) 2px,rgba(47,128,237,0) 100%)}
 
 @keyframes fx-draw{from{transform:scaleX(0)}}
-@keyframes fx-rise{from{opacity:0;transform:translateY(.5em)}}
-@keyframes fx-up{from{opacity:0;transform:translateY(18px)}}
+@keyframes fx-rise{from{opacity:0;transform:translateY(.4em)}}
+@keyframes fx-up{from{opacity:0;transform:translateY(14px)}}
 @keyframes fx-edge{0%{opacity:0}30%{opacity:1}100%{opacity:0}}
 @keyframes fx-pop{from{transform:scale(.55)}}
+@keyframes fx-lock{from{opacity:0;transform:translate(-16px,16px)}}
 
-/* ---------- 4b. phones and tablets (html.fx-lite, set in motion.js): one short rise per block, started from script.
-   A block below the screen waits hidden under .fx-wait; nothing else about it changes, so nothing inside it is restyled. ---------- */
-.fx-wait{opacity:0}
-.fx-lite [data-fx=head] .sw.in::after{transition-delay:.25s}
+/* ---------- 4b. phones and tablets (html.fx-lite, set in motion.js): nothing is hidden, ever. A block that scrolls in
+   makes one short move into place, started from script; the words can be read the whole time. ---------- */
 .js-motion.fx-lite .top .btn:not(.ghost)::after{animation:none}
-@media print{.fx-wait{opacity:1!important}}
 
 /* ---------- 5. section HUD (fixed, mono, updates as you scroll; hidden on phones) ---------- */
 .fx-hud{position:fixed;left:14px;top:50%;z-index:40;display:none;align-items:center;gap:12px;writing-mode:vertical-rl;transform:translateY(-50%) rotate(180deg);font:500 .6875rem/1 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--navy-300);pointer-events:none;transition:opacity .3s ease}
-@media (min-width:768px){.fx-hud{display:flex}}
+@media (min-width:1101px){.fx-hud{display:flex}}
 .fx-hud.is-top{opacity:0}
 .fx-hud.on-light{color:var(--navy-500)}
 .fx-hud .hud-n{font-weight:600;color:var(--blue-400)}
@@ -104,18 +73,6 @@ html.fx-intro-live .hero [data-reveal]{opacity:0!important;transform:translateY(
 .fx-hud .hud-l{inline-size:24ch;max-block-size:42vh;overflow:hidden;white-space:nowrap}   /* fixed length: a new label never moves anything */
 /* nav links light up for the section you are in */
 .top nav a.fx-cur{color:#FFF}
-
-/* ---------- 6. towns ticker ---------- */
-.ticker{position:relative;background:var(--navy-900);border-top:1px solid rgba(167,181,202,.14);border-bottom:1px solid rgba(167,181,202,.14)}
-.ticker-in{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
-.ticker-track{display:flex;width:max-content}
-.ticker ul{display:flex;list-style:none;margin:0;padding:0}
-.ticker li{display:inline-flex;align-items:center;gap:20px;padding:14px 0 14px 20px;font:500 .75rem/1 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--navy-300);white-space:nowrap}
-.ticker li::after{content:"";width:6px;height:6px;border-radius:1.5px;background:var(--blue-500)}
-.ticker li.hl{color:#FFF}
-.js-motion .ticker.fx-run .ticker-track{animation:fx-marquee 70s linear infinite}
-.js-motion .ticker:hover .ticker-track{animation-play-state:paused}
-@keyframes fx-marquee{to{transform:translateX(-50%)}}
 
 /* ---------- 7. parallax on the grid and topo lines (scroll-driven; static elsewhere) ---------- */
 .band.grid-48{isolation:isolate}
@@ -187,38 +144,40 @@ html[data-motion=off] .bar-btn::before{-webkit-mask-image:var(--fx-step);mask-im
 @keyframes fx-pop2{from{transform:scale(.55)}}
 /* header motion toggle: pause or play glyph */
 .motion-btn{display:inline-flex;align-items:center;gap:7px}
-@media (max-width:560px){.motion-btn{display:none}}
 .motion-btn::before{content:"";flex:none;width:10px;height:10px;background:currentColor;-webkit-mask:var(--fx-pause) center/contain no-repeat;mask:var(--fx-pause) center/contain no-repeat}
 .motion-btn[aria-pressed=true]::before{-webkit-mask-image:var(--fx-play);mask-image:var(--fx-play)}
-/* demo jump links: a down arrow that nudges */
-.demo-index a::after{content:"";flex:none;width:10px;height:10px;background:var(--blue-400);-webkit-mask:var(--fx-down) center/contain no-repeat;mask:var(--fx-down) center/contain no-repeat;transition:transform .25s var(--ease-out)}
-.demo-index a:hover::after,.demo-index a:focus-visible::after{transform:translateY(3px)}
 /* plus icons turn on hover, close buttons spin */
-.svc:not([data-open]) > button:hover .plus{transform:rotate(90deg)}
-.faq details:not([open]) summary:hover svg{transform:rotate(90deg)}
+.faq details:not([open]) summary:hover svg,details.more:not([open]) > summary:hover svg{transform:rotate(90deg)}
 .int-x svg{transition:transform .3s var(--ease-out)}
 .int-x:hover svg{transform:rotate(90deg)}
 /* the logo bracket nudges toward the corner on hover */
 .lockup .mark .mk-br{transition:transform .35s var(--ease-out)}
 .lockup:hover .mark .mk-br{transform:translate(1.5px,-1.5px)}
 
+/* a text link with the button arrow (Meet us, More questions) */
+.arrow-link{display:inline-flex;align-items:center;gap:8px;min-height:44px;font-weight:600;color:var(--accent-ink);text-underline-offset:4px}
+.arrow-link::after{content:"";flex:none;width:15px;height:11px;background:currentColor;-webkit-mask:var(--fx-arr) center/contain no-repeat;mask:var(--fx-arr) center/contain no-repeat;transition:transform .28s var(--ease-out)}
+.arrow-link:hover::after,.arrow-link:focus-visible::after{transform:translateX(4px)}
+
 /* ---------- 10. links: underlines that slide ---------- */
 .top nav a{position:relative;display:inline-block}
 .top nav a::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:2px;border-radius:1px;background:var(--blue-400);transform:scaleX(0);transform-origin:right center;transition:transform .32s var(--ease-out)}
 .top nav a:hover::after,.top nav a:focus-visible::after,.top nav a.fx-cur::after,.top nav a[aria-current=page]::after{transform:scaleX(1);transform-origin:left center}
 .top nav a[aria-current=page]{box-shadow:none}
-footer a,footer .linkbtn,.team-mail a,.contact-line a,.close-alt a,.close-alt .linkbtn,.svc .pick .linkbtn{position:relative;display:inline-block;text-decoration:none}
-footer a::before,footer .linkbtn::before,.team-mail a::before,.contact-line a::before,.close-alt a::before,.close-alt .linkbtn::before,.svc .pick .linkbtn::before{content:"";position:absolute;left:0;right:0;bottom:1px;height:1px;background:currentColor;opacity:.4}
-footer a::after,footer .linkbtn::after,.team-mail a::after,.contact-line a::after,.close-alt a::after,.close-alt .linkbtn::after,.svc .pick .linkbtn::after{content:"";position:absolute;left:0;right:0;bottom:.5px;height:2px;border-radius:1px;background:var(--blue-400);transform:scaleX(0);transform-origin:right center;transition:transform .32s var(--ease-out)}
-.svc .pick .linkbtn::after{background:var(--accent-ink)}
-footer a:hover::after,footer .linkbtn:hover::after,.team-mail a:hover::after,.contact-line a:hover::after,.close-alt a:hover::after,.close-alt .linkbtn:hover::after,.svc .pick .linkbtn:hover::after,
-footer a:focus-visible::after,footer .linkbtn:focus-visible::after,.team-mail a:focus-visible::after,.contact-line a:focus-visible::after,.close-alt a:focus-visible::after,.close-alt .linkbtn:focus-visible::after,.svc .pick .linkbtn:focus-visible::after{transform:scaleX(1);transform-origin:left center}
+/* --ul is how far the underline sits above the bottom of the link's box (a 44px tap target keeps it under the words) */
+.foot-line a,.foot-nav a,.contact-line a,.close-alt a{--ul:1px;position:relative;text-decoration:none}
+.foot-nav a{--ul:10px}
+@media (pointer:coarse){.close-alt a{--ul:11px}}
+.foot-line a::before,.foot-nav a::before,.contact-line a::before,.close-alt a::before{content:"";position:absolute;left:0;right:0;bottom:var(--ul);height:1px;background:currentColor;opacity:.4}
+.foot-line a::after,.foot-nav a::after,.contact-line a::after,.close-alt a::after{content:"";position:absolute;left:0;right:0;bottom:calc(var(--ul) - .5px);height:2px;border-radius:1px;background:var(--blue-400);transform:scaleX(0);transform-origin:right center;transition:transform .32s var(--ease-out)}
+.foot-line a:hover::after,.foot-nav a:hover::after,.contact-line a:hover::after,.close-alt a:hover::after,
+.foot-line a:focus-visible::after,.foot-nav a:focus-visible::after,.contact-line a:focus-visible::after,.close-alt a:focus-visible::after{transform:scaleX(1);transform-origin:left center}
 
 /* source links under the statistics: the link takes the accent color and its underline thickens */
 .src a{transition:color var(--dur-hover) ease}
 .src a:hover,.src a:focus-visible{color:var(--accent-ink);text-decoration-thickness:2px}
 
-@media print{.fx-hud,.fx-intro,.ticker,.fx-scan,.fx-spot-clip{display:none!important}[data-fx],[data-fx] *{opacity:1!important;transform:none!important}}
+@media print{.fx-hud,.fx-scan,.fx-spot-clip{display:none!important}[data-fx],[data-fx] *{opacity:1!important;transform:none!important}}
 
 /* ---------- 16. design-engineering pass (2026-11-08): one real object, physical responses, less decoration ---------- */
 /* The Admin Map comes out of a paper folder as the offer scrolls in. The open position is the default, so no-JS, reduced
@@ -240,11 +199,11 @@ footer a:focus-visible::after,footer .linkbtn:focus-visible::after,.team-mail a:
 .js-motion .af-tog{position:relative;flex:none;display:inline-flex;align-items:center;min-height:40px;padding:0 14px;font:600 .8125rem/1 var(--font-sans);color:#FFF;background:#33240F;border:0;border-radius:999px;cursor:pointer;transition:scale .5s var(--ease-land)}
 .js-motion .af-tog:active{scale:.93;transition-duration:.08s}
 .af-tog:focus-visible{outline:3px solid var(--blue-400);outline-offset:2px}
-.js-motion .af .amap,.js-motion .af-front{transition:transform .95s var(--ease-land)}
+.js-motion .af .amap,.js-motion .af-front{transition:transform .48s var(--ease-out)}
 .js-motion .af-shut .af-front{transform:none}
 .js-motion .af-shut .amap{transform:translateY(12%)}
 .js-motion .af-shut .af-stamp{opacity:0}
-.js-motion .af:not(.af-shut) .af-stamp{animation:af-stamp .42s cubic-bezier(.2,1.5,.4,1) 1.05s backwards}
+.js-motion .af:not(.af-shut) .af-stamp{animation:af-stamp .36s cubic-bezier(.2,1.5,.4,1) .4s backwards}
 @keyframes af-stamp{from{opacity:0;transform:rotate(-7deg) scale(1.7)}}
 @media (hover:hover){.js-motion .af-shut:hover .af-front{transform:translateY(16px)}}
 @media (max-width:560px){
@@ -259,20 +218,3 @@ footer a:focus-visible::after,footer .linkbtn:focus-visible::after,.team-mail a:
   .js-motion .btn{transition:background-color var(--dur-hover) ease,border-color var(--dur-hover) ease,transform var(--dur-press) var(--ease-out),scale .55s var(--ease-land)}
   .js-motion .btn:active{scale:.95;transition-duration:var(--dur-hover),var(--dur-hover),var(--dur-press),.08s}
 }
-
-/* An opened service card becomes a full-width panel; motion.js glides its neighbours to their new places. */
-.svc-grid{grid-auto-flow:dense}
-@media (min-width:561px){.svc[data-open]{grid-column:1/-1}.svc[data-open] dl{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 28px}}
-@media (min-width:981px){.svc[data-open] dl{grid-template-columns:repeat(3,minmax(0,1fr))}}
-.js-motion .svc{transition:border-color var(--dur-hover) ease,opacity .25s ease,box-shadow .4s var(--ease-out),translate .55s var(--ease-land)}
-.js-motion .svc[data-open]{z-index:2;translate:0 -3px}
-.js-motion .svc[data-open]:not(.picked):not(.hit){border-color:var(--line-ui);box-shadow:var(--sh-3)}
-.js-motion .svc .plus{transition:transform .5s var(--ease-land)}
-.js-motion .svc[data-open] .more dl > div,.js-motion .svc[data-open] .more .pick{animation:fx-up .46s var(--ease-out) backwards}
-.js-motion .svc[data-open] .more dl > div:nth-child(2){animation-delay:.07s}
-.js-motion .svc[data-open] .more dl > div:nth-child(3){animation-delay:.14s}
-.js-motion .svc[data-open] .more dl > div:nth-child(n+4),.js-motion .svc[data-open] .more .pick{animation-delay:.21s}
-
-/* Less decoration: the corner bracket already marks AI work, so the label no longer needs its own chip. */
-.svc .kind{padding:0;background:none;font:500 .75rem/1.3 var(--font-mono);letter-spacing:.02em;color:var(--soft)}
-.svc .kind.ai{background:none;color:var(--accent-ink)}

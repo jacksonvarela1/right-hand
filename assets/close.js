@@ -1,8 +1,9 @@
 /* Right Hand NWA: closing devices (styles in assets/close.css). Loads after site.js and talks to it through RH.composer.
    1. Find your first handoff: three taps (kind of business, what eats the most time, how to meet) build a sample
-      Admin Map from assets/services-data.js; "Send me my real Admin Map" pre-fills the check-up form and goes there.
-   2. The floating check-up pill: desktop only, once the hero is gone, hidden over the quiz, the check-up and the footer.
-   3. Micro-proof under the primary CTAs is static HTML: motion.js cascades it in and close.css draws its checks.
+      Admin Map from assets/services-data.js; "Get my real Admin Map. Free check-up" pre-fills the check-up form and goes there.
+   2. The floating check-up pill: 900px and wider (below that the phone bar in assets/nav.js takes over), once the hero
+      is gone, hidden over the story, the quiz, the check-up, the sign-up and the footer.
+   3. The proof lists (.proof) are static HTML: motion.js cascades them in and close.css draws their checks.
    4. The check-up form's success moment when the email draft opens (site.js fires rh:draft).
    Reduced motion and the Pause motion button get the same results, finished, with nothing moving. */
 (function () {
@@ -135,7 +136,7 @@
     }
     // bring the map and its button into view; when both cannot fit (phones), start at the map's title
     function reveal() {
-      var mb = $("#mobile-bar"), vh = innerHeight - (mb && getComputedStyle(mb).display !== "none" ? mb.offsetHeight : 0), top = 80;
+      var mb = $("#mobile-bar"), vh = innerHeight - (mb && mb.offsetHeight ? mb.offsetHeight : 0), top = W.matchMedia("(max-width: 760px)").matches ? 16 : 80;
       var pr = $(".qz-paper", out).getBoundingClientRect(), gr = go.getBoundingClientRect(), end = gr.bottom + 16;
       var dy = end - pr.top <= vh - top ? (end > vh ? end - vh : pr.top < top ? pr.top - top : 0) : pr.top - top;
       if (Math.abs(dy) > 8) scrollBy({ top: dy, behavior: off() ? "auto" : "smooth" });
@@ -158,7 +159,7 @@
       C.prefill({ town: town ? town.value : "", eats: now.eats, modes: now.modes, picks: now.picks, clear: clear });
       applied = now; fresh = false;
     }
-    // the map's own button always carries it; any other check-up link (header, pill, mobile bar) carries a result not sent yet
+    // the map's own button always carries it; any other check-up link (header, pill, phone bar, menu) carries a result not sent yet
     d.addEventListener("click", function (e) {
       var a = e.target.closest && e.target.closest("[data-go=checkup]");
       if (a && (a === cta || fresh)) apply();
@@ -182,7 +183,7 @@
     var form = $("#composer"), conf = $("#c-confirm");
     if (!form || !conf) return;
     var btn = $('button[type="submit"]', form), t = 0;
-    if (btn && !$(".cs-ok", btn)) btn.insertAdjacentHTML("beforeend", '<span class="cs-ok" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M5.5 12.5l4.2 4.2 8.8-9.4"/></svg>Draft opened</span>');
+    if (btn && !$(".cs-ok", btn)) btn.insertAdjacentHTML("beforeend", '<span class="cs-ok" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M5.5 12.5l4.2 4.2 8.8-9.4"/></svg>Now hit send in your email</span>');
     if (!$(".cf-badge", conf)) conf.insertAdjacentHTML("afterbegin", '<span class="cf-badge" aria-hidden="true"><svg viewBox="0 0 32 32" focusable="false"><circle cx="16" cy="16" r="15"/><path pathLength="1" d="M9.5 16.5l4.2 4.2 8.8-9.4"/></svg></span><i class="cf-beam" aria-hidden="true"></i>');
     d.addEventListener("rh:draft", function () {
       clearTimeout(t);
