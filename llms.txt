@@ -1,6 +1,6 @@
 # Right Hand NWA
 
-> Right Hand NWA is a Northwest Arkansas team that takes receipts, invoices, follow-ups, scheduling and paperwork off small business owners' plates, and sets up AI that drafts the busywork. AI drafts, a person on the team checks every piece, and the owner approves: nothing goes out in an owner's name until they have approved it. It is run by four University of Arkansas students. The one offer is a free 30-minute admin and AI check-up, and Your Admin Map follows within 3 business days.
+> Right Hand NWA is admin and AI help for Northwest Arkansas small businesses, run by four University of Arkansas students. The team takes receipts, invoices, missed calls, follow-ups, scheduling and paperwork off small business owners' plates, and sets up AI that drafts the busywork. AI drafts, a person on the team checks every piece, and the owner approves: nothing goes out in an owner's name until they have approved it. The first step is a free 30-minute check-up, and Your Admin Map follows within 3 business days.
 
 ## About
 
@@ -9,12 +9,12 @@
 - Method: AI drafts, we check, you approve. A person on the team checks every piece. Automatic messages, like a missed-call text, only ever use wording the owner approved.
 - Area: anywhere in Benton and Washington counties, Arkansas, including Bentonville, Rogers, Springdale, Fayetteville, Bella Vista, Siloam Springs, Lowell, Cave Springs, Centerton, Farmington, Prairie Grove and Pea Ridge. In person at the business or a coffee shop, or by video or phone.
 - Contact: righthandnwa@gmail.com (reply within one business day). Instagram: @righthandnwa (https://www.instagram.com/righthandnwa/).
-- Pricing: the check-up is free. After that, a flat monthly price is quoted in writing before any work starts, based on the tasks the owner picks. No prices are published.
-- What we are not: we are not a CPA firm, law firm or payroll provider. If something needs one, we say so.
+- Pricing: the check-up is free. After that, one flat monthly price is quoted in writing before any work starts, based on the tasks the owner hands off. No prices are published.
+- We are not a CPA firm, law firm or payroll provider. If something needs one, we say so.
 
 ## Services
 
-Prices: Quoted after your check-up, based on volume.
+Prices: One flat monthly price, in writing, before any work starts.
 
 ### Money admin
 
@@ -86,7 +86,7 @@ Honest listings and real reviews only. We never write reviews.
 
 ## The free check-up
 
-**Free NWA Admin and AI Check-up**
+**Free 30-minute check-up**
 
 - A 30-minute conversation at your business anywhere in Benton or Washington County, or by video or phone.
 - We walk through your week together and list every recurring admin task and roughly how long it takes you.
@@ -94,9 +94,17 @@ Honest listings and real reviews only. We never write reviews.
 - One quick win you can do yourself this week with tools you already pay for.
 - If you want help, a flat written quote, good for 30 days. No pressure.
 
-Free. Nothing to buy, now or later. No books, bank statements or passwords needed. You keep the Admin Map whether you hire us or not. About 35 minutes of your time: 30 to talk, 5 to read your map.
+Free. No card, no obligation to hire us. No books, bank statements or passwords needed. You keep the Admin Map whether you hire us or not. About 35 minutes of your time: 30 to talk, 5 to read your map.
 
-To book: email righthandnwa@gmail.com, or use the form at https://righthandnwa.com/#checkup, which writes the email in your own email app for you to send.
+To ask for one: email righthandnwa@gmail.com, or use the form at https://righthandnwa.com/#checkup. It asks for your name, a cell number or email, your business and your town, and sends the request to the team.
+
+## What it costs
+
+- The check-up: free. 30 minutes. No card, no obligation to hire us.
+- Your Admin Map: free, and yours to keep.
+- After that, only if you want help: one flat monthly price, in writing, before any work starts. It depends on which tasks you hand off, and your quote is good for 30 days.
+- Start small: a one-month pilot on one or two tasks, then month to month. No cancellation fee. Stop with one email.
+- No surprise tools: we start with what you already pay for, and if something new would help, you see the cost first.
 
 ## What we never do
 
@@ -105,15 +113,14 @@ To book: email righthandnwa@gmail.com, or use the form at https://righthandnwa.c
 - We never touch your bank or move money.
 - We never write reviews. Honest listings and real reviews only.
 - We never sell or share your data, and we use settings that keep it out of AI model training.
-- We are not a CPA firm, law firm or payroll provider. If something needs one, we say so.
 - Always stays with you or a licensed pro: Tax prep and filing; Payroll processing and filing; Legal advice, contracts and formal HR policy; Moving money, paying bills or collecting debts; Signing anything; Outbound AI voice calls to your customers; Patient or health records.
 
 ## Links
 
-- [Home page](https://righthandnwa.com/): the method, six live demos on made-up businesses, every service, promises, team and FAQ
+- [Home page](https://righthandnwa.com/): who we are, how it works and what it costs, eight prototypes on made-up businesses, promises and questions
 - [Services](https://righthandnwa.com/services/): the full services catalog
-- [About](https://righthandnwa.com/about/): the four people behind Right Hand NWA
-- [Free check-up](https://righthandnwa.com/#checkup): writes a check-up request email in your own email app
+- [About](https://righthandnwa.com/about/): the four people behind Right Hand NWA, every promise and every question
+- [Free check-up](https://righthandnwa.com/#checkup): a short form that sends your request to the team
 - [Full catalog and answers as text](https://righthandnwa.com/llms-full.txt): every service with all six details, promises and FAQ answers
 - [Instagram @righthandnwa](https://www.instagram.com/righthandnwa/)
 - [Email righthandnwa@gmail.com](mailto:righthandnwa@gmail.com)

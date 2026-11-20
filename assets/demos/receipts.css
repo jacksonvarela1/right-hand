@@ -1,4 +1,6 @@
-/* Demo 03: receipt to expense review */
+/* Prototype 03: receipt to expense review. Every rule is scoped to #demo-receipts.
+   Up to 600px the stage shows one part at a time (the player's part switch, .pv): the receipt and what was read from
+   it, then the card match and the one question, then the October review. */
 #demo-receipts .stage{--stage-h:0px}
 #demo-receipts .rc{display:grid;grid-template-columns:230px minmax(0,1fr) minmax(0,1.15fr);gap:16px;align-items:start;padding:4px}
 #demo-receipts .rc-h{margin-bottom:8px;font:600 .75rem/1 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--navy-300)}
@@ -34,8 +36,8 @@
 #demo-receipts dl{margin:0;display:grid;gap:6px}
 #demo-receipts dl > div{display:grid;grid-template-columns:72px minmax(0,1fr);gap:10px;font-size:.875rem}
 #demo-receipts dt{font:500 .75rem/1.6 var(--font-mono);color:var(--navy-400)}
-#demo-receipts dd{margin:0;min-height:1.4em;color:#FFFFFF;font-weight:600}
-#demo-receipts .rc-math dd{min-height:3em;font-weight:500;color:var(--green-300)}
+#demo-receipts dd{margin:0;min-height:1.6em;color:#FFFFFF;font-weight:600}
+#demo-receipts .rc-math dd{min-height:3.2em;font-weight:500;color:var(--green-300)}
 #demo-receipts .rc-bank ul{list-style:none;padding:0;margin:0;display:grid;gap:5px}
 #demo-receipts .rc-bank li{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:2px 10px;padding:6px 8px;border-radius:var(--r-xs);border:1px solid transparent;font-size:.8125rem;color:var(--navy-200)}
 #demo-receipts .rc-bank li em{grid-column:2/-1;font:normal 500 .75rem var(--font-mono)}
@@ -82,6 +84,24 @@
 
 @media (pointer:coarse){#demo-receipts .rc-sheet .chip{min-height:44px}}
 @media (max-width:1060px){#demo-receipts .rc{grid-template-columns:220px minmax(0,1fr)}#demo-receipts .rc-sheet{grid-column:1/-1}}
-@media (max-width:600px){#demo-receipts .rc{grid-template-columns:minmax(0,1fr)}#demo-receipts .rc-receipt{max-width:250px;justify-self:center;width:100%}#demo-receipts .rc-sheet{grid-column:auto}}
+@media (max-width:600px){
+  #demo-receipts .pv{display:flex}
+  #demo-receipts .stage{--stage-h:600px}
+  #demo-receipts .rc{grid-template-columns:minmax(0,1fr);gap:12px}
+  #demo-receipts .rc-receipt{max-width:250px;justify-self:center;width:100%}
+  #demo-receipts .rc-sheet{grid-column:auto}
+  #demo-receipts .stage[data-view=read] .rc-bank,#demo-receipts .stage[data-view=read] .rc-guess,#demo-receipts .stage[data-view=read] .rc-try,#demo-receipts .stage[data-view=read] .rc-sheet,
+  #demo-receipts .stage[data-view=match] .rc-receipt,#demo-receipts .stage[data-view=match] .rc-extract,#demo-receipts .stage[data-view=match] .rc-sheet,
+  #demo-receipts .stage[data-view=review] .rc-receipt,#demo-receipts .stage[data-view=review] .rc-mid{display:none}
+  /* the review on a phone: the three questions and the Approve button come straight after the total, where the eye
+     is, and the category list follows them (the reading order in the markup stays as it is) */
+  #demo-receipts .rc-sheet{display:flex;flex-direction:column}
+  #demo-receipts .rs-cats{order:2;margin:14px 0 0}
+  #demo-receipts .rs-foot{position:relative;margin-top:10px;border-top:0;padding-top:0}
+  #demo-receipts .rs-stamp{right:0;bottom:0}
+  #demo-receipts .rs-by{order:2;margin-top:2px}
+  #demo-receipts .rs-approve{max-width:100%;white-space:normal;text-align:center}
+  #demo-receipts .rc-math dd{min-height:4.8em}   /* the math line takes three rows here: hold them, so the part keeps its height as it fills in */
+}
 @media (prefers-reduced-motion:reduce){#demo-receipts *{transition-duration:1ms!important}}
 html[data-motion=off] #demo-receipts *{transition-duration:1ms!important}

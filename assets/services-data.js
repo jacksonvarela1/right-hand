@@ -1,4 +1,6 @@
-/* Right Hand NWA services catalog. Classic script: sets window.RH_SERVICES for the services grid and picker. No prices anywhere. */
+/* Right Hand NWA services catalog. Classic script: sets window.RH_SERVICES. The home page reads it for the first-handoff quiz and the
+   check-up message (assets/close.js, assets/site.js); the build tools read it to write the home teaser, services/index.html and llms*.txt.
+   Keep it free of DOM calls (the tools run it in Node with only "window" in scope). No prices anywhere. */
 window.RH_SERVICES = {
   who: [
     { id: "home", label: "Home services" },
@@ -54,7 +56,7 @@ window.RH_SERVICES = {
         {
           id: "quotes", name: "Quotes and estimates",
           sum: "Quotes drafted from your own price sheet and a job-site voice note.",
-          tag: "ai", who: ["home", "auto", "supplier"],
+          tag: "ai", who: ["home", "auto", "supplier"], demo: "#demo-quotes",
           rows: {
             handoff: "Your price sheet and a quick voice note or photos from the job site.",
             back: "A clean quote ready for your review, plus a follow-up if the customer goes quiet.",
@@ -482,7 +484,7 @@ window.RH_SERVICES = {
         {
           id: "reviewreply", name: "Review reply drafts",
           sum: "A reply drafted in your voice for every review, good or bad.",
-          tag: "ai", who: ["shops", "salons", "auto"],
+          tag: "ai", who: ["shops", "salons", "auto"], demo: "#demo-reviews",
           rows: {
             handoff: "Manager access to your review profiles and a few past replies you liked.",
             back: "A drafted reply for every review, good or bad, in your voice and waiting for your OK.",
@@ -547,11 +549,11 @@ window.RH_SERVICES = {
     ]
   },
   buy: [
-    { name: "Free NWA Admin and AI Check-up", text: "30 minutes with us, then Your Admin Map in 3 business days: what to hand off first and what stays with you." },
+    { name: "Free 30-minute check-up", text: "30 minutes with us, then Your Admin Map in 3 business days: what to hand off first and what stays with you." },
     { name: "One-month pilot", text: "One or two tasks for one month, every piece approved by you." },
     {
       name: "Right Hand Desk, monthly",
-      text: "Ongoing admin from the same team every month, sized to your volume.",
+      text: "Ongoing admin from the same team every month, sized to the tasks you hand off.",
       tiers: [
         "Desk Basics: books prep and receipts, invoice follow-ups, Monday brief.",
         "Desk Standard: Basics plus inbox triage, scheduling and reminders, and review reply drafts.",
@@ -561,5 +563,5 @@ window.RH_SERVICES = {
     { name: "AI Builds", text: "Fixed scope: text-back, phone answering, chat assistant, lead intake, CRM, automations, meeting notes and the review system. Each includes setup, a test run you watch, a one-page how-it-works sheet and a 30-day watch of logs before sign-off. Builds can roll into the Desk plan." },
     { name: "AI Starter Workshop", text: "A half day for owner and staff, plus a follow-up a month later. Sold alone or with any build." }
   ],
-  priceLine: "Quoted after your check-up, based on volume."
+  priceLine: "One flat monthly price, in writing, before any work starts."
 };

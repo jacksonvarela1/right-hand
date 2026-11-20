@@ -1,6 +1,9 @@
-/* Demo 01: Missed call to booked visit (Cold Hollow Heating & Air, made-up shop). Every rule is scoped to #demo-calls.
+/* Prototype 01: Missed call to booked visit (Cold Hollow Heating & Air, made-up shop). Every rule is scoped to #demo-calls.
    Left: the shop's business line on a phone. Right: the owner's job card and the How it decided trace.
-   --stage-h is fixed per breakpoint and the phone has a fixed height, so the stage never changes height mid-play. */
+   --stage-h is fixed per breakpoint and the phone has a fixed height, so the stage never changes height mid-play.
+   (assets/lab.css repeats the three --stage-h values, to hold the place before this file arrives: keep them in step.)
+   Up to 720px the two halves take turns in the same box (the player's part switch, .pv): the customer's phone while the
+   texts go back and forth, the owner's card when it is the owner's move. */
 #demo-calls .stage{--stage-h:688px;background:var(--navy-950);box-shadow:inset 0 0 0 1px rgba(167,181,202,.12)}
 #demo-calls .cc{display:grid;grid-template-columns:320px minmax(0,460px);justify-content:center;align-items:center;gap:clamp(24px,4vw,56px);min-height:var(--stage-h);padding:24px}
 
@@ -23,7 +26,9 @@
 #demo-calls .miss time{grid-area:1/3;font:500 .6875rem/1 var(--font-mono)}
 
 /* text thread */
-#demo-calls .thread{flex:1;min-height:0;display:flex;flex-direction:column;gap:6px;padding:10px 10px 12px;overflow-y:auto;overscroll-behavior:contain;list-style:none;scrollbar-width:thin}
+#demo-calls .thread{flex:1;min-height:0;display:flex;flex-direction:column;gap:6px;padding:10px 10px 12px;overflow-y:auto;list-style:none;scrollbar-width:thin}
+/* touch: the thread is not a scroller of its own, so a thumb that lands on it still moves the page. The script keeps the newest text in view. */
+@media (pointer:coarse),(max-width:720px){#demo-calls .thread{overflow:hidden}}
 #demo-calls .thread:focus-visible{outline-offset:-3px}
 #demo-calls .msg{max-width:84%;padding:8px 11px;border-radius:16px;font-size:.8125rem;line-height:1.4}
 #demo-calls .msg.out{align-self:flex-end;background:var(--blue-600);color:#FFF;border-bottom-right-radius:5px;transform-origin:100% 100%}
@@ -91,13 +96,17 @@
   #demo-calls .olog li:not(:last-child){display:none}
 }
 @media (max-width:720px){
-  #demo-calls .stage{--stage-h:1000px}
-  #demo-calls .cc{grid-template-columns:minmax(0,1fr);justify-items:center;align-content:center;gap:14px;padding:12px}
-  #demo-calls .phone{width:min(100%,300px);height:480px}
+  #demo-calls .pv{display:flex}
+  #demo-calls .stage{--stage-h:560px}
+  #demo-calls .cc{grid-template-columns:minmax(0,1fr);justify-items:center;align-content:center;gap:12px;padding:12px}
+  #demo-calls .phone{width:min(100%,312px);height:536px}
   #demo-calls .side{width:100%;max-width:480px}
+  #demo-calls .stage[data-view=phone] .side,#demo-calls .stage[data-view=owner] .phone{display:none}
+  #demo-calls .olog{min-height:calc(2.9em + 4px)}
+  #demo-calls .olog li:not(:last-child){display:flex}
+  #demo-calls .olog li:nth-last-child(n+3){display:none}
 }
 @media (max-width:600px){
-  #demo-calls .stage{--stage-h:1060px}
   #demo-calls .cc{padding:10px}
 }
 

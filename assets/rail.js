@@ -1,11 +1,12 @@
-/* Ticket rail: swings the order tickets at the top of Live demos (styles in rail.css).
+/* Ticket rail: swings the order tickets above the prototype lab (styles in assets/lab.css). Loaded late by assets/lab.js.
    Each ticket is a damped pendulum that pivots where its ring sits on the rail. One requestAnimationFrame loop
    moves all of them with rotate() only, and it stops when every ticket hangs still, when the rail is off screen
    and when the tab is hidden.
    What pushes them: a first swing when the rail scrolls into view, page scroll speed, sideways scroll speed of the
    phone scroller, and the pointer landing on a ticket (its neighbours lean away).
+   The ticket whose prototype is open (aria-selected, set by assets/lab.js) is held straight, like one under the pointer.
    No JS, reduced motion or the Pause motion button: nothing here runs and the tickets hang still at their rest
-   angles. Links are never touched, so a click follows the href as usual. */
+   angles. The links themselves are never touched: what a click does is up to assets/lab.js. */
 (function (w, d) {
   "use strict";
   var html = d.documentElement;
@@ -41,7 +42,8 @@
       var el = link.querySelector(".tk-swing") || link;
       var rest = parseFloat(w.getComputedStyle(el).getPropertyValue("--tk-rest")) || 0;
       var k = K * VARY[i % VARY.length];
-      return { el: el, rest: rest, a: rest, v: 0, f: 0, k: k, c: 2 * ZETA * Math.sqrt(k), hover: false, focus: false, drawn: null, nudged: 0 };
+      var sel = link.getAttribute("aria-selected") === "true";
+      return { el: el, rest: rest, a: sel ? 0 : rest, v: 0, f: 0, k: k, c: 2 * ZETA * Math.sqrt(k), hover: false, focus: false, sel: sel, drawn: null, nudged: 0 };
     });
     var queue = [];              // delayed kicks: { i, v, at }, timed on the loop clock below
     var live = false;            // motion is allowed
@@ -104,7 +106,7 @@
 
       var busy = queue.length > 0 || Math.abs(push) > 1;
       for (var i = 0; i < S.length; i++) {
-        var s = S[i], hot = s.hover || s.focus, target = hot ? 0 : s.rest;
+        var s = S[i], hot = s.hover || s.focus || s.sel, target = hot ? 0 : s.rest;
         s.f += (src - s.f) * al; src = s.f;
         // semi-implicit Euler: speed first, then angle from the new speed
         var acc = -(hot ? s.k * HOT_K : s.k) * (s.a - target) - (hot ? s.c * HOT_C : s.c) * s.v + (hot ? 0.25 : 1) * s.f;
@@ -117,7 +119,7 @@
       if (busy) { id = raf(frame); return; }
       // everything hangs still: park each ticket exactly on its target and let the loop sleep
       push = 0;
-      for (var j = 0; j < S.length; j++) { var p = S[j]; p.a = (p.hover || p.focus) ? 0 : p.rest; p.v = 0; p.f = 0; draw(p); }
+      for (var j = 0; j < S.length; j++) { var p = S[j]; p.a = (p.hover || p.focus || p.sel) ? 0 : p.rest; p.v = 0; p.f = 0; draw(p); }
     }
 
     function setLive(on) {
@@ -129,7 +131,7 @@
         S.forEach(function (s) { s.a = s.rest; s.v = 0; s.f = 0; s.drawn = null; s.el.style.transform = ""; });
         return;
       }
-      S.forEach(function (s) { s.a = (s.hover || s.focus) ? 0 : s.rest; s.v = 0; s.f = 0; draw(s, true); });
+      S.forEach(function (s) { s.a = (s.hover || s.focus || s.sel) ? 0 : s.rest; s.v = 0; s.f = 0; draw(s, true); });
       if (seen) { entrance(entered ? 0.5 : 1); entered = true; }
       wake(true);
     }
@@ -148,6 +150,16 @@
         if (live) { nudge(i, 0.6); wake(); }
       });
       link.addEventListener("blur", function () { if (!s.focus) return; s.focus = false; wake(); });
+    });
+
+    // another prototype was opened: its ticket straightens, the one before it is let go, and the neighbours feel it
+    d.addEventListener("rh:lab", function () {
+      links.forEach(function (link, i) {
+        var on = link.getAttribute("aria-selected") === "true";
+        if (on && !S[i].sel && live) nudge(i, 0.8);
+        S[i].sel = on;
+      });
+      wake();
     });
 
     w.addEventListener("scroll", wake, { passive: true });

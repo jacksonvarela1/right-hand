@@ -1,6 +1,8 @@
-/* Demo 01: Missed call to booked visit. Cold Hollow Heating & Air, Rogers (made-up shop, sample data).
+/* Prototype 01: Missed call to booked visit. Cold Hollow Heating & Air, Rogers (made-up shop, sample data).
    Right Hand texts back after a missed call and holds a slot. Only the owner confirms (the You cursor, or the visitor).
-   Uses the shared player (assets/demo-player.js). Every beat is a step, so pause and hand-off stay exact. */
+   Uses the shared player (assets/demo-player.js). Every beat is a step, so pause and hand-off stay exact.
+   On phones the stage shows one half at a time (views "phone" and "owner"): the steps and the visitor's own moves
+   switch to the half where the next thing happens. */
 (function () {
   "use strict";
   var root = document.getElementById("demo-calls");
@@ -28,7 +30,7 @@
   var HTML = '<div class="phone"><div class="screen paper">' +
     '<div class="sb">' + NOW + 'Tue Nov 3, 6:52 PM</time><span>Business line</span></div>' +
     '<div class="call"><div class="ring"><p class="rl">Incoming call</p><p class="rn">' + PH + '</p><p class="rc">Rogers, AR</p>' +
-    '<div class="wave" aria-hidden="true">' + new Array(13).join("<i></i>") + '</div><p class="rc">After hours. No one free to answer.</p></div>' +
+    '<div class="wave" aria-hidden="true">' + new Array(13).join("<i></i>") + '</div><p class="rc">No one free to answer.</p></div>' +
     '<p class="miss"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 3h3l1.5 4-2 1.2a9 9 0 0 0 5.3 5.3l1.2-2 4 1.5v3a1.5 1.5 0 0 1-1.6 1.5C9 17 3 11 2.5 4.6A1.5 1.5 0 0 1 4 3zM12 3l4 4m0-4l-4 4"/></svg>' +
     '<b>Missed call</b><span>' + PH + ', after hours</span>' + NOW + '6:52 PM</time></p></div>' +
     '<ol class="thread" role="log" aria-live="off" aria-label="Texts with ' + PH + '" tabindex="0"></ol>' +
@@ -39,7 +41,15 @@
     '<ol class="olog" aria-label="Owner log"></ol></section><div class="trace"><h4>How it decided</h4><ul>' +
     "<li><i></i>Never quotes prices.</li><li><i></i>Never diagnoses.</li><li><i></i>Holds the slot until you confirm.</li></ul></div></div>";
 
-  var E = {}, conv, pend, quiet = 0, CX;
+  var E = {}, conv, pend, quiet = 0, CX, swapT = 0;
+  // phones: turn to the other half a moment after the visitor's move has landed (at once when motion is off)
+  function turn(c, k, ms) {
+    clearTimeout(swapT);
+    if (quiet || !ms || RH.motionOff()) { c.view(k); return; }
+    var s = conv;
+    swapT = setTimeout(function () { if (conv === s) c.view(k); }, ms);
+  }
+  function tail() { if (E.thread) E.thread.scrollTop = E.thread.scrollHeight; }
 
   /* ---------- building blocks (each one is instant when quiet, for finalState) ---------- */
   function A(c, el, kf, o) { return quiet ? null : c.anim(el, kf || IN, o || { duration: 240 }); }
@@ -171,9 +181,11 @@
       if (conv.s !== "held") return;
       approve(c); booked(c);
       c.say("Owner card: booked. The customer got a confirmation text.");
+      turn(c, "phone", 1100);
     } else if (SL[k]) {
       pick(c, k); hold(c);
       c.say("Owner card: " + SL[k] + " is held and needs your OK. Press Confirm visit.");
+      turn(c, "owner", 700);
     } else if (k !== "over") {
       add(c, "in", L[k] + (k === "cost" ? "" : "."));
       if (k === "rep") askSys(c, "Repair");
@@ -184,7 +196,7 @@
     }
     sync(c);
     var a = document.activeElement;
-    if (f && (!c.stage.contains(a) || a.disabled)) { var b = conv.s === "held" ? E.cfm : E.chips.querySelector("button"); if (b) b.focus(); }
+    if (f && (!c.stage.contains(a) || a.disabled)) { var b = conv.s === "held" ? E.cfm : E.chips.querySelector("button"); if (b) b.focus({ preventScroll: true }); }
   }
 
   /* ---------- the script: [ms before this beat, beat] ---------- */
@@ -199,17 +211,18 @@
     [1200, function (c) { offer(c, ""); pend = null; }],
     [1400, function (c) { var b = E.chips.firstChild; if (b) b.className = "chip on"; pend = function (c) { pick(c, "w8"); hold(c); }; }],
     [300, function (c) { pick(c, "w8"); pend = hold; }],
-    [900, function (c) { hold(c); c.cursor("rh", E.d.u, { fx: .1 }); pend = null; }],
-    [300, function (c) { c.cursor("you", E.cfm); }],
+    [900, function (c) { c.view("owner"); hold(c); c.cursor("rh", E.d.u, { fx: .1 }); pend = null; }],
+    [500, function (c) { c.cursor("you", E.cfm); }],
     [700, function (c) { c.press("you"); approve(c); pend = booked; }],
-    [800, function (c) { booked(c); pend = null; }],
+    [1100, function (c) { c.view("phone"); booked(c); pend = null; }],
     [800, function (c) { c.hideCursors(); }]
   ];
 
   stage.innerHTML = '<div class="cc"></div>';
   E.cc = stage.firstChild;
-  var foot = root.querySelector(".stage-foot");
-  if (foot && !root.querySelector(".demo-notes")) foot.insertAdjacentHTML("afterend", '<ul class="demo-notes"><li>Business texting needs carrier registration (A2P 10DLC). We set that up with you before anything sends.</li><li>Every first text names your business and says Reply STOP to opt out.</li><li>We do not set up AI voice calls to your customers.</li></ul>');
+  // the panel was hidden (another prototype was open, or the phone half was out of view): a box that comes back starts
+  // scrolled to its top, so put the newest text back in view
+  root.addEventListener("rh:show", tail);
 
   stage.addEventListener("click", function (e) {
     var b = e.target.closest ? e.target.closest("button") : null;
@@ -222,15 +235,18 @@
     root: root,
     title: "Missed call to booked visit",
     loops: 1,
+    views: [{ k: "phone", label: "Customer's phone" }, { k: "owner", label: "Owner's view" }],
+    onView: function (c, k) { if (k === "phone") tail(); },
     steps: S.map(function (s) { return { d: s[0], run: function (c) { s[1](c); sync(c); } }; }),
-    reset: function (c) { build(c); pend = function (c) { missed(c); opener(c); }; c.hideCursors(); },
+    reset: function (c) { clearTimeout(swapT); build(c); pend = function (c) { missed(c); opener(c); }; c.hideCursors(); },
     finalState: function (c) {
       build(c);
       quiet = 1;
       missed(c); opener(c); s4(c); askSys(c, ISSUE); s6(c); offer(c, ""); pick(c, "w8"); hold(c); approve(c); booked(c);
       quiet = 0;
       pend = null;
-      E.thread.scrollTop = E.thread.scrollHeight;
+      c.view("phone");
+      tail();
     },
     onHandoff: function (c) {
       E.thread.setAttribute("aria-live", "polite");

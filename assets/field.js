@@ -1,12 +1,18 @@
 /* Right Hand NWA: the particle field.
    One WebGL point cloud that takes the shape of whatever the page is saying.
    - Hero: the three keys (AI drafts, We check, You approve) pick the shape. It cycles on its own until a visitor presses one.
-   - Story: a pinned section where the scroll position scrubs the cloud from the pile, through four kinds of admin, to the mark.
+   - Story (wide screens only): a pinned section where the scroll position scrubs the cloud through three jobs to the mark.
+     900px and narrower it is never pinned and gets no canvas: the plain list in the page is the whole story.
    - Sign-up: an envelope that wakes as you type and flies off when the email is sent.
    - Closing (wide screens): the offer spelled out in points beside the check-up form.
    Rules of the road:
-   - Needs hardware WebGL. Without it the hero keeps its still logo, the story stays a plain list and the other two stay hidden.
-   - Reduced motion or "Pause motion": one still frame, no loop. The keys still switch shapes, at once.
+   - Needs WebGL. Without it the hero keeps its still logo, the story stays a plain list and the other two stay hidden.
+   - Reduced motion or "Pause motion": one still frame, no loop. The keys still switch shapes, at once. The story is un-pinned.
+   - Watchdog: a machine that cannot keep up gets that same still instead of a struggling loop. That is decided once,
+     when the graphics are drawn in software (no GPU: SwiftShader, llvmpipe, WARP, the Basic Render Driver; found on
+     remote desktops, locked-down PCs and test labs), or when the first frames come slowly (the middle gap of about 20
+     frames is over 28 ms, under 36 frames a second). Add ?field=live to the address to switch the watchdog off, for
+     instance to record the moving field on a machine without a GPU.
    - Each loop runs only while its canvas is on screen and the tab is visible.
    - Only the first shapes are built at load; the rest are built in idle time so the page is never held up.
    Shapes come from assets/field-shapes.js (window.RHShapes), sampled here into point clouds. */
@@ -14,14 +20,42 @@
   "use strict";
   var d = document, html = d.documentElement, W = window;
   var RM = W.matchMedia("(prefers-reduced-motion: reduce)");
-  function off() { return RM.matches || html.getAttribute("data-motion") === "off"; }
+  // calm: the watchdog's verdict (see the top of the file). From then on every field here behaves as under "Pause motion".
+  var calm = false, onCalm = [], LIVE = /[?&]field=live(&|$)/.test(W.location.search), judged = LIVE, gaps = [];
+  function off() { return calm || RM.matches || html.getAttribute("data-motion") === "off"; }
+  function settle() {
+    if (calm || LIVE) return;
+    calm = judged = true;
+    onCalm.forEach(function (fn) { try { fn(); } catch (e) {} });
+  }
+  // true when this context is drawn by the processor instead of a graphics chip
+  function software(gl) {
+    try {
+      var x = gl.getExtension("WEBGL_debug_renderer_info"), r = String(gl.getParameter(x ? x.UNMASKED_RENDERER_WEBGL : gl.RENDERER));
+      return /swiftshader|llvmpipe|softpipe|software|basic render|\bwarp\b/i.test(r);
+    } catch (e) { return false; }
+  }
+  // Called with each frame's time while a loop runs. The first few gaps are start-up and are left out; the middle one
+  // of the next 20 decides. Clearly slow (under 20 frames a second): the still, now. In between: one more round of 20
+  // must agree, so a page that was only busy loading keeps its moving field.
+  var SLOW = 28, round = 0;
+  function watch(gap) {
+    if (judged) return;
+    gaps.push(gap);
+    if (gaps.length < 24) return;
+    var mid = gaps.slice(4).sort(function (a, b) { return a - b; })[10];
+    gaps = [];
+    if (mid > 50 || (mid > SLOW && round)) settle();
+    else if (mid > SLOW) round = 1;
+    else judged = true;
+  }
   function $(s, r) { return (r || d).querySelector(s); }
   function $$(s, r) { return Array.prototype.slice.call((r || d).querySelectorAll(s)); }
   function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
   function ease(t) { return t * t * (3 - 2 * t); }
   function idle(fn) { if (W.requestIdleCallback) W.requestIdleCallback(fn, { timeout: 1500 }); else setTimeout(fn, 80); }
 
-  // phones hide the header's Pause motion button, so the hero carries its own; it drives the same switch
+  // 760px and below the header has no Pause motion button, so the hero carries its own; it drives the same switch
   (function () {
     var pz = $(".fld-pause"), mb = $("#motion-btn");
     if (!pz || !mb) return;
@@ -151,9 +185,11 @@
   // null when the browser has no hardware WebGL: the caller then leaves the page's still fallback in place
   function makeField(cv) {
     var gl = null;
-    // a software renderer would make the page crawl, so it is refused (automated test browsers are let through)
+    // a software renderer would make the page crawl. Where the browser itself can tell, the context is refused here
+    // (automated test browsers are let through); the watchdog at the top of the file catches the rest by name.
     try { gl = cv.getContext("webgl", { alpha: true, antialias: false, depth: false, stencil: false, powerPreference: "low-power", failIfMajorPerformanceCaveat: !navigator.webdriver }); } catch (e) {}
     if (!gl) return null;
+    if (!judged && software(gl)) settle();
     var prog, loc = {}, data = [new Float32Array(N * 3)], bufs = [], pa = -1, pb = -1, cw = 0, ch = 0, cd = 0, lost = false, tmp = new Float32Array(N * 3), api = {};
     function sh(type, src) { var s = gl.createShader(type); if (!s) return null; gl.shaderSource(s, src); gl.compileShader(s); return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null; }
     function buf(arr, dyn) { var b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b); gl.bufferData(gl.ARRAY_BUFFER, arr, dyn ? gl.DYNAMIC_DRAW : gl.STATIC_DRAW); return b; }
@@ -224,10 +260,18 @@
 
   // run fn every frame while el is on screen and the tab is visible; fn returns false to stop until the next wake
   function loop(el, fn) {
-    var raf = 0, vis = false;
+    var raf = 0, vis = false, last = 0;
     // fn may call wake() itself (a shape change does); the frame it books is the next one, so a second is never added
-    function tick(now) { raf = 0; if (!vis || d.hidden) return; if (fn(now) !== false && !raf) raf = requestAnimationFrame(tick); }
+    function tick(now) {
+      raf = 0;
+      if (!vis || d.hidden) { last = 0; return; }
+      if (last && !judged) watch(now - last);
+      last = now;
+      if (fn(now) !== false && !raf) raf = requestAnimationFrame(tick);
+      if (!raf) last = 0;   // the loop rests: the gap to its next frame says nothing about speed
+    }
     function wake() { if (!raf && vis && !d.hidden) raf = requestAnimationFrame(tick); }
+    onCalm.push(wake);   // the watchdog's verdict: one still frame, then rest
     if ("IntersectionObserver" in W) new IntersectionObserver(function (es) { vis = es[es.length - 1].isIntersecting; wake(); }, { rootMargin: "80px" }).observe(el);
     else vis = true;
     d.addEventListener("visibilitychange", wake);
@@ -252,7 +296,7 @@
     var order = ["doc", "lens", "mark"], slot = {}, keys = [];
     var SAY = { doc: "AI writes the first pass.", lens: "A person on our team reads every piece.", mark: "Nothing goes out without your OK." };
     function slotOf(name) { if (slot[name] === undefined) slot[name] = f.add(shape(name)); return slot[name]; }
-    var at = -1, to = slotOf("pile"), mix = 1, anim = null, next = 0, held = 0, hot = .03, burst = 0, rx = 0, ry = 0, tx = 0, ty = 0, px = 9, py = 9, t0 = performance.now(), time = 0, wake;
+    var at = -1, to = slotOf("pile"), mix = 1, anim = null, next = 0, held = 0, hot = .03, burst = 0, rx = 0, ry = 0, tx = 0, ty = 0, px = 9, py = 9, t0 = performance.now(), time = 0, wake, landing = false;
     f.pair(to, to);
     slotOf("doc");
     idle(function () { slotOf("lens"); idle(function () { slotOf("mark"); }); });
@@ -261,23 +305,24 @@
       var now = performance.now(), from = anim && mix < 1 ? f.snap(mix, time) : to;
       at = i; to = slotOf(order[i]);
       f.pair(from, to);
-      if (off()) { mix = 1; anim = null; } else { mix = 0; anim = { t: now, d: dur || 1500 }; }
+      if (off() && !landing) { mix = 1; anim = null; } else { mix = 0; anim = { t: now, d: dur || 1500 }; }
       keys.forEach(function (k, j) { k.setAttribute("aria-pressed", String(j === i)); });
       if (say) say.textContent = SAY[order[i]] || "";
       if (wake) wake();
     }
     function frame(now) {
-      var still = off();
+      var still = off() && !landing;
       if (anim) {
         mix = clamp((now - anim.t) / anim.d, 0, 1);
-        if (mix >= 1) { anim = null; next = now + 3200; if (order[at] === "mark") { burst = .16; hot = .5; } }
+        if (mix >= 1) { anim = null; next = now + 3200; if (landing) { landing = false; still = off(); } else if (order[at] === "mark") { burst = .16; hot = .5; } }
       }
       if (still) { mix = 1; anim = null; }
       else if (!anim && at >= 0 && now > next && now > held) go((at + 1) % order.length);
       burst *= .9; hot += (.03 - hot) * .025;
       rx += (tx - rx) * .06; ry += (ty - ry) * .06;
       time = still ? 0 : (now - t0) / 1000;
-      f.draw({ mix: mix, time: time, rotX: rx + (still ? 0 : Math.sin(now / 2700) * .2), rotY: ry + (still ? 0 : Math.sin(now / 3900) * .07), ptrX: px, ptrY: py, scale: .86, hot: still ? .03 : hot, burst: still ? 0 : burst });
+      var sway = still ? 0 : landing ? 1 - ease(mix) : 1;   // while it lands the sway dies down, so the still that follows is the same picture
+      f.draw({ mix: mix, time: time, rotX: rx + Math.sin(now / 2700) * .2 * sway, rotY: ry + Math.sin(now / 3900) * .07 * sway, ptrX: px, ptrY: py, scale: .86, hot: still ? .03 : hot, burst: still ? 0 : burst });
       return !still;
     }
 
@@ -294,7 +339,7 @@
         b.addEventListener("click", function () { held = Infinity; go(i, 1100); });
       });
     }
-    if (cap) cap.textContent = "Pick a step: AI drafts, We check or You approve.";
+    if (cap) cap.textContent = W.matchMedia("(hover: none)").matches ? "Tap a key to see each step." : "Press a key to see each step.";
 
     if (W.matchMedia("(hover: hover) and (pointer: fine)").matches) {
       sec.addEventListener("pointermove", function (e) {
@@ -309,39 +354,36 @@
 
     wake = loop(host, frame);
     guard(f, host, wake);
-    // the first shape gathers as the page (or the first-visit intro) hands over
-    function start() { if (at < 0) go(off() ? 2 : 0, 2100); }
-    if (html.classList.contains("fx-intro-live") || html.classList.contains("rh-intro")) {
-      var t = setTimeout(start, 4500);
-      d.addEventListener("rh:intro-done", function () { clearTimeout(t); start(); });
-    } else start();
+    // the first shape gathers as soon as the script runs: there is no intro to wait for, and this is the page's entrance
+    if (at < 0) go(off() ? 2 : 0, 2100);
     d.addEventListener("rh:motion", function () { if (at >= 0 && off()) { mix = 1; anim = null; } });
+    // the still a slow machine keeps is the mark, whole: the cloud lands on it in one short move instead of jumping there
+    onCalm.push(function () { if (at < 0) return; landing = true; go(2, 700); });
+    d.addEventListener("rh:motion", function () { landing = false; });
   }
 
-  /* ---------- story: scroll scrubs the cloud through the chapters ---------- */
+  /* ---------- story: on wide screens the scroll scrubs the cloud from job to job ---------- */
+  // 900px and narrower the story is never pinned: it stays the plain list in the page (about one phone screen), and no
+  // graphics context is made for it. Reduced or paused motion gives the same plain list at every width.
   function story() {
     var sec = $("#story");
-    if (!sec || off()) return; // reduced or paused motion at load: the plain list stays
+    if (!sec) return;
     var cv = $(".st-cv", sec), items = $$(".st-ch", sec), bar = $(".st-prog", sec), n = items.length;
     if (!cv || n < 2) return;
-    var f = makeField(cv);
-    if (!f) return;
-    sec.classList.add("st-live");
-    sec.style.setProperty("--st-n", n - 1);
-    var names = items.map(function (li) { return li.getAttribute("data-shape") || "mark"; }), slots = [], act = -1, rx = 0, tx = 0, wake;
-    // progress is measured against the pinned stage (100svh), which does not change when a phone's browser bar slides in and out
-    var pin = $(".st-pin", sec) || sec, ph = pin.offsetHeight;
-    if (W.ResizeObserver) new ResizeObserver(function () { ph = pin.offsetHeight; }).observe(pin); else W.addEventListener("resize", function () { ph = pin.offsetHeight; });
+    var WIDE = W.matchMedia("(min-width: 901px)"), f = null, dead = false, wake = null, ticks = [];
+    var names = items.map(function (li) { return li.getAttribute("data-shape") || "mark"; }), slots = [], act = -1, rx = 0, tx = 0;
+    var pin = $(".st-pin", sec) || sec, ph = 0;
     function slotAt(i) { if (slots[i] === undefined) slots[i] = f.add(shape(names[i])); return slots[i]; }
-    // the first is needed as soon as the section scrolls in; the rest are built one per idle slice
-    slotAt(0);
-    (function more(i) { if (i < n) idle(function () { slotAt(i); more(i + 1); }); })(1);
 
     function frame(now) {
       var r = sec.getBoundingClientRect(), total = r.height - (ph || W.innerHeight), p = total > 0 ? clamp(-r.top / total, 0, 1) * (n - 1) : 0, still = off();
       // a chapter changes only once the scroll is clearly past the halfway point, so a small wobble cannot flicker between two
-      var a = act < 0 || Math.abs(p - act) > .58 ? clamp(Math.round(p), 0, n - 1) : act, i = Math.min(p | 0, n - 2), m = clamp((p - i - .2) / .6, 0, 1), wide = W.innerWidth > 860, end = ease(clamp(p - (n - 2), 0, 1));
-      if (a !== act) { act = a; items.forEach(function (li, j) { li.classList.toggle("on", j === a); li.classList.toggle("was", j < a); }); }
+      var a = act < 0 || Math.abs(p - act) > .58 ? clamp(Math.round(p), 0, n - 1) : act, i = Math.min(p | 0, n - 2), m = clamp((p - i - .2) / .6, 0, 1), end = ease(clamp(p - (n - 2), 0, 1));
+      if (a !== act) {
+        act = a;
+        items.forEach(function (li, j) { li.classList.toggle("on", j === a); li.classList.toggle("was", j < a); });
+        ticks.forEach(function (t, j) { t.classList.toggle("on", j === a); t.classList.toggle("done", j < a); });
+      }
       if (bar) bar.style.setProperty("--p", (p / (n - 1)).toFixed(3));
       if (still) m = m < .5 ? 0 : 1;
       rx += (tx - rx) * .06;
@@ -349,17 +391,53 @@
       f.draw({
         mix: m, time: still ? 0 : now / 1000,
         rotX: still ? 0 : rx + (p / (n - 1) - .5) * .9 + Math.sin(now / 3100) * .1, rotY: still ? 0 : Math.sin(p * 1.7) * .12,
-        ptrX: 9, ptrY: 9, scale: .92, offX: wide ? .4 : 0, offY: wide ? -.02 : .34, hot: .03 + end * .32, burst: 0
+        ptrX: 9, ptrY: 9, scale: .92, offX: .4, offY: -.02, hot: .03 + end * .32, burst: 0
       });
-      return !still;
+      return !still && sec.classList.contains("st-live");
     }
-    if (W.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-      sec.addEventListener("pointermove", function (e) { tx = (e.clientX / W.innerWidth - .5) * .5; });
-      sec.addEventListener("pointerleave", function () { tx = 0; });
+    // everything the pinned stage needs is made the first time it is wanted, and only then
+    function build() {
+      f = makeField(cv);
+      if (!f) { dead = true; return false; }
+      sec.style.setProperty("--st-n", n - 1);
+      // the week as four boxes under the words (decoration: the list itself is what a screen reader gets)
+      if (bar && items[0].hasAttribute("data-tick")) {
+        var tk = d.createElement("ol");
+        tk.className = "st-ticks"; tk.setAttribute("aria-hidden", "true");
+        items.forEach(function (li) { var t = d.createElement("li"); t.textContent = li.getAttribute("data-tick") || ""; tk.appendChild(t); ticks.push(t); });
+        bar.parentNode.insertBefore(tk, bar);
+      }
+      // progress is measured against the pinned stage (100svh), which does not change when a browser bar slides in and out
+      if (W.ResizeObserver) new ResizeObserver(function () { ph = pin.offsetHeight; }).observe(pin); else W.addEventListener("resize", function () { ph = pin.offsetHeight; });
+      // the first shape is needed as soon as the section scrolls in; the rest are built one per idle slice
+      slotAt(0);
+      (function more(i) { if (i < n) idle(function () { slotAt(i); more(i + 1); }); })(1);
+      if (W.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+        sec.addEventListener("pointermove", function (e) { tx = (e.clientX / W.innerWidth - .5) * .5; });
+        sec.addEventListener("pointerleave", function () { tx = 0; });
+      }
+      wake = loop(sec, frame);
+      f.onrestore = wake;
+      return true;
     }
-    wake = loop(sec, frame);
-    f.onrestore = wake;
-    W.addEventListener("scroll", wake, { passive: true }); // paused motion still follows the scroll, one still frame at a time
+    // Pinned or plain. The reader stays put when it changes: a section above them that changes height must not move the page
+    // (browsers with scroll anchoring see to that themselves), and a change made from inside the stage restarts at the story's top.
+    function sync() {
+      var live = !dead && WIDE.matches && !off();
+      if (live && !f && !build()) live = false;
+      if (live === sec.classList.contains("st-live")) return;
+      var r = sec.getBoundingClientRect(), h0 = r.height;
+      sec.classList.toggle("st-live", live);
+      if (!live) { act = -1; items.forEach(function (li) { li.classList.remove("was"); }); }
+      ph = pin.offsetHeight;
+      if (r.bottom <= 0) { if (!(W.CSS && CSS.supports && CSS.supports("overflow-anchor", "auto"))) W.scrollBy({ top: sec.getBoundingClientRect().height - h0, behavior: "instant" }); }
+      else if (r.top < 0) sec.scrollIntoView({ behavior: "instant" });
+      if (live && wake) wake();
+    }
+    sync();
+    d.addEventListener("rh:motion", sync);
+    onCalm.push(sync);
+    if (WIDE.addEventListener) WIDE.addEventListener("change", sync);
   }
 
   /* ---------- sign-up: an envelope that wakes as you type and flies off when the email is sent ---------- */
@@ -441,6 +519,15 @@
     if (d.fonts && d.fonts.load) d.fonts.load("800 40" + FONT).then(soon, soon); else soon();
   }
 
-  function init() { [hero, story, signup, closer].forEach(function (fn) { try { fn(); } catch (e) {} }); }
+  function near(sel, fn) {
+    var el = $(sel);
+    if (!el || !("IntersectionObserver" in W)) { try { fn(); } catch (e) {} return; }
+    var io = new IntersectionObserver(function (es) { if (es.some(function (e) { return e.isIntersecting; })) { io.disconnect(); try { fn(); } catch (e) {} } }, { rootMargin: "100% 0px" });
+    io.observe(el);
+  }
+  function init() {
+    [hero, story].forEach(function (fn) { try { fn(); } catch (e) {} });
+    near("#signup", signup); near("#checkup", closer);
+  }
   if (d.readyState === "loading") d.addEventListener("DOMContentLoaded", init); else init();
 })();

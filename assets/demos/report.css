@@ -1,4 +1,4 @@
-/* Demo 06: Monday owner report (Cobalt & Comb Salon, made-up). A light paper report on the dark stage.
+/* Prototype 06: Monday owner report (Cobalt & Comb Salon, made-up). A light paper report on the dark stage.
    --stage-h is reserved per breakpoint and nothing changes size during playback: hidden sentences keep their space,
    numbers swap in place, bars grow with transform. On one-column layouts the chips and answer panel appear when the visitor takes over (.rp-asked, set in report.js),
    never on their own when autoplay parks, so the stage does not grow under a reader. */
@@ -99,15 +99,19 @@
   #demo-report .rp-num{height:44px;margin:-11px 0}
   #demo-report .rp-draft{padding:13px 2px}
 }
+/* one column: the charts and the notes take turns in the same box (the player's part switch, .pv). The answer box stays
+   under whichever part is showing, so a tap on a bar or on a question is answered where it was made. */
 @media (max-width:900px){
-  #demo-report .stage{--stage-h:1160px}
+  #demo-report .pv{display:flex}
+  #demo-report .stage{--stage-h:560px}
   #demo-report .rp-body{grid-template-columns:minmax(0,1fr)}
   #demo-report .rp-lead{display:none}
   #demo-report:not(.rp-asked) .rp-askw{display:none}
+  #demo-report .stage[data-view=charts] .rp-side > :not(.rp-askw),#demo-report .stage[data-view=charts] .rp-askw > :not(.rp-out),
+  #demo-report .stage[data-view=notes] .rp-kpi,#demo-report .stage[data-view=notes] .rp-charts{display:none}
 }
-@media (max-width:900px) and (pointer:coarse){#demo-report .stage{--stage-h:1290px}}
 @media (max-width:600px){
-  #demo-report .stage{--stage-h:1220px;--rp-pad:0px}
+  #demo-report .stage{--rp-pad:0px}
   #demo-report .rp{padding:12px;border-radius:var(--r-md)}
   #demo-report .rp-h{font-size:.9375rem}
   #demo-report .rp-wk{font-size:.6875rem}
@@ -136,7 +140,6 @@
   #demo-report .rp-notes p{font-size:.8125rem}
   #demo-report .rp-rev{padding:6px 10px}
 }
-@media (max-width:600px) and (hover:hover) and (pointer:fine){#demo-report .stage{--stage-h:1140px}}
 @media (prefers-reduced-motion:reduce){#demo-report *,#demo-report *::before{transition-duration:1ms!important;transition-delay:0s!important}}
 #demo-report:is([data-motion=off] *) *,#demo-report:is([data-motion=off] *) *::before{transition-duration:1ms!important;transition-delay:0s!important}
 

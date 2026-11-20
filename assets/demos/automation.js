@@ -1,5 +1,7 @@
-/* Demo 05: Automation builder, Flint Row Auto Care (made-up, sample data). Right Hand drafts, the owner approves.
-   Packet rides are ctx.anim animations built from 64 cached path samples, so they pause with the player. */
+/* Prototype 05: Automation builder, Flint Row Auto Care (made-up, sample data). Right Hand drafts, the owner approves.
+   Packet rides are ctx.anim animations built from 64 cached path samples, so they pause with the player.
+   The wires are drawn from the nodes' boxes, so they are measured again whenever the flow gets its box back: when its
+   panel is opened (rh:show, from assets/lab.js) and when a phone turns from the "step" part back to the "flow" part. */
 (function () {
   "use strict";
   var root = document.getElementById("demo-automation");
@@ -129,7 +131,7 @@
   }
   function label(t, w) { var p = w && w.pts && w.pts[32]; if (t && p) { t.setAttribute("x", p[0]); t.setAttribute("y", p[1] - 6); } }
   function geo() {
-    if (!nodes.length) return;
+    if (!nodes.length || !flowEl.offsetWidth) return;   // no box to measure (panel closed, or the other phone part showing): keep what was drawn
     wires.forEach(function (w) { path(w); });
     if (by) { path(by, 1); label(lr, wires[by.a]); label(lq, by); }
     if (pkAt && pkAt[0].pts) pks[0].style.transform = tf(pkAt[0].pts[pkAt[1]]);
@@ -236,8 +238,8 @@
     var k = flow[i].k, m = "Step " + (i + 1) + " of " + flow.length + ": ", r;
     if (k === "bays" && s !== B) { out(i, "Skipped", "dim"); return hop(i, s, tok, g); }
     r = show(i, s, g);
-    if (CF[k] && !g) { stopRest(i); guardP.hidden = false; return C.say(m + "stopped. " + GUARD); }
-    if (k === "gate" && !g) { ap.hidden = false; wait = { i: i, s: s, tok: tok }; return C.say(m + "waiting for your approval."); }
+    if (CF[k] && !g) { stopRest(i); guardP.hidden = false; C.view("step"); return C.say(m + "stopped. " + GUARD); }
+    if (k === "gate" && !g) { ap.hidden = false; wait = { i: i, s: s, tok: tok }; C.view("step"); return C.say(m + "waiting for your approval."); }
     if (k === "branch") {
       if (s === SC.angry) { stopRest(i); return C.say(m + "unhappy customer. You reply."); }
       dimPath(i, s);
@@ -245,11 +247,12 @@
     if (i >= flow.length - 1) return C.say(m + "done. " + r[0] + ".");
     hop(i, s, tok, g);
   }
-  function run(s) { clearRun(); var tok = runTok; show(0, s); pkStart(); hop(0, s, tok, false); }
+  function run(s) { C.view("flow"); clearRun(); var tok = runTok; show(0, s); pkStart(); hop(0, s, tok, false); }
   function approve() {
     if (!wait) return;
     var w = wait; wait = null;
-    if (nodes[w.i]) nodes[w.i].firstChild.focus();
+    C.view("flow");
+    if (nodes[w.i]) nodes[w.i].firstChild.focus({ preventScroll: true });
     ap.hidden = true; show(w.i, w.s, true); C.say("Approved by you.");
     hop(w.i, w.s, w.tok, true);
   }
@@ -275,32 +278,34 @@
     if (rmB.hidden && nodes[sel]) nodes[sel].firstChild.focus();
   }
   function add(k) {
-    if (flow.length > 11) return C.say("This demo holds 12 steps. Remove one first.");
+    if (flow.length > 11) return C.say("This prototype holds 12 steps. Remove one first.");
     var i = (sel < 0 ? flow.length - 1 : sel) + 1;
     flow.splice(i, 0, mk(k));
+    C.view("flow");
     rebuild(i, "Added " + K[k][1] + " as step " + (i + 1) + " of " + flow.length + ".");
   }
   function fixGate() {
     var gi = -1, g, u;
     flow.forEach(function (o, i) { if (o.k === "gate") gi = i; });
-    if (gi < 0 && flow.length > 11) return C.say("Remove a step first. This demo holds 12 steps.");
+    if (gi < 0 && flow.length > 11) return C.say("Remove a step first. This prototype holds 12 steps.");
     g = gi < 0 ? mk("gate") : flow.splice(gi, 1)[0];
     u = unsafe(); flow.splice(u < 0 ? flow.length : u, 0, g); u = flow.indexOf(g);
+    C.view("flow");
     rebuild(u, "You approve is back at step " + (u + 1) + ". Nothing reaches a customer without your OK.");
-    nodes[u].firstChild.focus();
+    nodes[u].firstChild.focus({ preventScroll: true });
   }
 
   stage.addEventListener("click", function (e) {
     var t = e.target.closest ? e.target.closest("button") : null;
     if (!t || !stage.contains(t) || !C) return;
-    if (t.classList.contains("node")) { var i = nodes.indexOf(t.parentNode); act(i); info(i); return; }
+    if (t.classList.contains("node")) { var i = nodes.indexOf(t.parentNode); act(i); info(i); C.view("step"); return; }
     if (t.getAttribute("aria-disabled") === "true") return;
     var d = t.dataset;
     if (d.mv) move(+d.mv);
     else if (d.rm) remove();
     else if (d.add) add(d.add);
     else if (d.run) run(SC[d.run]);
-    else if (t.hasAttribute("data-reset")) { flow = BASE.map(mk); rebuild(7, "Back to the 8 starting steps."); }
+    else if (t.hasAttribute("data-reset")) { flow = BASE.map(mk); C.view("flow"); rebuild(7, "Back to the 8 starting steps."); }
     else if (t === ap) approve();
     else if (t.classList.contains("gfix")) fixGate();
   });
@@ -324,14 +329,14 @@
   }
   var steps = [{ d: 100, run: assemble }, { d: 1600, run: function () { arr(0); pkStart(); } }];
   for (var n = 1; n < 8; n++) (function (i) {
-    steps.push({ d: i === 1 ? 300 : i === 5 ? 600 : 400, run: function (c) { if (i === 6) c.hideCursors(); ride(wires[i - 1]); } });
+    steps.push({ d: i === 1 ? 300 : i === 5 ? 600 : 400, run: function (c) { if (i === 6) { c.hideCursors(); c.view("flow"); } ride(wires[i - 1]); } });
     steps.push({ d: 600, run: function (c) {
       arr(i, i > 5);
       if (i === 2) dimPath(2, B);
-      if (i === 5) { ap.hidden = false; wait = { i: 5, s: B, tok: runTok }; c.cursor("you", ap); }
+      if (i === 5) { ap.hidden = false; wait = { i: 5, s: B, tok: runTok }; c.view("step"); c.cursor("you", ap); }
     } });
     // the You cursor presses Approve; one step, so reduced-motion Next step never lands on a cursor-only beat
-    if (i === 5) steps.push({ d: 1300, run: function (c) { c.press("you"); wait = null; ap.hidden = true; arr(5, 1); } });
+    if (i === 5) steps.push({ d: 1600, run: function (c) { c.press("you"); wait = null; ap.hidden = true; arr(5, 1); } });
   })(n);
   steps.push({ d: 800, run: pkOff });
 
@@ -354,7 +359,13 @@
     if (sel < 0) act(flow.length - 1); else editState();
   }
 
-  RH.demo({ root: root, title: "Automation builder", loops: 2, steps: steps, reset: reset, finalState: finalState, onHandoff: onHandoff });
+  RH.demo({
+    root: root, title: "Automation builder", loops: 2, steps: steps, reset: reset, finalState: finalState, onHandoff: onHandoff,
+    views: [{ k: "flow", label: "The flow" }, { k: "step", label: "Step and tests" }],
+    onView: function (c, k) { if (k === "flow") geo(); }
+  });
+  // the panel was closed when this ran, or has been closed since: nothing had a box to measure
+  root.addEventListener("rh:show", geo);
 
   // wire geometry follows layout changes only (debounced), never scroll
   if (window.ResizeObserver) { var rt = 0; new ResizeObserver(function () { clearTimeout(rt); rt = setTimeout(geo, 100); }).observe(flowEl); }

@@ -11,6 +11,10 @@
 .js .qz-nojs{display:none}
 html:not(.js) .qz-ui{display:none}
 html:not(.js) .qz-grid{grid-template-columns:minmax(0,1fr)}
+/* the script that runs the quiz never arrived (assets/boot.js marks the section once the page has loaded): the plain version comes back */
+.qz-band.no-js .qz-nojs{display:block}
+.qz-band.no-js .qz-ui{display:none}
+.qz-band.no-js .qz-grid{grid-template-columns:minmax(0,1fr)}
 @media (max-width:900px){.qz-grid{grid-template-columns:minmax(0,1fr)}}
 
 /* the ask card: three steps share one grid cell, so a new step never changes the card's height */
@@ -20,8 +24,12 @@ html:not(.js) .qz-grid{grid-template-columns:minmax(0,1fr)}
 .qz-bar{flex:1;height:3px;border-radius:2px;background:var(--gray-200);overflow:hidden}
 .qz-bar i{display:block;height:100%;background:var(--blue-500);transform:scaleX(.3334);transform-origin:left center;transition:transform .45s var(--ease-out)}
 .qz-steps{display:grid}
-.qz-step{grid-area:1/1;min-width:0;margin:0;padding:0;border:0;visibility:hidden;opacity:0}
-.qz-step.is-on{visibility:visible;opacity:1}
+/* No transition on a step or on the box around its options, ever. Under reduced motion site.css forces every transition to
+   1ms, which also delays the visibility an element inherits: for that millisecond the next step's first option is still
+   hidden and cannot take keyboard focus, so a keyboard user fell out of the quiz. (The entrance below is an animation.) */
+.qz-step{grid-area:1/1;min-width:0;margin:0;padding:0;border:0;display:none;transition:none}
+.qz-step .qz-opts{transition:none}
+.qz-step.is-on{display:block}
 .js-motion .qz-step.is-on{animation:qz-step .42s var(--ease-out) both}
 @keyframes qz-step{from{opacity:0;transform:translateX(14px)}}
 .qz-step legend{float:left;width:100%;margin:18px 0 14px;padding:0;font-size:1.25rem;font-weight:700;line-height:1.25;letter-spacing:-.01em;color:var(--navy-900)}
@@ -100,6 +108,10 @@ html:not(.js) .qz-grid{grid-template-columns:minmax(0,1fr)}
   .qz-paper{margin:12px 12px 0;padding:16px 14px 14px}
   .amap .qz-rows li{grid-template-columns:minmax(0,1fr)}
   .amap .qz-rows .st{grid-column:1;grid-row:auto;justify-self:start;margin-top:4px}
+  /* before the three taps the sample is three short placeholder rows; the real rows take their room on the last tap */
+  .amap .qz-ph{grid-template-columns:minmax(0,1fr) auto}
+  .amap .qz-ph span{display:none}
+  .amap .qz-rows .qz-ph .st{grid-column:2;grid-row:1;margin-top:0}
 }
 .qz-foot{display:grid;margin:16px 20px 0}
 .qz-foot > *{grid-area:1/1;min-width:0}
@@ -110,8 +122,8 @@ html:not(.js) .qz-grid{grid-template-columns:minmax(0,1fr)}
 .qz-go.on{visibility:visible;opacity:1}
 .qz-go .ctas{margin-top:0}
 .js-motion .qz-go.on{animation:fx-up .5s var(--ease-out) both}
-.js-motion .qz-go.on .proof li{animation:fx-up .5s var(--ease-out) calc(var(--k,0)*80ms + 180ms) backwards}
-.js-motion .qz-go.on .proof .ck path{animation:cl-draw .45s var(--ease-out) calc(var(--k,0)*80ms + 300ms) backwards}
+.qz-go .micro{color:var(--navy-300)}
+.js-motion .qz-go.on .micro{animation:fx-up .5s var(--ease-out) .18s backwards}
 
 /* ---------- 2. micro-proof under the primary CTAs (motion.js cascades it in) ---------- */
 .proof{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:14px;list-style:none;font-size:.875rem;font-weight:600;line-height:1.4;color:var(--soft)}
@@ -160,3 +172,5 @@ html:not(.js) .cta-pill{display:none}
 .cf-beam{position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(21,173,110,.85) 0,rgba(21,173,110,.85) 2px,rgba(99,217,155,.22) 2px,rgba(99,217,155,0) 60px);opacity:0;transform:translateY(-100%)}
 
 @media print{.cta-pill,.qz-band{display:none!important}}
+/* phones: the answer panel waits out of sight until the first tap, instead of 1.2 screens of "waiting" rows */
+@media (max-width:760px){.qz-out:not(.is-started) .qz-log,.qz-out:not(.is-started) .qz-paper{display:none}}

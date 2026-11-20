@@ -1,4 +1,4 @@
-/* Demo 06: Monday owner report. Cobalt & Comb Salon (made-up salon, Fayetteville). Sample data.
+/* Prototype 06: Monday owner report. Cobalt & Comb Salon (made-up salon, Fayetteville). Sample data.
    One data object per week drives every ticker, bar, dot, table, sentence and answer, so the text can only say what
    the charts draw. Each sentence lights the mark it cites (blue, 2px outline, numbered label, leader line).
    Right Hand writes and points; its cursor only hovers. The owner reads, asks and decides. */
@@ -217,6 +217,8 @@
     root: root,
     title: "Monday owner report",
     loops: 1,
+    // one column (phones, tablets): the charts and the notes take turns; the steps turn to the part that is changing
+    views: [{ k: "charts", label: "The numbers" }, { k: "notes", label: "What stood out" }],
     reset: function () { parking = false; if (!RH.motionOff()) root.classList.remove("rp-asked"); S.w = "a"; S.nw = ""; unlight(); paint(W.a); zero(); clearOut(); qa("details").forEach(function (d) { d.open = false; }); },
     finalState: function () { parking = true; S.w = "a"; unlight(); paint(W.a); clearOut(); unhov(); },
     onHandoff: function () { if (!parking || RH.motionOff()) asked(); parking = false; paint(W[S.w]); unhov(); },
@@ -224,12 +226,12 @@
       { d: 500, run: function () { tick([0, 0, 0, 0], kv(W[S.w]), 900); } },
       { d: 300, run: growBars },
       { d: 1000, run: growSrc },
-      { d: 700, run: function (c) { reveal(0, c); } },
+      { d: 700, run: function (c) { c.view("notes"); reveal(0, c); } },
       { d: 1100, run: function (c) { reveal(1, c); } },
       { d: 600, run: function (c) { var d = q(".rp-draft"); d.classList.add("hov"); c.cursor("rh", d); } },
       { d: 500, run: function (c) { reveal(2, c); } },
       { d: 1100, run: function (c) { reveal(3, c); } },
-      { d: 3000, run: function (c) { unlight(); unhov(); c.hideCursors(); c.cursor("you", q('[data-w="b"]')); } },
+      { d: 3000, run: function (c) { c.view("charts"); unlight(); unhov(); c.hideCursors(); c.cursor("you", q('[data-w="b"]')); } },
       { d: 800, run: function (c) { c.press("you"); setWeek("b", c); } },
       // Week B's regenerated text cites its chart too; no cursor-only steps, so reduced-motion Next step always shows a change
       { d: 2000, run: function (c) { lightNote(0, c); c.cursor("you", q('[data-w="a"]')); } },
@@ -259,6 +261,7 @@
       c.say("Showing " + w.name + ", " + w.range + ": " + pl(sum(w.book), "booking") + ", " + pl(sum(w.ns), "no-show") + ".");
     } else if (b.classList.contains("rp-num")) {
       i = lis.indexOf(b.parentNode); if (i !== S.lit) lightNote(i, c);
+      c.view("charts");   // one column: turn to the charts, where the note's source is lit
       c.say("Note " + (i + 1) + " is highlighted in the charts.");
     } else if (b.classList.contains("rp-draft")) {
       show('<p class="rp-oh">Draft reminder text (sample)</p><p class="rp-sms">Hi Jordan, this is Cobalt &amp; Comb Salon. Reminder: your visit is tomorrow at 10:30 AM. Reply C to confirm, or call 479-555-0148 to move it.</p><p class="rp-fine">Draft only. Nothing sends until you approve it.</p>');

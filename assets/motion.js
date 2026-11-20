@@ -1,13 +1,14 @@
 /* Right Hand NWA: motion system (styles in assets/motion.css).
-   One IntersectionObserver drives every [data-fx] entrance:
-     head      section head: hairline draws, mono eyebrow scrambles in, heading rises word by word, swoosh draws, lead fades up
-     cascade   children cascade in; with data-edge each card flashes a blue edge
-     scan      a blue scan line wipes the block in from the top (data-fx-delay="ms" to stagger)
-     scramble  mono text scrambles into place
-   Also here: the first-visit intro, the section HUD, the towns ticker, the scroll progress fallback, the cursor spotlight
-   on dark cards and magnetic primary CTAs (fine pointers only), press ripples, chip ticks and ghost-button traces.
+   One IntersectionObserver drives every [data-fx] entrance. Each is over in under half a second and reads as assembling:
+     head      section head: hairline draws, mono label decodes, heading steps up word by word, swoosh draws, lead fades up
+     cascade   children land one after another; with data-edge each card flashes a blue edge
+     scan      the block steps in under a thin blue beam and its bracket locks onto the corner (data-fx-delay="ms" to stagger)
+     scramble  mono text decodes into place
+   On phones and tablets nothing is hidden first: a block that scrolls in makes one short move into place.
+   Also here: the section HUD, the scroll progress fallback, the cursor spotlight on dark cards and magnetic primary
+   CTAs (fine pointers only), press ripples, chip ticks, ghost-button traces and the Admin Map folder.
    Reduced motion, the Pause motion button (html[data-motion=off]) and no-JS all get the finished, static page.
-   Load it as the first deferred script: the intro starts at once, everything else waits for DOMContentLoaded. */
+   There is no intro and no cover: nothing in this file can hold back the first paint. Everything waits for DOMContentLoaded. */
 (function () {
   "use strict";
   var d = document, html = d.documentElement, W = window;
@@ -20,92 +21,24 @@
   var GLYPHS = "ABCDEFGHJKLMNPQRSTUVWXYZ0123456789#/+<>";
   var EASE = "cubic-bezier(.23,1,.32,1)", EASE_IO = "cubic-bezier(.65,0,.35,1)";
   var LAND = W.CSS && CSS.supports && CSS.supports("animation-timing-function", "linear(0, 1)") ? "linear(0,.13 6%,.45 13%,.78 20%,.97 27%,1.04 34%,1.05 40%,1.03 48%,1.005 60%,.998 75%,1)" : EASE;
-  var timers = [], finishers = [], introOn = false, queue = [], fxio = null;
+  var timers = [], finishers = [], fxio = null;
   // Phones and tablets get the calm tier: each block makes one short rise instead of word-by-word, card-by-card choreography.
   // Every extra animated piece is another layer to build while the page is moving, which is what makes a scroll stutter.
   var LITE = W.matchMedia("(pointer: coarse), (max-width: 900px)").matches;
   if (LITE) html.classList.add("fx-lite");
   function later(fn, ms) { var t = setTimeout(fn, ms); timers.push(t); return t; }
 
-  /* ---------- 1. intro: first visit of the session, home page only, at most 1.4 s, any click, key or scroll skips ---------- */
-  (function intro() {
-    if (!html.classList.contains("rh-intro")) return;
-    var mark = $(".top .mark");
-    // late page, no motion or no animation support: just show the page
-    if (off() || performance.now() > 4000 || !mark || !Element.prototype.animate || !d.body) { endIntro(); return; }
-    introOn = true;
-    var k = 1;
-    function T(ms) { return Math.round(ms * k); }
-    var word = "Right Hand NWA";
-    var o = d.createElement("div");
-    o.className = "fx-intro"; o.setAttribute("aria-hidden", "true");
-    o.innerHTML = '<i class="fx-ig fx-ig-h"></i><i class="fx-ig fx-ig-v"></i><div class="fx-ic"><span class="fx-im"></span>' +
-      '<div class="fx-iw"><span class="fx-iw-m">' + word.split("").map(function (c) { return "<i>" + (c === " " ? "&nbsp;" : c) + "</i>"; }).join("") + '</span><span class="fx-iw-s">Right Hand <b>NWA</b></span></div>' +
-      '<p class="fx-it">AI drafts / We check / You approve</p></div><i class="fx-iscan"></i>';
-    var m = mark.cloneNode(true); m.setAttribute("class", "fx-mk");
-    $(".fx-im", o).appendChild(m);
-    d.body.appendChild(o);
-    html.classList.add("fx-intro-live");
-    var A = [], lift = null, t0 = null;
-    function a(el, kf, ms, dl, ease) { if (!el) return null; var x = el.animate(kf, { duration: T(ms), delay: T(dl || 0), easing: ease || EASE, fill: "both" }); if (t0 != null) try { x.startTime = t0; } catch (e) {} A.push(x); return x; }
-    // the timeline is set on the first frame (after the other scripts have run), squeezed so the hero is readable by about 1.5 s
-    function start() {
-      if (done) return;
-      var now = performance.now();
-      if (now > 4000) { finish(false); return; }
-      // pin every step to this frame's time: a long task right after this frame must not push the whole intro later
-      t0 = d.timeline && d.timeline.currentTime != null ? d.timeline.currentTime : null;
-      // fast page: squeeze so the hero is readable near 1.45 s; slow page (in-app browsers on cell data): a short 0.9 s cut, never skipped
-      k = now < 900 ? Math.min(1, (1550 - now) / 1380) : 0.65;
-      a($(".fx-ig-h", o), [{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], 520, 0);
-      a($(".fx-ig-v", o), [{ transform: "scaleY(0)" }, { transform: "scaleY(1)" }], 560, 60);
-      a($(".mk-bx", m), [{ transform: "scale(.4)", opacity: 0 }, { transform: "scale(1)", opacity: 1 }], 380, 80, LAND);
-      a($(".mk-br", m), [{ transform: "translate(-30%,26%)", opacity: 0 }, { transform: "none", opacity: 1 }], 380, 230);
-      var ck = $(".mk-ck", m); if (ck) { ck.style.strokeDasharray = "1"; a(ck, [{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], 260, 430); }
-      $$(".fx-iw-m i", o).forEach(function (c, i) { a(c, [{ opacity: 0 }, { opacity: 1 }], 1, 300 + i * 24, "linear"); });
-      a($(".fx-iw-m", o), [{ opacity: 1 }, { opacity: 0 }], 50, 700, "linear");
-      a($(".fx-iw-s", o), [{ opacity: 0, transform: "translateX(-50%) scale(.96)" }, { opacity: 1, transform: "translateX(-50%) scale(1)" }], 190, 735);
-      a($(".fx-it", o), [{ opacity: 0, transform: "translateY(6px)" }, { opacity: 1, transform: "none" }], 240, 740);
-      a($(".fx-iscan", o), [{ transform: "translateY(" + innerHeight + "px)" }, { transform: "translateY(-160px)" }], 300, 820, "cubic-bezier(.4,0,.2,1)");
-      a($(".fx-ic", o), [{ transform: "none", opacity: 1 }, { transform: "translateY(-36px)", opacity: 0 }], 330, 1010, EASE_IO);
-      lift = a(o, [{ transform: "none" }, { transform: "translateY(-100%)" }], 380, 1000, EASE_IO);
-      lift.onfinish = function () { finish(false); };
-      setTimeout(function () { finish(false); }, T(1380) + 2500);   // belt and braces
-    }
-    var EV = ["pointerdown", "keydown", "wheel", "touchstart", "scroll"], done = false;
-    function skip() { finish(true); }
-    EV.forEach(function (e) { W.addEventListener(e, skip, { passive: true, capture: e !== "scroll" }); });   // scroll: the page itself, not a box inside it
-    function finish(fast) {
-      if (done) return; done = true;
-      EV.forEach(function (e) { W.removeEventListener(e, skip, { capture: e !== "scroll" }); });
-      if (!fast) { gone(); return; }
-      A.forEach(function (x) { try { x.pause(); } catch (e) {} });
-      o.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160, easing: "ease-out", fill: "forwards" }).onfinish = gone;
-    }
-    function gone() { if (o.parentNode) o.parentNode.removeChild(o); endIntro(); }
-    requestAnimationFrame(start);
-    setTimeout(function () { if (!lift) finish(false); }, 2400);   // a hidden tab never paints a frame: just show the page
-  })();
-  function endIntro() {
-    introOn = false;
-    html.classList.remove("rh-intro", "fx-intro-live");
-    d.dispatchEvent(new CustomEvent("rh:intro-done"));
-    var q = queue; queue = []; q.forEach(function (el) { fire(el); });
-  }
-
-  // deferred scripts run before DOMContentLoaded, so this waits for site.js and the demos to build their markup
+  // deferred scripts run before DOMContentLoaded, so this waits for site.js to build its markup (the prototypes arrive later, through assets/lab.js)
   if (d.readyState === "complete") init(); else d.addEventListener("DOMContentLoaded", init);
 
   function init() {
     pageFallback();
     decorate();
-    ticker();
     hud();
     progress();
     if (matchMedia("(hover: hover) and (pointer: fine)").matches) { spotlight(); magnet(); }
     ripple();
     folder();
-    cardGlide();
     d.addEventListener("touchstart", function () {}, { passive: true }); // iOS only paints :active with a touch listener present
     reveals();
     d.addEventListener("rh:motion", function (e) { if (e.detail && e.detail.off) stopAll(); });
@@ -127,23 +60,26 @@
         d.dispatchEvent(new CustomEvent("rh:motion", { detail: { off: o } }));
       });
     }
-    var groups = $$(".loop3, .inc, .prom"), sws = $$(".sw");
+    // the checks in these lists draw themselves as each list scrolls in. html.seq is what holds them un-drawn until then
+    // (site.css), and it is set here, by the script that draws them.
+    var groups = $$(".loop3, .steps, .inc, .prom");
     function light(g, now) {
       if (g.classList.contains("loop3")) {
         var c = $$("li:not(.arrw)", g);
         var end = function () { c.forEach(function (x, i) { x.classList.add("lit"); x.classList.toggle("on", i === c.length - 1); }); };
         if (now) { end(); return; }
-        c.forEach(function (x, i) { later(function () { c.forEach(function (y) { y.classList.remove("on"); }); x.classList.add("on", "lit"); if (i === c.length - 1) end(); }, i * 550); });
+        c.forEach(function (x, i) { later(function () { c.forEach(function (y) { y.classList.remove("on"); }); x.classList.add("on", "lit"); if (i === c.length - 1) end(); }, i * 140); });
         return;
       }
-      $$(".ck", g).forEach(function (x, i) { if (now) x.classList.add("on"); else later(function () { x.classList.add("on"); }, 150 + i * 200); });
+      $$(".ck", g).forEach(function (x, i) { if (now) x.classList.add("on"); else later(function () { x.classList.add("on"); }, 60 + i * 90); });
     }
-    finishers.push(function () { groups.forEach(function (g) { light(g, true); }); sws.forEach(function (s) { s.classList.add("in"); }); });
+    finishers.push(function () { groups.forEach(function (g) { light(g, true); }); });
     if (off() || !HAS_IO) { finishers[finishers.length - 1](); return; }
+    html.classList.add("seq");
     var io = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (!e.isIntersecting) return; io.unobserve(e.target); if (e.target.classList.contains("sw")) e.target.classList.add("in"); else light(e.target, off()); });
+      es.forEach(function (e) { if (!e.isIntersecting) return; io.unobserve(e.target); light(e.target, off()); });
     }, { threshold: .3 });
-    groups.concat(sws).forEach(function (el) { io.observe(el); });
+    groups.forEach(function (el) { io.observe(el); });
   }
 
   /* ---------- 3. static decoration: chip ticks and ghost-button traces (demo stages keep their own controls) ---------- */
@@ -171,33 +107,32 @@
     return over > rb.bottom * .4 || e.time - flickAt < 450;
   }
   function reveals() {
-    // markup that site.js renders gets its effects here
-    $$(".svc-grid").forEach(function (g) { if (!g.hasAttribute("data-fx")) { g.setAttribute("data-fx", "cascade"); g.setAttribute("data-edge", ""); } });
-    $$(".svc-line > h3").forEach(function (h) { if (!h.hasAttribute("data-fx")) h.setAttribute("data-fx", "scan"); });
     var els = $$("[data-fx]");
     if (off() || !HAS_IO) { els.forEach(settle); return; }
-    // anything already on screen is settled as it is, so nothing blinks out (the intro covers the screen, so it waits)
+    // anything already on screen is settled as it is, so nothing blinks out
     var vh = innerHeight, rs = els.map(function (el) { return el.getBoundingClientRect(); });
-    var todo = els.filter(function (el, i) { var r = rs[i], seen = !introOn && r.top < vh && r.bottom > 0; if (seen || LITE) settle(el); return !seen; });
-    // calm tier: everything is already in its finished state; what is still below the screen just waits, hidden
-    if (LITE) todo.forEach(function (el) { el.classList.add("fx-wait"); }); else todo.forEach(prep);
+    var todo = els.filter(function (el, i) { var r = rs[i], seen = r.top < vh && r.bottom > 0; if (seen || LITE) settle(el); return !seen; });
+    // calm tier: everything is already in its finished state and stays visible; a block still below the screen is only
+    // marked, so it makes its one short move when it scrolls in
+    if (LITE) todo.forEach(function (el) { el._fxw = true; }); else todo.forEach(prep);
     html.classList.add("fx");
     fxio = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (!e.isIntersecting) return; fxio.unobserve(e.target); if (introOn) queue.push(e.target); else if (late(e)) settle(e.target); else fire(e.target, e.boundingClientRect.height); });
+      es.forEach(function (e) { if (!e.isIntersecting) return; fxio.unobserve(e.target); if (late(e)) settle(e.target); else fire(e.target, e.boundingClientRect.height); });
     }, { threshold: 0, rootMargin: LITE ? "100% 0px 0px 0px" : "100% 0px -12% 0px" });
     todo.forEach(function (el) { fxio.observe(el); });
   }
   function prep(el) {
     var t = el.getAttribute("data-fx");
-    if (t === "cascade") Array.prototype.forEach.call(el.children, function (c, i) { c.style.setProperty("--k", Math.min(i, 10)); });
+    if (t === "cascade") Array.prototype.forEach.call(el.children, function (c, i) { c.style.setProperty("--k", Math.min(i, 6)); });
     else if (t === "head") { var eb = $(":scope > .eyebrow", el), h = $("h2", el); if (eb) scrPrep(eb); if (h) words(h); }
     else if (t === "scramble") scrPrep(el);
   }
   function fire(el, hgt) {
     if (LITE) {
-      if (!el.classList.contains("fx-wait")) return;
-      el.classList.remove("fx-wait");
-      if (!off() && el.animate) el.animate([{ opacity: 0, transform: "translateY(16px)" }, { opacity: 1, transform: "none" }], { duration: 480, easing: EASE });
+      if (!el._fxw) return;
+      el._fxw = false;
+      // never from invisible: if the phone is busy and this starts a few frames late, the words were readable all along
+      if (!off() && el.animate) el.animate([{ opacity: .35, transform: "translateY(14px)" }, { opacity: 1, transform: "none" }], { duration: 380, easing: EASE });
       return;
     }
     if (el.classList.contains("fx-in")) return;
@@ -205,17 +140,16 @@
     var t = el.getAttribute("data-fx");
     el.classList.add("fx-in");
     if (t === "head") {
-      var v = $(":scope > .eyebrow .fx-scr", el); if (v) scramble(v, 560);
+      var v = $(":scope > .eyebrow .fx-scr", el); if (v) scramble(v, 300);
       $$(".sw", el).forEach(function (s) { s.classList.add("in"); });
-      var h = $("h2", el), n = h ? +h.style.getPropertyValue("--n") || 4 : 4;
-      later(function () { el.classList.add("fx-done"); }, n * 42 + 1400);
-    } else if (t === "cascade") later(function () { el.classList.add("fx-done"); }, Math.min(el.children.length, 11) * 65 + 1300);
+      later(function () { el.classList.add("fx-done"); }, 620);
+    } else if (t === "cascade") later(function () { el.classList.add("fx-done"); }, Math.min(el.children.length, 7) * 30 + 520);
     else if (t === "scan") scan(el, hgt);
-    else if (t === "scramble") { var s = $(".fx-scr", el); if (s) scramble(s, 620); later(function () { el.classList.add("fx-done"); }, 700); }
+    else if (t === "scramble") { var s = $(".fx-scr", el); if (s) scramble(s, 320); later(function () { el.classList.add("fx-done"); }, 400); }
     else el.classList.add("fx-done");
   }
   function settle(el) {
-    if (el.classList.contains("fx-wait")) { el.classList.remove("fx-wait"); if (el.classList.contains("fx-done")) return; }
+    el._fxw = false;
     el.classList.add("fx-in", "fx-done");
     $$(".sw", el).forEach(function (s) { s.classList.add("in"); });
     $$(".fx-scr", el).forEach(function (v) { v._stop = true; var t = v.getAttribute("data-t"); if (t) v.textContent = t; });
@@ -264,40 +198,45 @@
       if (p < 1) requestAnimationFrame(f);
     })(t0);
   }
-  // scan-line wipe: a cover the color of the band shrinks away under a blue beam
+  // scan: the block steps in (motion.css) while a thin blue beam passes over it. Nothing covers the block.
   function scan(el, hgt) {
     // the observer has already measured the block; asking again here would force a layout in the middle of a scroll
-    var h = (hgt || el.offsetHeight) + 24, w = d.createElement("span");
-    w.className = "fx-scan"; w.setAttribute("aria-hidden", "true"); w.innerHTML = "<b></b><i></i>";
+    var h = (hgt || el.offsetHeight) + 60, w = d.createElement("span"), wait = +(el.getAttribute("data-fx-delay") || 0);
+    w.className = "fx-scan"; w.setAttribute("aria-hidden", "true"); w.innerHTML = "<i></i>";
+    if (wait) el.style.animationDelay = wait + "ms";
     el.appendChild(w);
-    var o = { duration: Math.min(1100, 520 + h * .45), delay: +(el.getAttribute("data-fx-delay") || 0), easing: EASE_IO, fill: "both" };
-    w.firstChild.animate([{ transform: "scaleY(1)" }, { transform: "scaleY(0)" }], o);
-    w.lastChild.animate([{ transform: "translateY(0)", opacity: 1 }, { transform: "translateY(" + h + "px)", opacity: 1, offset: .88 }, { transform: "translateY(" + h + "px)", opacity: 0 }], o).onfinish = function () {
+    w.firstChild.animate([{ transform: "translateY(0)", opacity: 1 }, { transform: "translateY(" + h + "px)", opacity: 1, offset: .85 }, { transform: "translateY(" + h + "px)", opacity: 0 }],
+      { duration: Math.min(460, 300 + h * .15), delay: wait, easing: EASE_IO, fill: "both" }).onfinish = function () {
       if (w.parentNode) w.parentNode.removeChild(w);
+      el.style.animationDelay = "";
       el.classList.add("fx-done");
     };
   }
   function stopAll() {
     timers.forEach(clearTimeout); timers = [];
-    queue = [];
     $$("[data-fx]").forEach(settle);
     finishers.forEach(function (f) { f(); });
+    // whatever is still in flight (a swoosh mid-draw, a card mid-rise) lands now; loops and paused demo steps are left alone
+    if (d.getAnimations) d.getAnimations().forEach(function (a) {
+      try { var t = a.effect && a.effect.getComputedTiming(); if (a.playState === "running" && t && t.iterations !== Infinity) a.finish(); } catch (e) {}
+    });
     $$(".fx-mag").forEach(function (b) { b.style.translate = ""; b.style.scale = ""; });
     $$(".fx-lit").forEach(function (c) { c.classList.remove("fx-lit"); });
   }
 
-  /* ---------- 5. section HUD: "04 / 11 HOW IT WORKS", plus the nav link for the section you are in ---------- */
+  /* ---------- 5. section HUD: "04 / 10 HOW IT WORKS", plus the nav link for the section you are in.
+     The hero counts as 00 (the HUD is hidden there), so the numbers are the ones printed in the section labels. ---------- */
   function hud() {
     var tops = $$("main > section");
     if (tops.length < 3 || !HAS_IO) return;
     var all = $$("main section").filter(function (s) { return s.parentNode.tagName === "MAIN" || s.hasAttribute("data-hud"); });
     var el = d.createElement("div");
     el.className = "fx-hud is-top"; el.setAttribute("aria-hidden", "true");
-    el.innerHTML = '<span class="hud-n">01</span><span class="hud-ticks">' + tops.map(function () { return "<i></i>"; }).join("") + '</span><span class="hud-of">/ ' + pad(tops.length) + '</span><span class="hud-l"></span>';
+    el.innerHTML = '<span class="hud-n">00</span><span class="hud-ticks">' + tops.slice(1).map(function () { return "<i></i>"; }).join("") + '</span><span class="hud-of">/ ' + pad(tops.length - 1) + '</span><span class="hud-l"></span>';
     d.body.appendChild(el);
     var num = $(".hud-n", el), lab = $(".hud-l", el), ticks = $$(".hud-ticks i", el), nav = $$('.top nav a[href^="#"]'), on = all.map(function () { return false; }), now = -1;
     // the HUD is hidden on phones (motion.css), so nothing is painted into it there
-    var shown = W.matchMedia("(min-width: 768px)");
+    var shown = W.matchMedia("(min-width: 1101px)");
     if (shown.addEventListener) shown.addEventListener("change", function () { if (shown.matches && now >= 0) paint(now); });
     function label(s) {
       var t = s.getAttribute("data-hud"); if (t) return t;
@@ -306,8 +245,8 @@
     }
     function paint(i) {
       var s = all[i], top = s.parentNode.tagName === "MAIN" ? s : s.closest("main > section"), ti = tops.indexOf(top);
-      num.textContent = pad(ti + 1);
-      ticks.forEach(function (t, j) { t.classList.toggle("on", j === ti); });
+      num.textContent = pad(ti);
+      ticks.forEach(function (t, j) { t.classList.toggle("on", j === ti - 1); });
       el.classList.toggle("is-top", ti === 0);
       el.classList.toggle("on-light", !top.classList.contains("dark"));
       scramble(lab, 280, label(s));
@@ -319,16 +258,6 @@
       if (i >= 0 && i !== now) { now = i; if (shown.matches) paint(i); }
     }, { rootMargin: "-45% 0px -54% 0px" });
     all.forEach(function (s) { io.observe(s); });
-  }
-
-  /* ---------- 6. towns ticker: a second copy makes the loop seamless; it only runs while on screen ---------- */
-  function ticker() {
-    $$("[data-ticker]").forEach(function (t) {
-      var ul = $("ul", t); if (!ul) return;
-      ul.parentNode.appendChild(ul.cloneNode(true));
-      if (HAS_IO) new IntersectionObserver(function (es) { t.classList.toggle("fx-run", es[0].isIntersecting); }).observe(t);
-      else t.classList.add("fx-run");
-    });
   }
 
   /* ---------- 7. scroll progress line for browsers without scroll-driven animations ---------- */
@@ -353,7 +282,7 @@
 
   /* ---------- 8. fine pointers: a soft spotlight follows the cursor on dark cards; primary CTAs lean toward it ---------- */
   function spotlight() {
-    $$(".pstat, .team > li, .win, .terms, .demo, .line-links a, .page-cta .wrap").forEach(function (card) {
+    $$(".win, .terms, .lab, .line-links a, .page-cta .wrap").forEach(function (card) {
       if (card.closest(".stage")) return;
       var clip = d.createElement("span");
       clip.className = "fx-spot-clip"; clip.setAttribute("aria-hidden", "true"); clip.innerHTML = '<span class="fx-spot"></span>';
@@ -401,31 +330,6 @@
     });
   }
 
-  /* ---------- service cards: the opened card grows into its panel and its neighbours glide to their new places ---------- */
-  function cardGlide() {
-    d.addEventListener("click", function (e) {
-      var btn = e.target.closest && e.target.closest(".svc > button");
-      var grid = btn && btn.closest(".svc-grid");
-      if (!grid || off()) return;
-      var cards = $$(".svc", grid), first = cards.map(function (c) { return c.getBoundingClientRect(); });
-      var card = btn.parentNode;
-      // this listener runs in the capture phase, before site.js toggles the card; the next frame sees the new layout
-      requestAnimationFrame(function () {
-        var moved = 0;
-        cards.forEach(function (c, i) {
-          var a = first[i], b = c.getBoundingClientRect(), dx = a.left - b.left, dy = a.top - b.top, grow = b.width - a.width;
-          if (Math.abs(dx) < 1 && Math.abs(dy) < 1 && Math.abs(grow) < 1) return;
-          if (c === card) moved = b.top;
-          var from = { transform: "translate(" + dx.toFixed(1) + "px," + dy.toFixed(1) + "px)" }, to = { transform: "none" };
-          if (grow > 1) { from.clipPath = "inset(0 " + grow.toFixed(1) + "px 0 0 round 12px)"; to.clipPath = "inset(0 0 0 0 round 12px)"; }
-          c.animate([from, to], { duration: 520, easing: "cubic-bezier(.23,1,.32,1)" });
-        });
-        // a card that lands low on the screen comes up so its details are in view
-        if (card.hasAttribute("data-open") && moved > innerHeight * .55) window.scrollBy({ top: moved - 96, behavior: "smooth" });
-      });
-    }, true);
-  }
-
   /* ---------- the Admin Map folder: the sheet comes out as the offer scrolls in; a visitor can tuck it back ---------- */
   function folder() {
     var f = $("#af"), sheet = f && $("#amap", f), tog = f && $(".af-tog", f);
@@ -437,15 +341,29 @@
       if (shut && byHand) sheet.setAttribute("aria-hidden", "true"); else sheet.removeAttribute("aria-hidden");
     }
     tog.addEventListener("click", function () { set(!f.classList.contains("af-shut"), true); });
+    // phones: the quiz above has just built the visitor's own map, so this sample stays tucked (one tap opens it)
+    if (W.matchMedia("(max-width:760px)").matches) { set(true, true); return; }
     finishers.push(function () { set(false); });
-    if (off() || !("IntersectionObserver" in window) || f.getBoundingClientRect().top < innerHeight * .8) return;
-    set(true);
+    if (off() || !HAS_IO) return;
+    // Nothing waits tucked away for a scroll that may never come. The folder is shut only when it is on its way in
+    // (within one screen below the viewport); it opens when a quarter of it shows, or 0.6 s after its first pixel.
+    // A folder already on screen when it is first seen is left open.
+    var net = 0, opened = false;
+    function open() { if (opened) return; opened = true; clearTimeout(net); io.disconnect(); later(function () { set(false); }, 60); }
     var io = new IntersectionObserver(function (es) {
-      if (!es[0].isIntersecting) return;
-      io.disconnect();
-      later(function () { set(false); }, 160);
-    }, { threshold: .3 });
-    io.observe(f);
+      var e = es[es.length - 1];
+      if (!e.isIntersecting) return;
+      if (e.intersectionRatio >= .25) open(); else if (!net) net = setTimeout(open, 600);
+    }, { threshold: [0, .25] });
+    var near = new IntersectionObserver(function (es) {
+      var e = es[es.length - 1];
+      if (!e.isIntersecting) return;
+      near.disconnect();
+      if (off() || !e.rootBounds || e.boundingClientRect.top < e.rootBounds.top + e.rootBounds.height / 2) return;   // already on screen (the root reaches one screen further down)
+      set(true);
+      io.observe(f);
+    }, { rootMargin: "0px 0px 100% 0px" });
+    near.observe(f);
   }
 
   /* ---------- 9. press ripple on primary buttons (animates the button's ::before) ---------- */

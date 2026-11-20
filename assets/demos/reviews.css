@@ -1,0 +1,300 @@
+/* Prototype 08: review replies in the owner's voice (Juniper Street Tacos, made-up shop). Every rule is scoped to #demo-reviews.
+   Left: the overnight reviews and the How it decided trace. Right: the reply workbench (paper) with the voice card and the tally.
+   Nothing is sized by script. The three review panes share one grid cell, and so do the four tone variants of each draft and
+   the three states of the one-star, so the stage is as tall as its tallest state and never moves when one swaps in.
+   The layout follows the width of the stage itself (container queries), not the window, so it holds in a narrow tab panel.
+   The draft is a real text area on top of a highlight layer with the same text: both get the same box, font and wrapping.
+   Motion: things move with transform and opacity only; colours and borders ease in place. With reduced motion or the
+   Pause motion switch every transition and the one keyframe (the nudge on the two choices) are off, and each state is
+   simply shown (see the last rules in this file). */
+#demo-reviews .stage{--stage-h:0px;background:var(--navy-950);box-shadow:inset 0 0 0 1px rgba(167,181,202,.12)}
+#demo-reviews .rv{container-type:inline-size;padding:12px 10px 10px;font-size:.875rem;line-height:1.45}
+#demo-reviews .rv-tg{font:500 .6875rem/1.4 var(--font-mono);letter-spacing:.04em;color:var(--navy-400)}
+#demo-reviews ol,#demo-reviews ul{list-style:none}
+#demo-reviews dl,#demo-reviews dd,#demo-reviews blockquote{margin:0}
+#demo-reviews .rv-g{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"in" "bench" "trace";gap:10px;margin-top:10px}
+
+/* the overnight reviews */
+#demo-reviews .rv-in{grid-area:in;min-width:0;padding:10px;border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface)}
+#demo-reviews .rv-in h4,#demo-reviews .rv-trace h4{display:flex;align-items:baseline;gap:8px;font:700 .6875rem/1.2 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+#demo-reviews .rv-in h4 span{font-weight:500;letter-spacing:.04em;text-transform:none;color:var(--mute)}
+#demo-reviews .rv-list{display:grid;gap:6px;margin-top:9px}
+/* before a review lands its place is an empty slot, so the first frame reads as three on the way, not as a hole */
+#demo-reviews .rv-list li{position:relative;min-width:0;border-radius:var(--r-sm);box-shadow:inset 0 0 0 1px rgba(167,181,202,.16);transition:box-shadow .2s ease}
+#demo-reviews .rv-list li.in{box-shadow:inset 0 0 0 1px rgba(167,181,202,0)}
+#demo-reviews .rv-list li:not(.in) .rv-card{opacity:0;visibility:hidden}
+#demo-reviews .rv-card{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:5px 8px;width:100%;min-height:44px;padding:9px 10px;font:inherit;text-align:left;border:1px solid var(--line);border-radius:var(--r-sm);box-shadow:var(--sh-1);cursor:pointer;transition:border-color var(--dur-hover) ease,box-shadow var(--dur-hover) ease}
+#demo-reviews .rv-card:hover{border-color:var(--blue-300)}
+#demo-reviews .rv-card:focus-visible{border-radius:var(--r-sm)}
+#demo-reviews .rv-card[aria-current=true]{border-color:var(--blue-500);box-shadow:var(--glow)}
+#demo-reviews .rv-stars{display:inline-flex;flex:none}
+#demo-reviews .rv-stars svg{display:block;width:73px;height:14px;overflow:visible}
+#demo-reviews .rv-stars path{fill:var(--navy-900);stroke:var(--navy-900);stroke-width:1.5;stroke-linejoin:round}
+#demo-reviews .rv-stars .o{fill:none;stroke:var(--navy-300)}
+#demo-reviews .rv-chip{justify-self:end;padding:4px 6px;border-radius:5px;font:600 .6875rem/1 var(--font-mono);white-space:nowrap;background:var(--gray-100);color:var(--gray-600)}
+#demo-reviews [data-s=ready] .rv-chip{background:var(--blue-100);color:var(--blue-700)}
+#demo-reviews [data-s=needs] .rv-chip,#demo-reviews [data-s=held] .rv-chip{background:var(--amber-50);color:var(--amber-700)}
+#demo-reviews [data-s=posted] .rv-chip{background:var(--green-50);color:var(--green-700)}
+#demo-reviews .rv-who{grid-column:1/-1;display:flex;align-items:baseline;gap:8px;min-width:0;font-weight:700;font-size:.8125rem}
+#demo-reviews .rv-who small{font:500 .6875rem/1.2 var(--font-mono);color:var(--soft)}
+#demo-reviews .rv-ex{grid-column:1/-1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.8125rem;color:var(--ink-2)}
+/* the read beam (blue = Right Hand worked here) */
+#demo-reviews .rv-beam{position:absolute;inset:0;overflow:hidden;border-radius:var(--r-sm);pointer-events:none}
+#demo-reviews .rv-beam i{position:absolute;inset:0;opacity:0;background:linear-gradient(rgba(47,128,237,0) 35%,rgba(47,128,237,.18) calc(100% - 2px),var(--rh-blue) calc(100% - 2px))}
+
+/* the workbench: one sheet. Panes, voice card and tally are its three parts */
+#demo-reviews .rv-bench{grid-area:bench;display:grid;grid-template-columns:minmax(0,1fr);min-width:0;background:none}
+#demo-reviews .rv-panes{display:grid;min-width:0;padding:12px 12px 12px;border-top:4px solid var(--gray-300);border-radius:var(--r-md) var(--r-md) 0 0;background:var(--surface);transition:border-color .25s ease}
+#demo-reviews .rv-bench[data-s=ready] .rv-panes{border-top-color:var(--accent)}
+#demo-reviews .rv-bench[data-s=needs] .rv-panes,#demo-reviews .rv-bench[data-s=held] .rv-panes{border-top-color:var(--amber-400)}
+#demo-reviews .rv-bench[data-s=posted] .rv-panes{border-top-color:var(--green-500)}
+#demo-reviews .rv-panes > *{grid-area:1/1;min-width:0}
+#demo-reviews .rv-pane{display:flex;flex-direction:column;visibility:hidden;scroll-margin-top:46px}   /* clears the lab's dock */
+#demo-reviews .rv-pane.on{visibility:visible}
+#demo-reviews .rv-idle{display:grid;align-content:center;justify-items:center;gap:6px;padding:24px 12px;text-align:center;color:var(--soft);visibility:hidden}
+#demo-reviews .rv-idle.on{visibility:visible}
+#demo-reviews .rv-it{font:600 .75rem/1.2 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--accent-ink)}
+#demo-reviews .rv-ih{font:700 1.25rem/1.25 var(--font-sans);letter-spacing:-.01em;color:var(--ink)}
+#demo-reviews .rv-idle p:last-child{max-width:30em;font-size:.875rem}
+
+/* the review */
+#demo-reviews .rv-rh{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:3px 10px}
+#demo-reviews .rv-rh h4{font:700 1rem/1.3 var(--font-sans);outline-offset:3px}
+#demo-reviews .rv-when{grid-column:1/-1;font:500 .6875rem/1.4 var(--font-mono);color:var(--soft)}
+#demo-reviews .rv-q{margin-top:10px;padding:1px 0 1px 12px;border-left:3px solid var(--gray-300);font-size:.9375rem;line-height:1.6;color:var(--ink)}
+#demo-reviews .rv-cap{min-height:2.8em;margin-top:6px;font:500 .6875rem/1.4 var(--font-mono);color:var(--soft)}
+/* a phrase the draft answers. inline-block so the tap area is a full line high (24px) */
+#demo-reviews .rv-m{position:relative;isolation:isolate;display:inline-block;max-width:100%;min-height:24px;margin:0;padding:0 1px;font:inherit;color:inherit;text-align:left;vertical-align:baseline;background:none;border:0;border-radius:3px;cursor:pointer}
+#demo-reviews .rv-m i{position:absolute;inset:1px -2px;z-index:-1;border-radius:3px;background:var(--rh-sky);box-shadow:inset 0 -2px 0 var(--blue-300);transform:scaleX(0);transform-origin:0 50%;transition:transform .24s var(--ease-out) calc(var(--i,0)*110ms),background-color .15s ease}
+#demo-reviews .seen .rv-m i{transform:none}
+#demo-reviews .rv-m:disabled{cursor:default;color:inherit}
+#demo-reviews .rv-m.lit i{background:var(--blue-200);box-shadow:inset 0 -2px 0 var(--blue-600)}
+#demo-reviews .rv-m.off i{background:none;box-shadow:inset 0 -1.5px 0 var(--gray-400)}
+/* the one-star: only the phrase that stopped Right Hand is marked until a reply exists, and that one is amber */
+#demo-reviews [data-p="2"]:not(.has) .rv-m:not([data-k=c]) i{transform:scaleX(0)}
+#demo-reviews [data-p="2"] .rv-m[data-k=c] i{background:var(--amber-50);box-shadow:inset 0 -2px 0 var(--amber-400)}
+#demo-reviews [data-p="2"] .rv-m[data-k=c].lit i{background:#FFE3B0;box-shadow:inset 0 -2px 0 var(--amber-700)}
+
+/* the draft */
+#demo-reviews .rv-ed{position:relative;display:flex;flex-direction:column;flex:1;min-width:0;margin-top:12px}
+#demo-reviews .rv-eh{position:relative;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;min-height:32px;margin-bottom:6px}
+#demo-reviews .rv-eh label{font:700 .8125rem/1.2 var(--font-sans);color:var(--ink)}
+#demo-reviews .rv-by{font:500 .6875rem/1.3 var(--font-mono);color:var(--soft)}
+#demo-reviews .rv-tone{display:flex;gap:6px;margin-left:auto}
+#demo-reviews .chip{min-height:32px;padding:5px 11px;font-size:.8125rem}
+#demo-reviews .chip:disabled{cursor:default;opacity:.6}
+#demo-reviews .posted .rv-tone{visibility:hidden}
+#demo-reviews .rv-box{position:relative;display:grid;flex:1;min-width:0;border:1.5px solid var(--gray-500);border-radius:var(--r-sm);background:#FFFFFF;transition:border-color .25s ease}
+#demo-reviews .rv-box > *{grid-area:1/1;min-width:0}
+#demo-reviews .rv-bd,#demo-reviews .rv-sz,#demo-reviews .rv-box textarea{margin:0;padding:9px 12px 10px;border:0;font:400 .9375rem/1.6 var(--font-sans);letter-spacing:normal;word-spacing:normal;text-indent:0;text-align:left;text-transform:none;text-rendering:auto;font-kerning:normal;white-space:pre-wrap;overflow-wrap:break-word;word-break:normal;text-wrap:wrap}
+#demo-reviews .rv-bd{color:transparent;-webkit-user-select:none;user-select:none}
+#demo-reviews .rv-sz{visibility:hidden;pointer-events:none}
+#demo-reviews .rv-box textarea{display:block;width:100%;height:auto;min-height:0;overflow:hidden;resize:none;color:var(--navy-900);background:transparent;border-radius:6px;-webkit-appearance:none;appearance:none}
+#demo-reviews .rv-box textarea:focus-visible{outline-offset:1.5px}
+#demo-reviews .rv-box textarea[readonly]{cursor:default}
+#demo-reviews .rv-ios .rv-bd,#demo-reviews .rv-ios .rv-sz{padding-left:15px;padding-right:15px}
+#demo-reviews .rv-bd mark{color:transparent;border-radius:2px;background:var(--rh-sky);box-shadow:inset 0 -2px 0 var(--blue-300),2px 0 0 var(--rh-sky),-2px 0 0 var(--rh-sky);opacity:0;-webkit-box-decoration-break:clone;box-decoration-break:clone;transition:opacity .24s ease}
+#demo-reviews .rv-bd mark.on{opacity:1}
+#demo-reviews .rv-bd mark.lit{background:var(--blue-200);box-shadow:inset 0 -2px 0 var(--blue-600),2px 0 0 var(--blue-200),-2px 0 0 var(--blue-200)}
+#demo-reviews .rv-bd mark.no{background:var(--amber-50);box-shadow:inset 0 -2px 0 var(--amber-400),2px 0 0 var(--amber-50),-2px 0 0 var(--amber-50)}
+#demo-reviews .posted .rv-box{border-color:var(--green-500)}
+#demo-reviews .rv-note{min-height:2.8em;margin-top:6px;font:500 .6875rem/1.4 var(--font-mono);color:var(--soft)}
+#demo-reviews .rv-note.warn{color:var(--warn)}
+#demo-reviews .rv-note.ok{color:var(--ok)}
+
+/* stamps: green when the owner approved, amber when the reply is held for the call */
+#demo-reviews .rv-stamp{position:absolute;right:2px;top:-6px;z-index:2;padding:6px 10px 5px;border:2.5px solid var(--green-700);border-radius:6px;color:var(--green-700);font:800 1.0625rem/1 var(--font-sans);letter-spacing:.06em;text-transform:uppercase;text-align:center;background:rgba(255,255,255,.92);transform:rotate(-5deg) scale(1.3);opacity:0;pointer-events:none}
+#demo-reviews .rv-stamp small{display:block;margin-top:3px;font:600 .625rem/1.2 var(--font-mono);letter-spacing:.02em;text-transform:none}
+#demo-reviews .rv-stamp.hold{border-color:var(--amber-700);color:var(--amber-700);background:rgba(255,241,218,.92);top:8px;right:8px}
+#demo-reviews .posted .rv-ed .rv-stamp,#demo-reviews .held .rv-pn .rv-stamp{opacity:1;transform:rotate(-5deg) scale(1);transition:opacity .2s ease,transform .32s var(--ease-land)}
+
+/* the one-star: amber means it is the owner's. Its three states (the choice, the private note, the careful draft) share a cell */
+#demo-reviews .rv-alt{display:grid;flex:1;min-width:0;margin-top:12px;scroll-margin-top:14px}
+#demo-reviews .rv-alt > *{grid-area:1/1;min-width:0;margin-top:0;visibility:hidden}
+#demo-reviews [data-path=""] .rv-need,#demo-reviews [data-path=call] .rv-pn,#demo-reviews [data-path=reply] .rv-alt .rv-ed{visibility:inherit}
+#demo-reviews .rv-need,#demo-reviews .rv-pn{position:relative;display:flex;flex-direction:column;padding:11px 12px 12px;border:1px solid var(--amber-300);border-radius:var(--r-sm);background:var(--amber-50);font-size:.8125rem}
+#demo-reviews .rv-nh{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px;font-size:.875rem;font-weight:700;color:var(--ink)}
+#demo-reviews .rv-nh b,#demo-reviews .rv-why b,#demo-reviews .rv-pn dt{font:700 .6875rem/1.5 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--amber-700)}
+#demo-reviews .rv-why{display:grid;grid-template-columns:minmax(0,1fr);gap:0 10px;margin-top:6px;color:var(--ink-2)}
+#demo-reviews .rv-why q{font-weight:700;color:var(--ink)}
+#demo-reviews .rv-opts{display:grid;flex:1;grid-template-columns:minmax(0,1fr);gap:8px;margin-top:10px}
+#demo-reviews .rv-opt{position:relative;display:grid;grid-template-columns:18px minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr);gap:2px 9px;min-height:44px;padding:10px 12px;font:inherit;color:var(--navy-900);text-align:left;background:#FFFFFF;border:1.5px solid var(--amber-700);border-radius:var(--r-sm);box-shadow:var(--sh-1);cursor:pointer;transition:border-color var(--dur-hover) ease,box-shadow var(--dur-hover) ease,transform var(--dur-press) var(--ease-out)}
+#demo-reviews .rv-opt > svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+#demo-reviews .rv-opt b{font:700 .875rem/1.3 var(--font-sans)}
+#demo-reviews .rv-opt span{grid-column:2;font-size:.8125rem;line-height:1.4;color:var(--ink-2)}
+/* what picking it does next, said on the button, so nobody has to guess that the card is the control */
+#demo-reviews .rv-opt em{grid-column:2;align-self:end;display:inline-flex;align-items:center;gap:6px;margin-top:8px;font:700 .6875rem/1.2 var(--font-mono);font-style:normal;letter-spacing:.06em;text-transform:uppercase;color:var(--amber-700)}
+#demo-reviews .rv-opt em svg{flex:none;width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform var(--dur-hover) var(--ease-out)}
+#demo-reviews .rv-opt:hover em svg,#demo-reviews .rv-opt:focus-visible em svg{transform:translateX(3px)}
+#demo-reviews .rv-opt:hover{border-color:var(--navy-900);box-shadow:var(--sh-2)}
+/* after hand-off the two choices breathe three times: this review is waiting on the visitor */
+#demo-reviews .rv-opt::after{content:"";position:absolute;inset:-5px;border:2px solid var(--amber-700);border-radius:12px;opacity:0;pointer-events:none}
+@keyframes drv-nudge{0%,100%{opacity:0}40%{opacity:.6}}
+#demo-reviews.handed .rv-pane.on[data-path=""] .rv-opt::after{animation:drv-nudge 1.5s ease-in-out .6s 3}
+#demo-reviews.handed .rv-pane.on[data-path=""] .rv-opt + .rv-opt::after{animation-delay:.85s}
+#demo-reviews .rv-opt:active{transform:scale(.99)}
+#demo-reviews .rv-nf{padding-top:9px;font:500 .6875rem/1.4 var(--font-mono);color:var(--amber-700)}
+#demo-reviews .rv-ph{display:grid;gap:1px;max-width:calc(100% - 118px);min-height:42px;border-radius:4px;outline-offset:3px}
+#demo-reviews .rv-ph b{font:700 .875rem/1.3 var(--font-sans);color:var(--ink)}
+#demo-reviews .rv-ph span{font:500 .6875rem/1.4 var(--font-mono);color:var(--amber-700)}
+#demo-reviews .rv-pn dl{display:grid;gap:5px;margin:8px 0 10px}
+#demo-reviews .rv-pn dl > div{display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+#demo-reviews .rv-pn dd{font-weight:600;color:var(--ink)}
+#demo-reviews .rv-pf{margin-top:auto;padding-top:8px;border-top:1px dashed var(--amber-300);color:var(--ink-2)}
+
+/* checked by a person, then the owner's move. Two rows and two button places at every width, so no state changes its height */
+#demo-reviews .rv-ft{display:grid;gap:10px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+#demo-reviews .rv-ck{display:grid;grid-template-columns:20px minmax(0,1fr);gap:1px 8px;align-items:center;min-width:0;opacity:.45;transition:opacity .25s ease}
+#demo-reviews .rv-ck.on,#demo-reviews .rv-ck.mine{opacity:1}
+#demo-reviews .rv-ckb{grid-row:1/3;align-self:start;display:grid;place-items:center;width:20px;height:20px;margin-top:1px;border:1.5px solid var(--gray-400);border-radius:5px;color:var(--green-700);transition:background-color .25s ease,border-color .25s ease}
+#demo-reviews .rv-ckb .ck{width:14px;height:14px;stroke-width:3}
+#demo-reviews .rv-ck.on .rv-ckb{border-color:var(--green-700);background:var(--green-50)}
+#demo-reviews .rv-ck.on .ck path{stroke-dashoffset:0;transition:stroke-dashoffset var(--dur-reveal) var(--ease-out)}
+#demo-reviews .rv-ck.mine .rv-ckb{border-color:var(--navy-900)}
+#demo-reviews .rv-ck b{font:700 .8125rem/1.3 var(--font-sans);color:var(--ink)}
+#demo-reviews .rv-ck small{grid-column:2;min-height:2.8em;font:500 .6875rem/1.4 var(--font-mono);color:var(--soft)}
+#demo-reviews .rv-act{--bh:40px;display:grid;grid-template-columns:minmax(0,1fr);align-content:start;gap:8px;min-height:calc(var(--bh)*2 + 8px)}
+#demo-reviews .rv-act .btn{width:100%}
+#demo-reviews .rv-go{--btn-bg:var(--hot);--btn-bg-hover:var(--hot-2);--btn-ink:var(--navy-950);gap:7px}
+#demo-reviews .rv-go .ck{flex:none;width:16px;height:16px;margin-left:-2px;stroke-width:2.8}
+#demo-reviews .rv-go .ck path{stroke-dashoffset:0}
+#demo-reviews .rv-go[aria-disabled=true],#demo-reviews .rv-go[aria-disabled=true]:hover{opacity:.5;cursor:default;background:var(--btn-bg);border-color:var(--btn-bg)}
+#demo-reviews .rv-go[aria-disabled=true]:active{transform:none}
+/* approved: a quiet green confirmation where the hot button was */
+#demo-reviews .posted .rv-go[aria-disabled=true],#demo-reviews .posted .rv-go[aria-disabled=true]:hover{opacity:1;color:var(--green-700);background:var(--green-50);border-color:var(--green-500)}
+#demo-reviews .rv-next,#demo-reviews .rv-sw{background:#FFFFFF}
+
+/* the voice card */
+#demo-reviews .rv-voice{min-width:0;margin-top:10px;padding:12px;border-radius:var(--r-md);background:var(--navy-50);order:3}
+#demo-reviews .rv-voice h4{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 10px;font:700 .9375rem/1.3 var(--font-sans)}
+#demo-reviews .rv-voice .tag{padding:4px 6px;font-size:.625rem;background:#FFFFFF}
+#demo-reviews .rv-vs{margin-top:2px;font:500 .6875rem/1.4 var(--font-mono);color:var(--soft)}
+#demo-reviews .rv-voice dl{display:grid;gap:10px;margin-top:10px}
+#demo-reviews .rv-voice dt{margin-bottom:4px;font:600 .6875rem/1.3 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--soft)}
+#demo-reviews .rv-voice dd{display:flex;flex-wrap:wrap;gap:5px}
+#demo-reviews .rv-v{position:relative;display:inline-flex;align-items:center;gap:6px;min-height:26px;padding:3px 8px;border:1px solid var(--gray-300);border-radius:6px;background:#FFFFFF;font-size:.8125rem;font-weight:600;line-height:1.25;color:var(--ink);transition:background-color .2s ease,border-color .2s ease,color .2s ease}
+#demo-reviews .rv-v::before,#demo-reviews .rv-vk i{content:"";flex:none;width:8px;height:8px;border:1.5px solid var(--gray-400);border-radius:2px;transition:background-color .2s ease,border-color .2s ease}
+#demo-reviews .rv-v.on{border-color:var(--blue-300);background:var(--blue-100);color:var(--blue-800)}
+#demo-reviews .rv-v.on::before,#demo-reviews .rv-vk i{border-color:var(--blue-600);background:var(--blue-600)}
+#demo-reviews .rv-v.no{color:var(--navy-600);font-weight:500;text-decoration:line-through;text-decoration-color:var(--gray-400)}
+#demo-reviews .rv-v.no.on{border-color:var(--amber-400);background:var(--amber-50);color:var(--amber-700);font-weight:700;text-decoration:none}
+#demo-reviews .rv-v.no.on::before{border-color:var(--amber-700);background:var(--amber-400)}
+#demo-reviews .rv-vk{display:flex;flex-wrap:wrap;gap:3px 14px;margin-top:10px;font:500 .6875rem/1.3 var(--font-mono);color:var(--soft)}
+#demo-reviews .rv-vk span{display:inline-flex;align-items:center;gap:6px}
+#demo-reviews .rv-vk i{display:block}
+#demo-reviews .rv-vk .no i{border-color:var(--amber-700);background:var(--amber-400)}
+
+/* the tally: empty box, checked, needs you. The count sits beside the boxes and the detail keeps a line of its own on a phone */
+#demo-reviews .rv-sum{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:2px 10px;min-width:0;padding:10px 12px;border-top:1px solid var(--line);border-radius:0 0 var(--r-md) var(--r-md);background:var(--gray-100);color:var(--ink-2);font-size:.8125rem;line-height:1.35;order:2;transition:background-color .3s ease,color .3s ease}
+#demo-reviews .rv-sum b{color:var(--ink);font-weight:700}
+#demo-reviews .rv-sd{grid-column:1/-1;min-height:1.35em}
+#demo-reviews .rv-sum.done{background:var(--ok-wash);color:var(--ok)}
+#demo-reviews .rv-sum.done b{color:var(--ok)}
+#demo-reviews .rv-boxes{display:flex;flex:none;gap:4px}
+#demo-reviews .rv-boxes i{position:relative;width:14px;height:14px;border:1.5px solid var(--gray-400);border-radius:3px;background:#FFFFFF;transition:background-color .25s ease,border-color .25s ease}
+#demo-reviews .rv-boxes i::after{content:"";position:absolute;left:3.5px;top:.5px;width:4px;height:8px;border:solid #FFFFFF;border-width:0 2px 2px 0;transform:rotate(45deg) scale(0);transition:transform .28s var(--ease-land)}
+#demo-reviews .rv-boxes .ok{border-color:var(--green-700);background:var(--green-700)}
+#demo-reviews .rv-boxes .ok::after{transform:rotate(45deg) scale(1)}
+#demo-reviews .rv-boxes .warn{border-color:var(--amber-700);background:var(--amber-50)}
+#demo-reviews .rv-boxes .held{border-color:var(--amber-700);background:var(--amber-400)}
+
+/* How it decided */
+#demo-reviews .rv-trace{grid-area:trace;min-width:0;padding:12px 14px;border:1px solid rgba(167,181,202,.16);border-radius:var(--r-md)}
+#demo-reviews .rv-trace h4{display:block;margin-bottom:8px;font-weight:600;color:var(--blue-300)}
+#demo-reviews .rv-trace ul{display:grid;gap:5px;font-size:.8125rem;line-height:1.45;color:var(--navy-200)}
+#demo-reviews .rv-trace li{display:flex;align-items:baseline;gap:9px;transition:color .2s ease}
+#demo-reviews .rv-trace i{position:relative;top:1px;flex:none;width:9px;height:9px;border:1.5px solid var(--navy-400);border-radius:2px}
+#demo-reviews .rv-trace i::after{content:"";position:absolute;inset:-1.5px;border-radius:2px;background:var(--blue-400);opacity:0;transition:opacity .2s ease}
+#demo-reviews .rv-trace .hit{color:#FFFFFF}
+#demo-reviews .rv-trace .hit i::after{opacity:1}
+
+#demo-reviews .rv button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+#demo-reviews.handed .rv-m:not(:disabled):hover i{background:var(--blue-200)}
+
+/* the narrowest phones: the tally's detail can run to one more line, so that line is kept free, and the status chip in the
+   review's heading drops to a line of its own instead of crowding the stars */
+@container (max-width:300px){
+  #demo-reviews .rv-sd{min-height:2.7em}
+  #demo-reviews .rv-rh{grid-template-columns:auto minmax(0,1fr)}
+  #demo-reviews .rv-rh .rv-chip{grid-column:1/-1;justify-self:start;margin-top:3px}
+}
+/* most phones: the label and its by-line sit beside the tone chips, the caption fits one line, and the closing line of the
+   choice gives its room to the two buttons (each one already says what happens next, and the tally says nothing posts) */
+@container (min-width:276px) and (max-width:539px){
+  #demo-reviews .rv-eh{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;gap:0 10px}
+  #demo-reviews .rv-eh label{grid-area:1/1;align-self:end}
+  #demo-reviews .rv-by{grid-area:2/1;align-self:start}
+  #demo-reviews .rv-by span{display:none}
+  #demo-reviews .rv-tone{grid-area:1/2/3/3;margin-left:0}
+  #demo-reviews .rv-cap{min-height:1.4em}
+}
+@container (max-width:539px){
+  #demo-reviews .rv-nf{display:none}
+}
+/* the narrowest phones still wrap the tone chips under the label, so the stamp lands on that row, clear of the words,
+   and a note that carries two flags keeps to the first (both stay marked in the draft) so it never needs a third line */
+@container (max-width:275px){
+  #demo-reviews .rv-ed .rv-stamp{top:auto;bottom:-3px}
+  #demo-reviews .rv-note span{display:none}
+}
+/* three cards in a row can be too narrow for stars and a chip side by side: the chip goes under the stars */
+@container (min-width:540px) and (max-width:719px){
+  #demo-reviews .rv-card{grid-template-columns:minmax(0,1fr)}
+  #demo-reviews .rv-card .rv-chip{justify-self:start}
+}
+/* wider stage: three cards in a row, voice card beside the draft */
+@container (min-width:540px){
+  #demo-reviews .rv{padding:12px 14px 14px}
+  #demo-reviews .rv-list{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  #demo-reviews .rv-ex{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;white-space:normal}
+  #demo-reviews .rv-panes{padding:14px 18px 14px}
+  #demo-reviews .rv-opts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #demo-reviews .rv-pn dl > div{grid-template-columns:66px minmax(0,1fr);gap:10px;align-items:baseline}
+  #demo-reviews .rv-why{grid-template-columns:auto minmax(0,1fr);align-items:baseline}
+  #demo-reviews .rv-voice dl{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+  #demo-reviews .rv-trace ul{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px 20px}
+  #demo-reviews .rv-sum{display:flex;gap:10px;min-height:44px;padding:9px 18px}
+  #demo-reviews .rv-sd{margin-left:-5px}
+  #demo-reviews .rv-cap,#demo-reviews .rv-note,#demo-reviews .rv-ck small{min-height:1.4em}
+  #demo-reviews .rv-act{display:flex;min-height:var(--bh)}
+  #demo-reviews .rv-act .btn{width:auto}
+}
+@container (min-width:700px){
+  #demo-reviews .rv-bench{grid-template-columns:minmax(0,1fr) 216px;grid-template-rows:minmax(0,1fr) auto;border-radius:var(--r-md);box-shadow:var(--sh-3)}
+  #demo-reviews .rv-panes{border-radius:var(--r-md) 0 0 0}
+  #demo-reviews .rv-voice{order:0;margin-top:0;padding:14px;border-top:4px solid var(--navy-100);border-left:1px solid var(--line);border-radius:0 var(--r-md) 0 0}
+  #demo-reviews .rv-voice dl{grid-template-columns:minmax(0,1fr)}
+  #demo-reviews .rv-sum{grid-column:1/-1}
+}
+/* widest: reviews and trace in a left column, the workbench on the right */
+@container (min-width:940px){
+  #demo-reviews .rv-g{grid-template-columns:272px minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);grid-template-areas:"in bench" "trace bench";gap:12px 14px;align-items:start}
+  #demo-reviews .rv-bench{align-self:stretch}
+  #demo-reviews .rv-list{grid-template-columns:minmax(0,1fr);gap:6px}
+  #demo-reviews .rv-trace ul{grid-template-columns:minmax(0,1fr)}
+}
+
+/* phones and small tablets: one part at a time (the player's part switch, .pv). The overnight reviews with the rules that
+   sorted them; then the reply to the review that was opened, in the same place; the voice card as a third part. */
+@media (max-width:760px){
+  #demo-reviews .pv{display:flex}
+  #demo-reviews .stage{--stage-h:536px}
+  #demo-reviews .rv-g{grid-template-areas:none}
+  #demo-reviews .rv-in,#demo-reviews .rv-bench,#demo-reviews .rv-trace{grid-area:auto}
+  #demo-reviews .stage[data-view=list] .rv-bench,
+  #demo-reviews .stage[data-view=reply] .rv-in,#demo-reviews .stage[data-view=reply] .rv-trace,#demo-reviews .stage[data-view=reply] .rv-voice,#demo-reviews .stage[data-view=reply] .rv-tg,
+  #demo-reviews .stage[data-view=voice] .rv-in,#demo-reviews .stage[data-view=voice] .rv-trace,#demo-reviews .stage[data-view=voice] .rv-panes,#demo-reviews .stage[data-view=voice] .rv-sum,#demo-reviews .stage[data-view=voice] .rv-tg{display:none}
+  #demo-reviews .stage[data-view=reply] .rv-g,#demo-reviews .stage[data-view=voice] .rv-g{margin-top:0}
+  #demo-reviews .stage[data-view=voice] .rv-voice{border-radius:var(--r-md)}
+}
+@media (max-width:600px),(pointer:coarse){#demo-reviews .rv-bd,#demo-reviews .rv-sz,#demo-reviews .rv-box textarea{font-size:1rem}}
+@media (pointer:coarse){
+  #demo-reviews .rv-act{--bh:44px}
+  #demo-reviews .chip{min-height:44px;padding:5px 14px}
+  #demo-reviews .rv-eh{min-height:44px}
+}
+@media (forced-colors:active){#demo-reviews .rv-m i,#demo-reviews .rv-bd mark{forced-color-adjust:none}}
+/* motion off: nothing eases and nothing pulses. It has to be "none", not a 1ms duration: a duration turns every swap of
+   visibility into a transition too, and for that instant the pane that just opened cannot take focus or its place in the tab order */
+@media (prefers-reduced-motion:reduce){#demo-reviews .stage *,#demo-reviews .stage *::before,#demo-reviews .stage *::after{transition:none!important;animation:none!important}}
+#demo-reviews:is([data-motion=off] *) .stage *,#demo-reviews:is([data-motion=off] *) .stage *::before,#demo-reviews:is([data-motion=off] *) .stage *::after{transition:none!important;animation:none!important}

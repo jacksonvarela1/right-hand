@@ -1,6 +1,11 @@
-/* Right Hand NWA hero: "the corridor check-in".
+/* Right Hand NWA: "the corridor check-in", beside the team in the Who we are section of the home page.
    A schematic of Northwest Arkansas (not to scale, cities placed from real latitude and longitude) feeding a sample
-   Right Hand queue. Plays once per session in about 2.6 seconds, then the last row waits for the visitor to approve.
+   Right Hand queue: the same three jobs as the story (a missed call, a receipt, a late invoice) and one that waits for
+   the visitor to approve. Plays once per session in about one second, as soon as it scrolls into view; the rows are
+   readable within the first half second.
+   Nothing waits hidden for a scroll that may never come: the map and the rows are cleared for their entrance only
+   once the block is within one screen of the viewport, and they play at the latest a moment after its first pixel
+   shows. Without IntersectionObserver, or with one that never reports, the finished map simply stays as it is.
    After editing the markup below, run node tools/build-services.mjs so the static copy in index.html matches. */
 (function () {
   "use strict";
@@ -27,8 +32,6 @@
     ["Rogers", "Missed call", "Text-back ready in your wording"],
     ["Springdale", "Receipt photo", "Matched to the card charge"],
     ["Bella Vista", "Invoice past due", "Friendly reminder drafted"],
-    ["Bentonville", "Booking request", "Slot held until you confirm"],
-    ["Fayetteville", "Weekly numbers", "Monday report ready"],
     ["Siloam Springs", "Quote request", "Reply drafted. Needs your OK."]
   ];
   var s = ['<div class="nwa-layout"><svg class="nwa-svg" viewBox="0 0 560 520" role="img" aria-labelledby="nwa-t"><title id="nwa-t">Schematic map of Northwest Arkansas: Interstate 49 runs from Bella Vista through Bentonville, Rogers, Springdale and Fayetteville, with Siloam Springs to the west.</title>'];
@@ -53,7 +56,7 @@
   });
   s.push('</ol><p class="sr-only" aria-live="polite" data-hero-live></p></div></div>');
   s.push('<p class="map-cap">Northwest Arkansas. Schematic, not to scale. Sample tasks.</p>');
-  // index.html ships this exact markup (tools/build-services.mjs writes it), so the hero window has its full size at first paint
+  // index.html ships this exact markup (tools/build-services.mjs writes it), so the window has its full size at first paint
   if (!host.querySelector(".nwa-layout")) host.innerHTML = s.join("");
 
   var rows = host.querySelectorAll(".q-row"), cities = {}, ask = host.querySelector(".q-ask"), btn = host.querySelector(".q-approve"), live = host.querySelector("[data-hero-live]");
@@ -71,28 +74,38 @@
     host.classList.add("drawn");
     rows.forEach(function (r, i) {
       var c = cities[r.getAttribute("data-city")];
-      at(950 + i * 140, function () { r.classList.add("in"); if (c) { c.classList.add("live"); setTimeout(function () { c.classList.remove("live"); }, 900); } });
-      at(1750 + i * 130, function () { r.classList.add("scan"); });
-      at(1930 + i * 130, function () { r.classList.add("ready"); });
+      at(120 + i * 70, function () { r.classList.add("in"); if (c) { c.classList.add("live"); setTimeout(function () { c.classList.remove("live"); }, 900); } });
+      at(430 + i * 70, function () { r.classList.add("scan"); });
+      at(560 + i * 70, function () { r.classList.add("ready"); });
     });
-    at(2700, finish);
+    at(1500, finish);
   }
   var seen = false;
   try { seen = sessionStorage.getItem("rh-hero") === "1"; } catch (e) {}
-  if (off() || seen) finish();
+  if (off() || seen || !("IntersectionObserver" in window)) finish();
   else {
-    host.classList.add("armed");
+    var net = 0, started = false;
+    var start = function () {
+      if (started) return;
+      started = true; clearTimeout(net); io.disconnect();
+      try { sessionStorage.setItem("rh-hero", "1"); } catch (e) {}
+      play();
+    };
+    // plays once a third of it shows; a block too tall or too slowly scrolled to get there plays 0.6 s after its first pixel
     var io = new IntersectionObserver(function (es) {
-      if (!es[0].isIntersecting) return;
-      io.disconnect(); try { sessionStorage.setItem("rh-hero", "1"); } catch (e) {}
-      // the first-visit intro (assets/motion.js) covers the hero: play the map as the intro lifts away
-      if (html.classList.contains("fx-intro-live")) {
-        var go = function () { clearTimeout(t); document.removeEventListener("rh:intro-done", go); play(); };
-        var t = setTimeout(go, 3000);
-        document.addEventListener("rh:intro-done", go);
-      } else play();
-    }, { threshold: .35 });
-    io.observe(host);
+      var e = es[es.length - 1];
+      if (!e.isIntersecting) return;
+      if (e.intersectionRatio >= .35) start(); else if (!net) net = setTimeout(start, 600);
+    }, { threshold: [0, .35] });
+    // cleared for the entrance (.armed) only when it comes within one screen of the viewport
+    var near = new IntersectionObserver(function (es) {
+      if (!es[es.length - 1].isIntersecting) return;
+      near.disconnect();
+      if (off()) { finish(); return; }
+      host.classList.add("armed");
+      io.observe(host);
+    }, { rootMargin: "0px 0px 100% 0px" });
+    near.observe(host);
   }
   document.addEventListener("rh:motion", function (e) { if (e.detail && e.detail.off) finish(); });
   btn.addEventListener("click", function () {
