@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src https://docs.google.com; form-action 'self' mailto:; base-uri 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-LrZWyv49ByaUirmNGTNRg+P0DeXDHQIYt49rXC7nkG4='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src https://docs.google.com; form-action 'self' mailto:; base-uri 'self'; object-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Right Hand NWA | Admin and AI help for Northwest Arkansas small businesses</title>
 <meta name="description" content="Admin and AI help for small businesses in Bentonville, Rogers, Springdale and Fayetteville, from four University of Arkansas students. AI drafts, we check, you approve. Free 30-minute check-up.">
@@ -27,30 +27,422 @@
 <meta name="twitter:image" content="https://righthandnwa.com/assets/og.png">
 <meta name="twitter:image:alt" content="Right Hand NWA: hand off the admin, keep the final say. A sample task queue with a missed call, a receipt photo and an invoice prepared, and a quote reply waiting for the owner's OK.">
 <link rel="alternate" type="text/plain" href="https://righthandnwa.com/llms.txt" title="Right Hand NWA for language models">
-<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<link rel="preload" href="assets/fonts/plus-jakarta-sans-latin-var.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="assets/fonts/geist-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/site.css">
-<link rel="stylesheet" href="assets/motion.css">
-<link rel="stylesheet" href="assets/close.css">
-<link rel="stylesheet" href="assets/field.css">
-<link rel="stylesheet" href="assets/lab.css">
-<script src="assets/boot.js"></script>
-<script src="assets/motion.js" defer></script>
-<script src="assets/nav.js" defer></script>
-<script src="assets/services-data.js" defer></script>
-<script src="assets/nwa-map.js" defer></script>
-<script src="assets/config.js" defer></script>
-<script src="assets/site.js" defer></script>
-<script src="assets/interest.js" defer></script>
-<script src="assets/close.js" defer></script>
-<script src="assets/field-shapes.js" defer></script>
-<script src="assets/field.js" defer></script>
-<script src="assets/lab.js" defer></script>
-<!-- jsonld:start -->
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["Organization","ProfessionalService"],"@id":"https://righthandnwa.com/#organization","name":"Right Hand NWA","alternateName":"Right Hand Northwest Arkansas","url":"https://righthandnwa.com/","description":"Admin and AI help for Northwest Arkansas small businesses, from four University of Arkansas students. The team takes receipts, invoices, missed calls, follow-ups, scheduling and paperwork off small business owners' plates, and sets up AI that drafts the busywork. AI drafts, a person on the team checks, and the owner approves. Tax, payroll, legal work and moving money stay with the owner and their licensed pros.","slogan":"Hand off the admin. Keep the final say.","logo":{"@type":"ImageObject","@id":"https://righthandnwa.com/#logo","url":"https://righthandnwa.com/assets/logo.png","contentUrl":"https://righthandnwa.com/assets/logo.png","width":512,"height":512,"caption":"Right Hand NWA"},"image":{"@type":"ImageObject","@id":"https://righthandnwa.com/#image","url":"https://righthandnwa.com/assets/og.png","contentUrl":"https://righthandnwa.com/assets/og.png","width":1200,"height":630},"email":"righthandnwa@gmail.com","contactPoint":{"@type":"ContactPoint","contactType":"customer service","email":"righthandnwa@gmail.com","areaServed":"US-AR","availableLanguage":"English"},"sameAs":["https://www.instagram.com/righthandnwa/"],"founder":[{"@type":"Person","name":"Jackson Varela","description":"University of Arkansas student","memberOf":{"@id":"https://righthandnwa.com/#uark"}},{"@type":"Person","name":"Annie Wagner","description":"University of Arkansas student","memberOf":{"@id":"https://righthandnwa.com/#uark"}},{"@type":"Person","name":"Abigail Estes","description":"University of Arkansas student","memberOf":{"@id":"https://righthandnwa.com/#uark"}},{"@type":"Person","name":"Bella Gambaro","description":"University of Arkansas student","memberOf":{"@id":"https://righthandnwa.com/#uark"}}],"areaServed":[{"@type":"Place","name":"Northwest Arkansas","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"AdministrativeArea","name":"Benton County, Arkansas","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"AdministrativeArea","name":"Washington County, Arkansas","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Bentonville","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Rogers","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Springdale","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Fayetteville","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Bella Vista","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Siloam Springs","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Lowell","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Cave Springs","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Centerton","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Farmington","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Prairie Grove","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Pea Ridge","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}}],"knowsAbout":["Small business admin","Receipt capture and expense review","Invoice follow-ups","CPA and bookkeeper prep","Inbox triage and reply drafts","Missed-call text-back","Appointment scheduling and reminders","Written how-tos (SOPs)","Workflow automations","Practical AI for small business","AI use policies for small business","Google Business Profile and local listings","Honest review requests"],"hasOfferCatalog":{"@type":"OfferCatalog","name":"Right Hand NWA services","url":"https://righthandnwa.com/services/","itemListElement":[{"@type":"OfferCatalog","name":"Money admin","url":"https://righthandnwa.com/services/#money-admin","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Receipt capture and categorizing"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Monthly expense review"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Invoices and overdue follow-ups"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Quotes and estimates"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Bills-due and renewals calendar"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"CPA and bookkeeper prep"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Software subscription cleanup"}}]},{"@type":"OfferCatalog","name":"Customers and front desk","url":"https://righthandnwa.com/services/#customers-and-front-desk","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Inbox triage and reply drafts"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Missed-call text-back and booking"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"AI phone answering, inbound only"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Website chat assistant"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Lead intake form that routes itself"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"CRM setup and cleanup"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Quote follow-ups"}}]},{"@type":"OfferCatalog","name":"Scheduling and follow-ups","url":"https://righthandnwa.com/services/#scheduling-and-follow-ups","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Booking page"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Appointment reminders and no-show follow-ups"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Calendar management"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Staff schedule drafts"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Vendor and delivery coordination"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Meeting and call notes with AI"}}]},{"@type":"OfferCatalog","name":"Documents and how-tos","url":"https://righthandnwa.com/services/#documents-and-how-tos","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"One folder system with naming rules"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Templates for quotes, forms and checklists"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Written how-tos (SOPs)"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Hiring admin"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Supplier and vendor office support"}}]},{"@type":"OfferCatalog","name":"AI in your business","url":"https://righthandnwa.com/services/#ai-in-your-business","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Workflow automations"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"AI email drafting in your inbox"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Weekly owner report"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"AI starter workshop"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"One-page AI use policy"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Company prompt kit and SOP assistant"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Monthly AI office hours"}}]},{"@type":"OfferCatalog","name":"Local presence and reputation","url":"https://righthandnwa.com/services/#local-presence-and-reputation","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Google Business Profile and listings upkeep"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Honest review requests"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Review reply drafts"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Social posts and content calendar"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Email newsletter"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Digital front door check"}}]}]},"makesOffer":{"@type":"Offer","@id":"https://righthandnwa.com/#checkup-offer","name":"Free 30-minute check-up","price":"0","priceCurrency":"USD","url":"https://righthandnwa.com/#checkup","description":"A free 30-minute check-up at your business anywhere in Benton or Washington County, or by video or phone. Within 3 business days, Your Admin Map arrives by email: your top 3 tasks to hand off, and for each one what we would do, what AI would draft, what stays with you, and what stays with your CPA or attorney. No card, no obligation to hire us.","itemOffered":{"@type":"Service","name":"30-minute admin and AI check-up","provider":{"@id":"https://righthandnwa.com/#organization"},"areaServed":{"@id":"https://righthandnwa.com/#arkansas"}}}},{"@type":"CollegeOrUniversity","@id":"https://righthandnwa.com/#uark","name":"University of Arkansas","url":"https://www.uark.edu/"},{"@type":"State","@id":"https://righthandnwa.com/#arkansas","name":"Arkansas","containedInPlace":{"@type":"Country","name":"United States"}},{"@type":"WebSite","@id":"https://righthandnwa.com/#website","url":"https://righthandnwa.com/","name":"Right Hand NWA","alternateName":"Right Hand Northwest Arkansas","publisher":{"@id":"https://righthandnwa.com/#organization"},"inLanguage":"en-US"},{"@type":"WebPage","@id":"https://righthandnwa.com/#webpage","url":"https://righthandnwa.com/","name":"Right Hand NWA | Admin and AI help for Northwest Arkansas small businesses","description":"Admin and AI help for small businesses in Bentonville, Rogers, Springdale and Fayetteville, from four University of Arkansas students. AI drafts, we check, you approve. Free 30-minute check-up.","isPartOf":{"@id":"https://righthandnwa.com/#website"},"about":{"@id":"https://righthandnwa.com/#organization"},"primaryImageOfPage":{"@id":"https://righthandnwa.com/#image"},"inLanguage":"en-US"},{"@type":"FAQPage","@id":"https://righthandnwa.com/#faq","url":"https://righthandnwa.com/#questions","isPartOf":{"@id":"https://righthandnwa.com/#webpage"},"mainEntity":[{"@type":"Question","name":"What does it cost?","acceptedAnswer":{"@type":"Answer","text":"The check-up is free, with nothing to buy. If you want help after that, we quote a flat monthly price in writing before any work starts, based on the tasks you pick. Tool costs, like a texting plan, are paid by you directly to the vendor, and we show them before you decide."}},{"@type":"Question","name":"You're students. Why should I trust you with my business?","acceptedAnswer":{"@type":"Answer","text":"Fair question. We are four University of Arkansas students who work in Northwest Arkansas. For you, that means a short client list, a named person on every task, and work you can check line by line. Try the prototypes on this page and judge the work yourself."}},{"@type":"Question","name":"Is AI going to talk to my customers?","acceptedAnswer":{"@type":"Answer","text":"Only if you want it to, and only from answers you approved. A phone or chat assistant says it is an assistant and hands anything else to you. Everything else AI does is a draft that one of us checks and you approve. If you'd rather we skip AI on a task, we do it by hand."}},{"@type":"Question","name":"Do I have to give you my passwords or bank login?","acceptedAnswer":{"@type":"Answer","text":"No, and please don't send them. The check-up needs no logins at all. If you hire us, you invite us as a user in the tools you already use, so you can see what we can reach and remove us in one click. We never touch your bank or move money."}},{"@type":"Question","name":"What if you get something wrong?","acceptedAnswer":{"@type":"Answer","text":"You see the sources and the math before anything is final, and anything we can't match to a record comes to you as a question. If a mistake slips through in work you approved, we fix it at no charge."}},{"@type":"Question","name":"What if I want to stop?","acceptedAnswer":{"@type":"Answer","text":"Email us. It is month to month with no cancellation fee. Within 2 business days we remove our access, hand back every file and how-to, and confirm it in writing."}}]}]}</script>
-<!-- jsonld:end -->
+<link rel="icon" href="assets/favicon.svg?v=4ea3b7b2" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=b2c869ad">
+<!-- head:start -->
+<link rel="preload" href="assets/bundle-home.css?v=d4ddea59" as="style">
+<link rel="preload" href="assets/fonts/plus-jakarta-sans-latin-var.woff2?v=153fc85b" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Plus Jakarta Sans";src:url(assets/fonts/plus-jakarta-sans-latin-var.woff2?v=153fc85b) format("woff2");font-weight:200 800;font-style:normal;font-display:swap}
+@font-face{font-family:"Geist Mono";src:url(assets/fonts/geist-mono-latin.woff2?v=684ad5b5) format("woff2");font-weight:400 600;font-style:normal;font-display:swap}
+@font-face{font-family:"RH Sans Fallback";src:local("Arial"),local("ArialMT"),local("Roboto"),local("Liberation Sans");font-weight:200 450;size-adjust:104%}
+@font-face{font-family:"RH Sans Fallback";src:local("Arial"),local("ArialMT"),local("Roboto"),local("Liberation Sans");font-weight:451 600;size-adjust:106%}
+@font-face{font-family:"RH Sans Fallback";src:local("Arial Bold"),local("Arial-BoldMT"),local("Roboto Bold"),local("Roboto-Bold"),local("Liberation Sans Bold");font-weight:601 800;size-adjust:102%}
+:root{--rh-navy:#0B1F3B;--rh-blue:#2F80ED;--rh-sky:#E6F0FF;--rh-gray:#E5E7EB;--navy-50:#F4F7FB;--navy-100:#E5EAF2;--navy-200:#C8D2E0;--navy-300:#A7B5CA;--navy-400:#8497B1;--navy-500:#637998;--navy-600:#445C7E;--navy-700:#2B4365;--navy-800:#193051;--navy-850:#122846;--navy-900:#0B1F3B;--navy-950:#051326;--blue-50:#F2F7FF;--blue-100:#E6F0FF;--blue-200:#C4DDFF;--blue-300:#95C0FE;--blue-400:#5F9FFA;--blue-500:#2F80ED;--blue-600:#1B6BD1;--blue-700:#115AB5;--blue-800:#0F4386;--blue-900:#0E2F5D;--gray-50:#F7F8FA;--gray-100:#EEF0F4;--gray-200:#E5E7EB;--gray-300:#D1D4DA;--gray-400:#A0A5AC;--gray-500:#6F757E;--gray-600:#535862;--gray-700:#3A404B;--green-50:#E2F8EA;--green-300:#63D99B;--green-500:#15AD6E;--green-700:#14764A;--green-950:#0D362A;--amber-50:#FFF1DA;--amber-300:#FDC357;--amber-400:#FCB442;--amber-700:#985B1A;--amber-950:#402C12;--red-50:#FFEDEB;--red-300:#F58B84;--red-500:#DB4241;--red-700:#BA2B2E;--font-sans:"Plus Jakarta Sans","RH Sans Fallback",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--font-mono:"Geist Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;--fs-micro:.75rem;--fs-sm:.875rem;--fs-body:1.0625rem;--fs-lead:clamp(1.125rem,1.03rem + .45vw,1.375rem);--fs-h3:clamp(1.25rem,1.1rem + .6vw,1.5rem);--fs-h2:clamp(2.125rem,1.45rem + 2.6vw,3.5rem);--fs-h1:clamp(2.6rem,1.6rem + 4.6vw,5rem);--container:1200px;--container-wide:1320px;--pad-x:clamp(1.125rem,.6rem + 2.4vw,2.5rem);--gutter:clamp(1rem,.6rem + 1.6vw,1.5rem);--section-y:clamp(4.5rem,3rem + 6vw,8.5rem);--section-head-gap:clamp(2rem,1.5rem + 2vw,3.5rem);--r-paper:4px;--r-xs:6px;--r-sm:8px;--r-btn:10px;--r-md:12px;--r-lg:16px;--r-xl:24px;--sh-1:0 1px 2px rgba(11,31,59,.06),0 1px 3px rgba(11,31,59,.05);--sh-2:0 2px 6px -1px rgba(11,31,59,.08),0 12px 24px -12px rgba(11,31,59,.18);--sh-3:0 4px 10px -2px rgba(11,31,59,.08),0 28px 56px -24px rgba(11,31,59,.32);--sh-d:inset 0 1px 0 rgba(230,240,255,.06),0 0 0 1px rgba(167,181,202,.10),0 28px 56px -28px rgba(0,0,0,.7);--glow:0 0 0 1px rgba(47,128,237,.55),0 10px 36px -10px rgba(47,128,237,.55);--bracket-w:3px;--bracket-off:10px;--bracket-trim:38%;--dur-press:120ms;--dur-hover:180ms;--dur-chip:240ms;--dur-reveal:320ms;--dur-move:420ms;--dur-draw:600ms;--dur-chart:700ms;--dur-tick:900ms;--ease-out:cubic-bezier(.23,1,.32,1);--ease-io:cubic-bezier(.65,0,.35,1);--ease-land:linear(0,.13 6%,.45 13%,.78 20%,.97 27%,1.04 34%,1.05 40%,1.03 48%,1.005 60%,.998 75%,1);--box:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='1.5' y='1.5' width='21' height='21' rx='6' fill='none' stroke='%23000' stroke-width='2'/%3E%3C/svg%3E");--ck-box:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='1.5' y='1.5' width='21' height='21' rx='6' fill='none' stroke='%23000' stroke-width='2'/%3E%3Cpath d='M6.8 12.6l3.4 3.4 7-7.6' fill='none' stroke='%23000' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");--fx-arr:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 12'%3E%3Cpath d='M1.5 6h14M11 1.5L15.5 6 11 10.5' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");}
+:root,.paper{--bg:var(--navy-50);--surface:#FFFFFF;--surface-2:var(--gray-100);--surface-3:var(--gray-200);--wash:var(--blue-100);--ink:var(--navy-900);--ink-2:var(--navy-700);--soft:var(--navy-600);--mute:var(--gray-500);--line:var(--gray-200);--line-ui:var(--gray-500);--rule:var(--navy-200);--accent:var(--blue-500);--accent-ink:var(--blue-700);--btn-bg:var(--blue-600);--btn-bg-hover:var(--blue-700);--btn-ink:#FFFFFF;--focus:var(--blue-600);--ok:var(--green-700);--ok-wash:var(--green-50);--warn:var(--amber-700);--warn-wash:var(--amber-50);--err:var(--red-700);--err-wash:var(--red-50);--mark-box:var(--navy-900);--mark-bracket:var(--blue-500);color-scheme:light;}
+.dark{--bg:var(--navy-950);--surface:var(--navy-900);--surface-2:var(--navy-850);--surface-3:var(--navy-800);--wash:rgba(47,128,237,.12);--ink:var(--navy-50);--ink-2:var(--navy-200);--soft:var(--navy-300);--mute:var(--navy-400);--line:rgba(167,181,202,.14);--line-ui:var(--navy-500);--rule:rgba(167,181,202,.2);--accent:var(--blue-500);--accent-ink:var(--blue-400);--btn-bg:var(--blue-400);--btn-bg-hover:var(--blue-300);--btn-ink:var(--navy-950);--focus:var(--blue-400);--ok:var(--green-300);--ok-wash:var(--green-950);--warn:var(--amber-300);--warn-wash:var(--amber-950);--err:var(--red-300);--err-wash:#3B1517;--mark-box:#FFFFFF;--mark-bracket:var(--blue-500);background:var(--bg);color:var(--ink);color-scheme:dark;}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-padding-top:84px;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:no-preference){html:not([data-motion=off]){scroll-behavior:smooth}}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 var(--fs-body)/1.6 var(--font-sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+::selection{background:var(--blue-200);color:var(--navy-950)}
+a{color:var(--accent-ink);text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:2px}
+h1,h2,h3,h4{margin:0;text-wrap:balance}
+h1{font-size:var(--fs-h1);font-weight:800;line-height:1.02;letter-spacing:-.035em}
+h2{font-size:var(--fs-h2);font-weight:700;line-height:1.08;letter-spacing:-.025em}
+p{margin:0;text-wrap:pretty}
+ul,ol{margin:0;padding:0}
+.wrap{max-width:var(--container);margin:0 auto;padding:0 var(--pad-x)}
+.wrap-wide{max-width:var(--container-wide);margin:0 auto;padding:0 var(--pad-x)}
+.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:12px;top:-80px;z-index:300;background:var(--btn-bg);color:var(--btn-ink);padding:10px 14px;border-radius:var(--r-sm);font-weight:600}
+.skip:focus{top:12px}
+.i{width:24px;height:24px;flex:none}
+.eyebrow{font:500 var(--fs-micro)/1.5 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent-ink)}
+.lead{font-size:var(--fs-lead);line-height:1.55;color:var(--soft);max-width:38em}
+.sec-h{max-width:48rem;margin-bottom:var(--section-head-gap)}
+.sec-h h2{margin-top:10px}
+.sec-h .lead{margin-top:20px}
+.band{padding:var(--section-y) 0;position:relative}
+.tag{display:inline-flex;align-items:center;gap:6px;font:500 var(--fs-micro)/1 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--soft);padding:5px 8px;border:1px solid var(--line);border-radius:var(--r-xs)}
+.sw{position:relative;white-space:nowrap}
+.sw::after{content:"";position:absolute;left:-2%;right:-2%;bottom:-.14em;height:.32em;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 20' preserveAspectRatio='none'%3E%3Cpath d='M4 14 C 50 4, 140 2, 196 9' fill='none' stroke='%232F80ED' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E") center/100% 100% no-repeat;transform-origin:left center}
+.fx.js-motion .sw:not(.in)::after{transform:scaleX(0)}
+.js-motion .sw.in::after{transition:transform .4s var(--ease-out) .1s}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:14px 22px;font:600 1rem/1.2 var(--font-sans);color:var(--btn-ink);background:var(--btn-bg);border:1.5px solid var(--btn-bg);border-radius:var(--r-btn);cursor:pointer;text-decoration:none;white-space:nowrap;transition:background-color var(--dur-hover) ease,border-color var(--dur-hover) ease,transform var(--dur-press) var(--ease-out)}
+.btn:hover{background:var(--btn-bg-hover);border-color:var(--btn-bg-hover)}
+.btn:active{transform:scale(.98)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-ui)}
+.btn.ghost:hover{border-color:var(--ink);background:var(--wash)}
+.btn.sm{min-height:40px;padding:9px 15px;font-size:.9375rem}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+@media (max-width:359px){.btn:not(.sm){max-width:100%;white-space:normal;text-align:center}}
+.linkbtn{font:inherit;font-weight:600;color:var(--accent-ink);background:none;border:0;padding:4px 0;cursor:pointer;text-decoration:underline;text-underline-offset:4px}
+.mark{width:28px;height:28px;flex:none;overflow:visible}
+.mark .mk-br{fill:var(--mark-bracket)}
+.mark .mk-bx,.mark .mk-ck{stroke:var(--mark-box)}
+.lockup{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.lockup b{font:800 1.25rem/1 var(--font-sans);letter-spacing:-.02em}
+.lockup b span{color:var(--blue-400)}
+.bracket{position:relative}
+.bracket::before{content:"";position:absolute;top:calc(var(--bracket-off)*-1);right:calc(var(--bracket-off)*-1);width:100%;height:100%;border:solid var(--accent);border-width:var(--bracket-w) var(--bracket-w) 0 0;border-top-right-radius:calc(var(--r-lg) + var(--bracket-off));clip-path:inset(0 0 0 var(--bracket-trim));pointer-events:none;z-index:0}
+.top{position:sticky;top:0;z-index:50;background:var(--navy-900);border-bottom:1px solid rgba(167,181,202,.14)}
+.top .wrap,.top .wrap-wide{display:flex;align-items:center;gap:22px;height:66px}
+.top .lockup{margin-right:auto}
+.top nav ul{display:flex;gap:22px;list-style:none}
+.top nav a{color:var(--navy-200);text-decoration:none;font-weight:500;font-size:.9375rem;padding:8px 0}
+.top nav a:hover{color:#FFF}
+.motion-btn{min-height:36px;padding:0 12px;font:600 .8125rem var(--font-sans);color:var(--navy-200);background:none;border:1px solid var(--navy-600);border-radius:var(--r-sm);cursor:pointer}
+.motion-btn:hover{color:#FFF;border-color:var(--navy-300)}
+.progress-rail{position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--blue-500);transform-origin:left;transform:scaleX(0)}
+@supports (animation-timeline:scroll()){@media (prefers-reduced-motion:no-preference) and (pointer:fine){.progress-rail{animation:rail linear both;animation-timeline:scroll(root)}}}
+.top nav{order:1}
+.top .motion-btn{order:2}
+.top .btn.sm{order:3}
+.top .menu-btn{order:4}
+.menu-btn,.bar-menu{display:none;align-items:center;gap:8px;min-height:44px;padding:0 12px 0 10px;font:600 .9375rem/1 var(--font-sans);color:#FFF;text-decoration:none;border:1px solid var(--navy-600);border-radius:var(--r-sm);cursor:pointer;white-space:nowrap}
+.menu-btn:hover,.bar-menu:hover{border-color:var(--navy-300)}
+.menu-btn .i,.bar-menu .i{width:20px;height:20px}
+@media (max-width:1100px){.top nav{display:none}.menu-btn{display:inline-flex}}
+@media (max-width:899px){.top .btn.sm{display:none}}
+@media (max-width:760px){.top .motion-btn{display:none}.top .wrap,.top .wrap-wide{gap:12px}}
+@media (max-width:760px),(max-height:560px){.top{position:static}}
+.hero{position:relative;overflow:hidden;isolation:isolate;padding:clamp(2.5rem,1.5rem + 4vw,5.5rem) 0 clamp(4rem,3rem + 4vw,7rem);background:var(--navy-950)}
+.hero::before{content:"";position:absolute;inset:0;z-index:-2;background:linear-gradient(180deg,var(--navy-900) 0%,var(--navy-950) 60%)}
+.grid-48::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='192'%3E%3Cpath d='M96.5 91v11M91 96.5h11' stroke='%23445C7E' stroke-opacity='.7'/%3E%3C/svg%3E"),linear-gradient(rgba(167,181,202,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(167,181,202,.07) 1px,transparent 1px);background-size:192px 192px,48px 48px,48px 48px;background-position:-1px -1px;-webkit-mask-image:radial-gradient(120% 90% at 70% 35%,#000 30%,transparent 78%);mask-image:radial-gradient(120% 90% at 70% 35%,#000 30%,transparent 78%)}
+.topo{position:absolute;left:-4%;bottom:-6%;width:46%;z-index:-1;opacity:.6;pointer-events:none}
+.topo path{fill:none;stroke:var(--navy-800);stroke-width:1}
+.hero-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(2rem,1rem + 3vw,4.5rem);align-items:center}
+.hero h1{margin-top:18px;max-width:12ch;color:#FFF}
+.hero .lead{margin-top:22px;color:var(--navy-200);max-width:31em;text-wrap:balance}
+.trio{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;list-style:none}
+.trio li{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid rgba(167,181,202,.2);border-radius:var(--r-xs);font-weight:600;font-size:.9375rem;color:var(--navy-100);background:rgba(18,40,70,.6)}
+.trio li b{color:var(--blue-400);font-weight:700}
+.ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+@media (min-width:561px) and (max-width:1279px){.hero .ctas{display:inline-grid}}
+.micro{margin-top:14px;font-size:var(--fs-sm);line-height:1.5;color:var(--soft)}
+.hero .micro{color:var(--navy-300)}
+.hero-proof{gap:8px;margin-top:20px;font-size:.8125rem;color:var(--navy-100)}
+.hero-proof li{gap:9px;min-height:36px;padding:6px 13px 6px 9px;border:1px solid var(--rule);border-radius:var(--r-sm);background:rgba(18,40,70,.5)}
+.hero-proof .ck{width:18px;height:18px;padding:2px;border:1.5px solid currentColor;border-radius:5px;color:var(--green-300);stroke-width:3.4}
+.hero-visual{position:relative}
+.hero-glow{position:absolute;inset:8% 6% 10% 10%;z-index:-1;background:radial-gradient(closest-side,rgba(47,128,237,.16),transparent);pointer-events:none}
+@media (max-width:1020px){.hero-grid{grid-template-columns:minmax(0,1fr)}.hero h1{max-width:14ch}}
+.win{position:relative;background:var(--navy-900);border-radius:var(--r-lg);box-shadow:var(--sh-d)}
+.win-bar{display:flex;align-items:center;gap:12px;min-height:44px;padding:6px 10px 6px 16px;border-bottom:1px solid rgba(167,181,202,.12);font:500 .8125rem/1 var(--font-mono);color:var(--navy-300)}
+.win-bar .path{margin-right:auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.top{--mark-box:#FFFFFF}
+.nwa{position:relative;padding:12px 14px 12px}
+.nwa-layout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:14px;align-items:center}
+.nwa-svg{display:block;width:100%;height:auto;aspect-ratio:560/520;color:var(--navy-300)}
+.nwa-area{fill:rgba(47,128,237,.06);stroke:rgba(95,159,250,.32);stroke-width:1.2;stroke-dasharray:4 6}
+.nwa-hwy-bg{fill:none;stroke:rgba(167,181,202,.14);stroke-width:10;stroke-linecap:round}
+.nwa-hwy{fill:none;stroke:var(--blue-500);stroke-width:3.5;stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:0}
+.nwa-hwy.west{stroke:var(--blue-400);stroke-width:2.5;opacity:.8}
+.nwa.armed:not(.drawn) .nwa-hwy{stroke-dashoffset:100}
+.nwa.drawn .nwa-hwy{transition:stroke-dashoffset .42s var(--ease-io) .04s}
+.nwa.drawn .nwa-hwy.west{transition-delay:.2s}
+.nwa-shield rect{fill:var(--navy-800);stroke:var(--blue-400);stroke-width:1.2}
+.nwa-shield text{font:700 14px var(--font-mono);fill:#FFF}
+.nwa-small{fill:var(--navy-400)}
+.nwa-city text{font:600 21px var(--font-sans);fill:var(--navy-100)}
+.nwa-dot{fill:var(--navy-900);stroke:#FFF;stroke-width:2.4;transition:fill .2s ease}
+.nwa-pulse{fill:rgba(47,128,237,.4);opacity:0;transform-box:fill-box;transform-origin:center}
+.nwa-city.live .nwa-dot{fill:var(--blue-500)}
+.nwa-city.live .nwa-pulse{animation:pulse .9s var(--ease-out)}
+.nwa-city{transform-box:fill-box;transform-origin:center}
+.nwa.armed:not(.drawn) .nwa-city{opacity:0;transform:scale(.6)}
+.nwa.drawn .nwa-city{transition:opacity .22s ease,transform .22s var(--ease-land);transition-delay:calc(var(--i)*40ms + .08s)}
+.queue{padding:12px;border-radius:var(--r-md);background:rgba(5,19,38,.55);border:1px solid rgba(167,181,202,.14)}
+.q-head{display:flex;justify-content:space-between;gap:8px;margin-bottom:10px;font:600 .75rem/1 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--navy-300)}
+.q-head .mono{letter-spacing:.02em;text-transform:none}
+.q-list{list-style:none;display:grid;gap:7px}
+.q-row{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1px 10px;align-items:center;padding:9px 11px;border:1px solid rgba(167,181,202,.14);border-radius:var(--r-sm);background:var(--navy-900)}
+.q-city{grid-column:1;font:600 .6875rem/1.3 var(--font-mono);letter-spacing:.04em;color:var(--blue-300)}
+.q-task{grid-column:1;font-size:.9375rem;color:#FFF}
+.q-note{grid-column:1;font-size:.8125rem;line-height:1.35;color:var(--navy-300)}
+.q-st,.q-approve{grid-column:2;grid-row:1/4}
+.q-st{display:inline-flex;align-items:center;gap:6px;font:600 .75rem/1 var(--font-mono);color:var(--green-300);transition:opacity .2s ease}
+.q-st .ck{width:16px;height:16px;padding:1.5px;border:1.5px solid currentColor;border-radius:4px;color:var(--green-300);stroke-width:3.4}
+.q-st .ck path{stroke-dashoffset:0}
+.nwa.armed .q-row:not(.ready) .q-st{opacity:0}
+.nwa.armed .q-row:not(.ready) .q-st .ck path{stroke-dashoffset:1}
+.nwa.armed .q-row.ready .q-st .ck path,.q-st.on .ck path{stroke-dashoffset:0;transition:stroke-dashoffset .32s var(--ease-out)}
+.q-st.ok:not(.on) .ck path{stroke-dashoffset:1}
+.q-scan{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(47,128,237,.35),transparent);transform:translateX(-100%)}
+.q-row.scan .q-scan{animation:scan .18s linear forwards}
+.q-row.ready .q-scan{animation:none;opacity:0}
+.nwa.armed .q-row:not(.in){opacity:0;transform:translateY(8px)}
+.nwa.armed .q-row.in{transition:opacity .26s var(--ease-out),transform .26s var(--ease-out)}
+.q-ask{border-color:rgba(252,180,66,.6);background:rgba(64,44,18,.5)}
+.q-ask .q-note{color:var(--amber-300);font-weight:600}
+.q-ask .q-approve{--btn-bg:var(--blue-400);--btn-bg-hover:var(--blue-300);--btn-ink:var(--navy-950);min-height:40px;padding:8px 14px}
+.q-ask.approved{border-color:rgba(99,217,155,.6);background:rgba(13,54,42,.55)}
+.q-ask.approved .q-note{color:var(--green-300)}
+.q-st.ok{opacity:1}
+.map-cap{margin:10px 2px 0;font:500 var(--fs-micro)/1.5 var(--font-mono);letter-spacing:.04em;color:var(--navy-400)}
+@media (max-width:640px){.nwa-layout{grid-template-columns:minmax(0,1fr)}.nwa-svg{max-width:420px;margin:0 auto}}
+@media (max-width:560px){.q-st,.q-approve{grid-row:1/3}.q-note{grid-column:1/-1}}
+@media (prefers-reduced-motion:no-preference){.js-motion .top .mark .mk-br{animation:mk-br .45s var(--ease-out) both}.js-motion .top .mark .mk-bx{animation:mk-bx .4s var(--ease-out) both;transform-box:fill-box;transform-origin:center}.js-motion .top .mark .mk-ck{stroke-dasharray:1;animation:mk-ck .32s var(--ease-out) .2s both}}
+.ck{fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.ck path{stroke-dasharray:1;stroke-dashoffset:1}
+.team,.people{list-style:none;display:grid}
+.team li,.people li{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-areas:"ph name" "ph role";column-gap:16px;align-items:center;padding:14px 0;border-top:1px solid var(--rule)}
+.team li:last-child,.people li:last-child{border-bottom:1px solid var(--rule)}
+.ini{grid-area:ph;position:relative;display:grid;place-items:center;width:56px;height:56px;border-radius:14px;background:linear-gradient(155deg,var(--navy-700),var(--navy-850) 70%);color:#FFF;font:800 1.0625rem/1 var(--font-sans);letter-spacing:.02em}
+.ini::after{content:"";position:absolute;top:-5px;right:-5px;width:100%;height:100%;border:solid var(--blue-500);border-width:2.5px 2.5px 0 0;border-top-right-radius:18px;-webkit-clip-path:inset(0 0 0 38%);clip-path:inset(0 0 0 38%);pointer-events:none}
+.team b,.people b{grid-area:name;align-self:end;font-size:1.1875rem;font-weight:700;line-height:1.25;color:var(--ink)}
+.team .role,.people .role{grid-area:role;align-self:start;font-size:.9375rem;line-height:1.4;color:var(--soft)}
+.team:has(.ph),.people:has(.ph){grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 16px}
+.team:has(.ph) li,.people:has(.ph) li{grid-template-columns:minmax(0,1fr);grid-template-areas:"ph" "name" "role";padding:0;border:0}
+.team:has(.ph) .ini,.people:has(.ph) .ini{width:100%;height:auto;aspect-ratio:4/5;border-radius:var(--r-md);font-size:2rem}
+.team:has(.ph) .ini::after,.people:has(.ph) .ini::after{top:-7px;right:-7px;border-width:3px 3px 0 0;border-top-right-radius:calc(var(--r-md) + 7px)}
+.team:has(.ph) b,.people:has(.ph) b{margin-top:12px}
+[aria-invalid=true]{border-color:var(--red-700)}
+html[data-motion=off] *,html[data-motion=off] *::before,html[data-motion=off] *::after{animation-duration:1ms!important;animation-iteration-count:1!important;transition-duration:1ms!important}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:1ms!important;animation-iteration-count:1!important;transition-duration:1ms!important;scroll-behavior:auto!important}}
+@media (pointer:coarse){.btn.sm,.chip:not(.stage *),.q-ask .q-approve{min-height:44px}}
+:root{--hot:#FF4B33;--hot-2:#FF6A55}
+:root,.dark,.q-ask .q-approve,.composer .btn,.int-card .btn{--btn-bg:var(--hot);--btn-bg-hover:var(--hot-2);--btn-ink:var(--navy-950)}
+.top .btn.sm{background:transparent;color:#FFF;border-color:var(--hot)}
+.top .btn.sm:hover{background:rgba(255,75,51,.16);border-color:var(--hot-2)}
+html:not(.js) .q-approve,html:not(.js) .motion-btn{display:none}
+@media (max-width:899px){html{scroll-padding-bottom:calc(76px + env(safe-area-inset-bottom))}}
+@media (max-width:760px),(max-height:560px){html{scroll-padding-top:16px}}
+html:not(.js) [data-motion-proxy]{display:none}
+html:has(.menu[open]){overflow:hidden}
+.who-grid{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:clamp(2.5rem,1rem + 4.5vw,5.5rem);align-items:start}
+.who .sec-h{margin-bottom:clamp(1.5rem,1.2rem + 1vw,2.25rem)}
+.who-more{margin-top:12px}
+.who-where{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:start;margin-bottom:24px;font-size:var(--fs-lead);line-height:1.45;color:var(--navy-100);max-width:30em}
+.who-where .i{margin-top:.2em;color:var(--blue-400)}
+.who-map .nwa{container-type:inline-size}
+.who-map .nwa-layout{grid-template-columns:minmax(0,1fr)}
+.who-map .nwa-svg{max-width:380px;margin:0 auto}
+@container (min-width:600px){.who-map .nwa-layout{grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr)}}
+@media (max-width:900px){.who-grid{grid-template-columns:minmax(0,1fr)}.who-map .nwa-svg{max-width:300px}}
+@media (max-width:560px){:root{--section-y:3.75rem;--section-head-gap:1.75rem}}
+@media (prefers-reduced-motion:no-preference){@view-transition{navigation:auto}.top{view-transition-name:rh-top}.top .lockup .mark{view-transition-name:rh-mark}::view-transition-old(root),::view-transition-new(root){animation-duration:.22s}}
+:root{--fx-play:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 1.6v8.8a.6.6 0 0 0 .9.5l7-4.4a.6.6 0 0 0 0-1L3.9 1.1a.6.6 0 0 0-.9.5z'/%3E%3C/svg%3E");--fx-stop:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Crect x='2' y='2' width='8' height='8' rx='1.6'/%3E%3C/svg%3E");--fx-step:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M1.5 1.8v8.4a.6.6 0 0 0 .9.5l6-4.2a.6.6 0 0 0 0-1l-6-4.2a.6.6 0 0 0-.9.5z'/%3E%3Crect x='9' y='1.5' width='1.8' height='9' rx='.7'/%3E%3C/svg%3E");--fx-pause:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Crect x='2.2' y='1.5' width='2.8' height='9' rx='.9'/%3E%3Crect x='7' y='1.5' width='2.8' height='9' rx='.9'/%3E%3C/svg%3E");--fx-ck:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6.4l2.6 2.6L10 3.4' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");--fx-down:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M6 1.5v8.5M2.2 6.4L6 10.2l3.8-3.8' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");}
+[data-fx=head]::before{content:"";display:block;height:1px;margin-bottom:20px;background:linear-gradient(90deg,var(--accent) 0 48px,var(--rule) 48px);transform-origin:left center}
+.fx-w{display:inline-block}
+.fx.js-motion [data-fx=head]:not(.fx-in)::before{transform:scaleX(0)}
+.fx.js-motion [data-fx=head]:not(.fx-in) > .eyebrow,.fx.js-motion [data-fx=head]:not(.fx-in) > .lead{opacity:0}
+.fx.js-motion [data-fx=head]:not(.fx-in) .fx-w{opacity:0;transform:translateY(.4em)}
+.js-motion [data-fx=head].fx-in:not(.fx-done)::before{animation:fx-draw .44s var(--ease-out) backwards}
+.js-motion [data-fx=head].fx-in:not(.fx-done) .fx-w{animation:fx-rise .3s var(--ease-out) calc(min(var(--w,0),8)*20ms + 30ms) backwards}
+.js-motion [data-fx=head].fx-in:not(.fx-done) > .lead{animation:fx-up .32s var(--ease-out) .14s backwards}
+.js-motion [data-fx=head].fx-in .sw.in::after{transition-duration:.34s;transition-delay:.14s}
+.fx.js-motion [data-fx=scramble]:not(.fx-in){opacity:0}
+[data-edge] > *{position:relative}
+.fx.js-motion [data-fx=cascade]:not(.fx-in) > *{opacity:0}
+.js-motion [data-fx=cascade].fx-in:not(.fx-done) > *{animation:fx-up .32s var(--ease-out) calc(var(--k,0)*30ms) backwards}
+.js-motion [data-edge].fx-in:not(.fx-done) > *::before{content:"";position:absolute;inset:-1px;border:1.5px solid var(--blue-400);border-radius:inherit;pointer-events:none;animation:fx-edge .46s ease calc(var(--k,0)*30ms + 40ms) both}
+[data-fx=scan]{position:relative}
+.fx.js-motion [data-fx=scan]:not(.fx-in){opacity:0}
+.js-motion [data-fx=scan].fx-in:not(.fx-done){animation:fx-up .36s var(--ease-out) backwards}
+.js-motion .bracket[data-fx=scan].fx-in:not(.fx-done)::before,.js-motion [data-fx=scan].fx-in:not(.fx-done) .bracket::before{animation:fx-lock .46s var(--ease-out) .04s backwards}
+.fx-scan{position:absolute;inset:0;z-index:30;overflow:hidden;border-radius:inherit;pointer-events:none}
+.fx-scan > i{position:absolute;left:0;right:0;top:-60px;height:62px;background:linear-gradient(0deg,#5F9FFA 0,#5F9FFA 2px,rgba(47,128,237,.2) 2px,rgba(47,128,237,0) 100%)}
+.js-motion.fx-lite .top .btn:not(.ghost)::after{animation:none}
+.fx-hud{position:fixed;left:14px;top:50%;z-index:40;display:none;align-items:center;gap:12px;writing-mode:vertical-rl;transform:translateY(-50%) rotate(180deg);font:500 .6875rem/1 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--navy-300);pointer-events:none;transition:opacity .3s ease}
+@media (min-width:1101px){.fx-hud{display:flex}}
+.fx-hud.is-top{opacity:0}
+.fx-hud.on-light{color:var(--navy-500)}
+.fx-hud .hud-n{font-weight:600;color:var(--blue-400)}
+.fx-hud.on-light .hud-n{color:var(--blue-700)}
+.fx-hud .hud-ticks{display:flex;gap:4px}
+.fx-hud .hud-ticks i{display:block;width:8px;height:2px;border-radius:1px;background:currentColor;opacity:.3;transition:opacity .3s ease}
+.fx-hud .hud-l{inline-size:24ch;max-block-size:42vh;overflow:hidden;white-space:nowrap}
+.top nav a.fx-cur{color:#FFF}
+@supports (animation-timeline:scroll()){@media (prefers-reduced-motion:no-preference) and (hover:hover) and (pointer:fine) and (min-width:901px){.js-motion .hero.grid-48::after,.js-motion .page-hero.grid-48::after{top:-96px;bottom:-96px;animation:fx-par-grid linear both;animation-timeline:scroll(root);animation-range:0 100vh}.js-motion .hero .topo{animation:fx-par-topo linear both;animation-timeline:scroll(root);animation-range:0 100vh}}}
+html[data-motion=off] .progress-rail{display:none}
+.fx-spotted{position:relative;isolation:isolate}
+.fx-spot-clip{position:absolute;inset:0;z-index:-1;overflow:hidden;border-radius:inherit;pointer-events:none}
+.fx-spot{position:absolute;left:0;top:0;width:460px;height:460px;margin:-230px 0 0 -230px;border-radius:50%;background:radial-gradient(closest-side,rgba(95,159,250,.2),rgba(95,159,250,.07) 55%,rgba(95,159,250,0));opacity:0;transition:opacity .35s ease}
+.js-motion .fx-lit > .fx-spot-clip > .fx-spot{opacity:1}
+.fx-mag{transition:background-color var(--dur-hover) ease,border-color var(--dur-hover) ease,transform var(--dur-press) var(--ease-out)}
+html[data-motion=off] .fx-mag{translate:none!important;scale:none!important}
+.btn:not(.ghost):not(.stage *){position:relative;overflow:hidden;isolation:isolate}
+.btn:not(.ghost):not(.stage *):not(.sm){padding-right:19px}
+.btn.sm:not(.ghost):not(.stage *):not(.top *){padding-right:12px}
+.btn:not(.ghost):not(.stage *)::before{content:"";position:absolute;left:var(--rx,50%);top:var(--ry,50%);width:var(--rs,0px);height:var(--rs,0px);margin:calc(var(--rs,0px)/-2) 0 0 calc(var(--rs,0px)/-2);border-radius:50%;z-index:-1;background:radial-gradient(closest-side,rgba(255,255,255,.62),rgba(255,255,255,0));opacity:0;pointer-events:none}
+.btn:not(.ghost):not(.stage *)::after{content:"";flex:none;width:15px;height:11px;margin:0 -3px 0 -2px;background:currentColor;-webkit-mask:var(--fx-arr) center/contain no-repeat;mask:var(--fx-arr) center/contain no-repeat;transition:transform .28s var(--ease-out)}
+.btn:not(.ghost):not(.stage *):hover::after,.btn:not(.ghost):not(.stage *):focus-visible::after{transform:translateX(4px)}
+.btn:not(.ghost):not(.stage *):active::after{transform:translateX(7px)}
+.top .btn:not(.ghost)::after,.top .btn:not(.ghost):hover::after,.top .btn:not(.ghost):focus-visible::after,.top .btn:not(.ghost):active::after{position:absolute;top:0;bottom:0;left:0;width:42%;height:auto;margin:0;background:linear-gradient(100deg,rgba(255,255,255,0) 20%,rgba(255,255,255,.62) 50%,rgba(255,255,255,0) 80%);-webkit-mask:none;mask:none;transform:translateX(-130%) skewX(-18deg);transition:none;pointer-events:none}
+.js-motion .top .btn:not(.ghost)::after{animation:fx-shine 6.5s var(--ease-io) 2.6s infinite}
+.q-ask .q-approve.btn:not(.stage *)::after,.q-ask .q-approve.btn:not(.stage *):hover::after,.q-ask .q-approve.btn:not(.stage *):focus-visible::after,.q-ask .q-approve.btn:not(.stage *):active::after{width:13px;height:13px;margin:0;-webkit-mask-image:var(--fx-ck);mask-image:var(--fx-ck);transform:none}
+.q-ask .q-approve.btn:not(.stage *):hover::after{transform:scale(1.2)}
+.btn.ghost:not(.stage *){position:relative}
+.fx-trace{position:absolute;left:-1.5px;top:-1.5px;width:calc(100% + 3px);height:calc(100% + 3px);overflow:hidden;border-radius:var(--r-btn);pointer-events:none}
+.fx-trace rect{fill:none;stroke:var(--blue-400);stroke-width:3;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .55s var(--ease-io)}
+.btn.ghost:hover .fx-trace rect,.btn.ghost:focus-visible .fx-trace rect{stroke-dashoffset:0}
+.fx-tick{width:14px;height:14px;flex:none;margin-left:-3px;overflow:visible}
+.fx-tick .bx{fill:none;stroke:currentColor;stroke-width:1.8;opacity:.45;transition:opacity .2s ease}
+.fx-tick .c{fill:none;stroke:currentColor;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .3s var(--ease-out) .04s}
+.motion-btn{display:inline-flex;align-items:center;gap:7px}
+.motion-btn::before{content:"";flex:none;width:10px;height:10px;background:currentColor;-webkit-mask:var(--fx-pause) center/contain no-repeat;mask:var(--fx-pause) center/contain no-repeat}
+.motion-btn[aria-pressed=true]::before{-webkit-mask-image:var(--fx-play);mask-image:var(--fx-play)}
+.lockup .mark .mk-br{transition:transform .35s var(--ease-out)}
+.lockup:hover .mark .mk-br{transform:translate(1.5px,-1.5px)}
+.arrow-link{display:inline-flex;align-items:center;gap:8px;min-height:44px;font-weight:600;color:var(--accent-ink);text-underline-offset:4px}
+.arrow-link::after{content:"";flex:none;width:15px;height:11px;background:currentColor;-webkit-mask:var(--fx-arr) center/contain no-repeat;mask:var(--fx-arr) center/contain no-repeat;transition:transform .28s var(--ease-out)}
+.arrow-link:hover::after,.arrow-link:focus-visible::after{transform:translateX(4px)}
+.top nav a{position:relative;display:inline-block}
+.top nav a::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:2px;border-radius:1px;background:var(--blue-400);transform:scaleX(0);transform-origin:right center;transition:transform .32s var(--ease-out)}
+.top nav a:hover::after,.top nav a:focus-visible::after,.top nav a.fx-cur::after,.top nav a[aria-current=page]::after{transform:scaleX(1);transform-origin:left center}
+.top nav a[aria-current=page]{box-shadow:none}
+@media (hover:none){.js-motion .btn{transition:background-color var(--dur-hover) ease,border-color var(--dur-hover) ease,transform var(--dur-press) var(--ease-out),scale .55s var(--ease-land)}.js-motion .btn:active{scale:.95;transition-duration:var(--dur-hover),var(--dur-hover),var(--dur-press),.08s}}
+.qz-st i{grid-area:1/1;padding:5px 8px;border-radius:5px;font-style:normal;text-align:center}
+.qz-st .s1{background:var(--blue-50);color:var(--blue-700);opacity:0}
+.qz-st .s2{background:var(--blue-100);color:var(--blue-800);opacity:0}
+.qz-st .s3{background:var(--amber-50);color:var(--amber-700)}
+.js-motion .qz-row{animation:qz-row .5s var(--ease-out) calc(var(--k,0)*180ms + 260ms) backwards}
+.js-motion .qz-row .s1{animation:qz-s1 1s linear calc(var(--k,0)*180ms + 260ms) both}
+.js-motion .qz-row .s2{animation:qz-s2 1s linear calc(var(--k,0)*180ms + 260ms) both}
+.js-motion .qz-row .s3{animation:qz-s3 1s linear calc(var(--k,0)*180ms + 260ms) both}
+.proof{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:14px;list-style:none;font-size:.875rem;font-weight:600;line-height:1.4;color:var(--soft)}
+.proof li{display:inline-flex;align-items:center;gap:7px}
+.proof .ck{width:16px;height:16px;flex:none;color:var(--ok);stroke-width:2.8}
+.proof .ck path{stroke-dashoffset:0}
+.fx.js-motion .proof[data-fx]:not(.fx-in) .ck path{stroke-dashoffset:1}
+.js-motion .proof[data-fx].fx-in:not(.fx-done) .ck path{animation:cl-draw .45s var(--ease-out) calc(var(--k,0)*65ms + 300ms) backwards}
+b > span[data-count]{display:inline-block;font-variant-numeric:tabular-nums}
+.cs-ok{position:absolute;inset:-1.5px;z-index:2;display:flex;align-items:center;justify-content:center;gap:8px;border-radius:inherit;background:var(--green-300);color:var(--navy-950);font-weight:700;pointer-events:none;opacity:0;transform:translateY(105%)}
+.cs-ok svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
+.cs-ok path{stroke-dasharray:1;stroke-dashoffset:1}
+.is-sent > .cs-ok{opacity:1;transform:none}
+.is-sent > .cs-ok path{stroke-dashoffset:0}
+.js-motion .cs-ok{transition:transform .42s var(--ease-out),opacity .2s ease}
+.js-motion .cs-ok path{transition:stroke-dashoffset .45s var(--ease-out) .22s}
+.cf-badge{flex:none;width:30px;height:30px}
+.cf-badge svg{display:block;width:100%;height:100%;overflow:visible}
+.cf-badge circle{fill:var(--green-700)}
+.cf-badge path{fill:none;stroke:#FFF;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:0}
+.cf-beam{position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(21,173,110,.85) 0,rgba(21,173,110,.85) 2px,rgba(99,217,155,.22) 2px,rgba(99,217,155,0) 60px);opacity:0;transform:translateY(-100%)}
+.js .hero-visual .fld-say{display:block}
+.js .hero-visual .trio{gap:14px 12px;margin-top:24px}
+.js .hero-visual .trio:not(.keys) li{min-height:46px;margin-bottom:6px;padding:0 16px 2px;gap:7px;border-radius:11px}
+.js .hero-visual .trio:not(.keys) li b{font-weight:800}
+@media (max-width:420px){.js .hero-visual .trio{gap:12px 8px}.js .hero-visual .trio:not(.keys) li{padding:0 11px 2px;font-size:.875rem}}
+.top .btn:not(.ghost)::after{z-index:-1;opacity:.5}
+.hero.has-fld .hero-grid{grid-template-columns:minmax(0,1.14fr) minmax(0,.86fr)}
+.hero.has-fld h1{max-width:none;font-size:clamp(2.1rem,1.2rem + 3.3vw,3.75rem);line-height:1.04;text-wrap:balance}
+.fld{position:relative;height:min(68vh,600px);min-height:340px}
+.fld canvas{position:absolute;left:-16%;top:-10%;width:132%;height:120%;display:none;pointer-events:none}
+.fld.is-live canvas{display:block}
+.fld-still{position:absolute;left:50%;top:50%;width:min(52%,300px);transform:translate(-50%,-50%);overflow:visible}
+.fld.is-live .fld-still{display:none}
+.fld-say{position:relative;min-height:1.5em;text-align:center;font:600 1.0625rem/1.5 var(--font-sans);color:#FFF}
+html:not(.js) .fld-say{display:none}
+@media (max-width:370px){.fld-say{min-height:3em}}
+.fld-cap{position:relative;margin-top:2px;text-align:center;font:500 var(--fs-micro)/1.5 var(--font-mono);letter-spacing:.06em;color:var(--navy-300)}
+.hero.has-fld .hero-glow{inset:4% 8% 8% 8%}
+.trio.keys{gap:14px 12px;margin-top:24px}
+.trio.keys li{padding:6px 0 0;border:0;border-radius:0;background:none}
+.key{all:unset;box-sizing:border-box;display:block;border-radius:12px;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+.key .cap{position:relative;display:inline-flex;align-items:center;gap:7px;min-height:46px;padding:0 17px 2px;border-radius:11px;font:600 .9375rem/1 var(--font-sans);color:var(--navy-100);white-space:nowrap;background:linear-gradient(180deg,#203D66 0%,#152B4C 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.24),inset 0 -1px 0 rgba(0,0,0,.4),0 6px 0 #14305A,0 7px 0 0 #020812,0 16px 20px -10px rgba(0,0,0,.75);transform:translateY(-6px);transition:transform .16s var(--ease-out),box-shadow .16s var(--ease-out),color .2s ease,background-color .2s ease}
+.key .cap b{color:var(--blue-300);font-weight:800}
+.key .cap::after{content:"";position:absolute;left:15px;right:15px;bottom:7px;height:2px;border-radius:2px;background:var(--blue-400);opacity:0;transition:opacity .2s ease}
+@media (hover:hover){.key:hover .cap{transform:translateY(-7px);color:#FFF}}
+.key:active .cap,.key[aria-pressed=true] .cap{transform:translateY(-1px);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),inset 0 -1px 0 rgba(0,0,0,.4),0 1px 0 #14305A,0 2px 0 0 #020812,0 6px 10px -6px rgba(0,0,0,.75)}
+.key:active .cap{transform:none}
+.key[aria-pressed=true] .cap{color:#FFF}
+.key[aria-pressed=true] .cap::after{opacity:1;box-shadow:0 0 10px var(--blue-400)}
+.key[data-k=mark][aria-pressed=true] .cap::after{background:var(--hot);box-shadow:0 0 12px var(--hot)}
+.key[data-k=mark][aria-pressed=true] .cap b{color:#FF8A78}
+.key:focus-visible{outline:3px solid var(--focus);outline-offset:5px}
+@media (forced-colors:active){.key .cap{border:1px solid ButtonText}.key[aria-pressed=true] .cap{border:3px solid Highlight}}
+.hero-visual .trio{justify-content:center}
+.fld-pause{display:none}
+@media (max-width:760px){.js .fld-pause{display:block;position:relative;min-height:44px;margin:10px auto -6px;color:var(--navy-200);font-size:var(--fs-sm)}}
+@media (max-width:1020px){.hero.has-fld .hero-grid{grid-template-columns:minmax(0,1fr);gap:clamp(1.25rem,1rem + 2vw,2.25rem)}.fld{height:min(34vh,280px);height:min(34svh,280px);min-height:200px}.fld-cap{margin-top:14px}.fld canvas{left:-8%;width:116%}}
+@media (max-width:560px){.hero{padding-top:18px}.hero.has-fld h1{margin-top:10px;font-size:clamp(1.875rem,1rem + 4.4vw,2.25rem)}.hero .lead{margin-top:12px;font-size:1.0625rem;line-height:1.5}.hero .ctas{margin-top:16px;gap:10px}.hero .ctas .btn{width:100%}.hero .micro{margin-top:10px}}
+@media (max-width:380px){.hero .eyebrow{letter-spacing:.06em}}
+@media (max-width:340px){.hero .eyebrow{font-size:.6875rem;letter-spacing:.03em}}
+@media (max-width:420px){.trio.keys{gap:12px 8px}.key .cap{padding:0 12px 2px;font-size:.875rem}.key .cap::after{left:11px;right:11px}}
+.st-prog,.st-ticks{display:none}
+.st-live{--st-step:70;height:calc(100vh + var(--st-n,3)*var(--st-step)*1vh)}
+@supports (height:100svh){.st-live{height:calc(100svh + var(--st-n,3)*var(--st-step)*1svh)}}
+.st-live h2{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.st-live .st-ticks{display:flex;flex-wrap:wrap;gap:8px 20px;list-style:none;font:500 var(--fs-micro)/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--navy-400)}
+.st-ticks li{display:inline-flex;align-items:center;gap:8px;transition:color .2s ease}
+.st-ticks li::before{content:"";flex:none;width:16px;height:16px;background:currentColor;-webkit-mask:var(--box) center/100% 100% no-repeat;mask:var(--box) center/100% 100% no-repeat}
+.st-ticks li.done{color:var(--green-300)}
+.st-ticks li.done::before,.st-ticks li:last-child.on::before{-webkit-mask-image:var(--ck-box);mask-image:var(--ck-box)}
+.sg-sent .sg-fine,.sg-sent .sg-status,.sg-sent .lead,.sg-sent .eyebrow,.sg-sent h2,.sg-sent .sg-alt{display:none}
+.lab-mark::before{opacity:1}
+.js-motion .lab-mark::before{transition:transform .42s var(--ease-land),opacity .2s ease}
+.lab-beam{position:absolute;left:0;right:0;top:0;z-index:30;height:62px;margin-top:-62px;pointer-events:none;opacity:0;background:linear-gradient(0deg,#5F9FFA 0,#5F9FFA 2px,rgba(47,128,237,.2) 2px,rgba(47,128,237,0) 100%)}
+.lab-clip{position:absolute;inset:0;z-index:30;overflow:hidden;border-radius:inherit;pointer-events:none}
+.pv{display:none;gap:4px;margin:12px 24px 0;padding:4px;border:1px solid rgba(167,181,202,.14);border-radius:var(--r-md);background:var(--navy-850)}
+.pv-b{flex:1 1 0;min-width:0;min-height:44px;padding:4px 6px;font:600 .8125rem/1.15 var(--font-sans);color:var(--navy-200);background:none;border:0;border-radius:var(--r-sm);cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.pv-b b{margin-right:6px;font:600 .6875rem/1 var(--font-mono);color:var(--blue-300)}
+.pv-b[aria-pressed=true]{color:var(--navy-950);background:var(--blue-300)}
+.pv-b[aria-pressed=true] b{color:var(--navy-800)}
+.js-motion .pv-b{transition:background-color .18s ease,color .18s ease}
+@media (max-width:600px){.demo-head,.proto-bar,.stage,.demo-notes,.pv{margin-left:12px;margin-right:12px}.pv{margin-top:10px}}
+.cursor{position:absolute;left:0;top:0;z-index:20;pointer-events:none;opacity:0;display:flex;align-items:flex-start;gap:4px;transition:transform .7s var(--ease-io),opacity .2s ease}
+.cursor svg{width:18px;height:18px;fill:var(--navy-900);stroke:#FFFFFF;stroke-width:1.3;transition:transform .12s ease;transform-origin:2px 1px}
+.cursor span{margin-top:14px;font:600 .6875rem/1 var(--font-mono);color:#FFFFFF;background:var(--navy-900);padding:4px 7px;border-radius:4px;box-shadow:0 0 0 1px rgba(255,255,255,.25)}
+.cursor-rh i{display:block;width:14px;height:14px;margin-top:2px;border:2.5px solid #FFFFFF;border-radius:4px;box-shadow:3px -3px 0 0 var(--blue-500)}
+.cursor-rh span{background:var(--blue-700)}
+.cursor.down svg,.cursor.down i{transform:scale(.88)}
+@media (prefers-reduced-motion:reduce){.cursor{display:none}}
+html[data-motion=off] .cursor{display:none}
+@media (forced-colors:active){.lab,.lab-dock,.proto-bar,.pv{border:1px solid CanvasText}.pv-b[aria-pressed=true]{background:Highlight;color:HighlightText}}
+@keyframes rail{to{transform:scaleX(1)}}
+@keyframes pulse{from{transform:scale(1);opacity:1}to{transform:scale(3.4);opacity:0}}
+@keyframes scan{to{transform:translateX(100%)}}
+@keyframes mk-br{from{opacity:0;transform:translate(-12%,10%)}}
+@keyframes mk-bx{from{transform:scale(.96)}}
+@keyframes mk-ck{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes fx-draw{from{transform:scaleX(0)}}
+@keyframes fx-rise{from{opacity:0;transform:translateY(.4em)}}
+@keyframes fx-up{from{opacity:0;transform:translateY(14px)}}
+@keyframes fx-edge{0%{opacity:0}30%{opacity:1}100%{opacity:0}}
+@keyframes fx-lock{from{opacity:0;transform:translate(-16px,16px)}}
+@keyframes fx-par-grid{to{transform:translateY(64px)}}
+@keyframes fx-par-topo{to{transform:translateY(110px)}}
+@keyframes fx-shine{0%{transform:translateX(-130%) skewX(-18deg)}16%,100%{transform:translateX(330%) skewX(-18deg)}}
+@keyframes qz-row{from{opacity:0;transform:translateY(12px)}}
+@keyframes qz-s1{0%,38%{opacity:1}46%,100%{opacity:0}}
+@keyframes qz-s2{0%,38%{opacity:0}46%,74%{opacity:1}82%,100%{opacity:0}}
+@keyframes qz-s3{0%,74%{opacity:0;transform:scale(.9)}86%{opacity:1;transform:scale(1.06)}100%{opacity:1;transform:none}}
+@keyframes cl-draw{from{stroke-dashoffset:1}}
+</style>
+<script>(function (d) {
+var h = d.documentElement, off = false;
+if (/(^| )js( |$)/.test(h.className)) return;
+try { off = localStorage.getItem("rh-motion") === "off"; } catch (e) {}
+if (off) h.setAttribute("data-motion", "off");
+var motion = !off && !matchMedia("(prefers-reduced-motion: reduce)").matches;
+h.className += " js" + (motion ? " js-motion" : "");
+if ("onpagereveal" in window) window.addEventListener("pagereveal", function (e) {
+if (e.viewTransition && h.getAttribute("data-motion") === "off") { try { e.viewTransition.skipTransition(); } catch (x) {} }
+});
+window.addEventListener("load", function () {
+var parts = d.querySelectorAll("[data-needs]"), i;
+for (i = 0; i < parts.length; i++) if ((" " + h.className + " ").indexOf(" " + parts[i].getAttribute("data-needs") + " ") < 0) parts[i].className += " no-js";
+});
+})(document);</script>
+<!-- head:end -->
+<script src="assets/boot.js?v=e06e86c5" defer></script>
+<script src="assets/motion.js?v=4587833a" defer></script>
+<script src="assets/nav.js?v=ec2a8562" defer></script>
+<script src="assets/services-data.js?v=cf00a2d5" defer></script>
+<script src="assets/nwa-map.js?v=3028ca99" defer></script>
+<script src="assets/config.js?v=bf94f332" defer></script>
+<script src="assets/site.js?v=e22a4edf" defer></script>
+<script src="assets/interest.js?v=8b853594" defer></script>
+<script src="assets/close.js?v=a6ca7b44" defer></script>
+<script src="assets/field-shapes.js?v=d136792b" defer></script>
+<script src="assets/field.js?v=ab414ae6" defer></script>
+<script src="assets/lab.js?v=18d270c2" defer></script>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -164,7 +556,9 @@
   </div>
 </section>
 
-<section class="band light qz-band" id="first-handoff" data-hud="First handoff" aria-labelledby="qz-h">
+<link rel="stylesheet" href="assets/bundle-home.css?v=d4ddea59" id="css">
+
+<section class="band light qz-band" id="first-handoff" data-hud="First handoff" data-needs="qz-on" aria-labelledby="qz-h">
   <div class="wrap qz-grid">
     <div class="qz-left">
       <div class="sec-h" data-fx="head">
@@ -649,5 +1043,8 @@
     </div>
   </div>
 </dialog>
+<!-- jsonld:start -->
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["Organization","ProfessionalService"],"@id":"https://righthandnwa.com/#organization","name":"Right Hand NWA","alternateName":"Right Hand Northwest Arkansas","url":"https://righthandnwa.com/","description":"Admin and AI help for Northwest Arkansas small businesses, from four University of Arkansas students. The team takes receipts, invoices, missed calls, follow-ups, scheduling and paperwork off small business owners' plates, and sets up AI that drafts the busywork. AI drafts, a person on the team checks, and the owner approves. Tax, payroll, legal work and moving money stay with the owner and their licensed pros.","slogan":"Hand off the admin. Keep the final say.","logo":{"@type":"ImageObject","@id":"https://righthandnwa.com/#logo","url":"https://righthandnwa.com/assets/logo.png","contentUrl":"https://righthandnwa.com/assets/logo.png","width":512,"height":512,"caption":"Right Hand NWA"},"image":{"@type":"ImageObject","@id":"https://righthandnwa.com/#image","url":"https://righthandnwa.com/assets/og.png","contentUrl":"https://righthandnwa.com/assets/og.png","width":1200,"height":630},"email":"righthandnwa@gmail.com","contactPoint":{"@type":"ContactPoint","contactType":"customer service","email":"righthandnwa@gmail.com","areaServed":"US-AR","availableLanguage":"English"},"sameAs":["https://www.instagram.com/righthandnwa/"],"founder":[{"@type":"Person","name":"Jackson Varela","description":"University of Arkansas student","memberOf":{"@id":"https://righthandnwa.com/#uark"}},{"@type":"Person","name":"Annie Wagner","description":"University of Arkansas student","memberOf":{"@id":"https://righthandnwa.com/#uark"}},{"@type":"Person","name":"Abigail Estes","description":"University of Arkansas student","memberOf":{"@id":"https://righthandnwa.com/#uark"}},{"@type":"Person","name":"Bella Gambaro","description":"University of Arkansas student","memberOf":{"@id":"https://righthandnwa.com/#uark"}}],"areaServed":[{"@type":"Place","name":"Northwest Arkansas","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"AdministrativeArea","name":"Benton County, Arkansas","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"AdministrativeArea","name":"Washington County, Arkansas","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Bentonville","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Rogers","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Springdale","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Fayetteville","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Bella Vista","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Siloam Springs","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Lowell","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Cave Springs","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Centerton","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Farmington","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Prairie Grove","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Pea Ridge","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}}],"knowsAbout":["Small business admin","Receipt capture and expense review","Invoice follow-ups","CPA and bookkeeper prep","Inbox triage and reply drafts","Missed-call text-back","Appointment scheduling and reminders","Written how-tos (SOPs)","Workflow automations","Practical AI for small business","AI use policies for small business","Google Business Profile and local listings","Honest review requests"],"hasOfferCatalog":{"@type":"OfferCatalog","name":"Right Hand NWA services","url":"https://righthandnwa.com/services/","itemListElement":[{"@type":"OfferCatalog","name":"Money admin","url":"https://righthandnwa.com/services/#money-admin","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Receipt capture and categorizing"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Monthly expense review"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Invoices and overdue follow-ups"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Quotes and estimates"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Bills-due and renewals calendar"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"CPA and bookkeeper prep"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Software subscription cleanup"}}]},{"@type":"OfferCatalog","name":"Customers and front desk","url":"https://righthandnwa.com/services/#customers-and-front-desk","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Inbox triage and reply drafts"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Missed-call text-back and booking"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"AI phone answering, inbound only"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Website chat assistant"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Lead intake form that routes itself"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"CRM setup and cleanup"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Quote follow-ups"}}]},{"@type":"OfferCatalog","name":"Scheduling and follow-ups","url":"https://righthandnwa.com/services/#scheduling-and-follow-ups","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Booking page"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Appointment reminders and no-show follow-ups"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Calendar management"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Staff schedule drafts"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Vendor and delivery coordination"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Meeting and call notes with AI"}}]},{"@type":"OfferCatalog","name":"Documents and how-tos","url":"https://righthandnwa.com/services/#documents-and-how-tos","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"One folder system with naming rules"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Templates for quotes, forms and checklists"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Written how-tos (SOPs)"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Hiring admin"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Supplier and vendor office support"}}]},{"@type":"OfferCatalog","name":"AI in your business","url":"https://righthandnwa.com/services/#ai-in-your-business","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Workflow automations"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"AI email drafting in your inbox"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Weekly owner report"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"AI starter workshop"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"One-page AI use policy"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Company prompt kit and SOP assistant"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Monthly AI office hours"}}]},{"@type":"OfferCatalog","name":"Local presence and reputation","url":"https://righthandnwa.com/services/#local-presence-and-reputation","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Google Business Profile and listings upkeep"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Honest review requests"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Review reply drafts"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Social posts and content calendar"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Email newsletter"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Digital front door check"}}]}]},"makesOffer":{"@type":"Offer","@id":"https://righthandnwa.com/#checkup-offer","name":"Free 30-minute check-up","price":"0","priceCurrency":"USD","url":"https://righthandnwa.com/#checkup","description":"A free 30-minute check-up at your business anywhere in Benton or Washington County, or by video or phone. Within 3 business days, Your Admin Map arrives by email: your top 3 tasks to hand off, and for each one what we would do, what AI would draft, what stays with you, and what stays with your CPA or attorney. No card, no obligation to hire us.","itemOffered":{"@type":"Service","name":"30-minute admin and AI check-up","provider":{"@id":"https://righthandnwa.com/#organization"},"areaServed":{"@id":"https://righthandnwa.com/#arkansas"}}}},{"@type":"CollegeOrUniversity","@id":"https://righthandnwa.com/#uark","name":"University of Arkansas","url":"https://www.uark.edu/"},{"@type":"State","@id":"https://righthandnwa.com/#arkansas","name":"Arkansas","containedInPlace":{"@type":"Country","name":"United States"}},{"@type":"WebSite","@id":"https://righthandnwa.com/#website","url":"https://righthandnwa.com/","name":"Right Hand NWA","alternateName":"Right Hand Northwest Arkansas","publisher":{"@id":"https://righthandnwa.com/#organization"},"inLanguage":"en-US"},{"@type":"WebPage","@id":"https://righthandnwa.com/#webpage","url":"https://righthandnwa.com/","name":"Right Hand NWA | Admin and AI help for Northwest Arkansas small businesses","description":"Admin and AI help for small businesses in Bentonville, Rogers, Springdale and Fayetteville, from four University of Arkansas students. AI drafts, we check, you approve. Free 30-minute check-up.","isPartOf":{"@id":"https://righthandnwa.com/#website"},"about":{"@id":"https://righthandnwa.com/#organization"},"primaryImageOfPage":{"@id":"https://righthandnwa.com/#image"},"inLanguage":"en-US"},{"@type":"FAQPage","@id":"https://righthandnwa.com/#faq","url":"https://righthandnwa.com/#questions","isPartOf":{"@id":"https://righthandnwa.com/#webpage"},"mainEntity":[{"@type":"Question","name":"What does it cost?","acceptedAnswer":{"@type":"Answer","text":"The check-up is free, with nothing to buy. If you want help after that, we quote a flat monthly price in writing before any work starts, based on the tasks you pick. Tool costs, like a texting plan, are paid by you directly to the vendor, and we show them before you decide."}},{"@type":"Question","name":"You're students. Why should I trust you with my business?","acceptedAnswer":{"@type":"Answer","text":"Fair question. We are four University of Arkansas students who work in Northwest Arkansas. For you, that means a short client list, a named person on every task, and work you can check line by line. Try the prototypes on this page and judge the work yourself."}},{"@type":"Question","name":"Is AI going to talk to my customers?","acceptedAnswer":{"@type":"Answer","text":"Only if you want it to, and only from answers you approved. A phone or chat assistant says it is an assistant and hands anything else to you. Everything else AI does is a draft that one of us checks and you approve. If you'd rather we skip AI on a task, we do it by hand."}},{"@type":"Question","name":"Do I have to give you my passwords or bank login?","acceptedAnswer":{"@type":"Answer","text":"No, and please don't send them. The check-up needs no logins at all. If you hire us, you invite us as a user in the tools you already use, so you can see what we can reach and remove us in one click. We never touch your bank or move money."}},{"@type":"Question","name":"What if you get something wrong?","acceptedAnswer":{"@type":"Answer","text":"You see the sources and the math before anything is final, and anything we can't match to a record comes to you as a question. If a mistake slips through in work you approved, we fix it at no charge."}},{"@type":"Question","name":"What if I want to stop?","acceptedAnswer":{"@type":"Answer","text":"Email us. It is month to month with no cancellation fee. Within 2 business days we remove our access, hand back every file and how-to, and confirm it in writing."}}]}]}</script>
+<!-- jsonld:end -->
 </body>
 </html>

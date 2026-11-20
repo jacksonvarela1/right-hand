@@ -6,8 +6,13 @@
    - Sign-up: an envelope that wakes as you type and flies off when the email is sent.
    - Closing (wide screens): the offer spelled out in points beside the check-up form.
    Rules of the road:
-   - Needs hardware WebGL. Without it the hero keeps its still logo, the story stays a plain list and the other two stay hidden.
+   - Needs WebGL. Without it the hero keeps its still logo, the story stays a plain list and the other two stay hidden.
    - Reduced motion or "Pause motion": one still frame, no loop. The keys still switch shapes, at once. The story is un-pinned.
+   - Watchdog: a machine that cannot keep up gets that same still instead of a struggling loop. That is decided once,
+     when the graphics are drawn in software (no GPU: SwiftShader, llvmpipe, WARP, the Basic Render Driver; found on
+     remote desktops, locked-down PCs and test labs), or when the first frames come slowly (the middle gap of about 20
+     frames is over 28 ms, under 36 frames a second). Add ?field=live to the address to switch the watchdog off, for
+     instance to record the moving field on a machine without a GPU.
    - Each loop runs only while its canvas is on screen and the tab is visible.
    - Only the first shapes are built at load; the rest are built in idle time so the page is never held up.
    Shapes come from assets/field-shapes.js (window.RHShapes), sampled here into point clouds. */
@@ -15,7 +20,35 @@
   "use strict";
   var d = document, html = d.documentElement, W = window;
   var RM = W.matchMedia("(prefers-reduced-motion: reduce)");
-  function off() { return RM.matches || html.getAttribute("data-motion") === "off"; }
+  // calm: the watchdog's verdict (see the top of the file). From then on every field here behaves as under "Pause motion".
+  var calm = false, onCalm = [], LIVE = /[?&]field=live(&|$)/.test(W.location.search), judged = LIVE, gaps = [];
+  function off() { return calm || RM.matches || html.getAttribute("data-motion") === "off"; }
+  function settle() {
+    if (calm || LIVE) return;
+    calm = judged = true;
+    onCalm.forEach(function (fn) { try { fn(); } catch (e) {} });
+  }
+  // true when this context is drawn by the processor instead of a graphics chip
+  function software(gl) {
+    try {
+      var x = gl.getExtension("WEBGL_debug_renderer_info"), r = String(gl.getParameter(x ? x.UNMASKED_RENDERER_WEBGL : gl.RENDERER));
+      return /swiftshader|llvmpipe|softpipe|software|basic render|\bwarp\b/i.test(r);
+    } catch (e) { return false; }
+  }
+  // Called with each frame's time while a loop runs. The first few gaps are start-up and are left out; the middle one
+  // of the next 20 decides. Clearly slow (under 20 frames a second): the still, now. In between: one more round of 20
+  // must agree, so a page that was only busy loading keeps its moving field.
+  var SLOW = 28, round = 0;
+  function watch(gap) {
+    if (judged) return;
+    gaps.push(gap);
+    if (gaps.length < 24) return;
+    var mid = gaps.slice(4).sort(function (a, b) { return a - b; })[10];
+    gaps = [];
+    if (mid > 50 || (mid > SLOW && round)) settle();
+    else if (mid > SLOW) round = 1;
+    else judged = true;
+  }
   function $(s, r) { return (r || d).querySelector(s); }
   function $$(s, r) { return Array.prototype.slice.call((r || d).querySelectorAll(s)); }
   function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
@@ -152,9 +185,11 @@
   // null when the browser has no hardware WebGL: the caller then leaves the page's still fallback in place
   function makeField(cv) {
     var gl = null;
-    // a software renderer would make the page crawl, so it is refused (automated test browsers are let through)
+    // a software renderer would make the page crawl. Where the browser itself can tell, the context is refused here
+    // (automated test browsers are let through); the watchdog at the top of the file catches the rest by name.
     try { gl = cv.getContext("webgl", { alpha: true, antialias: false, depth: false, stencil: false, powerPreference: "low-power", failIfMajorPerformanceCaveat: !navigator.webdriver }); } catch (e) {}
     if (!gl) return null;
+    if (!judged && software(gl)) settle();
     var prog, loc = {}, data = [new Float32Array(N * 3)], bufs = [], pa = -1, pb = -1, cw = 0, ch = 0, cd = 0, lost = false, tmp = new Float32Array(N * 3), api = {};
     function sh(type, src) { var s = gl.createShader(type); if (!s) return null; gl.shaderSource(s, src); gl.compileShader(s); return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null; }
     function buf(arr, dyn) { var b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b); gl.bufferData(gl.ARRAY_BUFFER, arr, dyn ? gl.DYNAMIC_DRAW : gl.STATIC_DRAW); return b; }
@@ -225,10 +260,18 @@
 
   // run fn every frame while el is on screen and the tab is visible; fn returns false to stop until the next wake
   function loop(el, fn) {
-    var raf = 0, vis = false;
+    var raf = 0, vis = false, last = 0;
     // fn may call wake() itself (a shape change does); the frame it books is the next one, so a second is never added
-    function tick(now) { raf = 0; if (!vis || d.hidden) return; if (fn(now) !== false && !raf) raf = requestAnimationFrame(tick); }
+    function tick(now) {
+      raf = 0;
+      if (!vis || d.hidden) { last = 0; return; }
+      if (last && !judged) watch(now - last);
+      last = now;
+      if (fn(now) !== false && !raf) raf = requestAnimationFrame(tick);
+      if (!raf) last = 0;   // the loop rests: the gap to its next frame says nothing about speed
+    }
     function wake() { if (!raf && vis && !d.hidden) raf = requestAnimationFrame(tick); }
+    onCalm.push(wake);   // the watchdog's verdict: one still frame, then rest
     if ("IntersectionObserver" in W) new IntersectionObserver(function (es) { vis = es[es.length - 1].isIntersecting; wake(); }, { rootMargin: "80px" }).observe(el);
     else vis = true;
     d.addEventListener("visibilitychange", wake);
@@ -253,7 +296,7 @@
     var order = ["doc", "lens", "mark"], slot = {}, keys = [];
     var SAY = { doc: "AI writes the first pass.", lens: "A person on our team reads every piece.", mark: "Nothing goes out without your OK." };
     function slotOf(name) { if (slot[name] === undefined) slot[name] = f.add(shape(name)); return slot[name]; }
-    var at = -1, to = slotOf("pile"), mix = 1, anim = null, next = 0, held = 0, hot = .03, burst = 0, rx = 0, ry = 0, tx = 0, ty = 0, px = 9, py = 9, t0 = performance.now(), time = 0, wake;
+    var at = -1, to = slotOf("pile"), mix = 1, anim = null, next = 0, held = 0, hot = .03, burst = 0, rx = 0, ry = 0, tx = 0, ty = 0, px = 9, py = 9, t0 = performance.now(), time = 0, wake, landing = false;
     f.pair(to, to);
     slotOf("doc");
     idle(function () { slotOf("lens"); idle(function () { slotOf("mark"); }); });
@@ -262,23 +305,24 @@
       var now = performance.now(), from = anim && mix < 1 ? f.snap(mix, time) : to;
       at = i; to = slotOf(order[i]);
       f.pair(from, to);
-      if (off()) { mix = 1; anim = null; } else { mix = 0; anim = { t: now, d: dur || 1500 }; }
+      if (off() && !landing) { mix = 1; anim = null; } else { mix = 0; anim = { t: now, d: dur || 1500 }; }
       keys.forEach(function (k, j) { k.setAttribute("aria-pressed", String(j === i)); });
       if (say) say.textContent = SAY[order[i]] || "";
       if (wake) wake();
     }
     function frame(now) {
-      var still = off();
+      var still = off() && !landing;
       if (anim) {
         mix = clamp((now - anim.t) / anim.d, 0, 1);
-        if (mix >= 1) { anim = null; next = now + 3200; if (order[at] === "mark") { burst = .16; hot = .5; } }
+        if (mix >= 1) { anim = null; next = now + 3200; if (landing) { landing = false; still = off(); } else if (order[at] === "mark") { burst = .16; hot = .5; } }
       }
       if (still) { mix = 1; anim = null; }
       else if (!anim && at >= 0 && now > next && now > held) go((at + 1) % order.length);
       burst *= .9; hot += (.03 - hot) * .025;
       rx += (tx - rx) * .06; ry += (ty - ry) * .06;
       time = still ? 0 : (now - t0) / 1000;
-      f.draw({ mix: mix, time: time, rotX: rx + (still ? 0 : Math.sin(now / 2700) * .2), rotY: ry + (still ? 0 : Math.sin(now / 3900) * .07), ptrX: px, ptrY: py, scale: .86, hot: still ? .03 : hot, burst: still ? 0 : burst });
+      var sway = still ? 0 : landing ? 1 - ease(mix) : 1;   // while it lands the sway dies down, so the still that follows is the same picture
+      f.draw({ mix: mix, time: time, rotX: rx + Math.sin(now / 2700) * .2 * sway, rotY: ry + Math.sin(now / 3900) * .07 * sway, ptrX: px, ptrY: py, scale: .86, hot: still ? .03 : hot, burst: still ? 0 : burst });
       return !still;
     }
 
@@ -313,6 +357,9 @@
     // the first shape gathers as soon as the script runs: there is no intro to wait for, and this is the page's entrance
     if (at < 0) go(off() ? 2 : 0, 2100);
     d.addEventListener("rh:motion", function () { if (at >= 0 && off()) { mix = 1; anim = null; } });
+    // the still a slow machine keeps is the mark, whole: the cloud lands on it in one short move instead of jumping there
+    onCalm.push(function () { if (at < 0) return; landing = true; go(2, 700); });
+    d.addEventListener("rh:motion", function () { landing = false; });
   }
 
   /* ---------- story: on wide screens the scroll scrubs the cloud from job to job ---------- */
@@ -389,6 +436,7 @@
     }
     sync();
     d.addEventListener("rh:motion", sync);
+    onCalm.push(sync);
     if (WIDE.addEventListener) WIDE.addEventListener("change", sync);
   }
 

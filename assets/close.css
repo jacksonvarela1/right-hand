@@ -11,6 +11,10 @@
 .js .qz-nojs{display:none}
 html:not(.js) .qz-ui{display:none}
 html:not(.js) .qz-grid{grid-template-columns:minmax(0,1fr)}
+/* the script that runs the quiz never arrived (assets/boot.js marks the section once the page has loaded): the plain version comes back */
+.qz-band.no-js .qz-nojs{display:block}
+.qz-band.no-js .qz-ui{display:none}
+.qz-band.no-js .qz-grid{grid-template-columns:minmax(0,1fr)}
 @media (max-width:900px){.qz-grid{grid-template-columns:minmax(0,1fr)}}
 
 /* the ask card: three steps share one grid cell, so a new step never changes the card's height */

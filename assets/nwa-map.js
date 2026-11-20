@@ -3,6 +3,9 @@
    Right Hand queue: the same three jobs as the story (a missed call, a receipt, a late invoice) and one that waits for
    the visitor to approve. Plays once per session in about one second, as soon as it scrolls into view; the rows are
    readable within the first half second.
+   Nothing waits hidden for a scroll that may never come: the map and the rows are cleared for their entrance only
+   once the block is within one screen of the viewport, and they play at the latest a moment after its first pixel
+   shows. Without IntersectionObserver, or with one that never reports, the finished map simply stays as it is.
    After editing the markup below, run node tools/build-services.mjs so the static copy in index.html matches. */
 (function () {
   "use strict";
@@ -79,15 +82,30 @@
   }
   var seen = false;
   try { seen = sessionStorage.getItem("rh-hero") === "1"; } catch (e) {}
-  if (off() || seen) finish();
+  if (off() || seen || !("IntersectionObserver" in window)) finish();
   else {
-    host.classList.add("armed");
-    var io = new IntersectionObserver(function (es) {
-      if (!es[0].isIntersecting) return;
-      io.disconnect(); try { sessionStorage.setItem("rh-hero", "1"); } catch (e) {}
+    var net = 0, started = false;
+    var start = function () {
+      if (started) return;
+      started = true; clearTimeout(net); io.disconnect();
+      try { sessionStorage.setItem("rh-hero", "1"); } catch (e) {}
       play();
-    }, { threshold: .35 });
-    io.observe(host);
+    };
+    // plays once a third of it shows; a block too tall or too slowly scrolled to get there plays 0.6 s after its first pixel
+    var io = new IntersectionObserver(function (es) {
+      var e = es[es.length - 1];
+      if (!e.isIntersecting) return;
+      if (e.intersectionRatio >= .35) start(); else if (!net) net = setTimeout(start, 600);
+    }, { threshold: [0, .35] });
+    // cleared for the entrance (.armed) only when it comes within one screen of the viewport
+    var near = new IntersectionObserver(function (es) {
+      if (!es[es.length - 1].isIntersecting) return;
+      near.disconnect();
+      if (off()) { finish(); return; }
+      host.classList.add("armed");
+      io.observe(host);
+    }, { rootMargin: "0px 0px 100% 0px" });
+    near.observe(host);
   }
   document.addEventListener("rh:motion", function (e) { if (e.detail && e.detail.off) finish(); });
   btn.addEventListener("click", function () {

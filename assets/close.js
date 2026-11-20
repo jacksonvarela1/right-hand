@@ -60,6 +60,9 @@
   (function quiz() {
     var Q = $("#qz"), out = $("#qz-out"), S = W.RH_SERVICES;
     if (!Q || !out || !S || !S.lines) return;
+    // the quiz is in working order from here. Its section names this class (data-needs): when it never appears,
+    // assets/boot.js puts the section back in its plain, no-quiz form once the page has loaded.
+    d.documentElement.classList.add("qz-on");
     var by = {}, order = [], WHO = {};
     S.lines.forEach(function (l) { l.items.forEach(function (s) { by[s.id] = s; order.push(s.id); }); });
     (S.who || []).forEach(function (w) { WHO[w.id] = w.label; });

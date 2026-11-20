@@ -1,8 +1,11 @@
-// Right Hand NWA build step 1 of 2. Run after editing assets/services-data.js, assets/nwa-map.js, tools/lib.mjs or the
-// home page's own wording (questions, promises, steps, cost block, title and description):
+// Right Hand NWA build step 1 of 2. Run after editing assets/services-data.js, assets/nwa-map.js, tools/lib.mjs, any
+// stylesheet, assets/boot.js or the home page's own wording (questions, promises, steps, cost block, title and description):
 //   node tools/build-services.mjs && node tools/build-pages.mjs
 // It writes, into index.html, the regions between <!-- name:start --> and <!-- name:end --> markers:
-//   jsonld            the JSON-LD @graph (business, website, page, offer catalog, free check-up offer, the home page's questions)
+//   head              the first paint: critical CSS and assets/boot.js inline, the one stylesheet, written by
+//                     tools/build-head.mjs (which also keeps the CSP's script hash and the ?v= stamps on asset addresses)
+//   jsonld            the JSON-LD @graph (business, website, page, offer catalog, free check-up offer, the home page's
+//                     questions); it sits at the end of <body>, so it never stands between the visitor and the headline
 //   nwa               the corridor map and queue, from assets/nwa-map.js, so the window has its full size at first paint
 //   team              the four person cards (a photo when assets/team/<first-name>.jpg exists, initials otherwise)
 //   services-teaser   six service-line tiles that link to the services page with relative addresses
@@ -17,6 +20,7 @@ import { writeFileSync, existsSync } from "node:fs";
 import vm from "node:vm";
 import { p, read, SITE, EMAIL, INSTAGRAM, TOWNS, must, esc, text, lis, region, ldjson, loadServices, KIND, ROWS, lineId, lineIcon,
   TEAM, hasPhoto, FAQ_MORE, CHECKUP_NAME, CHECKUP_INCLUDES, CHECKUP_TERMS, NOT_WE, homeFaq, allFaq, promiseItems, dataRules, stepItems, prototypes, numWord } from "./lib.mjs";
+import { finish } from "./build-head.mjs";
 
 const S = loadServices();
 const N = S.lines.reduce((t, l) => t + l.items.length, 0);
@@ -129,6 +133,8 @@ const graph = {
   ]
 };
 put("jsonld", "\n" + ldjson(graph) + "\n");
+// last, because it reads the finished page: the head region, the CSP's script hash and the ?v= stamps (tools/build-head.mjs)
+html = finish(html, "home");
 writeFileSync(p("index.html"), html);
 
 /* ---------- 4. llms.txt and llms-full.txt ---------- */

@@ -8,12 +8,15 @@
 //     the line under the button: read from index.html;
 //   - the team, the market statistics, the five extra questions, what the check-up includes: tools/lib.mjs;
 //   - the page copy for the two pages: below.
+// The head of both pages (critical CSS and assets/boot.js inline, one stylesheet, the CSP's script hash, ?v= stamps on
+// asset addresses) is finished by tools/build-head.mjs, which this file calls for each page it writes.
 // EVERY internal link these pages carry is relative (../, ../#checkup, ../services/, ./), never root-absolute, so the
 // site works at a domain root and under any sub-path (a mirror). Canonical, Open Graph and JSON-LD addresses keep
 // pointing at the main domain.
 import { writeFileSync, mkdirSync } from "node:fs";
 import { p, read, SITE, EMAIL, INSTAGRAM, GITHUB, LASTMOD, TOWNS, must, esc, text, andList, numWord, ldjson, between, loadServices, KIND, ROWS, lineId, lineIcon,
   TEAM, hasPhoto, STATS, STATS_READ, CHECKUP_INCLUDES, CHECKUP_TERMS, NOT_WE, TRUST, NOT_SURE, allFaq, promiseItems, dataRules, stepItems, microLine } from "./lib.mjs";
+import { finishAll } from "./build-head.mjs";
 
 const ORG = SITE + "#organization";
 
@@ -97,15 +100,11 @@ ${REFERRER}
 <link rel="alternate" type="text/plain" href="${SITE}llms.txt" title="Right Hand NWA for language models">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
-<link rel="preload" href="../assets/fonts/plus-jakarta-sans-latin-var.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="../assets/fonts/geist-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../assets/site.css">
-<link rel="stylesheet" href="../assets/pages.css">
-<link rel="stylesheet" href="../assets/motion.css">
-<script src="../assets/boot.js"></script>
+<!-- head:start -->
+<!-- head:end -->
+<script src="../assets/boot.js" defer></script>
 <script src="../assets/motion.js" defer></script>
 <script src="../assets/nav.js" defer></script>
-${ldjson(o.jsonld)}
 </head>`;
 // the home page's own header: its logo goes home instead of to the top of the page
 const header = (page) => rebase(HEADER, page).replace('href="#top" aria-label="Right Hand NWA, back to top"', 'href="../" aria-label="Right Hand NWA, home"');
@@ -137,7 +136,9 @@ const cta = (h, lead, page) => `<section class="band dark page-cta" data-hud="Fr
 </section>`;
 const page = (o) => {
   const body = '<a class="skip" href="#main">Skip to content</a>\n\n' + header(o.page) + "\n\n<main id=\"main\">\n\n" + o.main + "\n\n</main>\n\n" + rebase(MENU, o.page) + "\n\n" + footer(o.page, o.fine) + "\n\n" + rebase(BAR, o.page);
-  const out = head(o) + "\n<body class=\"pg\">\n" + sprite(body) + "\n" + body + "\n</body>\n</html>\n";
+  // the JSON-LD sits at the end of <body>: nothing a visitor does not see stands between them and the headline.
+  // The head region is still empty here: tools/build-head.mjs fills it when the page is written (section 7).
+  const out = head(o) + "\n<body class=\"pg\">\n" + sprite(body) + "\n" + body + "\n" + ldjson(o.jsonld) + "\n</body>\n</html>\n";
   // the promise in the header of this file, checked on every run: nothing may start at the domain root
   const abs = out.match(/(?:href|src)="\/[^"]*"/g);
   if (abs) throw new Error("build-pages: root-absolute link in " + o.page + "/index.html: " + abs.slice(0, 5).join(", "));
@@ -456,9 +457,10 @@ ${[SITE, SVC_URL, ABOUT_URL].map((u) => `  <url>\n    <loc>${u}</loc>\n    <last
 `;
 
 /* ---------- 7. write ---------- */
-for (const [dir, out] of [["services", servicesHtml], ["about", aboutHtml]]) {
-  mkdirSync(p(dir), { recursive: true });
-  writeFileSync(p(dir + "/index.html"), out);
-}
+// tools/build-head.mjs finishes and writes the two pages (critical CSS and assets/boot.js inline, the one stylesheet,
+// the CSP's script hash, ?v= stamps) and brings index.html's head up to date against them, so all three agree.
+for (const dir of ["services", "about"]) mkdirSync(p(dir), { recursive: true });
+const heads = finishAll({ services: servicesHtml, about: aboutHtml });
 writeFileSync(p("sitemap.xml"), sitemap);
-console.log("build-pages: services/index.html " + Buffer.byteLength(servicesHtml) + " bytes (" + N + " services in " + S.lines.length + " lines); about/index.html " + Buffer.byteLength(aboutHtml) + " bytes (" + FAQ.length + " questions, " + PROM.length + " promises, " + STATS.length + " statistics, " + TEAM.length + " team members); sitemap.xml lastmod " + LASTMOD);
+console.log("build-head (from build-pages): " + heads.join("; "));
+console.log("build-pages: services/index.html " + Buffer.byteLength(read("services/index.html")) + " bytes (" + N + " services in " + S.lines.length + " lines); about/index.html " + Buffer.byteLength(read("about/index.html")) + " bytes (" + FAQ.length + " questions, " + PROM.length + " promises, " + STATS.length + " statistics, " + TEAM.length + " team members); sitemap.xml lastmod " + LASTMOD);

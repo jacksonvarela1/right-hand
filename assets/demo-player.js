@@ -40,9 +40,15 @@
   RH.motionOff = motionOff;
 
   /* ---------- conductor: only the most visible demo plays, and never while the page is being scrolled ---------- */
-  var players = [], moving = false, moveT = 0;
+  var players = [], moving = false, moveT = 0, HAS_IO = "IntersectionObserver" in window;
+  // a browser without IntersectionObserver: how much of a stage shows is measured here instead, each time the page comes to rest
+  function share(stage) {
+    var r = stage.getBoundingClientRect(), vh = window.innerHeight, vis = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0));
+    return r.height > 0 ? Math.max(vis / r.height, Math.min(1, vis / vh)) : 0;
+  }
   function conduct() {
     var best = null;
+    if (!HAS_IO) players.forEach(function (p) { p.ratio = share(p.stage); });
     players.forEach(function (p) { if (p.ratio >= 0.5 && (!best || p.ratio > best.ratio)) best = p; });
     players.forEach(function (p) { if (p === best && !document.hidden) { if (moving) p._hold(); else p._wake(); } else p._sleep(); });
   }
@@ -83,7 +89,7 @@
     });
 
     var st = { i: 0, loop: 0, timer: 0, due: 0, left: 0, running: false, held: false, auto: true, handed: false, done: false, anims: [] };
-    var p = { ratio: 0, root: root };
+    var p = { ratio: 0, root: root, stage: stage };
 
     // phone part switch (see Views at the top). A visitor's press on it takes the prototype over, like any press on the stage.
     var views = cfg.views && cfg.views.length > 1 ? cfg.views : null, pv = null, view = views ? views[0].k : "";
@@ -241,7 +247,8 @@
 
     players.push(p);
     // a stage taller than twice the screen (the receipts demo on phones) can never be half visible, so filling half the screen counts too
-    new IntersectionObserver(function (es) { var e = es[0], vh = e.rootBounds ? e.rootBounds.height : innerHeight; p.ratio = e.isIntersecting ? Math.max(e.intersectionRatio, Math.min(1, e.intersectionRect.height / vh)) : 0; conduct(); }, { threshold: STEPS }).observe(stage);
+    if (HAS_IO) new IntersectionObserver(function (es) { var e = es[0], vh = e.rootBounds ? e.rootBounds.height : innerHeight; p.ratio = e.isIntersecting ? Math.max(e.intersectionRatio, Math.min(1, e.intersectionRect.height / vh)) : 0; conduct(); }, { threshold: STEPS }).observe(stage);
+    else conduct();
     return { ctx: ctx, handoff: handoff, restart: restart, view: setView };
   };
 

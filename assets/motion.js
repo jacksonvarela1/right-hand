@@ -342,14 +342,26 @@
     }
     tog.addEventListener("click", function () { set(!f.classList.contains("af-shut"), true); });
     finishers.push(function () { set(false); });
-    if (off() || !("IntersectionObserver" in window) || f.getBoundingClientRect().top < innerHeight * .8) return;
-    set(true);
+    if (off() || !HAS_IO) return;
+    // Nothing waits tucked away for a scroll that may never come. The folder is shut only when it is on its way in
+    // (within one screen below the viewport); it opens when a quarter of it shows, or 0.6 s after its first pixel.
+    // A folder already on screen when it is first seen is left open.
+    var net = 0, opened = false;
+    function open() { if (opened) return; opened = true; clearTimeout(net); io.disconnect(); later(function () { set(false); }, 60); }
     var io = new IntersectionObserver(function (es) {
-      if (!es[0].isIntersecting) return;
-      io.disconnect();
-      later(function () { set(false); }, 60);
-    }, { threshold: .25 });
-    io.observe(f);
+      var e = es[es.length - 1];
+      if (!e.isIntersecting) return;
+      if (e.intersectionRatio >= .25) open(); else if (!net) net = setTimeout(open, 600);
+    }, { threshold: [0, .25] });
+    var near = new IntersectionObserver(function (es) {
+      var e = es[es.length - 1];
+      if (!e.isIntersecting) return;
+      near.disconnect();
+      if (off() || !e.rootBounds || e.boundingClientRect.top < e.rootBounds.top + e.rootBounds.height / 2) return;   // already on screen (the root reaches one screen further down)
+      set(true);
+      io.observe(f);
+    }, { rootMargin: "0px 0px 100% 0px" });
+    near.observe(f);
   }
 
   /* ---------- 9. press ripple on primary buttons (animates the button's ::before) ---------- */

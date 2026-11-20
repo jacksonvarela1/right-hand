@@ -3,11 +3,14 @@
 
 /* The hero's final layout is reserved as soon as scripts are on (html.js, set in boot.js before first paint): the caption
    line and the three keys already have the size they will have once field.js has run, so nothing beside or below them
-   moves when the field starts. */
+   moves when the field starts. Each chip has exactly the box of the key's cap that replaces it (same width: the chip's
+   1px border comes off its padding, same gap, same weight; same place: the cap sits 6px above its base), so the words
+   on the three keys do not move either. */
 .js .hero-visual .fld-say{display:block}
 .js .hero-visual .trio{gap:14px 12px;margin-top:24px}
-.js .hero-visual .trio:not(.keys) li{min-height:46px;margin-top:6px;padding:0 17px 2px;border-radius:11px}
-@media (max-width:420px){.js .hero-visual .trio{gap:12px 8px}.js .hero-visual .trio:not(.keys) li{padding:0 12px 2px;font-size:.875rem}}
+.js .hero-visual .trio:not(.keys) li{min-height:46px;margin-bottom:6px;padding:0 16px 2px;gap:7px;border-radius:11px}
+.js .hero-visual .trio:not(.keys) li b{font-weight:800}
+@media (max-width:420px){.js .hero-visual .trio{gap:12px 8px}.js .hero-visual .trio:not(.keys) li{padding:0 11px 2px;font-size:.875rem}}
 
 /* ---------- one hot color: the "your move" moments only (primary buttons, the approve key, a few sparks in the field) ---------- */
 .cta-pill{background:var(--hot);color:var(--navy-950);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22),0 14px 30px -12px rgba(5,19,38,.6)}
