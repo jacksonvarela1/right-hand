@@ -2,8 +2,11 @@
 (function () {
   "use strict";
   // Sign-ups go to a Google Form owned by righthandnwa@gmail.com (responses tab plus email alerts).
-  var ENDPOINT = "https://docs.google.com/forms/d/e/1FAIpQLScthXfEx8WRH-UOFJgcvtD2Zo4NrtUutI3HHeGuptyLz_Jd5w/formResponse";
-  var FIELDS = { email: "entry.848100374", business: "entry.1907144585", city: "entry.736194494", interests: "entry.537803960", source: "entry.2127818100" };
+  // The address and question ids live in assets/config.js (RH_CONFIG.signup) next to the check-up form's, so one edit
+  // moves both. These copies are the fallback for a page that does not load config.js.
+  var SG = (window.RH_CONFIG && window.RH_CONFIG.signup) || {};
+  var ENDPOINT = SG.endpoint || "https://docs.google.com/forms/d/e/1FAIpQLScthXfEx8WRH-UOFJgcvtD2Zo4NrtUutI3HHeGuptyLz_Jd5w/formResponse";
+  var FIELDS = SG.fields || { email: "entry.848100374", business: "entry.1907144585", city: "entry.736194494", interests: "entry.537803960", source: "entry.2127818100" };
   var INSTAGRAM = "https://www.instagram.com/righthandnwa/";
   var KEY = "rhnwa-interest";
   var RM = matchMedia("(prefers-reduced-motion: reduce)");

@@ -30,7 +30,7 @@
 <link rel="icon" href="assets/favicon.svg?v=4ea3b7b2" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=b2c869ad">
 <!-- head:start -->
-<link rel="preload" href="assets/bundle-home.css?v=d4ddea59" as="style">
+<link rel="preload" href="assets/bundle-home.css?v=4262851a" as="style">
 <link rel="preload" href="assets/fonts/plus-jakarta-sans-latin-var.woff2?v=153fc85b" as="font" type="font/woff2" crossorigin>
 <style>
 @font-face{font-family:"Plus Jakarta Sans";src:url(assets/fonts/plus-jakarta-sans-latin-var.woff2?v=153fc85b) format("woff2");font-weight:200 800;font-style:normal;font-display:swap}
@@ -436,10 +436,10 @@ for (i = 0; i < parts.length; i++) if ((" " + h.className + " ").indexOf(" " + p
 <script src="assets/nav.js?v=ec2a8562" defer></script>
 <script src="assets/services-data.js?v=cf00a2d5" defer></script>
 <script src="assets/nwa-map.js?v=3028ca99" defer></script>
-<script src="assets/config.js?v=bf94f332" defer></script>
-<script src="assets/site.js?v=e22a4edf" defer></script>
-<script src="assets/interest.js?v=8b853594" defer></script>
-<script src="assets/close.js?v=a6ca7b44" defer></script>
+<script src="assets/config.js?v=b6b20fe0" defer></script>
+<script src="assets/site.js?v=ee9711b6" defer></script>
+<script src="assets/interest.js?v=5ac9c564" defer></script>
+<script src="assets/close.js?v=fdc883eb" defer></script>
 <script src="assets/field-shapes.js?v=d136792b" defer></script>
 <script src="assets/field.js?v=ab414ae6" defer></script>
 <script src="assets/lab.js?v=18d270c2" defer></script>
@@ -556,7 +556,7 @@ for (i = 0; i < parts.length; i++) if ((" " + h.className + " ").indexOf(" " + p
   </div>
 </section>
 
-<link rel="stylesheet" href="assets/bundle-home.css?v=d4ddea59" id="css">
+<link rel="stylesheet" href="assets/bundle-home.css?v=4262851a" id="css">
 
 <section class="band light qz-band" id="first-handoff" data-hud="First handoff" data-needs="qz-on" aria-labelledby="qz-h">
   <div class="wrap qz-grid">
@@ -891,8 +891,8 @@ for (i = 0; i < parts.length; i++) if ((" " + h.className + " ").indexOf(" " + p
   <div class="wrap close-grid">
     <div data-fx="head">
       <p class="eyebrow">09 · Start here</p>
-      <h2 id="close-h">Hand off the admin. Keep the final <span class="sw">say</span>.</h2>
-      <p class="lead">Start with 30 minutes. Free, local, and you keep the plan.</p>
+      <h2 id="close-h">Start with 30 minutes. <span class="sw">Free</span>.</h2>
+      <p class="lead">Local, no card, and the plan is yours to keep.</p>
       <div class="cl-fld" id="cl-fld" aria-hidden="true"><canvas></canvas></div>
       <h3 class="next-h" id="next-h">What happens next</h3>
       <ol class="next" aria-labelledby="next-h">
@@ -903,16 +903,17 @@ for (i = 0; i < parts.length; i++) if ((" " + h.className + " ").indexOf(" " + p
       <ul class="promise-strip"><li>You approve everything</li><li>Stop any time</li><li>No passwords needed</li></ul>
       <p class="fine close-alt">Rather just ask a question? Email <a href="mailto:righthandnwa@gmail.com">righthandnwa@gmail.com</a> or <a href="#signup">leave your email below</a>.</p>
     </div>
-    <form class="composer bracket" data-fx="scan" id="composer" novalidate aria-labelledby="comp-h">
-      <h3 id="comp-h">Get your free 30-minute check-up</h3>
-      <p class="sub">Four things and you're done. One of us replies within one business day to set a time.</p>
+    <form class="composer bracket" data-fx="scan" id="composer" novalidate aria-labelledby="comp-h" method="post" action="mailto:righthandnwa@gmail.com?subject=Free%2030-minute%20check-up" enctype="text/plain">
+      <h3 id="comp-h">Get your free <span class="nw">30-minute</span> check-up</h3>
+      <ol class="c-steps"><li>Send these three things.</li><li>One of us replies within one business day to set a time.</li><li>We meet for 30 minutes. Your Admin Map arrives within 3 business days, free.</li></ol>
+      <p class="fine ig-only">In Instagram right now? <a href="https://ig.me/m/righthandnwa" target="_blank" rel="noopener noreferrer">DM us instead</a>, no form needed.</p>
       <p class="fine c-back" id="c-back" hidden></p>
       <div class="field"><label for="c-name">Your name</label><input id="c-name" name="name" autocomplete="name" required aria-describedby="c-name-err"><p class="err" id="c-name-err" hidden>Add your name so we know who to reply to.</p></div>
-      <div class="field"><label for="c-contact">Your cell or email</label><input id="c-contact" name="contact" inputmode="email" autocapitalize="off" autocomplete="off" required aria-describedby="c-contact-hint c-contact-err"><p class="hint" id="c-contact-hint">We reply the way you reach us: a text to a cell, an email to an email.</p><p class="err" id="c-contact-err" hidden>Add a 10-digit cell number or a full email address.</p></div>
-      <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px">
+      <div class="field"><div class="c-via" role="group" aria-label="How should we reach you?"><button type="button" class="chip" aria-pressed="true" data-via="tel">Text me</button><button type="button" class="chip" aria-pressed="false" data-via="email">Email me</button></div><label for="c-contact" id="c-contact-l">Your cell</label><input id="c-contact" name="contact" type="tel" inputmode="tel" autocomplete="tel" autocapitalize="off" required aria-describedby="c-contact-hint c-contact-err"><p class="hint" id="c-contact-hint">We text you back at this number.</p><p class="err" id="c-contact-err" hidden>Add a 10-digit cell number.</p></div>
+      <input type="text" name="rh_hp" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
       <div class="two">
         <div class="field"><label for="c-biz">Business name</label><input id="c-biz" name="business" autocomplete="organization" required aria-describedby="c-biz-err"><p class="err" id="c-biz-err" hidden>Add your business name.</p></div>
-        <div class="field"><label for="c-town">Town</label><select id="c-town" name="town" required aria-describedby="c-town-err"><option value="">Pick your town</option><option>Bentonville</option><option>Rogers</option><option>Springdale</option><option>Fayetteville</option><option>Bella Vista</option><option>Siloam Springs</option><option>Lowell</option><option>Cave Springs</option><option>Centerton</option><option>Farmington</option><option>Prairie Grove</option><option>Other NWA town</option></select><p class="err" id="c-town-err" hidden>Pick your town.</p></div>
+        <div class="field"><label for="c-town">Town <span class="opt">(optional)</span></label><select id="c-town" name="town"><option value="">Pick your town</option><option>Bentonville</option><option>Rogers</option><option>Springdale</option><option>Fayetteville</option><option>Bella Vista</option><option>Siloam Springs</option><option>Lowell</option><option>Cave Springs</option><option>Centerton</option><option>Farmington</option><option>Prairie Grove</option><option>Other NWA town</option></select></div>
       </div>
       <details class="c-more"><summary>Add details <span class="opt">(optional)</span></summary>
       <div class="field"><fieldset><legend>What eats the most time? <span class="opt">(optional)</span></legend><div class="chips" id="c-eats"></div></fieldset></div>
@@ -920,11 +921,11 @@ for (i = 0; i < parts.length; i++) if ((" " + h.className + " ").indexOf(" " + p
       </details>
       <p class="fine pick-line" id="c-picks" hidden></p>
       <details class="c-see"><summary>See exactly what we receive</summary><pre class="preview" id="c-preview" aria-live="off"></pre></details>
-      <div class="c-acts"><button type="submit" class="btn" id="c-send">Send my request</button></div>
+      <div class="c-acts"><button type="submit" class="btn" id="c-send"><span class="c-lbl">Send my request</span></button></div>
       <p class="fine c-doors">Rather not use a form? <a href="https://ig.me/m/righthandnwa" target="_blank" rel="noopener noreferrer">Message us on Instagram</a>, <a href="mailto:righthandnwa@gmail.com" id="c-mail">open an email draft</a> or <button type="button" class="linkbtn" id="c-copy">copy the message</button>.</p>
       <ul class="proof" data-fx="cascade" aria-label="The fine print"><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>Free. Nothing to buy.</li><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>You keep the plan.</li><li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>We reply within one business day.</li></ul>
       <p class="c-status" id="c-status" role="status"></p>
-      <div class="confirm" id="c-confirm" hidden tabindex="-1"><p><b id="c-confirm-h">Your check-up request is in.</b> <span id="c-confirm-msg">One of us replies within one business day to set a time.</span> Nothing by tomorrow evening? <a href="https://ig.me/m/righthandnwa" target="_blank" rel="noopener noreferrer">Message us on Instagram</a> or email <a href="mailto:righthandnwa@gmail.com">righthandnwa@gmail.com</a> and we will find it.</p></div>
+      <div class="confirm" id="c-confirm" hidden tabindex="-1"><p><b id="c-confirm-h">Your check-up request is in.</b> <span id="c-confirm-msg">One of us replies within one business day to set a time.</span> <span id="c-chase">Nothing by tomorrow evening?</span> <a href="https://ig.me/m/righthandnwa" target="_blank" rel="noopener noreferrer">Message us on Instagram</a> or email <a href="mailto:righthandnwa@gmail.com">righthandnwa@gmail.com</a> and we will find it.</p></div>
     </form>
   </div>
 </section>
@@ -948,7 +949,7 @@ for (i = 0; i < parts.length; i++) if ((" " + h.className + " ").indexOf(" " + p
       <a class="btn" href="#checkup" data-go="checkup">Get my free 30-minute check-up</a>
     </div>
     <ul class="sg-alt" aria-label="Other ways to reach us">
-      <li><a href="https://www.instagram.com/righthandnwa/" target="_blank" rel="noopener noreferrer"><svg class="i" aria-hidden="true"><use href="#i-ig"/></svg>Message @righthandnwa on Instagram</a></li>
+      <li><a href="https://ig.me/m/righthandnwa" target="_blank" rel="noopener noreferrer"><svg class="i" aria-hidden="true"><use href="#i-ig"/></svg>Message @righthandnwa on Instagram</a></li>
       <li><a href="mailto:righthandnwa@gmail.com"><svg class="i" aria-hidden="true"><use href="#i-mail"/></svg>righthandnwa@gmail.com</a></li>
     </ul>
   </div>
@@ -979,7 +980,7 @@ for (i = 0; i < parts.length; i++) if ((" " + h.className + " ").indexOf(" " + p
       <li><a href="about/"><b>About</b><span>The team, every promise, every question.</span></a></li>
     </ul></nav>
     <ul class="menu-contact">
-      <li><a href="https://www.instagram.com/righthandnwa/" target="_blank" rel="noopener noreferrer" aria-label="Instagram, @righthandnwa"><svg class="i" aria-hidden="true"><use href="#i-ig"/></svg>Instagram</a></li>
+      <li><a href="https://ig.me/m/righthandnwa" target="_blank" rel="noopener noreferrer" aria-label="Message @righthandnwa on Instagram"><svg class="i" aria-hidden="true"><use href="#i-ig"/></svg>Message us on Instagram</a></li>
       <li><a href="mailto:righthandnwa@gmail.com" aria-label="Email righthandnwa@gmail.com"><svg class="i" aria-hidden="true"><use href="#i-mail"/></svg>Email</a></li>
       <li><a href="#signup" data-open-interest>Not ready? Leave your email</a></li>
     </ul>
@@ -1008,7 +1009,7 @@ for (i = 0; i < parts.length; i++) if ((" " + h.className + " ").indexOf(" " + p
 
 <a class="cta-pill" id="cta-pill" href="#checkup" data-go="checkup"><span class="cp-i" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path class="cp-ck" pathLength="1" d="M8.5 14.5l2 2 4-4"/></svg><i class="cp-ping"></i></span>Get my free check-up</a>
 <!-- chrome:bar:start -->
-<div class="mobile-bar" id="mobile-bar"><a class="bar-go" href="#checkup" data-go="checkup"><span class="btn">Get my free check-up</span></a><a class="bar-nav" href="#site-menu" data-menu-open><span class="bar-menu"><svg class="i" aria-hidden="true"><use href="#i-menu"/></svg>Menu</span></a></div>
+<div class="mobile-bar" id="mobile-bar"><a class="bar-go" href="#checkup" data-go="checkup"><span class="btn">Get my free check-up</span></a><a class="bar-dm ig-only" href="https://ig.me/m/righthandnwa" target="_blank" rel="noopener noreferrer"><span>DM us</span></a><a class="bar-nav" href="#site-menu" data-menu-open aria-label="Menu"><span class="bar-menu"><svg class="i" aria-hidden="true"><use href="#i-menu"/></svg><span class="bar-mtxt">Menu</span></span></a></div>
 <!-- chrome:bar:end -->
 
 <dialog id="interest" aria-labelledby="int-h">
@@ -1039,7 +1040,7 @@ for (i = 0; i < parts.length; i++) if ((" " + h.className + " ").indexOf(" " + p
     <div data-done hidden>
       <h2>Got it. We'll write back.</h2>
       <p class="sub">We'll email you once, from righthandnwa@gmail.com. Ready now? Get the free check-up, or message us on Instagram.</p>
-      <div class="c-acts"><a class="btn" href="#checkup" data-go="checkup" data-close>Get my free 30-minute check-up</a><a class="btn ghost" href="https://www.instagram.com/righthandnwa/" target="_blank" rel="noopener noreferrer">@righthandnwa</a></div>
+      <div class="c-acts"><a class="btn" href="#checkup" data-go="checkup" data-close>Get my free 30-minute check-up</a><a class="btn ghost" href="https://ig.me/m/righthandnwa" target="_blank" rel="noopener noreferrer">Message us on Instagram</a></div>
     </div>
   </div>
 </dialog>

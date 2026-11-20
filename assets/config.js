@@ -21,5 +21,10 @@ window.RH_CONFIG = {
       source: "entry.2127818100"    // "Source page": where the visitor came from
     },
     timeoutMs: 8000
+  },
+  // the email sign-up (#signup and the small dialog). Same Google Form today; assets/interest.js reads this.
+  signup: {
+    endpoint: "https://docs.google.com/forms/d/e/1FAIpQLScthXfEx8WRH-UOFJgcvtD2Zo4NrtUutI3HHeGuptyLz_Jd5w/formResponse",
+    fields: { email: "entry.848100374", business: "entry.1907144585", city: "entry.736194494", interests: "entry.537803960", source: "entry.2127818100" }
   }
 };

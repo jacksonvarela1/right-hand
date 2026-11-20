@@ -21,6 +21,12 @@ Three tools, no dependencies (Node 18 or newer). The first two call the third th
 
 Running it twice in a row changes nothing.
 
+Before each deploy, and after anyone edits the Google Form, check that the form will still take what the site sends (it reads the form's public page and sends nothing):
+
+    node tools/check-form.mjs
+
+Both forms post blind, so a closed form, a renamed question or a new required question would lose every request while the page still says "sent". The tool exits with 1 and names the problem.
+
 **A stylesheet edit does not show in a browser until the build has run**: the pages load a generated bundle, not `assets/site.css` and its siblings directly. After editing only stylesheets or scripts, this is enough (and fast):
 
     node tools/build-head.mjs

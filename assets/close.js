@@ -186,7 +186,7 @@
     var form = $("#composer"), conf = $("#c-confirm");
     if (!form || !conf) return;
     var btn = $('button[type="submit"]', form), t = 0;
-    if (btn && !$(".cs-ok", btn)) btn.insertAdjacentHTML("beforeend", '<span class="cs-ok" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M5.5 12.5l4.2 4.2 8.8-9.4"/></svg>Now hit send in your email</span>');
+    if (btn && !$(".cs-ok", btn)) btn.insertAdjacentHTML("beforeend", '<span class="cs-ok" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path pathLength="1" d="M5.5 12.5l4.2 4.2 8.8-9.4"/></svg>Request sent</span>');
     if (!$(".cf-badge", conf)) conf.insertAdjacentHTML("afterbegin", '<span class="cf-badge" aria-hidden="true"><svg viewBox="0 0 32 32" focusable="false"><circle cx="16" cy="16" r="15"/><path pathLength="1" d="M9.5 16.5l4.2 4.2 8.8-9.4"/></svg></span><i class="cf-beam" aria-hidden="true"></i>');
     d.addEventListener("rh:draft", function () {
       clearTimeout(t);

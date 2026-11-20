@@ -105,6 +105,9 @@
     else later(function () { var f = $("#c-name"); if (f) f.focus({ preventScroll: true }); }, off() ? 0 : 700);
   });
 
+  // Inside Instagram's own browser a DM is the shortest way to reach us: html.ig-app shows the "DM us" shortcuts.
+  if (/Instagram/.test(navigator.userAgent || "")) html.classList.add("ig-app");
+
   /* ---------- services a visitor asked about ---------- */
   // Set by the first-handoff quiz (assets/close.js, through RH.composer.prefill) and by "Ask about this in my check-up"
   // links on the services page (?pick=<id>). Names come from assets/services-data.js, so no service card has to be on this page.
@@ -150,6 +153,19 @@
     if (!form) return api;
     var eats = $("#c-eats"), mode = $("#c-mode"), pre = $("#c-preview"), status = $("#c-status"), conf = $("#c-confirm"), pl = $("#c-picks");
     var mail = $("#c-mail"), sendBtn = $("#c-send"), back = $("#c-back"), confMsg = $("#c-confirm-msg"), busy = false;
+    var lbl = $(".c-lbl", sendBtn) || sendBtn;   // the button also holds the success overlay (assets/close.js): only its label changes
+    // "Text me" / "Email me": the field gets the right keyboard and autofill; reach() accepts either way
+    var contact = form.elements.contact, cLabel = $("#c-contact-l"), cHint = $("#c-contact-hint"), cErr = $("#c-contact-err"), viaBox = $(".c-via", form);
+    var VIA = { tel: { type: "tel", im: "tel", ac: "tel", label: "Your cell", hint: "We text you back at this number.", err: "Add a 10-digit cell number." },
+      email: { type: "email", im: "email", ac: "email", label: "Your email", hint: "We email you back at this address.", err: "Add a full email address, like you@yourbusiness.com." } };
+    if (viaBox) viaBox.addEventListener("click", function (e) {
+      var b = e.target.closest("[data-via]"); if (!b) return;
+      var v = VIA[b.getAttribute("data-via")];
+      $$("[data-via]", viaBox).forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      contact.type = v.type; contact.setAttribute("inputmode", v.im); contact.setAttribute("autocomplete", v.ac);
+      cLabel.textContent = v.label; cHint.textContent = v.hint; cErr.textContent = v.err;
+      clearErr(contact); contact.focus(); update();
+    });
     function mailtoHref(m) { return "mailto:" + EMAIL + "?subject=" + encodeURIComponent(m.subject) + "&body=" + encodeURIComponent(m.body); }
     function chipset(host, list) { host.innerHTML = list.map(function (x) { return '<button type="button" class="chip" aria-pressed="false" data-v="' + esc(x) + '">' + esc(x) + '</button>'; }).join(""); }
     chipset(eats, EATS); chipset(mode, MODES);
@@ -157,9 +173,9 @@
     [eats, mode].forEach(function (h) { h.addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; b.setAttribute("aria-pressed", String(b.getAttribute("aria-pressed") !== "true")); update(); }); });
     function val(n) { return form.elements[n].value.trim(); }
     function msg() {
-      var biz = val("business") || "{business}", town = val("town") || "{town}";
-      var subject = "Free 30-minute check-up: " + biz + ", " + town;
-      var lines = ["Hi Right Hand NWA,", "", "I'd like a free 30-minute check-up.", "", "Name: " + (val("name") || "{name}"), "Reach me at: " + (val("contact") || "{cell or email}"), "Business: " + biz + " in " + town];
+      var biz = val("business") || "{business}", town = val("town");   // the town is optional
+      var subject = "Free 30-minute check-up: " + biz + (town ? ", " + town : "");
+      var lines = ["Hi Right Hand NWA,", "", "I'd like a free 30-minute check-up.", "", "Name: " + (val("name") || "{name}"), "Reach me at: " + (val("contact") || "{cell or email}"), "Business: " + biz + (town ? " in " + town : "")];
       var e = sel(eats); if (e.length) lines.push("What eats the most time: " + e.join(", "));
       if (picks.length) lines.push("Services I'm curious about: " + picks.map(function (p) { return p.name; }).join(", "));
       var m = sel(mode), t = val("times"); if (m.length || t) lines.push("How and when to meet: " + [m.join(" or "), t].filter(Boolean).join(", "));
@@ -182,7 +198,7 @@
     function clearErr(el) { el.removeAttribute("aria-invalid"); var er = $("#" + el.id + "-err"); if (er) er.hidden = true; }
     function valid() {
       var bad = null;
-      ["name", "contact", "business", "town"].forEach(function (n) { var el = form.elements[n], ok = n === "contact" ? !!reach(el.value) : !!el.value.trim(); if (!ok) { setErr(el); if (!bad) bad = el; } else clearErr(el); });
+      ["name", "contact", "business"].forEach(function (n) { var el = form.elements[n], ok = n === "contact" ? !!reach(el.value) : !!el.value.trim(); if (!ok) { setErr(el); if (!bad) bad = el; } else clearErr(el); });
       if (bad) { status.textContent = "A few things are missing. They are marked above."; status.classList.add("bad"); bad.focus(); return false; }
       status.textContent = ""; status.classList.remove("bad"); return true;
     }
@@ -191,13 +207,16 @@
       $("#c-confirm-h").textContent = "Got it" + (first ? ", " + first : "") + ". Your check-up request is in.";
       confMsg.textContent = "One of us will " + (r.via === "text" ? "text you at " : "email you at ") + r.value + " within one business day to set a time.";
       status.textContent = ""; status.classList.remove("bad");
-      sendBtn.textContent = "Request sent"; sendBtn.disabled = true;
+      lbl.textContent = "Request sent"; sendBtn.disabled = true;
+      // when to chase us: the next weekday (a request sent on Friday is answered by Monday)
+      var ch = $("#c-chase"); if (ch) { var nd = new Date(); do { nd.setDate(nd.getDate() + 1); } while (nd.getDay() === 0 || nd.getDay() === 6);
+        var dd = Math.round((nd - new Date()) / 864e5); ch.textContent = "Nothing by " + (dd <= 1 ? "tomorrow" : nd.toLocaleDateString("en-US", { weekday: "long" })) + " evening?"; }
       conf.hidden = false; setTimeout(function () { conf.focus(); }, 50);
       try { localStorage.setItem(LEAD, JSON.stringify({ t: Date.now(), via: r.via })); } catch (e) {}
       d.dispatchEvent(new CustomEvent("rh:draft"));   // assets/close.js plays the success moment
     }
     function failed() {
-      busy = false; sendBtn.disabled = false; sendBtn.textContent = "Send my request";
+      busy = false; sendBtn.disabled = false; lbl.textContent = "Send my request";
       status.textContent = "That did not go through from this connection. Your answers are still here. Try again, or use one of the other ways just above."; status.classList.add("bad");
     }
     form.addEventListener("submit", function (e) {
@@ -208,10 +227,11 @@
         status.classList.remove("bad"); status.textContent = "Your email app should open with the message written. Nothing opened? Use one of the other ways just above.";
         return;
       }
-      if (form.elements.website.value) { done(r); return; }   // the hidden trap field is filled: a bot. Say thanks, send nothing.
-      busy = true; sendBtn.disabled = true; sendBtn.textContent = "Sending…";
+      // The hidden trap field: a bot fills it, but so can an over-eager autofill, so the request still goes, flagged.
+      var trap = !!(form.elements.rh_hp && form.elements.rh_hp.value);
+      busy = true; sendBtn.disabled = true; lbl.textContent = "Sending…";
       var F = CK.fields || {}, body = new URLSearchParams(), ea = sel(eats), md = sel(mode), tm = val("times");
-      var details = ["CHECK-UP REQUEST", "reach by " + r.via];
+      var details = (trap ? ["TRAP FILLED"] : []).concat(["CHECK-UP REQUEST", "reach by " + r.via]);
       if (ea.length) details.push("eats time: " + ea.join(", "));
       if (picks.length) details.push("services: " + picks.map(function (p) { return p.name; }).join(", "));
       if (md.length || tm) details.push("meet: " + [md.join(" or "), tm].filter(Boolean).join(", "));
