@@ -341,6 +341,8 @@
       if (shut && byHand) sheet.setAttribute("aria-hidden", "true"); else sheet.removeAttribute("aria-hidden");
     }
     tog.addEventListener("click", function () { set(!f.classList.contains("af-shut"), true); });
+    // phones: the quiz above has just built the visitor's own map, so this sample stays tucked (one tap opens it)
+    if (W.matchMedia("(max-width:760px)").matches) { set(true, true); return; }
     finishers.push(function () { set(false); });
     if (off() || !HAS_IO) return;
     // Nothing waits tucked away for a scroll that may never come. The folder is shut only when it is on its way in

@@ -177,10 +177,11 @@
         st.held = !!quiet; if (quiet) return;
       } else if (quiet || !st.held) return;
       st.held = false;
-      setPill(st.handed ? "turn" : "ready"); pillText.textContent = st.handed ? "Your turn" : "Paused";
+      setPill(st.handed ? "turn" : "ready"); pillText.textContent = st.handed ? "Your turn" : (st.i === 0 && !st.loop ? "Ready" : "Paused");
     }
     function resume() {
       if (st.running || st.handed || st.done || !st.auto || motionOff()) return;
+      if (st.poster) { st.poster = false; if (views) setView(views[0].k); if (cfg.reset) cfg.reset(ctx); }
       st.running = true; if (!st.held) setPill("playing"); st.held = false;
       st.anims.forEach(function (a) { try { a.play(); } catch (e) {} });
       sched(st.left || (steps[st.i] ? steps[st.i].d : 400)); st.left = 0;
@@ -196,7 +197,7 @@
       if (!silent) conduct();
     }
     function restart() {
-      clearT(); finishAnims(); st.handed = false; st.done = false; st.held = false; st.auto = true; st.i = 0; st.loop = 0; st.left = 0;
+      clearT(); finishAnims(); st.handed = false; st.done = false; st.held = false; st.poster = false; st.auto = true; st.i = 0; st.loop = 0; st.left = 0;
       root.classList.remove("handed"); live.setAttribute("aria-live", "off");
       if (views) setView(views[0].k);
       if (cfg.reset) cfg.reset(ctx);
@@ -214,6 +215,7 @@
       if (views) setView(views[0].k);
       if (cfg.reset) cfg.reset(ctx);
       ctx.hideCursors(); setPill("ready");
+      if (cfg.finalState) { cfg.finalState(ctx); st.poster = true; }
     };
 
     btn.addEventListener("click", function () {
@@ -240,7 +242,7 @@
     // first frame
     if (cfg.reset) cfg.reset(ctx);
     if (motionOff()) { if (cfg.finalState) cfg.finalState(ctx); st.handed = true; st.auto = false; root.classList.add("handed"); live.setAttribute("aria-live", "polite"); if (cfg.onHandoff) cfg.onHandoff(ctx); setPill("turn"); }
-    else setPill("ready");
+    else { setPill("ready"); if (cfg.finalState) { cfg.finalState(ctx); st.poster = true; } }
     // from here the bar's status and button are true (assets/lab.css keeps them out of sight on a panel without a player)
     btn.disabled = false;
     root.classList.add("live");

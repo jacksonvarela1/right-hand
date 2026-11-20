@@ -715,3 +715,23 @@ html.ig-app .mobile-bar .bar-dm{display:flex}
 html.ig-app .mobile-bar .bar-mtxt{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 /* phones: the form comes first in the closing band (field.css); the column beside it keeps only the promises */
 @media (max-width:900px){.close-grid > [data-fx=head] > .eyebrow,.close-grid > [data-fx=head] > h2,.close-grid > [data-fx=head] > .lead,.close-grid > [data-fx=head] > .next-h,.close-grid > [data-fx=head] > ol.next{display:none}}
+/* two bands of the same tone in a row: less padding at the seam (it read as an empty gap) */
+.hero + .band.dark,.band.dark + .band.dark,.band.dark + .story,.story + .band.dark,.close + .sg{padding-top:calc(var(--section-y)*.45)}
+
+/* ---------- home services: a ledger. "We take" rows on the left, the "never touch" panel on the right ---------- */
+.svc-ledger{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:clamp(1.5rem,1rem + 2vw,3rem);align-items:start}
+.svc-ledger .line-links{grid-template-columns:minmax(0,1fr);gap:0;border-top:1px solid var(--line)}
+.svc-ledger .line-links a{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"name n" "note n";gap:3px 20px;padding:18px 6px;border:0;border-bottom:1px solid var(--line);border-radius:0;background:none;box-shadow:none;transition:background-color .2s ease}
+.svc-ledger .line-links a:hover{box-shadow:none;background:var(--wash)}
+.svc-ledger .line-links .tile{display:none}
+.svc-ledger .line-links b{margin-top:0;font-size:clamp(1.1875rem,1rem + .6vw,1.4375rem);font-weight:800;letter-spacing:-.012em}
+.svc-ledger .line-links .note{margin-top:0}
+.svc-ledger .line-links .n{align-self:center;justify-self:end;margin:0}
+.svc-ledger .stays-line{margin-top:0;padding:24px 24px 22px;border:0;border-radius:var(--r-lg);background:var(--navy-900);color:var(--navy-100);max-width:none;box-shadow:var(--sh-2)}
+.svc-ledger .stays-line .sl-h{color:#FFF;font-size:1.375rem}
+.svc-ledger .stays-line .sl-sub{margin-top:4px;color:var(--navy-200);font-size:.9375rem}
+.svc-ledger .stays-line ul{list-style:none;margin:14px 0 0;padding:0}
+.svc-ledger .stays-line li{display:flex;gap:12px;align-items:baseline;padding:10px 0;border-top:1px solid rgba(167,181,202,.16);color:#E8EEF8;font-size:.9688rem;line-height:1.4}
+.svc-ledger .stays-line li::before{content:"";flex:none;width:10px;height:10px;border-radius:2px;border:1.5px solid var(--hot);transform:translateY(1px)}
+@media (max-width:860px){.svc-ledger{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:640px){.svc-ledger .line-links a{padding:14px 4px}.svc-ledger .line-links .n{align-self:start;margin-top:3px}}

@@ -108,6 +108,15 @@
   // Inside Instagram's own browser a DM is the shortest way to reach us: html.ig-app shows the "DM us" shortcuts.
   if (/Instagram/.test(navigator.userAgent || "")) html.classList.add("ig-app");
 
+  // the story film (#story, phones and the calm desktop): plays while most of it is on screen, never with motion off
+  (function () {
+    var v = $(".st-vid"); if (!v || !("IntersectionObserver" in window)) return;
+    var vis = false;
+    function go() { if (vis && !off() && v.offsetParent) { var p = v.play(); if (p && p.catch) p.catch(function () {}); } else v.pause(); }
+    new IntersectionObserver(function (es) { vis = es[es.length - 1].intersectionRatio >= .6; go(); }, { threshold: [0, .6] }).observe(v);
+    d.addEventListener("rh:motion", go);
+  })();
+
   /* ---------- services a visitor asked about ---------- */
   // Set by the first-handoff quiz (assets/close.js, through RH.composer.prefill) and by "Ask about this in my check-up"
   // links on the services page (?pick=<id>). Names come from assets/services-data.js, so no service card has to be on this page.

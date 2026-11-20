@@ -61,7 +61,8 @@ put("team", "\n" + TEAM.map((t) => '        <li><span class="ini' + (hasPhoto(t)
 put("services-teaser", "\n" + S.lines.map((l) => '      <li><a href="services/#' + lineId(l) + '"><span class="tile" aria-hidden="true"><svg class="i"><use href="#' + lineIcon(l) + '"/></svg></span><b>' + esc(l.name) + "</b>" +
   (l.note ? '<span class="note">' + esc(l.note) + "</span>" : "") + '<span class="n">' + l.items.length + " services</span></a></li>").join("\n") + "\n    ");
 const lower = (x) => x.charAt(0).toLowerCase() + x.slice(1);
-put("stays-line", "<b>" + esc(S.stays.name) + ":</b> " + esc(S.stays.items.map(lower).join("; ")) + ".");
+// the home page's "never touch" panel beside the six lines: a heading, the rule, one row per item
+put("stays-line", '<h3 class="sl-h">Never touch</h3><p class="sl-sub">' + esc(S.stays.name) + '.</p><ul>' + S.stays.items.map((x) => "<li>" + esc(x) + "</li>").join("") + "</ul>");
 put("services-all", '<a class="btn ghost" href="services/">See all ' + N + " services</a>");
 
 /* ---------- 2. text pulled from the page itself, so every copy matches ---------- */

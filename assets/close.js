@@ -110,6 +110,7 @@
       if (i !== cur || !k) return;
       $$(".qz-opt", st).forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
       ans[k] = b.getAttribute("data-v");
+      out.classList.add("is-started");
       logSet(k, words(k, ans[k]), true);
       var my = ++tok;
       later(function () { if (my !== tok) return; if (i === 3) finish(); else show(i + 1, true); }, 300);   // long enough to see the tick land

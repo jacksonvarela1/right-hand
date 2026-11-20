@@ -52,7 +52,9 @@
     state = 1;
     lab.classList.add("lab-loading");
     var urls = scripts(typeof first === "number" && first >= 0 ? first : cur), left = urls.length, started = false;
-    function failed() { lab.classList.remove("lab-loading"); lab.classList.add("lab-failed"); }
+    var tags = [];
+    // a failure lets the next ticket tap try once more: the half-added tags go and the loader is ready again
+    function failed() { if (state !== 1) return; state = 0; tags.forEach(function (t) { if (t.parentNode) t.parentNode.removeChild(t); }); lab.classList.remove("lab-loading"); lab.classList.add("lab-failed"); }
     function run() {
       if (started) return;
       started = true;
@@ -61,16 +63,18 @@
         s.src = u + ver; s.async = false;   // injected scripts run in the order they are added only with async off
         s.onload = function () { if (!--left) { state = 2; lab.classList.remove("lab-loading"); shown(panels[cur]); } };
         s.onerror = failed;
-        d.head.appendChild(s);
+        d.head.appendChild(s); tags.push(s);
       });
     }
     // The scripts wait for the stylesheet, so a prototype never builds itself unstyled; they download meanwhile.
-    urls.forEach(function (u) { var l = d.createElement("link"); l.rel = "preload"; l.as = "script"; l.href = u + ver; d.head.appendChild(l); });
+    urls.forEach(function (u) { var l = d.createElement("link"); l.rel = "preload"; l.as = "script"; l.href = u + ver; d.head.appendChild(l); tags.push(l); });
     var css = d.createElement("link");
     css.rel = "stylesheet"; css.href = base + "demos.css" + ver;
-    css.onload = run; css.onerror = failed;
-    d.head.appendChild(css);
-    setTimeout(run, 4000);   // a browser that never reports the stylesheet still gets its prototypes
+    var cssDone = false, cssFailed = false;
+    css.onload = function () { cssDone = true; run(); }; css.onerror = function () { cssFailed = true; failed(); };
+    d.head.appendChild(css); tags.push(css);
+    // a browser that never reports the stylesheet still gets its prototypes, but never unstyled after a failure
+    setTimeout(function () { if (!cssFailed && (cssDone || css.sheet)) run(); }, 4000);
   }
 
   /* ---------- 1. tabs ---------- */
@@ -279,7 +283,8 @@
     // quiet time after the page has loaded: fetch them anyway, unless the visitor asked the browser to save data
     var idle = function () {
       var c = w.navigator && w.navigator.connection;
-      if (state || (c && c.saveData)) return;
+      // not on phones or small-memory devices: the lab sits near the top now, so its own observer covers them
+      if (state || (c && c.saveData) || w.matchMedia("(pointer: coarse)").matches || (w.navigator.deviceMemory && w.navigator.deviceMemory <= 4)) return;
       if (w.requestIdleCallback) w.requestIdleCallback(function () { load(-1); }, { timeout: 2500 }); else load(-1);
     };
     var soon = function () { setTimeout(idle, 3500); };

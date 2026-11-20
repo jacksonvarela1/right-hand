@@ -267,7 +267,7 @@ html.js .lab:not(.lab-live) .lab-dock{visibility:hidden}
 .stage:empty{display:grid;place-items:center;min-height:max(var(--stage-h,420px),420px);padding:24px;text-align:center;background:radial-gradient(circle,rgba(167,181,202,.14) 1px,rgba(167,181,202,0) 1.5px) 0 0/24px 24px var(--navy-950);box-shadow:inset 0 0 0 1px rgba(167,181,202,.12)}
 .stage:empty::before{font:500 .75rem/1.6 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--navy-300)}
 .lab-loading .stage:empty::before{content:"Loading the prototype"}
-.lab-failed .stage:empty::before{content:"This prototype did not load. Reload the page to try again."}
+.lab-failed .stage:empty::before{content:"This prototype did not load. Tap a ticket to try again."}
 /* the height the first prototype's stage will have, known before its own stylesheet arrives (keep in step with assets/demos/calls.css) */
 #demo-calls .stage{--stage-h:688px}
 @media (max-width:900px){#demo-calls .stage{--stage-h:640px}}

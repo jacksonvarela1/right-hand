@@ -27,9 +27,9 @@ html:not(.js) .qz-grid{grid-template-columns:minmax(0,1fr)}
 /* No transition on a step or on the box around its options, ever. Under reduced motion site.css forces every transition to
    1ms, which also delays the visibility an element inherits: for that millisecond the next step's first option is still
    hidden and cannot take keyboard focus, so a keyboard user fell out of the quiz. (The entrance below is an animation.) */
-.qz-step{grid-area:1/1;min-width:0;margin:0;padding:0;border:0;visibility:hidden;opacity:0;transition:none}
+.qz-step{grid-area:1/1;min-width:0;margin:0;padding:0;border:0;display:none;transition:none}
 .qz-step .qz-opts{transition:none}
-.qz-step.is-on{visibility:visible;opacity:1}
+.qz-step.is-on{display:block}
 .js-motion .qz-step.is-on{animation:qz-step .42s var(--ease-out) both}
 @keyframes qz-step{from{opacity:0;transform:translateX(14px)}}
 .qz-step legend{float:left;width:100%;margin:18px 0 14px;padding:0;font-size:1.25rem;font-weight:700;line-height:1.25;letter-spacing:-.01em;color:var(--navy-900)}
@@ -172,3 +172,5 @@ html:not(.js) .cta-pill{display:none}
 .cf-beam{position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(21,173,110,.85) 0,rgba(21,173,110,.85) 2px,rgba(99,217,155,.22) 2px,rgba(99,217,155,0) 60px);opacity:0;transform:translateY(-100%)}
 
 @media print{.cta-pill,.qz-band{display:none!important}}
+/* phones: the answer panel waits out of sight until the first tap, instead of 1.2 screens of "waiting" rows */
+@media (max-width:760px){.qz-out:not(.is-started) .qz-log,.qz-out:not(.is-started) .qz-paper{display:none}}

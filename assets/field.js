@@ -339,7 +339,7 @@
         b.addEventListener("click", function () { held = Infinity; go(i, 1100); });
       });
     }
-    if (cap) cap.textContent = "Press a key to see each step.";
+    if (cap) cap.textContent = W.matchMedia("(hover: none)").matches ? "Tap a key to see each step." : "Press a key to see each step.";
 
     if (W.matchMedia("(hover: hover) and (pointer: fine)").matches) {
       sec.addEventListener("pointermove", function (e) {
@@ -519,6 +519,15 @@
     if (d.fonts && d.fonts.load) d.fonts.load("800 40" + FONT).then(soon, soon); else soon();
   }
 
-  function init() { [hero, story, signup, closer].forEach(function (fn) { try { fn(); } catch (e) {} }); }
+  function near(sel, fn) {
+    var el = $(sel);
+    if (!el || !("IntersectionObserver" in W)) { try { fn(); } catch (e) {} return; }
+    var io = new IntersectionObserver(function (es) { if (es.some(function (e) { return e.isIntersecting; })) { io.disconnect(); try { fn(); } catch (e) {} } }, { rootMargin: "100% 0px" });
+    io.observe(el);
+  }
+  function init() {
+    [hero, story].forEach(function (fn) { try { fn(); } catch (e) {} });
+    near("#signup", signup); near("#checkup", closer);
+  }
   if (d.readyState === "loading") d.addEventListener("DOMContentLoaded", init); else init();
 })();

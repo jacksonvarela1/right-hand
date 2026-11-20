@@ -30,7 +30,7 @@
 <link rel="icon" href="assets/favicon.svg?v=4ea3b7b2" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=b2c869ad">
 <!-- head:start -->
-<link rel="preload" href="assets/bundle-home.css?v=4262851a" as="style">
+<link rel="preload" href="assets/bundle-home.css?v=47888320" as="style">
 <link rel="preload" href="assets/fonts/plus-jakarta-sans-latin-var.woff2?v=153fc85b" as="font" type="font/woff2" crossorigin>
 <style>
 @font-face{font-family:"Plus Jakarta Sans";src:url(assets/fonts/plus-jakarta-sans-latin-var.woff2?v=153fc85b) format("woff2");font-weight:200 800;font-style:normal;font-display:swap}
@@ -226,6 +226,7 @@ html:has(.menu[open]){overflow:hidden}
 @media (max-width:900px){.who-grid{grid-template-columns:minmax(0,1fr)}.who-map .nwa-svg{max-width:300px}}
 @media (max-width:560px){:root{--section-y:3.75rem;--section-head-gap:1.75rem}}
 @media (prefers-reduced-motion:no-preference){@view-transition{navigation:auto}.top{view-transition-name:rh-top}.top .lockup .mark{view-transition-name:rh-mark}::view-transition-old(root),::view-transition-new(root){animation-duration:.22s}}
+.hero + .band.dark,.band.dark + .band.dark,.band.dark + .story,.story + .band.dark,.close + .sg{padding-top:calc(var(--section-y)*.45)}
 :root{--fx-play:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 1.6v8.8a.6.6 0 0 0 .9.5l7-4.4a.6.6 0 0 0 0-1L3.9 1.1a.6.6 0 0 0-.9.5z'/%3E%3C/svg%3E");--fx-stop:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Crect x='2' y='2' width='8' height='8' rx='1.6'/%3E%3C/svg%3E");--fx-step:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M1.5 1.8v8.4a.6.6 0 0 0 .9.5l6-4.2a.6.6 0 0 0 0-1l-6-4.2a.6.6 0 0 0-.9.5z'/%3E%3Crect x='9' y='1.5' width='1.8' height='9' rx='.7'/%3E%3C/svg%3E");--fx-pause:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Crect x='2.2' y='1.5' width='2.8' height='9' rx='.9'/%3E%3Crect x='7' y='1.5' width='2.8' height='9' rx='.9'/%3E%3C/svg%3E");--fx-ck:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6.4l2.6 2.6L10 3.4' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");--fx-down:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M6 1.5v8.5M2.2 6.4L6 10.2l3.8-3.8' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");}
 [data-fx=head]::before{content:"";display:block;height:1px;margin-bottom:20px;background:linear-gradient(90deg,var(--accent) 0 48px,var(--rule) 48px);transform-origin:left center}
 .fx-w{display:inline-block}
@@ -331,7 +332,7 @@ b > span[data-count]{display:inline-block;font-variant-numeric:tabular-nums}
 @media (max-width:420px){.js .hero-visual .trio{gap:12px 8px}.js .hero-visual .trio:not(.keys) li{padding:0 11px 2px;font-size:.875rem}}
 .top .btn:not(.ghost)::after{z-index:-1;opacity:.5}
 .hero.has-fld .hero-grid{grid-template-columns:minmax(0,1.14fr) minmax(0,.86fr)}
-.hero.has-fld h1{max-width:none;font-size:clamp(2.1rem,1.2rem + 3.3vw,3.75rem);line-height:1.04;text-wrap:balance}
+.hero.has-fld h1{max-width:none;font-size:clamp(2.1rem,1rem + 3.6vw,4.25rem);line-height:1.04;text-wrap:balance}
 .fld{position:relative;height:min(68vh,600px);min-height:340px}
 .fld canvas{position:absolute;left:-16%;top:-10%;width:132%;height:120%;display:none;pointer-events:none}
 .fld.is-live canvas{display:block}
@@ -361,7 +362,7 @@ html:not(.js) .fld-say{display:none}
 .fld-pause{display:none}
 @media (max-width:760px){.js .fld-pause{display:block;position:relative;min-height:44px;margin:10px auto -6px;color:var(--navy-200);font-size:var(--fs-sm)}}
 @media (max-width:1020px){.hero.has-fld .hero-grid{grid-template-columns:minmax(0,1fr);gap:clamp(1.25rem,1rem + 2vw,2.25rem)}.fld{height:min(34vh,280px);height:min(34svh,280px);min-height:200px}.fld-cap{margin-top:14px}.fld canvas{left:-8%;width:116%}}
-@media (max-width:560px){.hero{padding-top:18px}.hero.has-fld h1{margin-top:10px;font-size:clamp(1.875rem,1rem + 4.4vw,2.25rem)}.hero .lead{margin-top:12px;font-size:1.0625rem;line-height:1.5}.hero .ctas{margin-top:16px;gap:10px}.hero .ctas .btn{width:100%}.hero .micro{margin-top:10px}}
+@media (max-width:560px){.hero{padding-top:18px}.hero.has-fld h1{margin-top:10px;font-size:clamp(2.375rem,1.4rem + 4vw,2.875rem)}.hero.has-fld{position:relative;isolation:isolate}.hero.has-fld .hero-visual{position:static}.hero.has-fld .fld{position:absolute;top:40px;right:-20%;width:80%;height:300px;min-height:0;opacity:.55;z-index:-1;pointer-events:none}.hero.has-fld .hero-glow{display:none}.hero .lead{margin-top:12px;font-size:1.0625rem;line-height:1.5}.hero .ctas{margin-top:16px;gap:10px}.hero .ctas .btn{width:100%}.hero .micro{margin-top:10px}}
 @media (max-width:380px){.hero .eyebrow{letter-spacing:.06em}}
 @media (max-width:340px){.hero .eyebrow{font-size:.6875rem;letter-spacing:.03em}}
 @media (max-width:420px){.trio.keys{gap:12px 8px}.key .cap{padding:0 12px 2px;font-size:.875rem}.key .cap::after{left:11px;right:11px}}
@@ -432,17 +433,17 @@ for (i = 0; i < parts.length; i++) if ((" " + h.className + " ").indexOf(" " + p
 })(document);</script>
 <!-- head:end -->
 <script src="assets/boot.js?v=e06e86c5" defer></script>
-<script src="assets/motion.js?v=4587833a" defer></script>
+<script src="assets/motion.js?v=813f7c7b" defer></script>
 <script src="assets/nav.js?v=ec2a8562" defer></script>
 <script src="assets/services-data.js?v=cf00a2d5" defer></script>
 <script src="assets/nwa-map.js?v=3028ca99" defer></script>
 <script src="assets/config.js?v=b6b20fe0" defer></script>
-<script src="assets/site.js?v=ee9711b6" defer></script>
+<script src="assets/site.js?v=9dc9193c" defer></script>
 <script src="assets/interest.js?v=5ac9c564" defer></script>
-<script src="assets/close.js?v=fdc883eb" defer></script>
+<script src="assets/close.js?v=4fa18f69" defer></script>
 <script src="assets/field-shapes.js?v=d136792b" defer></script>
-<script src="assets/field.js?v=ab414ae6" defer></script>
-<script src="assets/lab.js?v=18d270c2" defer></script>
+<script src="assets/field.js?v=7e502d99" defer></script>
+<script src="assets/lab.js?v=4f124014" defer></script>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -501,7 +502,7 @@ for (i = 0; i < parts.length; i++) if ((" " + h.className + " ").indexOf(" " + p
   </svg>
   <div class="wrap-wide hero-grid">
     <div class="hero-copy">
-      <p class="eyebrow">Northwest Arkansas · Admin and AI help</p>
+      <p class="eyebrow">For NWA shops, salons, trades and offices</p>
       <h1 id="hero-h">Hand off the admin. Keep the final say.</h1>
       <p class="lead">We're four University of Arkansas students. We take receipts, invoices, missed calls and follow-ups off your plate. AI writes the first draft, one of us checks it, and nothing goes out until you say yes.</p>
       <div class="ctas">
@@ -510,7 +511,7 @@ for (i = 0; i < parts.length; i++) if ((" " + h.className + " ").indexOf(" " + p
       </div>
       <p class="micro">Free. At your shop or on video. You keep the plan, hire us or not.</p>
       <ul class="proof hero-proof" aria-label="Three things you can count on">
-        <li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>Four U of A students you can meet</li>
+        <li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>No passwords needed</li>
         <li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>Reply within one business day</li>
         <li><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>Month to month. Stop with one email.</li>
       </ul>
@@ -536,7 +537,7 @@ for (i = 0; i < parts.length; i++) if ((" " + h.className + " ").indexOf(" " + p
       <div class="sec-h" data-fx="head">
         <p class="eyebrow">01 · Who</p>
         <h2 id="team-h">Four people you can <span class="sw">meet</span>.</h2>
-        <p class="lead">We're new. You won't find reviews here yet, because we won't make them up. What you will find is the actual work, live on this page, and four people you can meet.</p>
+        <p class="lead">We're new. You won't find reviews here yet, because we won't make them up. What you will find is sample work you can try on this page, and four people you can meet.</p>
       </div>
       <ul class="team" data-fx="cascade"><!-- team:start -->
         <li><span class="ini" aria-hidden="true">JV</span><b>Jackson Varela</b><span class="role">University of Arkansas student</span></li>
@@ -556,180 +557,12 @@ for (i = 0; i < parts.length; i++) if ((" " + h.className + " ").indexOf(" " + p
   </div>
 </section>
 
-<link rel="stylesheet" href="assets/bundle-home.css?v=4262851a" id="css">
-
-<section class="band light qz-band" id="first-handoff" data-hud="First handoff" data-needs="qz-on" aria-labelledby="qz-h">
-  <div class="wrap qz-grid">
-    <div class="qz-left">
-      <div class="sec-h" data-fx="head">
-        <p class="eyebrow">02 · First handoff</p>
-        <h2 id="qz-h">Find your first handoff in 30 <span class="sw">seconds</span>.</h2>
-        <p class="lead">Three taps. You get a sample Admin Map for a business like yours. Nothing leaves this page.</p>
-      </div>
-      <p class="qz-nojs">Tell us your kind of business and what eats your time in the <a href="#checkup">check-up form</a>, and we will send you a real Admin Map.</p>
-      <div class="qz-ask qz-ui" id="qz" data-fx="scan">
-        <div class="qz-top" aria-hidden="true"><span>Step <b data-qz-n>01</b> / 03 · <span data-qz-l>Business</span></span><span class="qz-bar"><i data-qz-bar></i></span></div>
-        <div class="qz-steps">
-          <fieldset class="qz-step is-on" data-step="1"><legend>What kind of business do you run?</legend><div class="qz-opts">
-            <button type="button" class="qz-opt" aria-pressed="false" data-v="home">Home services</button>
-            <button type="button" class="qz-opt" aria-pressed="false" data-v="shops">Shops and restaurants</button>
-            <button type="button" class="qz-opt" aria-pressed="false" data-v="salons">Salons and studios</button>
-            <button type="button" class="qz-opt" aria-pressed="false" data-v="auto">Auto shops</button>
-            <button type="button" class="qz-opt" aria-pressed="false" data-v="supplier">Supplier and vendor offices</button>
-            <button type="button" class="qz-opt" aria-pressed="false" data-v="pro">Professional offices</button>
-          </div></fieldset>
-          <fieldset class="qz-step" data-step="2"><legend>What eats the most time?</legend><div class="qz-opts">
-            <button type="button" class="qz-opt" aria-pressed="false" data-v="Missed calls and texts">Missed calls and texts</button>
-            <button type="button" class="qz-opt" aria-pressed="false" data-v="Email">Email</button>
-            <button type="button" class="qz-opt" aria-pressed="false" data-v="Receipts and expenses">Receipts and expenses</button>
-            <button type="button" class="qz-opt" aria-pressed="false" data-v="Invoices and follow-ups">Invoices and follow-ups</button>
-            <button type="button" class="qz-opt" aria-pressed="false" data-v="Scheduling">Scheduling</button>
-            <button type="button" class="qz-opt" aria-pressed="false" data-v="Paperwork and files">Paperwork and files</button>
-            <button type="button" class="qz-opt" aria-pressed="false" data-v="Setting up AI and automations">Setting up AI and automations</button>
-            <button type="button" class="qz-opt" aria-pressed="false" data-v="Weekly numbers">Weekly numbers</button>
-            <button type="button" class="qz-opt" aria-pressed="false" data-v="Reviews and Google profile">Reviews and Google profile</button>
-            <button type="button" class="qz-opt" aria-pressed="false" data-v="Not sure">Not sure</button>
-          </div><button type="button" class="linkbtn qz-back" data-back>Back</button></fieldset>
-          <fieldset class="qz-step" data-step="3"><legend>How do you like to meet?</legend><div class="qz-opts">
-            <button type="button" class="qz-opt" aria-pressed="false" data-v="At my business">At my business</button>
-            <button type="button" class="qz-opt" aria-pressed="false" data-v="Video">Video</button>
-            <button type="button" class="qz-opt" aria-pressed="false" data-v="Phone">Phone</button>
-          </div><button type="button" class="linkbtn qz-back" data-back>Back</button></fieldset>
-          <div class="qz-step qz-done" data-step="4">
-            <p class="qz-done-h"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>Your sample is ready.</p>
-            <dl class="qz-sum"><div><dt>Business</dt><dd data-sum="who"></dd></div><div><dt>Eats the most time</dt><dd data-sum="eats"></dd></div><div><dt>Meet</dt><dd data-sum="mode"></dd></div></dl>
-            <div class="field qz-town"><label for="qz-town">Your town, for the check-up email <span class="opt">(optional)</span></label><select id="qz-town"><option value="">Pick your town</option><option>Bentonville</option><option>Rogers</option><option>Springdale</option><option>Fayetteville</option><option>Bella Vista</option><option>Siloam Springs</option><option>Lowell</option><option>Cave Springs</option><option>Centerton</option><option>Farmington</option><option>Prairie Grove</option><option>Other NWA town</option></select></div>
-            <button type="button" class="btn ghost sm" data-restart>Start over</button>
-          </div>
-        </div>
-        <p class="sr-only" id="qz-live" aria-live="polite"></p>
-      </div>
-    </div>
-    <div class="qz-outwrap qz-ui" data-fx="scan" data-fx-delay="140">
-      <div class="qz-out win dark bracket" id="qz-out">
-        <div class="win-bar"><span class="path">right-hand / first-handoff</span><span class="tag">Sample</span></div>
-        <ol class="qz-log" aria-hidden="true">
-          <li data-log="who"><span class="k">business</span><span class="v">waiting</span><svg class="tk" viewBox="0 0 24 24"><path pathLength="1" d="M6 12.5l4 4 8-9"/></svg></li>
-          <li data-log="eats"><span class="k">eats time</span><span class="v">waiting</span><svg class="tk" viewBox="0 0 24 24"><path pathLength="1" d="M6 12.5l4 4 8-9"/></svg></li>
-          <li data-log="mode"><span class="k">meet</span><span class="v">waiting</span><svg class="tk" viewBox="0 0 24 24"><path pathLength="1" d="M6 12.5l4 4 8-9"/></svg></li>
-          <li data-log="match"><span class="k">match</span><span class="v">waiting for three taps</span><svg class="tk" viewBox="0 0 24 24"><path pathLength="1" d="M6 12.5l4 4 8-9"/></svg></li>
-        </ol>
-        <figure class="amap qz-paper" aria-labelledby="qz-map-t">
-          <p class="t" id="qz-map-t" tabindex="-1">Your sample Admin Map</p>
-          <p class="s" data-qz-for>Built from your three taps · sample</p>
-          <ol class="qz-rows">
-            <li class="qz-ph"><b>Your first handoff</b><span>Waiting for your answers</span><em class="st">Waiting</em></li>
-            <li class="qz-ph"><b>Your second handoff</b><span>Waiting for your answers</span><em class="st">Waiting</em></li>
-            <li class="qz-ph"><b>Your third handoff</b><span>Waiting for your answers</span><em class="st">Waiting</em></li>
-          </ol>
-          <p class="qz-note"><b>Your real Admin Map</b> arrives within 3 business days of your free check-up.</p>
-          <i class="qz-beam" aria-hidden="true"></i>
-        </figure>
-        <div class="qz-foot">
-          <p class="qz-idle">Answer the three taps and your sample builds here.</p>
-          <div class="qz-go">
-            <div class="ctas"><a class="btn" href="#checkup" data-go="checkup" data-qz-go>Get my real Admin Map. Free check-up</a></div>
-            <p class="micro">Free. At your shop or on video. You keep the plan, hire us or not.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="story dark" id="story" data-hud="A week with us" aria-labelledby="story-h">
-  <div class="st-pin">
-    <canvas class="st-cv" aria-hidden="true"></canvas>
-    <div class="wrap st-in">
-      <div class="st-copy">
-        <p class="eyebrow">03 · A week with us</p>
-        <h2 id="story-h">One week of admin, handed off.</h2>
-        <ol class="st-list">
-          <li class="st-ch on" data-shape="phone" data-tick="Call"><h3>A missed call.</h3><p>The caller gets a text in wording you approved, picks a real open slot, and you confirm it.</p></li>
-          <li class="st-ch" data-shape="receipt" data-tick="Receipt"><h3>A receipt photo.</h3><p>Read, sorted and matched to the card charge. A person checks every category.</p></li>
-          <li class="st-ch" data-shape="doc" data-tick="Invoice"><h3>A late invoice.</h3><p>A polite reminder is drafted for your OK. Late fees stay your call.</p></li>
-          <li class="st-ch" data-shape="mark" data-tick="Your OK"><h3>Your OK.</h3><p>Nothing goes out in your name until you approve it.</p><a class="btn" href="#checkup" data-go="checkup">Get my free 30-minute check-up</a><p class="micro">Free. At your shop or on video. You keep the plan, hire us or not.</p></li>
-        </ol>
-        <div class="st-prog" aria-hidden="true"><i></i></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="band dark how" id="how" data-hud="How it works" aria-labelledby="how-h">
-  <div class="wrap">
-    <div class="sec-h" data-fx="head">
-      <p class="eyebrow">04 · How it works</p>
-      <h2 id="how-h">Owners want the busywork gone. Not their <span class="sw">control</span> over it.</h2>
-    </div>
-    <div class="why">
-      <div class="pstat" data-fx="scan"><b><span data-count="78">78</span>%</b><p>of small business owners surveyed don't fully trust AI to handle low-level tasks without oversight.</p><p class="src">Source: <a href="https://stacker.com/stories/small-business/34-small-businesses-dont-trust-ai-basic-tasks" target="_blank" rel="noopener noreferrer">Bluevine survey of 942 small business owners and financial decision-makers, April 2026, via Stacker</a></p></div>
-      <div class="why-read">
-        <p class="bridge">So we built Right Hand around oversight. The late invoice gets a polite, approved follow-up instead of a sticky note.</p>
-        <ol class="loop3" id="loop3" aria-label="Our method">
-          <li>AI drafts</li><li aria-hidden="true" class="arrw"><svg class="arr"><use href="#i-arr"/></svg></li>
-          <li>We check</li><li aria-hidden="true" class="arrw"><svg class="arr"><use href="#i-arr"/></svg></li>
-          <li>You approve</li>
-        </ol>
-        <p class="aside-read">With unemployment at 2.7% here, hiring a full-time admin is hard. Flexible local help fills the gap. <span class="src">Source for the 2.7%: <a href="https://nwacouncil.org/2025/10/27/planning-for-growth-insights-from-the-2025-state-of-the-region/" target="_blank" rel="noopener noreferrer">2025 State of the Northwest Arkansas Region, Northwest Arkansas Council</a></span></p>
-      </div>
-    </div>
-    <h3 class="how-sub" id="steps-h">From first coffee to work off your plate.</h3>
-    <ol class="steps" data-fx="cascade" id="steps" aria-labelledby="steps-h">
-      <li class="step"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ck"/></svg><h4>Check-up</h4><p>30 minutes at your shop or on video. We list your recurring admin with you.</p></li>
-      <li class="step"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ck"/></svg><h4>Admin Map</h4><p>Within 3 business days: your top 3 handoffs, what AI drafts, what stays yours, and a flat quote if you want one.</p></li>
-      <li class="step"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ck"/></svg><h4>One-month pilot</h4><p>We take one or two tasks. You approve every piece.</p></li>
-      <li class="step"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ck"/></svg><h4>Monthly help</h4><p>Month to month. Add or drop tasks any time. Stop with one email.</p></li>
-    </ol>
-    <div class="how-pair">
-      <div class="receipt paper" id="cost" data-fx="scan">
-        <p class="receipt-top" aria-hidden="true"><span>Right Hand NWA</span><span>Northwest Arkansas</span></p>
-        <h3 id="cost-h">What it costs</h3>
-        <ul class="cost" aria-labelledby="cost-h">
-          <li><b>The check-up:</b> <span><em>free.</em> 30 minutes. No card, no obligation to hire us.</span></li>
-          <li><b>Your Admin Map:</b> <span><em>free,</em> and yours to keep.</span></li>
-          <li><b>After that, only if you want help:</b> <span>one flat monthly price, in writing, before any work starts. It depends on which tasks you hand off, and your quote is good for 30 days.</span></li>
-          <li><b>Start small:</b> <span>a one-month pilot on one or two tasks, then month to month. No cancellation fee. Stop with one email.</span></li>
-          <li><b>No surprise tools:</b> <span>we start with what you already pay for, and if something new would help, you see the cost first.</span></li>
-        </ul>
-      </div>
-    <div class="af" id="af">
-      <div class="af-back" aria-hidden="true"></div>
-      <figure class="amap bracket" id="amap" aria-labelledby="amap-t">
-      <p class="t" id="amap-t">Admin Map</p>
-      <span class="af-stamp" aria-hidden="true">Yours to keep</span>
-      <p class="s">Ozark Paws Grooming, Springdale (made-up shop) · sample</p>
-      <ol>
-        <li><b>Monthly expense review</b><span>We prepare, you approve · About 20 minutes of your time to review (sample estimate)</span><em class="st">Needs your OK</em></li>
-        <li><b>Overdue invoice reminders</b><span>Reminders drafted for your OK · Late fees stay your call</span><em class="st">Needs your OK</em></li>
-        <li><b>Appointment reminders</b><span>Set up in the booking tool you already use · You approve the wording once</span><em class="st">Needs your OK</em></li>
-      </ol>
-      <div class="extra">
-        <p><b>Stays with your CPA:</b> quarterly taxes</p>
-        <p><b>Quick win this week:</b> a Gmail filter that sends every emailed receipt to one label</p>
-        <p><b>Quote:</b> written after your check-up</p>
-      </div>
-    </figure>
-      <div class="af-front">
-        <p class="af-l" aria-hidden="true"><b>Your Admin Map</b><span>Within 3 business days</span></p>
-        <button type="button" class="af-tog" aria-expanded="true" aria-controls="amap">Tuck away</button>
-        <div class="af-plate" aria-hidden="true">
-          <p><span>Client</span>Your business</p>
-          <p><span>Prepared by</span>Right Hand NWA</p>
-          <p><span>Inside</span>Top 3 tasks to hand off, one quick win, a flat written quote</p>
-        </div>
-      </div>
-    </div>
-    </div>
-    <div class="ctas"><a class="btn" href="#checkup" data-go="checkup">Get my free 30-minute check-up</a></div>
-    <p class="micro">Free. At your shop or on video. You keep the plan, hire us or not.</p>
-  </div>
-</section>
+<link rel="stylesheet" href="assets/bundle-home.css?v=47888320" id="css">
 
 <section class="band demos-band dark" id="demos" data-hud="Prototypes" aria-labelledby="demos-h">
   <div class="wrap">
     <div class="sec-h" data-fx="head">
-      <p class="eyebrow">05 · Prototypes</p>
+      <p class="eyebrow">02 · Prototypes</p>
       <h2 id="demos-h">Don't take our word for it. Try the <span class="sw">work</span>.</h2>
       <p class="lead">Prototypes we built for made-up Northwest Arkansas businesses. Scripted, not live AI. Nothing you type leaves this page.</p>
     </div>
@@ -795,6 +628,172 @@ for (i = 0; i < parts.length; i++) if ((" " + h.className + " ").indexOf(" " + p
   </div>
 </section>
 
+<section class="band light qz-band" id="first-handoff" data-hud="First handoff" data-needs="qz-on" aria-labelledby="qz-h">
+  <div class="wrap qz-grid">
+    <div class="qz-left">
+      <div class="sec-h" data-fx="head">
+        <p class="eyebrow">03 · First handoff</p>
+        <h2 id="qz-h">Find your first handoff in 30 <span class="sw">seconds</span>.</h2>
+        <p class="lead">Three taps. You get a sample Admin Map for a business like yours. Nothing leaves this page.</p>
+      </div>
+      <p class="qz-nojs">Tell us your kind of business and what eats your time in the <a href="#checkup">check-up form</a>, and we will send you a real Admin Map.</p>
+      <div class="qz-ask qz-ui" id="qz" data-fx="scan">
+        <div class="qz-top" aria-hidden="true"><span>Step <b data-qz-n>01</b> / 03 · <span data-qz-l>Business</span></span><span class="qz-bar"><i data-qz-bar></i></span></div>
+        <div class="qz-steps">
+          <fieldset class="qz-step is-on" data-step="1"><legend>What kind of business do you run?</legend><div class="qz-opts">
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="home">Home services</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="shops">Shops and restaurants</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="salons">Salons and studios</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="auto">Auto shops</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="supplier">Supplier and vendor offices</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="pro">Professional offices</button>
+          </div></fieldset>
+          <fieldset class="qz-step" data-step="2"><legend>What eats the most time?</legend><div class="qz-opts">
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="Missed calls and texts">Missed calls and texts</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="Email">Email</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="Receipts and expenses">Receipts and expenses</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="Invoices and follow-ups">Invoices and follow-ups</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="Scheduling">Scheduling</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="Paperwork and files">Paperwork and files</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="Setting up AI and automations">Setting up AI and automations</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="Weekly numbers">Weekly numbers</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="Reviews and Google profile">Reviews and Google profile</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="Not sure">Not sure</button>
+          </div><button type="button" class="linkbtn qz-back" data-back>Back</button></fieldset>
+          <fieldset class="qz-step" data-step="3"><legend>How do you like to meet?</legend><div class="qz-opts">
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="At my business">At my business</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="Video">Video</button>
+            <button type="button" class="qz-opt" aria-pressed="false" data-v="Phone">Phone</button>
+          </div><button type="button" class="linkbtn qz-back" data-back>Back</button></fieldset>
+          <div class="qz-step qz-done" data-step="4">
+            <p class="qz-done-h"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg>Your sample is ready.</p>
+            <dl class="qz-sum"><div><dt>Business</dt><dd data-sum="who"></dd></div><div><dt>Eats the most time</dt><dd data-sum="eats"></dd></div><div><dt>Meet</dt><dd data-sum="mode"></dd></div></dl>
+            <div class="field qz-town"><label for="qz-town">Your town <span class="opt">(optional, we carry it into the check-up form)</span></label><select id="qz-town"><option value="">Pick your town</option><option>Bentonville</option><option>Rogers</option><option>Springdale</option><option>Fayetteville</option><option>Bella Vista</option><option>Siloam Springs</option><option>Lowell</option><option>Cave Springs</option><option>Centerton</option><option>Farmington</option><option>Prairie Grove</option><option>Other NWA town</option></select></div>
+            <button type="button" class="btn ghost sm" data-restart>Start over</button>
+          </div>
+        </div>
+        <p class="sr-only" id="qz-live" aria-live="polite"></p>
+      </div>
+    </div>
+    <div class="qz-outwrap qz-ui" data-fx="scan" data-fx-delay="140">
+      <div class="qz-out win dark bracket" id="qz-out">
+        <div class="win-bar"><span class="path">right-hand / first-handoff</span><span class="tag">Sample</span></div>
+        <ol class="qz-log" aria-hidden="true">
+          <li data-log="who"><span class="k">business</span><span class="v">waiting</span><svg class="tk" viewBox="0 0 24 24"><path pathLength="1" d="M6 12.5l4 4 8-9"/></svg></li>
+          <li data-log="eats"><span class="k">eats time</span><span class="v">waiting</span><svg class="tk" viewBox="0 0 24 24"><path pathLength="1" d="M6 12.5l4 4 8-9"/></svg></li>
+          <li data-log="mode"><span class="k">meet</span><span class="v">waiting</span><svg class="tk" viewBox="0 0 24 24"><path pathLength="1" d="M6 12.5l4 4 8-9"/></svg></li>
+          <li data-log="match"><span class="k">match</span><span class="v">waiting for three taps</span><svg class="tk" viewBox="0 0 24 24"><path pathLength="1" d="M6 12.5l4 4 8-9"/></svg></li>
+        </ol>
+        <figure class="amap qz-paper" aria-labelledby="qz-map-t">
+          <p class="t" id="qz-map-t" tabindex="-1">Your sample Admin Map</p>
+          <p class="s" data-qz-for>Built from your three taps · sample</p>
+          <ol class="qz-rows">
+            <li class="qz-ph"><b>Your first handoff</b><span>Waiting for your answers</span><em class="st">Waiting</em></li>
+            <li class="qz-ph"><b>Your second handoff</b><span>Waiting for your answers</span><em class="st">Waiting</em></li>
+            <li class="qz-ph"><b>Your third handoff</b><span>Waiting for your answers</span><em class="st">Waiting</em></li>
+          </ol>
+          <p class="qz-note"><b>Your real Admin Map</b> arrives within 3 business days of your free check-up.</p>
+          <i class="qz-beam" aria-hidden="true"></i>
+        </figure>
+        <div class="qz-foot">
+          <p class="qz-idle">Answer the three taps and your sample builds here.</p>
+          <div class="qz-go">
+            <div class="ctas"><a class="btn" href="#checkup" data-go="checkup" data-qz-go>Get my real Admin Map. Free check-up</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="story dark" id="story" data-hud="A sample week" aria-labelledby="story-h">
+  <div class="st-pin">
+    <canvas class="st-cv" aria-hidden="true"></canvas>
+    <div class="wrap st-in">
+      <div class="st-copy">
+        <p class="eyebrow">04 · A sample week</p>
+        <h2 id="story-h">What a week could look like.</h2>
+        <video class="st-vid" muted playsinline loop preload="none" poster="assets/story-poster.jpg" aria-hidden="true" tabindex="-1"><source src="assets/story.mp4?v=0eec1609" type="video/mp4"></video>
+        <ol class="st-list">
+          <li class="st-ch on" data-shape="phone" data-tick="Call"><h3>A missed call.</h3><p>The caller gets a text in wording you approved, picks a real open slot, and you confirm it.</p></li>
+          <li class="st-ch" data-shape="receipt" data-tick="Receipt"><h3>A receipt photo.</h3><p>Read, sorted and matched to the card charge. A person checks every category.</p></li>
+          <li class="st-ch" data-shape="doc" data-tick="Invoice"><h3>A late invoice.</h3><p>A polite reminder is drafted for your OK. Late fees stay your call.</p></li>
+          <li class="st-ch" data-shape="mark" data-tick="Your OK"><h3>Your OK.</h3><p>Nothing goes out in your name until you approve it.</p><a class="btn" href="#checkup" data-go="checkup">Get my free 30-minute check-up</a></li>
+        </ol>
+        <div class="st-prog" aria-hidden="true"><i></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band dark how" id="how" data-hud="How it works" aria-labelledby="how-h">
+  <div class="wrap">
+    <div class="sec-h" data-fx="head">
+      <p class="eyebrow">05 · How it works</p>
+      <h2 id="how-h">Owners want the busywork gone. Not their <span class="sw">control</span> over it.</h2>
+    </div>
+    <div class="why">
+      <div class="pstat" data-fx="scan"><b><span data-count="78">78</span>%</b><p>of small business owners surveyed don't fully trust AI to handle low-level tasks without oversight.</p><p class="src">Source: <a href="https://stacker.com/stories/small-business/34-small-businesses-dont-trust-ai-basic-tasks" target="_blank" rel="noopener noreferrer">Bluevine survey of 942 small business owners and financial decision-makers, April 2026, via Stacker</a></p></div>
+      <div class="why-read">
+        <p class="bridge">So we built Right Hand around oversight. The late invoice gets a polite, approved follow-up instead of a sticky note.</p>
+        <ol class="loop3" id="loop3" aria-label="Our method">
+          <li>AI drafts</li><li aria-hidden="true" class="arrw"><svg class="arr"><use href="#i-arr"/></svg></li>
+          <li>We check</li><li aria-hidden="true" class="arrw"><svg class="arr"><use href="#i-arr"/></svg></li>
+          <li>You approve</li>
+        </ol>
+      </div>
+    </div>
+    <h3 class="how-sub" id="steps-h">From first coffee to work off your plate.</h3>
+    <ol class="steps" data-fx="cascade" id="steps" aria-labelledby="steps-h">
+      <li class="step"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ck"/></svg><h4>Check-up</h4><p>30 minutes at your shop or on video. We list your recurring admin with you.</p></li>
+      <li class="step"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ck"/></svg><h4>Admin Map</h4><p>Within 3 business days: your top 3 handoffs, what AI drafts, what stays yours, and a flat quote if you want one.</p></li>
+      <li class="step"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ck"/></svg><h4>One-month pilot</h4><p>We take one or two tasks. You approve every piece.</p></li>
+      <li class="step"><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-ck"/></svg><h4>Monthly help</h4><p>Month to month. Add or drop tasks any time. Stop with one email.</p></li>
+    </ol>
+    <div class="how-pair">
+      <div class="receipt paper" id="cost" data-fx="scan">
+        <p class="receipt-top" aria-hidden="true"><span>Right Hand NWA</span><span>Northwest Arkansas</span></p>
+        <h3 id="cost-h">What it costs</h3>
+        <ul class="cost" aria-labelledby="cost-h">
+          <li><b>The check-up:</b> <span><em>free.</em> 30 minutes. No card, no obligation to hire us.</span></li>
+          <li><b>Your Admin Map:</b> <span><em>free,</em> and yours to keep.</span></li>
+          <li><b>After that, only if you want help:</b> <span>one flat monthly price, in writing, before any work starts. It depends on which tasks you hand off, and your quote is good for 30 days.</span></li>
+          <li><b>Start small:</b> <span>a one-month pilot on one or two tasks, then month to month. No cancellation fee. Stop with one email.</span></li>
+          <li><b>No surprise tools:</b> <span>we start with what you already pay for, and if something new would help, you see the cost first.</span></li>
+        </ul>
+      </div>
+    <div class="af" id="af">
+      <div class="af-back" aria-hidden="true"></div>
+      <figure class="amap bracket" id="amap" aria-labelledby="amap-t">
+      <p class="t" id="amap-t">Admin Map</p>
+      <span class="af-stamp" aria-hidden="true">Yours to keep</span>
+      <p class="s">Ozark Paws Grooming, Springdale (made-up shop) · sample</p>
+      <ol>
+        <li><b>Monthly expense review</b><span>We prepare, you approve · About 20 minutes of your time to review (sample estimate)</span><em class="st">Needs your OK</em></li>
+        <li><b>Overdue invoice reminders</b><span>Reminders drafted for your OK · Late fees stay your call</span><em class="st">Needs your OK</em></li>
+        <li><b>Appointment reminders</b><span>Set up in the booking tool you already use · You approve the wording once</span><em class="st">Needs your OK</em></li>
+      </ol>
+      <div class="extra">
+        <p><b>Stays with your CPA:</b> quarterly taxes</p>
+        <p><b>Quick win this week:</b> a Gmail filter that sends every emailed receipt to one label</p>
+        <p><b>Quote:</b> written after your check-up</p>
+      </div>
+    </figure>
+      <div class="af-front">
+        <p class="af-l" aria-hidden="true"><b>Your Admin Map</b><span>Within 3 business days</span></p>
+        <button type="button" class="af-tog" aria-expanded="true" aria-controls="amap">Tuck away</button>
+        <div class="af-plate" aria-hidden="true">
+          <p><span>Client</span>Your business</p>
+          <p><span>Prepared by</span>Right Hand NWA</p>
+          <p><span>Inside</span>Top 3 tasks to hand off, one quick win, a flat written quote</p>
+        </div>
+      </div>
+    </div>
+    </div>
+    <div class="ctas"><a class="btn" href="#checkup" data-go="checkup">Get my free 30-minute check-up</a></div>
+  </div>
+</section>
+
 <section class="band light" id="services" data-hud="Services" aria-labelledby="services-h">
   <div class="wrap">
     <div class="sec-h" data-fx="head">
@@ -802,6 +801,7 @@ for (i = 0; i < parts.length; i++) if ((" " + h.className + " ").indexOf(" " + p
       <h2 id="services-h">What we take, and what we never <span class="sw">touch</span>.</h2>
       <p class="lead">Pick a line to see every service in it.</p>
     </div>
+    <div class="svc-ledger">
     <ul class="line-links" data-fx="cascade" aria-label="Service lines"><!-- services-teaser:start -->
       <li><a href="services/#money-admin"><span class="tile" aria-hidden="true"><svg class="i"><use href="#i-receipt"/></svg></span><b>Money admin</b><span class="note">Prep only. You and your CPA decide.</span><span class="n">7 services</span></a></li>
       <li><a href="services/#customers-and-front-desk"><span class="tile" aria-hidden="true"><svg class="i"><use href="#i-chat"/></svg></span><b>Customers and front desk</b><span class="note">Nothing goes out in wording you have not approved.</span><span class="n">7 services</span></a></li>
@@ -810,7 +810,8 @@ for (i = 0; i < parts.length; i++) if ((" " + h.className + " ").indexOf(" " + p
       <li><a href="services/#ai-in-your-business"><span class="tile" aria-hidden="true"><svg class="i"><use href="#i-chip"/></svg></span><b>AI in your business</b><span class="note">Nothing new is installed without your yes.</span><span class="n">7 services</span></a></li>
       <li><a href="services/#local-presence-and-reputation"><span class="tile" aria-hidden="true"><svg class="i"><use href="#i-pin"/></svg></span><b>Local presence and reputation</b><span class="note">Honest listings and real reviews only. We never write reviews.</span><span class="n">6 services</span></a></li>
     <!-- services-teaser:end --></ul>
-    <p class="stays-line" data-fx="scan"><!-- stays-line:start --><b>Always stays with you or a licensed pro:</b> tax prep and filing; payroll processing and filing; legal advice, contracts and formal HR policy; moving money, paying bills or collecting debts; signing anything; outbound AI voice calls to your customers; patient or health records.<!-- stays-line:end --></p>
+    <div class="stays-line" data-fx="scan"><!-- stays-line:start --><h3 class="sl-h">Never touch</h3><p class="sl-sub">Always stays with you or a licensed pro.</p><ul><li>Tax prep and filing</li><li>Payroll processing and filing</li><li>Legal advice, contracts and formal HR policy</li><li>Moving money, paying bills or collecting debts</li><li>Signing anything</li><li>Outbound AI voice calls to your customers</li><li>Patient or health records</li></ul><!-- stays-line:end --></div>
+    </div>
     <p class="ctas"><!-- services-all:start --><a class="btn ghost" href="services/">See all 38 services</a><!-- services-all:end --></p>
   </div>
 </section>
@@ -864,7 +865,7 @@ for (i = 0; i < parts.length; i++) if ((" " + h.className + " ").indexOf(" " + p
     </div>
     <div class="faq" data-fx="cascade">
       <details open><summary>What does it cost?<svg aria-hidden="true"><use href="#i-plus"/></svg></summary><p>The check-up is free, with nothing to buy. If you want help after that, we quote a flat monthly price in writing before any work starts, based on the tasks you pick. Tool costs, like a texting plan, are paid by you directly to the vendor, and we show them before you decide.</p></details>
-      <details><summary>You're students. Why should I trust you with my business?<svg aria-hidden="true"><use href="#i-plus"/></svg></summary><p>Fair question. We are four University of Arkansas students who work in Northwest Arkansas. For you, that means a short client list, a named person on every task, and work you can check line by line. Try the prototypes on this page and judge the work yourself.</p></details>
+      <details><summary>You're students. Why should I trust you with my business?<svg aria-hidden="true"><use href="#i-plus"/></svg></summary><p>Fair question. We are four University of Arkansas students who work in Northwest Arkansas. For you, that means a named person on every task, and work you can check line by line. Try the prototypes on this page and judge the work yourself.</p></details>
       <details><summary>Is AI going to talk to my customers?<svg aria-hidden="true"><use href="#i-plus"/></svg></summary><p>Only if you want it to, and only from answers you approved. A phone or chat assistant says it is an assistant and hands anything else to you. Everything else AI does is a draft that one of us checks and you approve. If you'd rather we skip AI on a task, we do it by hand.</p></details>
       <details><summary>Do I have to give you my passwords or bank login?<svg aria-hidden="true"><use href="#i-plus"/></svg></summary><p>No, and please don't send them. The check-up needs no logins at all. If you hire us, you invite us as a user in the tools you already use, so you can see what we can reach and remove us in one click. We never touch your bank or move money.</p></details>
       <details><summary>What if you get something wrong?<svg aria-hidden="true"><use href="#i-plus"/></svg></summary><p>You see the sources and the math before anything is final, and anything we can't match to a record comes to you as a question. If a mistake slips through in work you approved, we fix it at no charge.</p></details>
@@ -872,7 +873,6 @@ for (i = 0; i < parts.length; i++) if ((" " + h.className + " ").indexOf(" " + p
     </div>
     <div class="faq-foot">
       <div class="ctas"><a class="btn" href="#checkup" data-go="checkup">Get my free 30-minute check-up</a></div>
-      <p class="micro">Free. At your shop or on video. You keep the plan, hire us or not.</p>
       <p class="more-link"><a class="arrow-link" href="about/#questions">More questions on the about page</a></p>
     </div>
   </div>
@@ -963,14 +963,14 @@ for (i = 0; i < parts.length; i++) if ((" " + h.className + " ").indexOf(" " + p
     <div class="menu-top">
       <h2 id="menu-h">Menu</h2>
       <button type="button" class="motion-btn menu-motion" data-motion-proxy aria-pressed="false">Pause motion</button>
-      <button type="button" class="menu-x" data-menu-close aria-label="Close menu"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button>
+      <button type="button" class="menu-x" data-menu-close aria-label="Close menu" autofocus><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button>
     </div>
     <nav aria-label="Sections of the home page"><ol class="menu-list">
       <li><a href="#team"><b>Who we are</b><span>Four University of Arkansas students.</span></a></li>
-      <li><a href="#first-handoff"><b>Find your first handoff</b><span>Three taps. A sample Admin Map.</span></a></li>
-      <li><a href="#story"><b>A week with us</b><span>A missed call, a receipt, a late invoice.</span></a></li>
-      <li><a href="#how"><b>How it works and what it costs</b><span>Four steps. The check-up is free.</span></a></li>
       <li><a href="#demos"><b>The prototypes</b><span>Try the work on made-up local businesses.</span></a></li>
+      <li><a href="#first-handoff"><b>Find your first handoff</b><span>Three taps. A sample Admin Map.</span></a></li>
+      <li><a href="#story"><b>A sample week</b><span>A missed call, a receipt, a late invoice.</span></a></li>
+      <li><a href="#how"><b>How it works and what it costs</b><span>Four steps. The check-up is free.</span></a></li>
       <li><a href="#services"><b>What we take</b><span>Six service lines, and what we never touch.</span></a></li>
       <li><a href="#promises"><b>What we promise</b><span>In writing, logins and data included.</span></a></li>
       <li><a href="#questions"><b>Fair questions</b><span>Cost, students, AI, passwords, stopping.</span></a></li>
@@ -986,7 +986,6 @@ for (i = 0; i < parts.length; i++) if ((" " + h.className + " ").indexOf(" " + p
     </ul>
     <div class="menu-cta">
       <a class="btn" href="#checkup" data-go="checkup">Get my free 30-minute check-up</a>
-      <p class="micro">Free. At your shop or on video. You keep the plan, hire us or not.</p>
     </div>
   </div>
 </dialog>
@@ -1002,7 +1001,7 @@ for (i = 0; i < parts.length; i++) if ((" " + h.className + " ").indexOf(" " + p
       <li><a href="about/">About</a></li>
       <li><a href="https://www.instagram.com/righthandnwa/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
     </ul></nav>
-    <p class="fine"><!-- page-fine:start -->We are not a CPA firm, law firm or payroll provider. Nothing here is tax, legal or accounting advice. Every demo business on this page is made up. Nothing you type in the prototypes leaves this page. The check-up form and the email sign-up send what you enter, the address of this page and the address of the page that linked you here to our private list, a Google Form our team owns. It is never sold or shared.<!-- page-fine:end --></p>
+    <p class="fine"><!-- page-fine:start -->We are not a CPA firm, law firm or payroll provider. Nothing here is tax, legal or accounting advice. Every demo business on this page is made up. Nothing you type in the prototypes leaves this page. The check-up form and the email sign-up send what you enter, the address of this page and the address of the page that linked you here to a private Google Form our team owns. It is never sold or shared.<!-- page-fine:end --></p>
   </div>
 </footer>
 <!-- chrome:footer:end -->
@@ -1045,7 +1044,7 @@ for (i = 0; i < parts.length; i++) if ((" " + h.className + " ").indexOf(" " + p
   </div>
 </dialog>
 <!-- jsonld:start -->
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["Organization","ProfessionalService"],"@id":"https://righthandnwa.com/#organization","name":"Right Hand NWA","alternateName":"Right Hand Northwest Arkansas","url":"https://righthandnwa.com/","description":"Admin and AI help for Northwest Arkansas small businesses, from four University of Arkansas students. The team takes receipts, invoices, missed calls, follow-ups, scheduling and paperwork off small business owners' plates, and sets up AI that drafts the busywork. AI drafts, a person on the team checks, and the owner approves. Tax, payroll, legal work and moving money stay with the owner and their licensed pros.","slogan":"Hand off the admin. Keep the final say.","logo":{"@type":"ImageObject","@id":"https://righthandnwa.com/#logo","url":"https://righthandnwa.com/assets/logo.png","contentUrl":"https://righthandnwa.com/assets/logo.png","width":512,"height":512,"caption":"Right Hand NWA"},"image":{"@type":"ImageObject","@id":"https://righthandnwa.com/#image","url":"https://righthandnwa.com/assets/og.png","contentUrl":"https://righthandnwa.com/assets/og.png","width":1200,"height":630},"email":"righthandnwa@gmail.com","contactPoint":{"@type":"ContactPoint","contactType":"customer service","email":"righthandnwa@gmail.com","areaServed":"US-AR","availableLanguage":"English"},"sameAs":["https://www.instagram.com/righthandnwa/"],"founder":[{"@type":"Person","name":"Jackson Varela","description":"University of Arkansas student","memberOf":{"@id":"https://righthandnwa.com/#uark"}},{"@type":"Person","name":"Annie Wagner","description":"University of Arkansas student","memberOf":{"@id":"https://righthandnwa.com/#uark"}},{"@type":"Person","name":"Abigail Estes","description":"University of Arkansas student","memberOf":{"@id":"https://righthandnwa.com/#uark"}},{"@type":"Person","name":"Bella Gambaro","description":"University of Arkansas student","memberOf":{"@id":"https://righthandnwa.com/#uark"}}],"areaServed":[{"@type":"Place","name":"Northwest Arkansas","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"AdministrativeArea","name":"Benton County, Arkansas","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"AdministrativeArea","name":"Washington County, Arkansas","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Bentonville","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Rogers","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Springdale","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Fayetteville","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Bella Vista","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Siloam Springs","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Lowell","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Cave Springs","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Centerton","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Farmington","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Prairie Grove","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Pea Ridge","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}}],"knowsAbout":["Small business admin","Receipt capture and expense review","Invoice follow-ups","CPA and bookkeeper prep","Inbox triage and reply drafts","Missed-call text-back","Appointment scheduling and reminders","Written how-tos (SOPs)","Workflow automations","Practical AI for small business","AI use policies for small business","Google Business Profile and local listings","Honest review requests"],"hasOfferCatalog":{"@type":"OfferCatalog","name":"Right Hand NWA services","url":"https://righthandnwa.com/services/","itemListElement":[{"@type":"OfferCatalog","name":"Money admin","url":"https://righthandnwa.com/services/#money-admin","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Receipt capture and categorizing"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Monthly expense review"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Invoices and overdue follow-ups"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Quotes and estimates"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Bills-due and renewals calendar"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"CPA and bookkeeper prep"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Software subscription cleanup"}}]},{"@type":"OfferCatalog","name":"Customers and front desk","url":"https://righthandnwa.com/services/#customers-and-front-desk","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Inbox triage and reply drafts"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Missed-call text-back and booking"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"AI phone answering, inbound only"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Website chat assistant"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Lead intake form that routes itself"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"CRM setup and cleanup"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Quote follow-ups"}}]},{"@type":"OfferCatalog","name":"Scheduling and follow-ups","url":"https://righthandnwa.com/services/#scheduling-and-follow-ups","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Booking page"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Appointment reminders and no-show follow-ups"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Calendar management"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Staff schedule drafts"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Vendor and delivery coordination"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Meeting and call notes with AI"}}]},{"@type":"OfferCatalog","name":"Documents and how-tos","url":"https://righthandnwa.com/services/#documents-and-how-tos","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"One folder system with naming rules"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Templates for quotes, forms and checklists"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Written how-tos (SOPs)"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Hiring admin"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Supplier and vendor office support"}}]},{"@type":"OfferCatalog","name":"AI in your business","url":"https://righthandnwa.com/services/#ai-in-your-business","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Workflow automations"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"AI email drafting in your inbox"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Weekly owner report"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"AI starter workshop"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"One-page AI use policy"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Company prompt kit and SOP assistant"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Monthly AI office hours"}}]},{"@type":"OfferCatalog","name":"Local presence and reputation","url":"https://righthandnwa.com/services/#local-presence-and-reputation","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Google Business Profile and listings upkeep"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Honest review requests"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Review reply drafts"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Social posts and content calendar"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Email newsletter"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Digital front door check"}}]}]},"makesOffer":{"@type":"Offer","@id":"https://righthandnwa.com/#checkup-offer","name":"Free 30-minute check-up","price":"0","priceCurrency":"USD","url":"https://righthandnwa.com/#checkup","description":"A free 30-minute check-up at your business anywhere in Benton or Washington County, or by video or phone. Within 3 business days, Your Admin Map arrives by email: your top 3 tasks to hand off, and for each one what we would do, what AI would draft, what stays with you, and what stays with your CPA or attorney. No card, no obligation to hire us.","itemOffered":{"@type":"Service","name":"30-minute admin and AI check-up","provider":{"@id":"https://righthandnwa.com/#organization"},"areaServed":{"@id":"https://righthandnwa.com/#arkansas"}}}},{"@type":"CollegeOrUniversity","@id":"https://righthandnwa.com/#uark","name":"University of Arkansas","url":"https://www.uark.edu/"},{"@type":"State","@id":"https://righthandnwa.com/#arkansas","name":"Arkansas","containedInPlace":{"@type":"Country","name":"United States"}},{"@type":"WebSite","@id":"https://righthandnwa.com/#website","url":"https://righthandnwa.com/","name":"Right Hand NWA","alternateName":"Right Hand Northwest Arkansas","publisher":{"@id":"https://righthandnwa.com/#organization"},"inLanguage":"en-US"},{"@type":"WebPage","@id":"https://righthandnwa.com/#webpage","url":"https://righthandnwa.com/","name":"Right Hand NWA | Admin and AI help for Northwest Arkansas small businesses","description":"Admin and AI help for small businesses in Bentonville, Rogers, Springdale and Fayetteville, from four University of Arkansas students. AI drafts, we check, you approve. Free 30-minute check-up.","isPartOf":{"@id":"https://righthandnwa.com/#website"},"about":{"@id":"https://righthandnwa.com/#organization"},"primaryImageOfPage":{"@id":"https://righthandnwa.com/#image"},"inLanguage":"en-US"},{"@type":"FAQPage","@id":"https://righthandnwa.com/#faq","url":"https://righthandnwa.com/#questions","isPartOf":{"@id":"https://righthandnwa.com/#webpage"},"mainEntity":[{"@type":"Question","name":"What does it cost?","acceptedAnswer":{"@type":"Answer","text":"The check-up is free, with nothing to buy. If you want help after that, we quote a flat monthly price in writing before any work starts, based on the tasks you pick. Tool costs, like a texting plan, are paid by you directly to the vendor, and we show them before you decide."}},{"@type":"Question","name":"You're students. Why should I trust you with my business?","acceptedAnswer":{"@type":"Answer","text":"Fair question. We are four University of Arkansas students who work in Northwest Arkansas. For you, that means a short client list, a named person on every task, and work you can check line by line. Try the prototypes on this page and judge the work yourself."}},{"@type":"Question","name":"Is AI going to talk to my customers?","acceptedAnswer":{"@type":"Answer","text":"Only if you want it to, and only from answers you approved. A phone or chat assistant says it is an assistant and hands anything else to you. Everything else AI does is a draft that one of us checks and you approve. If you'd rather we skip AI on a task, we do it by hand."}},{"@type":"Question","name":"Do I have to give you my passwords or bank login?","acceptedAnswer":{"@type":"Answer","text":"No, and please don't send them. The check-up needs no logins at all. If you hire us, you invite us as a user in the tools you already use, so you can see what we can reach and remove us in one click. We never touch your bank or move money."}},{"@type":"Question","name":"What if you get something wrong?","acceptedAnswer":{"@type":"Answer","text":"You see the sources and the math before anything is final, and anything we can't match to a record comes to you as a question. If a mistake slips through in work you approved, we fix it at no charge."}},{"@type":"Question","name":"What if I want to stop?","acceptedAnswer":{"@type":"Answer","text":"Email us. It is month to month with no cancellation fee. Within 2 business days we remove our access, hand back every file and how-to, and confirm it in writing."}}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["Organization","ProfessionalService"],"@id":"https://righthandnwa.com/#organization","name":"Right Hand NWA","alternateName":"Right Hand Northwest Arkansas","url":"https://righthandnwa.com/","description":"Admin and AI help for Northwest Arkansas small businesses, from four University of Arkansas students. The team takes receipts, invoices, missed calls, follow-ups, scheduling and paperwork off small business owners' plates, and sets up AI that drafts the busywork. AI drafts, a person on the team checks, and the owner approves. Tax, payroll, legal work and moving money stay with the owner and their licensed pros.","slogan":"Hand off the admin. Keep the final say.","logo":{"@type":"ImageObject","@id":"https://righthandnwa.com/#logo","url":"https://righthandnwa.com/assets/logo.png","contentUrl":"https://righthandnwa.com/assets/logo.png","width":512,"height":512,"caption":"Right Hand NWA"},"image":{"@type":"ImageObject","@id":"https://righthandnwa.com/#image","url":"https://righthandnwa.com/assets/og.png","contentUrl":"https://righthandnwa.com/assets/og.png","width":1200,"height":630},"email":"righthandnwa@gmail.com","contactPoint":{"@type":"ContactPoint","contactType":"customer service","email":"righthandnwa@gmail.com","areaServed":"US-AR","availableLanguage":"English"},"sameAs":["https://www.instagram.com/righthandnwa/"],"founder":[{"@type":"Person","name":"Jackson Varela","description":"University of Arkansas student","memberOf":{"@id":"https://righthandnwa.com/#uark"}},{"@type":"Person","name":"Annie Wagner","description":"University of Arkansas student","memberOf":{"@id":"https://righthandnwa.com/#uark"}},{"@type":"Person","name":"Abigail Estes","description":"University of Arkansas student","memberOf":{"@id":"https://righthandnwa.com/#uark"}},{"@type":"Person","name":"Bella Gambaro","description":"University of Arkansas student","memberOf":{"@id":"https://righthandnwa.com/#uark"}}],"areaServed":[{"@type":"Place","name":"Northwest Arkansas","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"AdministrativeArea","name":"Benton County, Arkansas","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"AdministrativeArea","name":"Washington County, Arkansas","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Bentonville","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Rogers","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Springdale","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Fayetteville","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Bella Vista","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Siloam Springs","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Lowell","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Cave Springs","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Centerton","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Farmington","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Prairie Grove","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}},{"@type":"City","name":"Pea Ridge","containedInPlace":{"@id":"https://righthandnwa.com/#arkansas"}}],"knowsAbout":["Small business admin","Receipt capture and expense review","Invoice follow-ups","CPA and bookkeeper prep","Inbox triage and reply drafts","Missed-call text-back","Appointment scheduling and reminders","Written how-tos (SOPs)","Workflow automations","Practical AI for small business","AI use policies for small business","Google Business Profile and local listings","Honest review requests"],"hasOfferCatalog":{"@type":"OfferCatalog","name":"Right Hand NWA services","url":"https://righthandnwa.com/services/","itemListElement":[{"@type":"OfferCatalog","name":"Money admin","url":"https://righthandnwa.com/services/#money-admin","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Receipt capture and categorizing"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Monthly expense review"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Invoices and overdue follow-ups"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Quotes and estimates"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Bills-due and renewals calendar"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"CPA and bookkeeper prep"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Software subscription cleanup"}}]},{"@type":"OfferCatalog","name":"Customers and front desk","url":"https://righthandnwa.com/services/#customers-and-front-desk","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Inbox triage and reply drafts"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Missed-call text-back and booking"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"AI phone answering, inbound only"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Website chat assistant"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Lead intake form that routes itself"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"CRM setup and cleanup"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Quote follow-ups"}}]},{"@type":"OfferCatalog","name":"Scheduling and follow-ups","url":"https://righthandnwa.com/services/#scheduling-and-follow-ups","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Booking page"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Appointment reminders and no-show follow-ups"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Calendar management"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Staff schedule drafts"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Vendor and delivery coordination"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Meeting and call notes with AI"}}]},{"@type":"OfferCatalog","name":"Documents and how-tos","url":"https://righthandnwa.com/services/#documents-and-how-tos","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"One folder system with naming rules"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Templates for quotes, forms and checklists"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Written how-tos (SOPs)"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Hiring admin"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Supplier and vendor office support"}}]},{"@type":"OfferCatalog","name":"AI in your business","url":"https://righthandnwa.com/services/#ai-in-your-business","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Workflow automations"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"AI email drafting in your inbox"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Weekly owner report"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"AI starter workshop"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"One-page AI use policy"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Company prompt kit and SOP assistant"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Monthly AI office hours"}}]},{"@type":"OfferCatalog","name":"Local presence and reputation","url":"https://righthandnwa.com/services/#local-presence-and-reputation","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Google Business Profile and listings upkeep"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Honest review requests"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Review reply drafts"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Social posts and content calendar"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Email newsletter"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Digital front door check"}}]}]},"makesOffer":{"@type":"Offer","@id":"https://righthandnwa.com/#checkup-offer","name":"Free 30-minute check-up","price":"0","priceCurrency":"USD","url":"https://righthandnwa.com/#checkup","description":"A free 30-minute check-up at your business anywhere in Benton or Washington County, or by video or phone. Within 3 business days, Your Admin Map arrives by email: your top 3 tasks to hand off, and for each one what we would do, what AI would draft, what stays with you, and what stays with your CPA or attorney. No card, no obligation to hire us.","itemOffered":{"@type":"Service","name":"30-minute admin and AI check-up","provider":{"@id":"https://righthandnwa.com/#organization"},"areaServed":{"@id":"https://righthandnwa.com/#arkansas"}}}},{"@type":"CollegeOrUniversity","@id":"https://righthandnwa.com/#uark","name":"University of Arkansas","url":"https://www.uark.edu/"},{"@type":"State","@id":"https://righthandnwa.com/#arkansas","name":"Arkansas","containedInPlace":{"@type":"Country","name":"United States"}},{"@type":"WebSite","@id":"https://righthandnwa.com/#website","url":"https://righthandnwa.com/","name":"Right Hand NWA","alternateName":"Right Hand Northwest Arkansas","publisher":{"@id":"https://righthandnwa.com/#organization"},"inLanguage":"en-US"},{"@type":"WebPage","@id":"https://righthandnwa.com/#webpage","url":"https://righthandnwa.com/","name":"Right Hand NWA | Admin and AI help for Northwest Arkansas small businesses","description":"Admin and AI help for small businesses in Bentonville, Rogers, Springdale and Fayetteville, from four University of Arkansas students. AI drafts, we check, you approve. Free 30-minute check-up.","isPartOf":{"@id":"https://righthandnwa.com/#website"},"about":{"@id":"https://righthandnwa.com/#organization"},"primaryImageOfPage":{"@id":"https://righthandnwa.com/#image"},"inLanguage":"en-US"},{"@type":"FAQPage","@id":"https://righthandnwa.com/#faq","url":"https://righthandnwa.com/#questions","isPartOf":{"@id":"https://righthandnwa.com/#webpage"},"mainEntity":[{"@type":"Question","name":"What does it cost?","acceptedAnswer":{"@type":"Answer","text":"The check-up is free, with nothing to buy. If you want help after that, we quote a flat monthly price in writing before any work starts, based on the tasks you pick. Tool costs, like a texting plan, are paid by you directly to the vendor, and we show them before you decide."}},{"@type":"Question","name":"You're students. Why should I trust you with my business?","acceptedAnswer":{"@type":"Answer","text":"Fair question. We are four University of Arkansas students who work in Northwest Arkansas. For you, that means a named person on every task, and work you can check line by line. Try the prototypes on this page and judge the work yourself."}},{"@type":"Question","name":"Is AI going to talk to my customers?","acceptedAnswer":{"@type":"Answer","text":"Only if you want it to, and only from answers you approved. A phone or chat assistant says it is an assistant and hands anything else to you. Everything else AI does is a draft that one of us checks and you approve. If you'd rather we skip AI on a task, we do it by hand."}},{"@type":"Question","name":"Do I have to give you my passwords or bank login?","acceptedAnswer":{"@type":"Answer","text":"No, and please don't send them. The check-up needs no logins at all. If you hire us, you invite us as a user in the tools you already use, so you can see what we can reach and remove us in one click. We never touch your bank or move money."}},{"@type":"Question","name":"What if you get something wrong?","acceptedAnswer":{"@type":"Answer","text":"You see the sources and the math before anything is final, and anything we can't match to a record comes to you as a question. If a mistake slips through in work you approved, we fix it at no charge."}},{"@type":"Question","name":"What if I want to stop?","acceptedAnswer":{"@type":"Answer","text":"Email us. It is month to month with no cancellation fee. Within 2 business days we remove our access, hand back every file and how-to, and confirm it in writing."}}]}]}</script>
 <!-- jsonld:end -->
 </body>
 </html>

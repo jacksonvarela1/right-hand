@@ -30,7 +30,7 @@
   var HTML = '<div class="phone"><div class="screen paper">' +
     '<div class="sb">' + NOW + 'Tue Nov 3, 6:52 PM</time><span>Business line</span></div>' +
     '<div class="call"><div class="ring"><p class="rl">Incoming call</p><p class="rn">' + PH + '</p><p class="rc">Rogers, AR</p>' +
-    '<div class="wave" aria-hidden="true">' + new Array(13).join("<i></i>") + '</div><p class="rc">After hours. No one free to answer.</p></div>' +
+    '<div class="wave" aria-hidden="true">' + new Array(13).join("<i></i>") + '</div><p class="rc">No one free to answer.</p></div>' +
     '<p class="miss"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 3h3l1.5 4-2 1.2a9 9 0 0 0 5.3 5.3l1.2-2 4 1.5v3a1.5 1.5 0 0 1-1.6 1.5C9 17 3 11 2.5 4.6A1.5 1.5 0 0 1 4 3zM12 3l4 4m0-4l-4 4"/></svg>' +
     '<b>Missed call</b><span>' + PH + ', after hours</span>' + NOW + '6:52 PM</time></p></div>' +
     '<ol class="thread" role="log" aria-live="off" aria-label="Texts with ' + PH + '" tabindex="0"></ol>' +
