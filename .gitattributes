@@ -1,0 +1,11 @@
+# Site text files are stored and checked out with LF: the build inlines assets/boot.js and puts its sha256 in the
+# Content-Security-Policy, so a CRLF working copy would block that script in a local preview.
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.mjs text eol=lf
+*.svg text eol=lf
+*.txt text eol=lf
+*.xml text eol=lf
+*.json text eol=lf
+*.md text eol=lf

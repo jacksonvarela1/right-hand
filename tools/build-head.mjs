@@ -47,6 +47,9 @@ const FONT_PRELOAD = "fonts/plus-jakarta-sans-latin-var.woff2";   // the headlin
 
 /* ---------- content stamps ---------- */
 const sha = (buf, enc) => createHash("sha256").update(buf).digest(enc);
+// A text file is hashed with LF line endings (what the repository stores), so the ?v= stamps do not depend on the OS.
+const TEXT = /\.(css|js|mjs|svg|html|txt|json|xml)$/i;
+const bytes = (f) => (TEXT.test(f) ? Buffer.from(readFileSync(p(f), "utf8").replace(/\r\n/g, "\n")) : readFileSync(p(f)));
 const short = (buf) => sha(buf, "hex").slice(0, 8);
 const memo = new Map();
 // assets/lab.js appends its own ?v= to demo-player.js, the prototype scripts, rail.js and demos.css.
@@ -57,7 +60,7 @@ function labGroup() {
 export function stamp(file) {
   if (!memo.has(file)) {
     must(existsSync(p(file)), "the file " + file + " that a page points at");
-    memo.set(file, file === "assets/lab.js" ? short(Buffer.concat(labGroup().map((f) => readFileSync(p(f))))) : short(readFileSync(p(file))));
+    memo.set(file, file === "assets/lab.js" ? short(Buffer.concat(labGroup().map(bytes))) : short(bytes(file)));
   }
   return memo.get(file);
 }

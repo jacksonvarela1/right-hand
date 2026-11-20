@@ -15,7 +15,8 @@ import vm from "node:vm";
 /* ---------- 1. constants ---------- */
 export const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 export const p = (f) => join(ROOT, f);
-export const read = (f) => readFileSync(p(f), "utf8");
+// Line endings are normalised to LF, so a build on Windows (git autocrlf) writes and hashes exactly what a build on Linux does.
+export const read = (f) => readFileSync(p(f), "utf8").replace(/\r\n/g, "\n");
 // Canonical, Open Graph and JSON-LD addresses always point at the main domain, even when the files are served from a mirror.
 export const SITE = "https://righthandnwa.com/";
 export const EMAIL = "righthandnwa@gmail.com";
